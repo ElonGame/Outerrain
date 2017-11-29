@@ -2,7 +2,7 @@
 
 int main()
 {
-	std::cout << "BIENVENU DANS OUTERRAIN !" << std::endl;
+	std::cout << "BIENVENUE DANS OUTERRAIN !" << std::endl;
 	std::cin.get();
 	return 0;
 }
