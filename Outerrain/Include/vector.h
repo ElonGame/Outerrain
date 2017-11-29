@@ -2,6 +2,8 @@
 #include <math.h>
 #include <iostream>
 
+
+/* Vector2 */
 class Vector2
 {
 private:
@@ -43,7 +45,6 @@ inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
 	stream << "(" << u.x << ", " << u.y << ");";
 	return stream;
 }
-
 inline double Dot(const Vector2& u, const Vector2& v)
 {
 	return u.X() * v.X() + u.Y() * v.Y();
@@ -53,6 +54,8 @@ inline double Magnitude(const Vector2& u)
 	return sqrt(u.X() * u.X() + u.Y() * u.Y());
 }
 
+
+/* Vector3 */
 class Vector3
 {
 private:
@@ -98,7 +101,6 @@ inline std::ostream& operator<<(std::ostream& stream, const Vector3& u)
 	stream << "(" << u.x << ", " << u.y << ", " << u.z << ");";
 	return stream;
 }
-
 inline Vector3 Cross(const Vector3& u, const Vector3& v)
 {
 	return Vector3(
