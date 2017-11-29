@@ -1,4 +1,6 @@
 #include "fields.h"
+#include <algorithm>
+using namespace std;
 
 Scalarfield2D::Scalarfield2D(int nx, int ny) : nx(nx), ny(ny)
 {
@@ -17,7 +19,7 @@ double Scalarfield2D::At(int i, int j) const
 	return values[index];
 }
 
-double Scalarfield2D::GetValue(double u, double v)
+double Scalarfield2D::GetValue(double u, double v) const
 {
 	return 0.0;
 }
