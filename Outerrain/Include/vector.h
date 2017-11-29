@@ -38,16 +38,17 @@ public:
 	void SetX(double x) { this->x = x; }
 	void SetY(double y) { this->y = y; }
 };
-std::ostream& operator<< (std::ostream& stream, const Vector2& u)
+inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
 {
-	return std::cout << "(" << u.x << ", " << u.y << ");";
+	stream << "(" << u.x << ", " << u.y << ");";
+	return stream;
 }
 
-float Dot(const Vector2& u, const Vector2& v)
+inline double Dot(const Vector2& u, const Vector2& v)
 {
 	return u.X() * v.X() + u.Y() * v.Y();
 }
-float Magnitude(const Vector2& u)
+inline double Magnitude(const Vector2& u)
 {
 	return sqrt(u.X() * u.X() + u.Y() * u.Y());
 }
@@ -82,7 +83,7 @@ public:
 			return y;
 		return z;
 	}
-	friend std::ostream& operator<< (std::ostream& stream, const Vector3& u);
+	friend std::ostream& operator<<(std::ostream& stream, const Vector3& u);
 
 	const double& X() const { return x; }
 	const double& Y() const { return y; }
@@ -92,23 +93,24 @@ public:
 	void setY(double y) { this->y = y; }
 	void setZ(double z) { this->z = z; }
 };
-std::ostream& operator<< (std::ostream& stream, const Vector3& u)
+inline std::ostream& operator<<(std::ostream& stream, const Vector3& u)
 {
-	return std::cout << "(" << u.x << ", " << u.y << ", " << u.z << ");";
+	stream << "(" << u.x << ", " << u.y << ", " << u.z << ");";
+	return stream;
 }
 
-Vector3 Cross(const Vector3& u, const Vector3& v)
+inline Vector3 Cross(const Vector3& u, const Vector3& v)
 {
 	return Vector3(
 		(u.Y() * v.Z()) - (u.Z() * v.Y()),
 		(u.Z() * v.X()) - (u.X() * v.Z()),
 		(u.X() * v.Y()) - (u.Y() * v.X()));
 }
-float Dot(const Vector3& u, const Vector3& v)
+inline double Dot(const Vector3& u, const Vector3& v)
 {
 	return u.X() * v.X() + u.Y() * v.Y() + u.Z() * v.Z();
 }
-float Magnitude(const Vector3& u)
+inline double Magnitude(const Vector3& u)
 {
 	return sqrt(u.X() * u.X() + u.Y() * u.Y() + u.Z() * u.Z());
 }
