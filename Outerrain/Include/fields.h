@@ -1,21 +1,28 @@
 #pragma once
 #include <vector>
+#include "vector.h"
 
 class Scalarfield2D
 {
 protected:
 	int nx, ny;
+	Vector2 a, b;
 	std::vector<double> values;
 
 public:
 	Scalarfield2D() { }
-	Scalarfield2D(int, int);
+	Scalarfield2D(int, int, Vector2, Vector2);
 
-	// Todo
-	// int Index(int, int) => retourne index1D à partir de index2D
-	// double At(int, int) => return value sans interpolation
-	// GetValue(double, double) => return value avec interpolation
 	int Index(int, int) const;
 	double At(int, int) const;
-	double GetValue(double, double) const;
+	double GetValueBilinear(const Vector2&) const;
+};
+
+class Heightfield : public Scalarfield2D
+{
+public:
+	Heightfield() : Scalarfield2D() { }
+	Heightfield(int, int, Vector2, Vector2);
+
+	double Height(const Vector2&) const;
 };
