@@ -21,13 +21,15 @@
   <ItemGroup>
     <ClInclude Include="Include\app.h" />
     <ClInclude Include="Include\fields.h" />
-    <ClInclude Include="Include\vector.h" />
+    <ClInclude Include="Include\mesh.h" />
+    <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\fields.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

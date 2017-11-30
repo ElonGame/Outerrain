@@ -1,5 +1,5 @@
 #include "app.h"
-#include "vector.h"
+#include "vec.h"
 
 int main()
 {

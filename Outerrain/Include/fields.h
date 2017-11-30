@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "vector.h"
+#include "vec.h"
 
 class Scalarfield2D
 {

@@ -1,5 +1,5 @@
 #include "fields.h"
-#include "vector.h"
+#include "vec.h"
 #include <algorithm>
 
 /* Scalarfield 2D */
