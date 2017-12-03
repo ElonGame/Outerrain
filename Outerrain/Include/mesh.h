@@ -2,6 +2,7 @@
 #include <vector>
 #include <GL\glew.h>
 #include "vec.h"
+#include "shader.h"
 
 class Mesh
 {
@@ -16,7 +17,8 @@ protected:
 	GLuint VAO;
 	GLuint fullBuffer;
 	GLuint indexBuffer;
-	GLuint shaderProgram;
+	
+	Shader shader;
 	bool updateBuffersNextDraw;
 
 
@@ -27,16 +29,16 @@ protected:
 	std::size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }
 
 	const double *NormalBufferPtr() const { return &normals.front().x; }
-	std::size_t NormalBufferSize() const { return normals.size() * sizeof(Vector3); }
+	size_t NormalBufferSize() const { return normals.size() * sizeof(Vector3); }
 
 	const double *TexcoordBufferPtr() const { return &texcoords.front().x; }
-	std::size_t TexcoordBufferSize() const { return texcoords.size() * sizeof(Vector2); }
+	size_t TexcoordBufferSize() const { return texcoords.size() * sizeof(Vector2); }
 
 	const double *ColorBufferPtr() const { return &colors.front().x; }
-	std::size_t ColorBufferSize() const { return colors.size() * sizeof(Vector4); }
+	size_t ColorBufferSize() const { return colors.size() * sizeof(Vector4); }
 
 	const void *IndexBufferPtr() const { return &indices.front(); }
-	std::size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
+	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
 
 public:
 	Mesh();
@@ -50,7 +52,9 @@ public:
 	void AddColor(const Vector4&);
 	void AddColor(const int&, const Vector4&);
 	void AddTriangle(const unsigned int, const unsigned int, const unsigned int);
-	void SetShader(GLuint);
+	void AddTexcoord(const Vector2&);
+	void AddTexcoord(const int&, const Vector2&);
+	void SetShader(const Shader&);
 
 	Vector3 Vertex(int) const;
 	Vector3 Normal(int) const;

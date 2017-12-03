@@ -1,12 +1,11 @@
 #include "mesh.h"
-
 #include <cassert>
 
 
 Mesh::Mesh() : 
 	vertices(), texcoords(), normals(), colors(), indices(), 
 	primitiveDrawn(GL_POINTS), VAO(0), fullBuffer(0), indexBuffer(0), 
-	shaderProgram(0) { }
+	shader() { }
 
 void Mesh::AddVertex(const Vector3& v)
 {
@@ -58,9 +57,22 @@ void Mesh::AddTriangle(const unsigned int a, const unsigned int b, const unsigne
 	updateBuffersNextDraw = true;
 }
 
-void Mesh::SetShader(GLuint shader)
+void Mesh::AddTexcoord(const Vector2& t)
 {
-	shaderProgram = shader;
+	texcoords.push_back(t);
+	updateBuffersNextDraw = true;
+}
+
+void Mesh::AddTexcoord(const int& i, const Vector2& t)
+{
+	assert(i < texcoords.size());
+	updateBuffersNextDraw = true;
+	texcoords[i] = t;
+}
+
+void Mesh::SetShader(const Shader& s)
+{
+	shader = s;
 }
 
 Vector3 Mesh::Vertex(int i) const
@@ -88,6 +100,7 @@ void Mesh::Destroy()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &fullBuffer);
 	glDeleteBuffers(1, &indexBuffer);
+	shader.Release();
 }
 
 void Mesh::CreateBuffers(const bool use_texcoord, const bool use_normal, const bool use_color)
@@ -201,7 +214,7 @@ void Mesh::Draw()
 		UpdateBuffers(true, true, true);
 
 	glBindVertexArray(VAO);
-	glUseProgram(shaderProgram);
+	glUseProgram(shader.GetProgram());
 
 	if (indices.size() > 0)
 		glDrawElements(primitiveDrawn, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
