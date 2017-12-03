@@ -23,15 +23,19 @@
     <ClInclude Include="Include\fields.h" />
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\shader.h" />
+    <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\cameraOrbiter.h" />
     <ClCompile Include="Source\app.cpp" />
+    <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\fields.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -122,6 +126,7 @@
       </SDLCheck>
       <AdditionalIncludeDirectories>.;..\Dependencies\include;Include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -19,6 +19,10 @@ public:
 	Vector2(double n) : x(n), y(n) {}
 	Vector2(double x, double y) : x(x), y(y) {}
 
+	Vector2 operator*(const double& k) const
+	{
+		return Vector2(x * k, y * k);
+	}
 	bool operator==(const Vector2& u) const
 	{
 		return (x == u.x && y == u.y);
@@ -52,6 +56,19 @@ inline double Magnitude(const Vector2& u)
 {
 	return sqrt(u.x * u.x + u.y * u.y);
 }
+inline Vector2 Normalize(const Vector2& v)
+{
+	double kk = 1 / Magnitude(v);
+	return v * kk;
+}
+inline Vector2 Center(const Vector2& a, const Vector2& b)
+{
+	return Vector2((a.x + b.x) / 2, (a.y + b.y) / 2);
+}
+inline Vector2 operator-(const Vector2& v)
+{
+	return Vector2(-v.x, -v.y);
+}
 
 
 /* Vector3 */
@@ -64,6 +81,10 @@ public:
 	explicit Vector3(double n) : x(n), y(n), z(n) {}
 	explicit Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
 
+	Vector3 operator*(const double& k) const
+	{
+		return Vector3(x * k, y * k, z * k);
+	}
 	bool operator==(const Vector3& u) const
 	{
 		return (x == u.x && y == u.y && z == u.z);
@@ -106,6 +127,19 @@ inline double Magnitude(const Vector3& u)
 {
 	return sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
 }
+inline Vector3 Normalize(const Vector3& v)
+{
+	double kk = 1 / Magnitude(v);
+	return v * kk;
+}
+inline Vector3 Center(const Vector3& a, const Vector3& b)
+{
+	return Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+}
+inline Vector3 operator-(const Vector3& v)
+{
+	return Vector3(-v.x, -v.y, -v.z);
+}
 
 
 /* Vector4 */
@@ -118,6 +152,10 @@ public:
 	Vector4(double n) : x(n), y(n), z(n), w(n) {}
 	Vector4(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {}
 
+	Vector4 operator*(const double& k) const
+	{
+		return Vector4(x * k, y * k, z * k, w * k);
+	}
 	bool operator==(const Vector4& u) const
 	{
 		return (x == u.x && y == u.y && z == u.z && w == u.w);
@@ -142,8 +180,28 @@ public:
 	}
 	friend std::ostream& operator<<(std::ostream& stream, const Vector4& u);
 };
+inline double Magnitude(const Vector4& u)
+{
+	return sqrt(u.x * u.x + u.y * u.y + u.z * u.z + u.w * u.w);
+}
+inline Vector4 Normalize(const Vector4& v)
+{
+	double kk = 1 / Magnitude(v);
+	return v * kk;
+}
 inline std::ostream& operator<<(std::ostream& stream, const Vector4& u)
 {
 	stream << "(" << u.x << ", " << u.y << ", " << u.z << ", " << u.w << ");";
 	return stream;
 }
+inline Vector4 operator-(const Vector4& v)
+{
+	return Vector4(-v.x, -v.y, -v.z, -v.w);
+}
+
+/* Bounds */
+struct Bounds
+{
+	Vector3 min;
+	Vector3 max;
+};

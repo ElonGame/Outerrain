@@ -2,6 +2,11 @@
 #include <string>
 #include <GL\glew.h>
 
+struct Transform;
+struct Vector2;
+struct Vector3;
+struct Vector4;
+
 class Shader
 {
 private:
@@ -10,24 +15,23 @@ private:
 public:
 	Shader() : program(0) { }
 
-	//! cree un shader program. a detruire avec release_program( ).
-	//! charge un seul fichier, les shaders sont separes par \#ifdef VERTEX_SHADER / \#endif et \#ifdef FRAGMENT_SHADER / \#endif.
-	//! renvoie l'identifiant openGL du program et le program est selectionne (cf glUseProgram()).
-	//! \param definitions est une chaine de caracteres pouvant comporter plusieurs lignes "#define what value\n"\n.
-	GLuint InitFromFile(const char *filename, const char *definitions = "");
-
-	//! detruit les shaders et le program.
+	void InitFromFile(const char *filename, const char *definitions = "");
 	int Release();
-
-	//! recharge les sources et recompile un shader program.
 	int Reload(const char *filename, const char *definitions = "");
-
-	//! renvoie les erreurs de compilation.
 	int GetCompileErrors(std::string& errors);
-
-	//! affiche les erreurs de compilation.
 	int PrintCompileErrors();
 
+	void UniformUInt(const char *uniform, const unsigned int& v);
+	void UniformInt(const char *uniform, const int& v);
+	void UniformFloat(const char *uniform, const float& v);
+
+	void UniformVec2(const char *uniform, const Vector2& v);
+	void UniformVec3(const char *uniform, const Vector3& v);
+	void UniformVec4(const char *uniform, const Vector4& v);
+
+	void UniformTransform(const char *uniform, const Transform& v);
+	void UniformTexture(const char *uniform, const int unit, const GLuint texture, const GLuint sampler = 0);
 
 	const GLuint& GetProgram() const { return program; }
 };
+

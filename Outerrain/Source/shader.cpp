@@ -4,8 +4,12 @@
 #include <vector>
 #include <algorithm>
 #include <climits>
+#include <cstdio>
+#include <set>
 
+#include "vec.h"
 #include "shader.h"
+#include "transform.h"
 
 
 /* File scope */
@@ -208,6 +212,9 @@ static GLuint compile_shader(const GLuint program, const GLenum shader_type, con
 /* Shader Specifics */
 int Shader::Reload(const char *filename, const char *definitions)
 {
+	if (program == 0)
+		return -1;
+
 	// supprime les shaders attaches au program
 	int shaders_max = 0;
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &shaders_max);
@@ -257,11 +264,10 @@ int Shader::Reload(const char *filename, const char *definitions)
 	return 0;
 }
 
-GLuint Shader::InitFromFile(const char *filename, const char *definitions)
+void Shader::InitFromFile(const char *filename, const char *definitions)
 {
-	GLuint program = glCreateProgram();
+	program = glCreateProgram();
 	Reload(filename, definitions);
-	return program;
 }
 
 int Shader::Release()
@@ -361,4 +367,117 @@ int Shader::PrintCompileErrors()
 	if (errors.size() > 0)
 		printf("%s\n", errors.c_str());
 	return code;
+}
+
+
+static
+int location(const GLuint program, const char *uniform)
+{
+	if (program == 0)
+		return -1;
+
+	// recuperer l'identifiant de l'uniform dans le program
+	GLint location = glGetUniformLocation(program, uniform);
+	if (location < 0)
+	{
+		char error[1024] = { 0 };
+#ifdef GL_VERSION_4_3
+		{
+			char label[1024];
+			glGetObjectLabel(GL_PROGRAM, program, sizeof(label), NULL, label);
+
+			sprintf(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform);
+		}
+#else
+		sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
+#endif
+
+		static std::set<std::string> log;
+		if (log.insert(error).second == true)
+			// pas la peine d'afficher le message 60 fois par seconde...
+			printf("%s\n", error);
+
+		return -1;
+	}
+
+#ifndef GK_RELEASE
+	// verifier que le program est bien en cours d'utilisation, ou utiliser glProgramUniform, mais c'est gl 4
+	GLuint current;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint *)&current);
+	if (current != program)
+	{
+		char error[1024] = { 0 };
+#ifdef GL_VERSION_4_3
+		{
+			char label[1024];
+			glGetObjectLabel(GL_PROGRAM, program, sizeof(label), NULL, label);
+			char labelc[1024];
+			glGetObjectLabel(GL_PROGRAM, current, sizeof(labelc), NULL, labelc);
+
+			sprintf(error, "uniform( %s %u, '%s' ): invalid shader program %s %u", label, program, uniform, labelc, current);
+		}
+#else
+		sprintf(error, "uniform( program %u, '%s'): invalid shader program %u...", program, uniform, current);
+#endif
+
+		printf("%s\n", error);
+		glUseProgram(program);
+	}
+#endif
+
+	return location;
+}
+
+void Shader::UniformUInt(const char *uniform, const unsigned int& v)
+{
+	glUniform1ui(location(program, uniform), v);
+}
+
+void Shader::UniformInt(const char *uniform, const int& v)
+{
+	glUniform1i(location(program, uniform), v);
+}
+
+void Shader::UniformFloat(const char *uniform, const float& v)
+{
+	glUniform1f(location(program, uniform), v);
+}
+
+void Shader::UniformVec2(const char *uniform, const Vector2& v)
+{
+	glUniform2fv(location(program, uniform), 1, (float*)&v.x);
+}
+
+void Shader::UniformVec3(const char *uniform, const Vector3& a)
+{
+	glUniform3fv(location(program, uniform), 1, (float*)&a.x);
+}
+
+void Shader::UniformVec4(const char *uniform, const Vector4& v)
+{
+	glUniform4fv(location(program, uniform), 1, (float*)&v.x);
+}
+
+void Shader::UniformTransform(const char *uniform, const Transform& v)
+{
+	glUniformMatrix4fv(location(program, uniform), 1, GL_TRUE, (const float*)v.buffer());
+}
+
+void Shader::UniformTexture(const char *uniform, const int unit, const GLuint texture, const GLuint sampler)
+{
+	// verifie que l'uniform existe
+	int id = location(program, uniform);
+	if (id < 0)
+		return;
+
+	// selectionne l'unite de texture
+	glActiveTexture(GL_TEXTURE0 + unit);
+	// configure la texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// les parametres de filtrage
+	glBindSampler(unit, sampler);
+
+	// transmet l'indice de l'unite de texture au shader
+	glUniform1i(id, unit);
 }

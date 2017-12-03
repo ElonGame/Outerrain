@@ -4,6 +4,8 @@
 #include "vec.h"
 #include "shader.h"
 
+class CameraOrbiter;
+
 class Mesh
 {
 protected:
@@ -56,10 +58,13 @@ public:
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
 
+
+	Bounds GetBounds() const;
 	Vector3 Vertex(int) const;
 	Vector3 Normal(int) const;
 	Vector2 Texcoord(int) const;
 	Vector4 Color(int) const;
 
 	void Draw();
+	void Draw(const CameraOrbiter&);
 };

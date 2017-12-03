@@ -36,6 +36,8 @@ int App::Init()
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
 
+	orbiter.LookAt(mesh.GetBounds());
+
 	return 1;
 }
 
@@ -47,12 +49,36 @@ int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	mesh.Draw();
+	mesh.Draw(orbiter);
 	return 1;
 }
 
 int App::Update(const float time, const float deltaTime)
 {
+	// Deplace la camera
+	int mx, my;
+	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
+	if (mb & SDL_BUTTON(1))
+		orbiter.rotation(mx, my);
+	if (mb & SDL_BUTTON(3))
+		orbiter.move(my);
+	if (mb & SDL_BUTTON(2))
+		orbiter.translation((float)mx / (float)window_width(), (float)my / (float)window_height());
+
+	// Keyboard
+	if (key_state(SDLK_PAGEUP))
+		orbiter.move(1.0f);
+	if (key_state(SDLK_PAGEDOWN))
+		orbiter.move(-1.0f);
+	if (key_state(SDLK_UP))
+		orbiter.translation(0.0f, 10.0f / (float)window_height());
+	if (key_state(SDLK_DOWN))
+		orbiter.translation(0.0f, -10.0f / (float)window_height());
+	if (key_state(SDLK_LEFT))
+		orbiter.translation(10.0f / (float)window_width(), 0.0f);
+	if (key_state(SDLK_RIGHT))
+		orbiter.translation(-10.0f / (float)window_width(), 0.0f);
+
 	return 1;
 }
 

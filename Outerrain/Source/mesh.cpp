@@ -1,4 +1,7 @@
 #include "mesh.h"
+#include "cameraOrbiter.h"
+#include "shader.h"
+#include <algorithm>
 #include <cassert>
 
 
@@ -93,6 +96,22 @@ Vector2 Mesh::Texcoord(int i) const
 Vector4 Mesh::Color(int i) const
 {
 	return colors[i];
+}
+
+Bounds Mesh::GetBounds() const
+{
+	Bounds ret;
+	if (vertices.size() < 1)
+		return ret;
+	ret.min = Vector3(vertices[0]);
+	ret.max = ret.min;
+	for (unsigned int i = 1; i < (unsigned int)vertices.size(); i++)
+	{
+		Vector3 p = vertices[i];
+		ret.min = Vector3(std::min(ret.min.x, p.x), std::min(ret.min.y, p.y), std::min(ret.min.z, p.z));
+		ret.max = Vector3(std::max(ret.max.x, p.x), std::max(ret.max.y, p.y), std::max(ret.max.z, p.z));
+	}
+	return ret;
 }
 
 void Mesh::Destroy()
@@ -220,4 +239,19 @@ void Mesh::Draw()
 		glDrawElements(primitiveDrawn, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
 	else
 		glDrawArrays(primitiveDrawn, 0, (GLsizei)vertices.size());
+}
+
+void Mesh::Draw(const CameraOrbiter& orbiter)
+{
+	GLuint m_program = shader.GetProgram();
+	assert(m_program != 0);
+	glUseProgram(m_program);
+
+	Transform mv = orbiter.view() * Identity();
+	Transform mvp = orbiter.projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
+
+	shader.UniformTransform("mvpMatrix", mvp);
+	shader.UniformTransform("mvMatrix", mv);
+
+	Draw();
 }
