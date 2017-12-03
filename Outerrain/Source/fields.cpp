@@ -28,8 +28,8 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 	double u = q[0] / d[0];
 	double v = q[1] / d[1];
 
-	int i = int(u*(nx - 1));
-	int j = int(v*(ny - 1));
+	int i = int(u * (nx - 1));
+	int j = int(v * (ny - 1));
 
 	double v1 = At(i, j);
 	double v2 = At(i + 1, j);

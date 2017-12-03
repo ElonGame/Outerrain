@@ -3,13 +3,18 @@
 #include <iostream>
 
 
+/* Forward Declarations */
+struct Vector2;
+struct Vector3;
+struct Vector4;
+
+
 /* Vector2 */
-class Vector2
+struct Vector2
 {
-private:
+public:
 	double x, y;
 
-public:
 	Vector2() : x(0.0), y(0.0) {}
 	Vector2(double n) : x(n), y(n) {}
 	Vector2(double x, double y) : x(x), y(y) {}
@@ -33,12 +38,6 @@ public:
 		return y;
 	}
 	friend std::ostream& operator<< (std::ostream& stream, const Vector2& u);
-
-	const double& X() const { return x; }
-	const double& Y() const { return y; }
-
-	void SetX(double x) { this->x = x; }
-	void SetY(double y) { this->y = y; }
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
 {
@@ -47,24 +46,23 @@ inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
 }
 inline double Dot(const Vector2& u, const Vector2& v)
 {
-	return u.X() * v.X() + u.Y() * v.Y();
+	return u.x * v.x + u.y * v.y;
 }
 inline double Magnitude(const Vector2& u)
 {
-	return sqrt(u.X() * u.X() + u.Y() * u.Y());
+	return sqrt(u.x * u.x + u.y * u.y);
 }
 
 
 /* Vector3 */
-class Vector3
+struct Vector3
 {
-private:
+public:
 	double x, y, z;
 
-public:
-	Vector3() : x(0.0), y(0.0), z(0.0) {}
-	Vector3(double n) : x(n), y(n), z(n) {}
-	Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
+	explicit Vector3() : x(0.0), y(0.0), z(0.0) { }
+	explicit Vector3(double n) : x(n), y(n), z(n) {}
+	explicit Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
 
 	bool operator==(const Vector3& u) const
 	{
@@ -87,14 +85,6 @@ public:
 		return z;
 	}
 	friend std::ostream& operator<<(std::ostream& stream, const Vector3& u);
-
-	const double& X() const { return x; }
-	const double& Y() const { return y; }
-	const double& Z() const { return z; }
-
-	void setX(double x) { this->x = x; }
-	void setY(double y) { this->y = y; }
-	void setZ(double z) { this->z = z; }
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector3& u)
 {
@@ -104,27 +94,26 @@ inline std::ostream& operator<<(std::ostream& stream, const Vector3& u)
 inline Vector3 Cross(const Vector3& u, const Vector3& v)
 {
 	return Vector3(
-		(u.Y() * v.Z()) - (u.Z() * v.Y()),
-		(u.Z() * v.X()) - (u.X() * v.Z()),
-		(u.X() * v.Y()) - (u.Y() * v.X()));
+		(u.y * v.z) - (u.z * v.y),
+		(u.z * v.x) - (u.x * v.z),
+		(u.x * v.y) - (u.y * v.x));
 }
 inline double Dot(const Vector3& u, const Vector3& v)
 {
-	return u.X() * v.X() + u.Y() * v.Y() + u.Z() * v.Z();
+	return u.x * v.x + u.y * v.y + u.z * v.z;
 }
 inline double Magnitude(const Vector3& u)
 {
-	return sqrt(u.X() * u.X() + u.Y() * u.Y() + u.Z() * u.Z());
+	return sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
 }
 
 
 /* Vector4 */
-class Vector4
+struct Vector4
 {
-private:
+public:
 	double x, y, z, w;
 
-public:
 	Vector4() : x(0.0), y(0.0), z(0.0), w(0.0) {}
 	Vector4(double n) : x(n), y(n), z(n), w(n) {}
 	Vector4(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {}
@@ -152,16 +141,6 @@ public:
 		return w;
 	}
 	friend std::ostream& operator<<(std::ostream& stream, const Vector4& u);
-
-	const double& X() const { return x; }
-	const double& Y() const { return y; }
-	const double& Z() const { return z; }
-	const double& W() const { return w; }
-
-	void setX(double x) { this->x = x; }
-	void setY(double y) { this->y = y; }
-	void setZ(double z) { this->z = z; }
-	void setW(double w) { this->w = w; }
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector4& u)
 {
