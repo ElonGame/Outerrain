@@ -48,6 +48,22 @@ Heightfield::Heightfield(int nx, int ny, Vector2 a, Vector2 b) : Scalarfield2D(n
 {
 }
 
+void Heightfield::InitFromFile()
+{
+
+}
+
+void Heightfield::InitFromNoise()
+{
+	for (int i = 0; i < nx; i++)
+	{
+		for (int j = 0; j < ny; j++)
+		{
+			values[Index(i, j)] = 1.0;
+		}
+	}
+}
+
 double Heightfield::Height(const Vector2& p) const
 {
 	return GetValueBilinear(p);

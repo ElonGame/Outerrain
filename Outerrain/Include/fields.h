@@ -25,6 +25,10 @@ public:
 	Heightfield() : Scalarfield2D() { }
 	Heightfield(int, int, Vector2, Vector2);
 
+	// @Todo
+	void InitFromFile();
+	void InitFromNoise();
+
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;

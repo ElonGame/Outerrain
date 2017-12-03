@@ -208,9 +208,6 @@ static GLuint compile_shader(const GLuint program, const GLenum shader_type, con
 /* Shader Specifics */
 int Shader::Reload(const char *filename, const char *definitions)
 {
-	if (program == 0)
-		return -1;
-
 	// supprime les shaders attaches au program
 	int shaders_max = 0;
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &shaders_max);

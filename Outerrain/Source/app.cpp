@@ -1,5 +1,6 @@
 #include "app.h"
 #include "GL/glew.h"
+#include "fields.h"
 
 App::App(const int& width, const int& height, const int& major, const int& minor) 
 		: m_window(nullptr), m_context(nullptr)
@@ -28,6 +29,13 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
+	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
+	hf.InitFromNoise();
+	mesh = hf.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	mesh.SetShader(shader);
+
 	return 1;
 }
 
@@ -39,6 +47,7 @@ int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
+	mesh.Draw();
 	return 1;
 }
 

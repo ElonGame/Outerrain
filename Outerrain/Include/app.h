@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Window.h"
+#include "mesh.h"
 
 class App
 {
 protected:
 	Window m_window;
 	Context m_context;
+	Mesh mesh;
 
 public:
 	App(const int&, const int&, const int&, const int&);
