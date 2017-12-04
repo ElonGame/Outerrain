@@ -276,9 +276,14 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * (orbiter.View() * trs);
 	Vector3 camPos = orbiter.Position();
 
+<<<<<<< HEAD
 	shader.UniformTransform("trsMatrix", trs);
-	shader.UniformVec3("camPos", camPos);
 	shader.UniformTransform("mvpMatrix", mvp);
+	shader.UniformVec3("camPos", camPos);
+=======
+	shader.UniformTransform("mvMatrix", mv);
+	shader.UniformTransform("mvpMatrix", mvp);
+>>>>>>> 98485b7056742ca47b191feed52e410e0e141c36
 
 	Draw();
 }

@@ -29,9 +29,13 @@
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\window.h" />
+    <ClInclude Include="noise.h" />
+    <ClInclude Include="perlin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Include\cameraOrbiter.h" />
+    <ClCompile Include="noise.cpp" />
+    <ClCompile Include="perlin.cpp" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
