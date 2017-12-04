@@ -37,8 +37,8 @@ int App::Init()
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
 	
-	//orbiter = CameraOrbiter(Vector3(0.0, 0.0, 0.0), 300.0);
-	orbiter.LookAt(mesh.GetBounds());
+	orbiter = CameraOrbiter(Vector3(0.0, 0.0, -100.0), 300.0);
+	//orbiter.LookAt(mesh.GetBounds());
 
 	return 1;
 }

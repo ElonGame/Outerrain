@@ -5,7 +5,7 @@
 
 #define max(a, b) a > b ? a : b
 
-void CameraOrbiter::lookat(const Vector3& center, const double size)
+void CameraOrbiter::lookat(const Vector3& center, const float size)
 {
 	m_center = center;
 	m_position = Vector2(0, 0);
@@ -24,19 +24,19 @@ void CameraOrbiter::LookAt(const Bounds& b)
 	lookat(b.min, b.max);
 }
 
-void CameraOrbiter::rotation(const double x, const double y)
+void CameraOrbiter::rotation(const float x, const float y)
 {
 	m_rotation.x = m_rotation.x + y;
 	m_rotation.y = m_rotation.y + x;
 }
 
-void CameraOrbiter::translation(const double x, const double y)
+void CameraOrbiter::translation(const float x, const float y)
 {
 	m_position.x = m_position.x - m_size * x;
 	m_position.y = m_position.y + m_size * y;
 }
 
-void CameraOrbiter::move(const double z)
+void CameraOrbiter::move(const float z)
 {
 	m_size = m_size - m_size * 0.01f * z;
 	if (m_size < 0.01f)
@@ -50,19 +50,19 @@ Transform CameraOrbiter::view() const
 		* Translation(-Vector3(m_center));
 }
 
-Transform CameraOrbiter::projection(const double width, const double height, const double fov) const
+Transform CameraOrbiter::projection(const float width, const float height, const float fov) const
 {
 	// calcule la distance entre le centre de l'objet et la camera
 	//~ Transform t= view();
 	//~ Vector3 c= t(m_center);
-	//~ double d= -c.z;
-	double d = Magnitude(m_center - Vector3(m_position.x, m_position.y, m_size));     // meme resultat plus rapide a calculer
+	//~ float d= -c.z;
+	float d = Magnitude(m_center - Vector3(m_position.x, m_position.y, m_size));     // meme resultat plus rapide a calculer
 
 																				 // regle near et far en fonction du centre et du rayon englobant l'objet 
 	return Perspective(fov, width / height, max(0.1f, d - m_radius), max(1.f, d + m_radius));
 }
 
-void CameraOrbiter::frame(const double width, const double height, const double z, const double fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
 	Transform v = view();
 	Transform p = projection(width, height, fov);
