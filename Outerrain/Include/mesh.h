@@ -67,7 +67,7 @@ public:
 	Vector2 Texcoord(int) const;
 	Vector4 Color(int) const;
 
-	void GenerateNormals();
+	void CalculateNormals();
 
 	void Draw();
 	void Draw(const CameraOrbiter&);

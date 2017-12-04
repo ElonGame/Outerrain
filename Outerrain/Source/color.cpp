@@ -1,4 +1,3 @@
-
 #include "color.h"
 
 float Color::power() const
@@ -6,31 +5,30 @@ float Color::power() const
 	return r + g + b;
 }
 
-Color Black()
+Color Color::Black()
 {
 	return Color(0, 0, 0);
 }
 
-Color White()
+Color Color::White()
 {
 	return Color(1, 1, 1);
 }
 
-Color Red()
+Color Color::Red()
 {
 	return Color(1, 0, 0);
 }
 
-Color Green()
+Color Color::Green()
 {
 	return Color(0, 1, 0);
 }
 
-Color Blue()
+Color Color::Blue()
 {
 	return Color(0, 0, 1);
 }
-
 
 Color operator+ (const Color& a, const Color& b)
 {

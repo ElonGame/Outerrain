@@ -1,4 +1,3 @@
-
 #ifndef _IMAGE_H
 #define _IMAGE_H
 
@@ -7,84 +6,74 @@
 
 #include "color.h"
 
+struct ImageData
+{
+	ImageData() : data(), width(0), height(0), channels(0), size(0) {}
+	ImageData(const int w, const int h, const int c, const int s = 1) : data(w*h*c*s), width(w), height(h), channels(c), size(s) {}
 
-//! \addtogroup image utilitaires pour manipuler des images
-///@{
+	std::size_t offset(const int x, const int y) { return y * width * channels * size + x * channels * size; }
+	const void *buffer() const { return &data.front(); }
+	void *buffer() { return &data.front(); }
 
-//! \file
-//! manipulation simplifiee d'images
+	void ReadImageData(const char *filename);
+	int WriteImageData(const char *filename);
 
-//! representation d'une image.
+	std::vector<unsigned char> data;
+
+	int width;
+	int height;
+	int channels;
+	int size;
+};
+
 class Image
 {
 protected:
-	std::vector<Color> m_data;
-	int m_width;
-	int m_height;
+	std::vector<Color> data;
+	int width;
+	int height;
 
 public:
-	Image() : m_data(), m_width(0), m_height(0) {}
-	Image(const int w, const int h, const Color& color = Black()) : m_data(w*h, color), m_width(w), m_height(h) {}
+	Image() : data(), width(0), height(0) {}
+	Image(const int w, const int h, const Color& color = Color::Black()) : data(w*h, color), width(w), height(h) {}
 
-	/*! renvoie une reference sur la couleur d'un pixel de l'image.
-	permet de modifier et/ou de connaitre la couleur d'un pixel :
-	\code
-	Image image(512, 512);
-
-	image(10, 10)= make_red();      // le pixel (10, 10) devient rouge
-	image(0, 0)= image(10, 10);     // le pixel (0, 0) recupere la couleur du pixel (10, 10)
-	\endcode
-	*/
 	Color& operator() (const int x, const int y)
 	{
-		std::size_t offset = y * m_width + x;
-		assert(offset < m_data.size());
-		return m_data[offset];
+		std::size_t offset = y * width + x;
+		assert(offset < data.size());
+		return data[offset];
 	}
 
-	//! renvoie la couleur d'un pixel de l'image (image non modifiable).
 	Color operator() (const int x, const int y) const
 	{
-		std::size_t offset = y * m_width + x;
-		assert(offset < m_data.size());
-		return m_data[offset];
+		std::size_t offset = y * width + x;
+		assert(offset < data.size());
+		return data[offset];
 	}
 
-	//! renvoie un pointeur sur le stockage des couleurs des pixels.
-	const void * buffer() const
+	const void* Buffer() const
 	{
-		assert(!m_data.empty());
-		return &m_data.front();
+		assert(!data.empty());
+		return &data.front();
 	}
 
-	//! renvoie la largeur de l'image.
-	int width() const { return m_width; }
-	//! renvoie la hauteur de l'image.
-	int height() const { return m_height; }
-	//! renvoie le nombre de pixels de l'image.
-	std::size_t size() const { return m_width * m_height; }
+	void ReadImage(const char *filename);
+	int WriteImage(const char *filename);
 
-	/*! sentinelle pour la gestion d'erreur lors du chargement d'un fichier.
-	exemple :
-	\code
-	Image image= read_image("debug.png");
-	if(image == Image::error())
-	return "erreur de chargement";
-	\endcode
-	*/
-	static Image& error()
+	int Width() const { return width; }
+	int Height() const { return height; }
+	std::size_t Size() const { return width * height; }
+
+	static Image& Error()
 	{
 		static Image image;
 		return image;
 	}
 
-	//! comparaison avec la sentinelle. \code if(image == Image::error()) { ... } \endcode
-	bool operator== (const Image& im) const
+	bool operator==(const Image& im) const
 	{
-		// renvoie vrai si im ou l'objet est la sentinelle
 		return (this == &im);
 	}
 };
 
-///@}
 #endif

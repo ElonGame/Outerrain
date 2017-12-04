@@ -228,7 +228,7 @@ void Mesh::UpdateBuffers(const bool use_texcoord, const bool use_normal, const b
 	updateBuffersNextDraw = false;
 }
 
-void Mesh::GenerateNormals()
+void Mesh::CalculateNormals()
 {
 	normals.resize(vertices.size());
 
@@ -287,7 +287,8 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Draw();
 }
 
-void Mesh::WriteMesh(const char *filename) {
+void Mesh::WriteMesh(const char *filename) 
+{
 	cout << indices.size();
 	cout << "Saving obj file " << endl;
 	ofstream objfile;

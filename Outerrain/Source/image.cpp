@@ -1,46 +1,36 @@
-
 #include <cstdio>
 #include <string>
 #include <algorithm>
 #include <cmath>
-
-#ifdef GK_MACOS
-#include <SDL2_image/SDL_image.h>
-#else
 #include <SDL2/SDL_image.h>
-#endif
 
-#include "image_io.h"
+#include "image.h"
 
 
-Image read_image(const char *filename)
+void Image::ReadImage(const char *filename)
 {
-	// importer le fichier en utilisant SDL_image
 	SDL_Surface *surface = IMG_Load(filename);
 	if (surface == NULL)
 	{
 		printf("[error] loading image '%s'... sdl_image failed.\n", filename);
-		return Image::error();
+		return;
 	}
 
-	// verifier le format, rgb ou rgba
 	const SDL_PixelFormat format = *surface->format;
 	if (format.BitsPerPixel != 24 && format.BitsPerPixel != 32)
 	{
 		printf("[error] loading image '%s'... format failed. (bpp %d)\n", filename, format.BitsPerPixel);
 		SDL_FreeSurface(surface);
-		return Image::error();
+		return;
 	}
 
-	int width = surface->w;
-	int height = surface->h;
 	int channels = (format.BitsPerPixel == 32) ? 4 : 3;
-
-	Image image(surface->w, surface->h);
+	width = surface->w;
+	height = surface->h;
+	data.resize(width * height, Color::Black());
 
 	printf("loading image '%s' %dx%d %d channels...\n", filename, width, height, channels);
 
-	// converti les donnees en pixel rgba, et retourne l'image, origine en bas a gauche.
 	if (format.BitsPerPixel == 32)
 	{
 		int py = 0;
@@ -55,7 +45,8 @@ Image read_image(const char *filename)
 				Uint8 b = pixel[format.Bshift / 8];
 				Uint8 a = pixel[format.Ashift / 8];
 
-				image(x, y) = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f, (float)a / 255.f);
+				int index = y * width + x;
+				data[index] = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f, (float)a / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
@@ -74,18 +65,17 @@ Image read_image(const char *filename)
 				const Uint8 g = pixel[format.Gshift / 8];
 				const Uint8 b = pixel[format.Bshift / 8];
 
-				image(x, y) = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f);
+				int index = y * width + x;
+				data[index] = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
 	}
 
 	SDL_FreeSurface(surface);
-	return image;
 }
 
-
-int write_image(const Image& image, const char *filename)
+int Image::WriteImage(const char *filename)
 {
 	if (std::string(filename).rfind(".png") == std::string::npos && std::string(filename).rfind(".bmp") == std::string::npos)
 	{
@@ -94,13 +84,13 @@ int write_image(const Image& image, const char *filename)
 	}
 
 	// flip de l'image : Y inverse entre GL et BMP
-	std::vector<Uint8> flip(image.width() * image.height() * 4);
+	std::vector<Uint8> flip(width * height * 4);
 
 	int p = 0;
-	for (int y = 0; y < image.height(); y++)
-		for (int x = 0; x < image.width(); x++)
+	for (int y = 0; y < height; y++)
+		for (int x = 0; x < width; x++)
 		{
-			Color color = image(x, image.height() - y - 1);
+			Color color = this->operator()(x, height - y - 1);
 			Uint8 r = (Uint8)std::min(std::floor(color.r * 255.f), 255.f);
 			Uint8 g = (Uint8)std::min(std::floor(color.g * 255.f), 255.f);
 			Uint8 b = (Uint8)std::min(std::floor(color.b * 255.f), 255.f);
@@ -113,8 +103,8 @@ int write_image(const Image& image, const char *filename)
 			p = p + 4;
 		}
 
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), image.width(), image.height(),
-		32, image.width() * 4,
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), width, height,
+		32, width * 4,
 #if 0
 		0xFF000000,
 		0x00FF0000,
@@ -140,35 +130,34 @@ int write_image(const Image& image, const char *filename)
 	return code;
 }
 
-
-ImageData read_image_data(const char *filename)
+void ImageData::ReadImageData(const char *filename)
 {
-	// importer le fichier en utilisant SDL_image
 	SDL_Surface *surface = IMG_Load(filename);
 	if (surface == NULL)
 	{
 		printf("[error] loading image '%s'... sdl_image failed.\n%s\n", filename, SDL_GetError());
-		return ImageData();
+		return;
 	}
 
-	// verifier le format, rgb ou rgba
 	const SDL_PixelFormat format = *surface->format;
 	if (format.BitsPerPixel != 24 && format.BitsPerPixel != 32)
 	{
 		printf("[error] loading image '%s'... format failed. (bpp %d)\n", filename, format.BitsPerPixel);
 		SDL_FreeSurface(surface);
-		return ImageData();
+		return;
 	}
 
-	int width = surface->w;
-	int height = surface->h;
-	int channels = (format.BitsPerPixel == 32) ? 4 : 3;
+	int c = (format.BitsPerPixel == 32) ? 4 : 3;
+
+	width = surface->w;
+	height = surface->h;
+	channels = c;
+	data.resize(width * height * c, 0);
 
 	ImageData image(width, height, channels);
 
 	printf("loading image '%s' %dx%d %d channels...\n", filename, width, height, channels);
 
-	// converti les donnees en pixel rgba, et retourne l'image, origine en bas a gauche.
 	if (format.BitsPerPixel == 32)
 	{
 		int py = 0;
@@ -183,16 +172,15 @@ ImageData read_image_data(const char *filename)
 				Uint8 b = pixel[format.Bshift / 8];
 				Uint8 a = pixel[format.Ashift / 8];
 
-				std::size_t offset = image.offset(x, y);
-				image.data[offset] = r;
-				image.data[offset + 1] = g;
-				image.data[offset + 2] = b;
-				image.data[offset + 3] = a;
+				std::size_t off = offset(x, y);
+				data[off] = r;
+				data[off + 1] = g;
+				data[off + 2] = b;
+				data[off + 3] = a;
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
 	}
-
 	else if (format.BitsPerPixel == 24)
 	{
 		int py = 0;
@@ -206,20 +194,19 @@ ImageData read_image_data(const char *filename)
 				const Uint8 g = pixel[format.Gshift / 8];
 				const Uint8 b = pixel[format.Bshift / 8];
 
-				std::size_t offset = image.offset(x, y);
-				image.data[offset] = r;
-				image.data[offset + 1] = g;
-				image.data[offset + 2] = b;
+				std::size_t off = offset(x, y);
+				data[off] = r;
+				data[off + 1] = g;
+				data[off + 2] = b;
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
 	}
 
 	SDL_FreeSurface(surface);
-	return image;
 }
 
-int write_image_data(ImageData& image, const char *filename)
+int ImageData::WriteImageData(const char *filename)
 {
 	if (std::string(filename).rfind(".png") == std::string::npos && std::string(filename).rfind(".bmp") == std::string::npos)
 	{
@@ -227,26 +214,26 @@ int write_image_data(ImageData& image, const char *filename)
 		return -1;
 	}
 
-	if (image.size != 1)
+	if (size != 1)
 	{
 		printf("[error] writing color image '%s'... not an 8 bits image.\n", filename);
 		return -1;
 	}
 
 	// flip de l'image : origine en bas a gauche
-	std::vector<Uint8> flip(image.width * image.height * 4);
+	std::vector<Uint8> flip(width * height * 4);
 
 	int p = 0;
-	for (int y = 0; y < image.height; y++)
-		for (int x = 0; x < image.width; x++)
+	for (int y = 0; y < height; y++)
+		for (int x = 0; x < width; x++)
 		{
-			std::size_t offset = image.offset(x, image.height - y - 1);
-			Uint8 r = image.data[offset];
-			Uint8 g = image.data[offset + 1];
-			Uint8 b = image.data[offset + 2];
+			std::size_t off = offset(x, height - y - 1);
+			Uint8 r = data[off];
+			Uint8 g = data[off + 1];
+			Uint8 b = data[off + 2];
 			Uint8 a = 255;
-			if (image.channels > 3)
-				a = image.data[offset + 3];
+			if (channels > 3)
+				a = data[off + 3];
 
 			flip[p] = r;
 			flip[p + 1] = g;
@@ -256,8 +243,8 @@ int write_image_data(ImageData& image, const char *filename)
 		}
 
 	// construit la surface sdl
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), image.width, image.height,
-		32, image.width * 4,
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), width, height,
+		32, width * 4,
 #if 0
 		0xFF000000,
 		0x00FF0000,

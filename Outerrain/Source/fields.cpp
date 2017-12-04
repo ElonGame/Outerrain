@@ -3,7 +3,6 @@
 #include "vec.h"
 #include "perlin.h"
 #include "image.h"
-#include "image_io.h"
 
 /* Scalarfield 2D */
 Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
@@ -46,7 +45,6 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 }
 
 
-
 /* Heightfield */
 Heightfield::Heightfield(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) : Scalarfield2D(nx, ny, bottomLeft, topRight)
 {
@@ -54,10 +52,11 @@ Heightfield::Heightfield(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) :
 
 void Heightfield::InitFromFile(const char* file, float blackAltitude, float whiteAltitude)
 {
-	Image heightmap = read_image(file);
+	Image heightmap;
+	heightmap.ReadImage(file);
 
-	float texelX = 1.0f / (heightmap.width());
-	float texelY = 1.0f / (heightmap.height());
+	float texelX = 1.0f / (heightmap.Width());
+	float texelY = 1.0f / (heightmap.Height());
 
 	for (int i = 0; i < ny; i++)
 	{
@@ -66,12 +65,12 @@ void Heightfield::InitFromFile(const char* file, float blackAltitude, float whit
 			float u = j / ((float)nx - 1);
 			float v = i / ((float)ny - 1);
 
-			int anchorX = u * (heightmap.width() - 1);
-			int anchorY = v * (heightmap.height() - 1);
+			int anchorX = u * (heightmap.Width() - 1);
+			int anchorY = v * (heightmap.Height() - 1);
 
-			if (anchorX == heightmap.width() - 1)
+			if (anchorX == heightmap.Width() - 1)
 				anchorX--;
-			if (anchorY == heightmap.height() - 1)
+			if (anchorY == heightmap.Height() - 1)
 				anchorY--;
 
 			float a = heightmap(anchorX, anchorY).r;
@@ -157,7 +156,7 @@ Mesh Heightfield::GetMesh() const
 	}
 
 	// Normals
-	ret.GenerateNormals();
+	ret.CalculateNormals();
 
 	return ret;
 }
@@ -173,6 +172,7 @@ bool Heightfield::Inside(const Vector3& point) const
 	return point.z < zt;
 }
 
+
 /* LayerField */
 LayerField::LayerField(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
 {
@@ -184,8 +184,6 @@ double LayerField::BeckrockValue(int i, int j)
 {
 	return bedrock.At(i, j);
 }
-
-
 
 double LayerField::SandValue(int i, int j)
 {
