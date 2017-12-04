@@ -25,7 +25,7 @@ protected:
 
 	void CreateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	void UpdateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
-
+	
 	const float* VertexBufferPtr() const { return &vertices.front().x; }
 	std::size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }
 
@@ -66,6 +66,8 @@ public:
 	Vector3 Normal(int) const;
 	Vector2 Texcoord(int) const;
 	Vector4 Color(int) const;
+
+	void GenerateNormals();
 
 	void Draw();
 	void Draw(const CameraOrbiter&);

@@ -27,7 +27,7 @@ public:
 	Heightfield(int, int, Vector2, Vector2);
 
 	void InitFromFile(const char* file, float blackAltitude, float whiteAltitude);
-	void InitFromNoise();
+	void InitFromNoise(int, int);
 
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;

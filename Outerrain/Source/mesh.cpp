@@ -3,7 +3,10 @@
 #include "shader.h"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
+#include <fstream>
 
+using namespace std;
 
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
@@ -72,6 +75,8 @@ void Mesh::AddTexcoord(const int& i, const Vector2& t)
 	updateBuffersNextDraw = true;
 	texcoords[i] = t;
 }
+
+
 
 void Mesh::SetShader(const Shader& s)
 {
@@ -223,6 +228,30 @@ void Mesh::UpdateBuffers(const bool use_texcoord, const bool use_normal, const b
 	updateBuffersNextDraw = false;
 }
 
+void Mesh::GenerateNormals()
+{
+	normals.resize(vertices.size());
+
+	for (unsigned int i = 0; i < indices.size() - 2; ++i)
+	{
+		// Sommets a, b, c de la face
+		int a = indices[i];
+		int b = indices[i + 1];
+		int c = indices[i + 2];
+
+		Vector3 AB = (vertices[b] - vertices[a]);
+		Vector3 AC = (vertices[c] - vertices[a]);
+		Vector3 normal = Cross(AB, AC);
+
+		normals[a] = normals[a] + normal;
+		normals[b] = normals[b] + normal;
+		normals[c] = normals[c] + normal;
+
+	}
+	for (unsigned int i = 0; i < normals.size(); i++)
+		normals[i] = Normalize(normals[i]);
+}
+
 void Mesh::Draw()
 {
 	if (VAO == 0)
@@ -248,13 +277,53 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform mv = orbiter.View() * Identity();
-	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
+	Transform trs = Identity();
+	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * (orbiter.View() * trs);
+	Vector3 camPos = orbiter.Position();
 
+	shader.UniformTransform("trsMatrix", trs);
 	shader.UniformTransform("mvpMatrix", mvp);
-	shader.UniformTransform("mvMatrix", mv);
+	shader.UniformVec3("camPos", camPos);
 
 	Draw();
+}
+
+void Mesh::WriteMesh(const char *filename) {
+	cout << indices.size();
+	cout << "Saving obj file " << endl;
+	ofstream objfile;
+	objfile.open(filename);
+	objfile << "#Test COMMENT.\n";
+	for (int i = 0; i < vertices.size(); i++)
+		objfile << "v " << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << "\n";
+	for (int j = 0; j < texcoords.size(); j++)
+		objfile << "vt " << texcoords[j].x << " " << texcoords[j].y << "\n";
+	for (int k = 0; k < normals.size() ; k++)
+		objfile << "vn " << normals[k].x << " " << normals[k].y << " " << normals[k].z << "\n";
+	for (int i = 0; i < indices.size(); i += 3)
+		objfile << "f " << indices[i] + 1 << "/" << indices[i + 1] + 1 <<"/" << indices[i + 2] + 1 << "\n";
+	
+	bool has_texcoords = (texcoords.size() > 0);
+	bool has_normals = (normals.size() > 0);
+	bool has_indices = (indices.size() > 0);
+	unsigned int n = has_indices ? (unsigned int)indices.size() : (unsigned int)vertices.size();
+	for (unsigned int i = 0; i + 2 < n; i += 3)
+	{
+		objfile << "f ";
+		for (unsigned int k = 0; k < 3; k++)
+		{
+			unsigned int id = has_indices ? indices[i + k] + 1 : i + k + 1;
+			objfile << id;
+			if (has_texcoords && has_normals)
+				objfile << "/" << id << "/" << id << " ";
+			else if (has_texcoords)
+				objfile << "/" << id << " ";
+			else if (has_normals)
+				objfile << "//" << id << " ";
+		}
+		objfile << "\n";
+	}
+	objfile.close();
 }
 
 void Mesh::ReadMesh(const char *filename)

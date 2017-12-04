@@ -23,6 +23,10 @@ public:
 	{
 		return Vector2(x * k, y * k);
 	}
+	Vector2 operator/(const float& k) const
+	{
+		return Vector2(x / k, y / k);
+	}
 	bool operator==(const Vector2& u) const
 	{
 		return (x == u.x && y == u.y);
@@ -84,6 +88,10 @@ public:
 	Vector3 operator*(const float& k) const
 	{
 		return Vector3(x * k, y * k, z * k);
+	}
+	Vector3 operator/(const float& k) const
+	{
+		return Vector3(x / k, y / k, z / k);
 	}
 	bool operator==(const Vector3& u) const
 	{
