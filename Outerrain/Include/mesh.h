@@ -26,6 +26,8 @@ protected:
 
 	void CreateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	void UpdateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
+	
+	void SetNormals();
 
 	const float* VertexBufferPtr() const { return &vertices.front().x; }
 	std::size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }

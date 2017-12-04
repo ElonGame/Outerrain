@@ -27,7 +27,7 @@ public:
 
 	// @Todo
 	void InitFromFile();
-	void InitFromNoise();
+	void InitFromNoise(int, int);
 
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;

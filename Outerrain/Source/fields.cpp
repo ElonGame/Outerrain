@@ -1,6 +1,7 @@
+#include <algorithm>
 #include "fields.h"
 #include "vec.h"
-#include <algorithm>
+#include "perlin.h"
 
 /* Scalarfield 2D */
 Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
@@ -36,10 +37,10 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 	double v3 = At(i + 1, j + 1);
 	double v4 = At(i, j + 1);
 
-	return (1 - u) * (1 - v) * v1 
-			+ (1 - u) * v * v2 
-			+ u * (1 - v) * v3 
-			+ u * v * v4;
+	return (1 - u) * (1 - v) * v1
+		+ (1 - u) * v * v2
+		+ u * (1 - v) * v3
+		+ u * v * v4;
 }
 
 
@@ -53,13 +54,14 @@ void Heightfield::InitFromFile()
 
 }
 
-void Heightfield::InitFromNoise()
+void Heightfield::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
 	for (int i = 0; i < nx; i++)
 	{
 		for (int j = 0; j < ny; j++)
 		{
-			values[Index(i, j)] = 1.0;
+			values[Index(i, j)] = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
+			//values[Index(i, j)] = Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6.0, i, j);
 		}
 	}
 }
