@@ -7,12 +7,9 @@
 class CameraOrbiter
 {
 public:
-	//! cree une camera par defaut. observe le centre (0, 0, 0) a une distance 5.
-	CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(1000.0) {}
-	//! cree une camera. observe le point center a une distance size.
-	CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar) {}
-	//! cree une camera. observe une boite alignee sur les axes.
-	CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1), zFar(1000.0) { }
+	CameraOrbiter();
+	CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar);
+	CameraOrbiter(const Vector3& pmin, const Vector3& pmax);
 
 	void LookAt(const Vector3& center, const float size);
 	void LookAt(const Vector3& pmin, const Vector3& pmax);

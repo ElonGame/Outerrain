@@ -36,10 +36,13 @@
     <ClInclude Include="Include\transform.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="noise.h">
+    <ClInclude Include="Include\image.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="perlin.h">
+    <ClInclude Include="Include\image_io.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\color.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,10 +74,10 @@
     <ClCompile Include="Source\cameraOrbiter.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="noise.cpp">
+    <ClCompile Include="Source\image_io.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="perlin.cpp">
+    <ClCompile Include="Source\color.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

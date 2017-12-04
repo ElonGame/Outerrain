@@ -164,3 +164,21 @@ float Heightfield::Lerp(float a, float b, float f)
 {
 	return (a * (1.0f - f)) + (b * f);
 }
+
+
+/* LayerField */
+LayerField::LayerField(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
+{
+	sand = Scalarfield2D(nx, ny, a, b);
+	bedrock = Scalarfield2D(nx, ny, a, b);
+}
+
+double LayerField::BeckrockValue(int i, int j)
+{
+	return bedrock.At(i, j);
+}
+
+double LayerField::SandValue(int i, int j)
+{
+	return sand.At(i, j);
+}
