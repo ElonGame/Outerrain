@@ -248,11 +248,13 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform mv = orbiter.View() * Identity();
-	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
+	Transform trs = Identity();
+	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * (orbiter.View() * trs);
+	Vector3 camPos = orbiter.Position();
 
+	shader.UniformTransform("trsMatrix", trs);
 	shader.UniformTransform("mvpMatrix", mvp);
-	shader.UniformTransform("mvMatrix", mv);
+	shader.UniformVec3("camPos", camPos);
 
 	Draw();
 }
