@@ -25,17 +25,15 @@
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\image_io.h" />
     <ClInclude Include="Include\mesh.h" />
+    <ClInclude Include="Include\noise.h" />
+    <ClInclude Include="Include\perlin.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\window.h" />
-    <ClInclude Include="noise.h" />
-    <ClInclude Include="perlin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Include\cameraOrbiter.h" />
-    <ClCompile Include="noise.cpp" />
-    <ClCompile Include="perlin.cpp" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
@@ -43,6 +41,8 @@
     <ClCompile Include="Source\image_io.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\mesh.cpp" />
+    <ClCompile Include="Source\noise.cpp" />
+    <ClCompile Include="Source\perlin.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\window.cpp" />
