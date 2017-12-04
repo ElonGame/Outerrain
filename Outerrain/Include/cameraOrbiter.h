@@ -7,12 +7,9 @@
 class CameraOrbiter
 {
 public:
-	//! cree une camera par defaut. observe le centre (0, 0, 0) a une distance 5.
-	CameraOrbiter() : center(), position(), rotation(), size(5.f), radius(5.f) {}
-	//! cree une camera. observe le point center a une distance size.
-	CameraOrbiter(const Vector3& center, const float size) : center(center), position(), rotation(), size(size), radius(size) {}
-	//! cree une camera. observe une boite alignee sur les axes.
-	CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), radius(size) {}
+	CameraOrbiter();
+	CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar);
+	CameraOrbiter(const Vector3& pmin, const Vector3& pmax);
 
 	void LookAt(const Vector3& center, const float size);
 	void LookAt(const Vector3& pmin, const Vector3& pmax);
@@ -64,7 +61,6 @@ public:
 	void Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
 
 	Vector3 Position();
-	float Radius() const { return radius; }
 	void SetFrameWidth(float w) { frameWidth = w; }
 	void SetFrameHeight(float h) { frameHeight = h; }
 	float FrameWidth() const { return frameWidth; }
@@ -75,8 +71,8 @@ protected:
 	Vector2 position;
 	Vector2 rotation;
 	float size;
-	float radius;
 	float frameWidth, frameHeight;
+	float zNear, zFar;
 };
 
 #endif

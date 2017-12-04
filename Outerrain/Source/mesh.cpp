@@ -228,6 +228,30 @@ void Mesh::UpdateBuffers(const bool use_texcoord, const bool use_normal, const b
 	updateBuffersNextDraw = false;
 }
 
+void Mesh::GenerateNormals()
+{
+	normals.resize(vertices.size());
+
+	for (unsigned int i = 0; i < indices.size() - 2; ++i)
+	{
+		// Sommets a, b, c de la face
+		int a = indices[i];
+		int b = indices[i + 1];
+		int c = indices[i + 2];
+
+		Vector3 AB = (vertices[b] - vertices[a]);
+		Vector3 AC = (vertices[c] - vertices[a]);
+		Vector3 normal = Cross(AB, AC);
+
+		normals[a] = normals[a] + normal;
+		normals[b] = normals[b] + normal;
+		normals[c] = normals[c] + normal;
+
+	}
+	for (unsigned int i = 0; i < normals.size(); i++)
+		normals[i] = Normalize(normals[i]);
+}
+
 void Mesh::Draw()
 {
 	if (VAO == 0)
@@ -256,8 +280,8 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Transform mv = orbiter.View() * Identity();
 	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
 
-	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformTransform("mvMatrix", mv);
+	shader.UniformTransform("mvpMatrix", mvp);
 
 	Draw();
 }
@@ -303,6 +327,11 @@ void Mesh::WriteMesh(const char *filename) {
 void Mesh::ReadMesh(const char *filename)
 {
 	FILE *in = fopen(filename, "rt");
+	if (in == NULL)
+	{
+		std::cout << "Error loading mesh - aborting" << std::endl;
+		return;
+	}
 
 	printf("loading mesh '%s'...\n", filename);
 

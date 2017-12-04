@@ -31,7 +31,8 @@ int App::Init()
 	//Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
 	//hf.InitFromNoise();
 	//mesh = hf.GetMesh();
-	mesh.ReadMesh("Data/test.obj");
+	mesh = hf.GetMesh();
+	//mesh.read_mesh("Data/bigguy.obj");
 
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
