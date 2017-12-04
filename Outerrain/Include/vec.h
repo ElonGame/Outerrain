@@ -209,8 +209,8 @@ inline Vector4 operator-(const Vector4& v)
 
 
 /* Bounds */
-struct Bounds
+typedef struct Bounds
 {
 	Vector3 min;
 	Vector3 max;
-};
+} Bounds;
