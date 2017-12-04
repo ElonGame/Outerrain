@@ -11,7 +11,6 @@ void CameraOrbiter::LookAt(const Vector3& c, const float s)
 	position = Vector2(0, 0);
 	rotation = Vector2(0, 0);
 	size = s;
-	radius = size;
 }
 
 void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
@@ -58,8 +57,8 @@ Transform CameraOrbiter::Projection(const float width, const float height, const
 	//~ float d= -c.z;
 	float d = Magnitude(center - Vector3(position.x, position.y, size));     // meme resultat plus rapide a calculer
 
-																				 // regle near et far en fonction du centre et du rayon englobant l'objet 
-	return Perspective(fov, width / height, max(0.1f, d - radius), max(1.f, d + radius));
+	// regle near et far en fonction du centre et du rayon englobant l'objet 
+	return Perspective(fov, width / height, 0.1f, max(1.f, d + zFar));
 }
 
 void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
