@@ -5,6 +5,20 @@
 
 #define max(a, b) a > b ? a : b
 
+CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(100.0)
+{
+}
+
+CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar) 
+	: center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
+{
+}
+
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax)
+	: center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1), zFar(1000.0)
+{ 
+}
+
 void CameraOrbiter::LookAt(const Vector3& c, const float s)
 {
 	center = c;
