@@ -20,7 +20,6 @@ App::~App()
 int App::Init()
 {
 	// Default gl state
-	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClearDepthf(1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -29,13 +28,16 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
+	/*Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
 	hf.InitFromNoise();
-	mesh = hf.GetMesh();
+	mesh = hf.GetMesh();*/
+	mesh.read_mesh("Data/bigguy.obj");
+
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
-
+	
+	//orbiter = CameraOrbiter(Vector3(0.0, 0.0, 0.0), 300.0);
 	orbiter.LookAt(mesh.GetBounds());
 
 	return 1;

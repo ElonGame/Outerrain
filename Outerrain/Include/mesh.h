@@ -44,6 +44,7 @@ protected:
 
 public:
 	Mesh();
+	Mesh(const GLenum primitives) : primitiveDrawn(primitives) {}
 
 	void Destroy();
 
@@ -67,4 +68,8 @@ public:
 
 	void Draw();
 	void Draw(const CameraOrbiter&);
+	
+
+	void read_mesh(const char *filename);
+
 };

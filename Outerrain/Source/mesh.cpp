@@ -239,6 +239,7 @@ void Mesh::Draw()
 		glDrawElements(primitiveDrawn, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
 	else
 		glDrawArrays(primitiveDrawn, 0, (GLsizei)vertices.size());
+	 glBindVertexArray(0);
 }
 
 void Mesh::Draw(const CameraOrbiter& orbiter)
@@ -254,4 +255,114 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformTransform("mvMatrix", mv);
 
 	Draw();
+}
+
+
+void Mesh::read_mesh(const char *filename)
+{
+	FILE *in = fopen(filename, "rt");
+
+
+	printf("loading mesh '%s'...\n", filename);
+
+	std::vector<Vector3> vert;
+	std::vector<Vector2> tex;
+	std::vector<Vector3> norm;
+
+	std::vector<int> idp;
+	std::vector<int> idt;
+	std::vector<int> idn;
+
+	char tmp[1024];
+	char line_buffer[1024];
+	bool error = true;
+	for (;;)
+	{
+		// charge une ligne du fichier
+		if (fgets(line_buffer, sizeof(line_buffer), in) == NULL)
+		{
+			error = false;       // fin du fichier, pas d'erreur detectee
+			break;
+		}
+
+		// force la fin de la ligne, au cas ou
+		line_buffer[sizeof(line_buffer) - 1] = 0;
+
+		// saute les espaces en debut de ligne
+		char *line = line_buffer;
+		while (*line && isspace(*line))
+			line++;
+
+		if (line[0] == 'v')
+		{
+			float x, y, z;
+			if (line[1] == ' ')          // position x y z
+			{
+				if (sscanf(line, "v %f %f %f", &x, &y, &z) != 3)
+					break;
+				vert.push_back(Vector3(x, y, z));
+			}
+			else if (line[1] == 'n')     // normal x y z
+			{
+				if (sscanf(line, "vn %f %f %f", &x, &y, &z) != 3)
+					break;
+				norm.push_back(Vector3(x, y, z));
+			}
+			else if (line[1] == 't')     // texcoord x y
+			{
+				if (sscanf(line, "vt %f %f", &x, &y) != 2)
+					break;
+				tex.push_back(Vector2(x, y));
+			}
+		}
+
+		else if (line[0] == 'f')         // triangle a b c, les sommets sont numerotes a partir de 1 ou de la fin du tableau (< 0)
+		{
+			idp.clear();
+			idt.clear();
+			idn.clear();
+
+			int next;
+			for (line = line + 1; ; line = line + next)
+			{
+				idp.push_back(0);
+				idt.push_back(0);
+				idn.push_back(0);         // 0: invalid index
+
+				next = 0;
+				if (sscanf(line, " %d/%d/%d %n", &idp.back(), &idt.back(), &idn.back(), &next) == 3)
+					continue;
+				else if (sscanf(line, " %d/%d %n", &idp.back(), &idt.back(), &next) == 2)
+					continue;
+				else if (sscanf(line, " %d//%d %n", &idp.back(), &idn.back(), &next) == 2)
+					continue;
+				else if (sscanf(line, " %d %n", &idp.back(), &next) == 1)
+					continue;
+				else if (next == 0)      // fin de ligne
+					break;
+			}
+						
+			for (int v = 2; v + 1 < (int)idp.size(); v++)
+			{
+				int idv[3] = { 0, v - 1, v };
+				for (int i = 0; i < 3; i++)
+				{
+					int k = idv[i];
+					int p = (idp[k] < 0) ? (int)vert.size() + idp[k] : idp[k] - 1;
+					int t = (idt[k] < 0) ? (int)tex.size() + idt[k] : idt[k] - 1;
+					int n = (idn[k] < 0) ? (int)norm.size() + idn[k] : idn[k] - 1;
+
+					if (p < 0) break; // error
+					if (t >= 0) AddTexcoord(tex[t]);
+					if (n >= 0) AddNormal(norm[n]);
+					AddVertex(vert[p]);
+				}
+			}
+		}
+	}
+
+	fclose(in);
+
+	if (error)
+		printf("loading mesh '%s'...\n[error]\n%s\n\n", filename, line_buffer);
 }
