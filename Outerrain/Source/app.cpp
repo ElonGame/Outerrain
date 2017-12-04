@@ -28,9 +28,9 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
-	//hf.InitFromNoise();
-	hf.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	Heightfield hf(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	hf.InitFromNoise(0.0f, 1.0f);
+	//hf.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
 	mesh = hf.GetMesh();
 	//mesh.read_mesh("Data/bigguy.obj");
 

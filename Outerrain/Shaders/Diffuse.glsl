@@ -28,10 +28,10 @@ void main( )
 #ifdef FRAGMENT_SHADER
 uniform vec3 camPos;
 
-const vec3 diffuseColor = vec3(1.0, 0.0, 0.0);
+const vec3 diffuseColor = vec3(0.2, 0.5, 0.8);
 const float shininess = 64.0;
 const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
-const vec3 lightDir = vec3(0, -1, 0);
+const vec3 lightDir = vec3(0.707, -0.707, 0);
 const vec3 lightColor = vec3(1, 1, 1);
 const float lightStrength = 1.0;
 

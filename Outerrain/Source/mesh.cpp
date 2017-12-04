@@ -277,8 +277,8 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Vector3 camPos = orbiter.Position();
 
 	shader.UniformTransform("trsMatrix", trs);
-	shader.UniformVec3("camPos", camPos);
 	shader.UniformTransform("mvpMatrix", mvp);
+	shader.UniformVec3("camPos", camPos);
 
 	Draw();
 }

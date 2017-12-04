@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "fields.h"
 #include "vec.h"
+#include "perlin.h"
 #include "image.h"
 #include "image_io.h"
 
