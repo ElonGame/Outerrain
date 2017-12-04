@@ -23,7 +23,6 @@ protected:
 	Shader shader;
 	bool updateBuffersNextDraw;
 
-
 	void CreateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	void UpdateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	
@@ -60,7 +59,9 @@ public:
 	void AddTexcoord(const Vector2&);
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
-
+	
+	void WriteMesh(const char*); // TODO Nathan
+	void ReadMesh(const char*);
 
 	Bounds GetBounds() const;
 	Vector3 Vertex(int) const;
@@ -70,8 +71,4 @@ public:
 
 	void Draw();
 	void Draw(const CameraOrbiter&);
-	
-
-	void read_mesh(const char *filename);
-
 };

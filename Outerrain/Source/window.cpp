@@ -13,14 +13,13 @@
 #include "GL/glew.h"
 #include "window.h"
 
-
 static int width = 0;
 static int height = 0;
-int window_width()
+int WindowWidth()
 {
 	return width;
 }
-int window_height()
+int WindowHeight()
 {
 	return height;
 }
@@ -32,7 +31,7 @@ int key_state(const SDL_Keycode key)
 	assert((size_t)code < key_states.size());
 	return (int)key_states[code];
 }
-void clear_key_state(const SDL_Keycode key)
+void ClearKeyState(const SDL_Keycode key)
 {
 	SDL_Scancode code = SDL_GetScancodeFromKey(key);
 	assert((size_t)code < key_states.size());
@@ -44,7 +43,7 @@ SDL_KeyboardEvent key_event()
 {
 	return last_key;
 }
-void clear_key_event()
+void ClearKeyEvent()
 {
 	last_key.type = 0;
 	last_key.keysym.sym = 0;
@@ -55,7 +54,7 @@ SDL_TextInputEvent text_event()
 {
 	return last_text;
 }
-void clear_text_event()
+void ClearTextEvent()
 {
 	last_text.text[0] = 0;
 }
@@ -65,7 +64,7 @@ const char *drop_event()
 {
 	return last_drop.c_str();
 }
-void clear_drop_event()
+void ClearDropEvent()
 {
 	last_drop.clear();
 }
@@ -75,7 +74,7 @@ SDL_MouseButtonEvent button_event()
 {
 	return last_button;
 }
-void clear_button_event()
+void ClearButtonEvent()
 {
 	last_button.state = 0;
 }
@@ -85,7 +84,7 @@ SDL_MouseWheelEvent wheel_event()
 {
 	return last_wheel;
 }
-void clear_wheel_event()
+void ClearWheelEvent()
 {
 	last_wheel.x = 0;
 	last_wheel.y = 0;
@@ -94,7 +93,7 @@ void clear_wheel_event()
 
 static unsigned int last_time = 0;
 static unsigned int last_delta = 1;
-float global_time()
+float GlobalTime()
 {
 	unsigned int now = SDL_GetTicks();
 	if (now <= last_time)
@@ -103,13 +102,13 @@ float global_time()
 	last_time = now;
 	return (float)last_time;
 }
-float delta_time()
+float DeltaTime()
 {
 	return (float)last_delta;
 }
 
 static int stop = 0;
-Window create_window(const int w, const int h)
+Window CreateWindow(const int w, const int h)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -139,12 +138,12 @@ Window create_window(const int w, const int h)
 
 	return window;
 }
-void release_window(Window window)
+void ReleaseWindow(Window window)
 {
 	SDL_StopTextInput();
 	SDL_DestroyWindow(window);
 }
-int events(Window window)
+int Events(Window window)
 {
 	// gestion des evenements
 	SDL_Event event;

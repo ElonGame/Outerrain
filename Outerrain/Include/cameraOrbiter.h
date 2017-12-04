@@ -1,39 +1,35 @@
-
 #ifndef _ORBITER_H
 #define _ORBITER_H
 
 #include "vec.h"
 #include "transform.h"
 
-//! representation de la camera, type orbiter, place sur une sphere autour du centre de l'objet.
 class CameraOrbiter
 {
 public:
 	//! cree une camera par defaut. observe le centre (0, 0, 0) a une distance 5.
-	CameraOrbiter() : m_center(), m_position(), m_rotation(), m_size(5.f), m_radius(5.f) {}
+	CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(100.0) {}
 	//! cree une camera. observe le point center a une distance size.
-	CameraOrbiter(const Vector3& center, const float size) : m_center(center), m_position(), m_rotation(), m_size(size), m_radius(size) {}
+	CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar) {}
 	//! cree une camera. observe une boite alignee sur les axes.
-	CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : m_center(Center(pmin, pmax)), m_position(), m_rotation(), m_size(Magnitude(pmin - pmax)), m_radius(m_size) {}
+	CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1), zFar(1000.0) { }
 
-	//! observe le point center a une distance size.
-	void lookat(const Vector3& center, const float size);
-	//! observe le centre d'une boite englobante.
-	void lookat(const Vector3& pmin, const Vector3& pmax);
+	void LookAt(const Vector3& center, const float size);
+	void LookAt(const Vector3& pmin, const Vector3& pmax);
 	void LookAt(const Bounds&);
 
 	//! change le point de vue / la direction d'observation.
-	void rotation(const float x, const float y);
+	void Rotation(const float x, const float y);
 	//! deplace le centre / le point observe.
-	void translation(const float x, const float y);
+	void Translation(const float x, const float y);
 	//! rapproche / eloigne la camera du centre.
-	void move(const float z);
+	void Move(const float z);
 
 	//! renvoie la transformation vue.
-	Transform view() const;
+	Transform View() const;
 
 	//! renvoie la projection reglee pour une image d'aspect width / height, et une ouverture de fov degres.
-	Transform projection(const float width, const float height, const float fov) const;
+	Transform Projection(const float width, const float height, const float fov) const;
 
 	/*! renvoie les coordonnees de l'origine d0 et les axes dx, dy du plan image dans le repere du monde.
 	permet de construire un rayon pour le pixel x, y :
@@ -65,29 +61,21 @@ public:
 	Point o= d0 + x*dx0 + y*dy0;
 	\endcode
 	*/
-	void frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
+	void Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
 
-	//! renvoie la position de la camera dans le repere du monde.
-	Vector3 position();
-
-	//! renvoie le rayon de la scene.
-	float radius() const { return m_radius; }
-
+	Vector3 Position();
 	void SetFrameWidth(float w) { frameWidth = w; }
 	void SetFrameHeight(float h) { frameHeight = h; }
-
 	float FrameWidth() const { return frameWidth; }
 	float FrameHeight() const { return frameHeight; }
 
 protected:
-	Vector3 m_center;
-	Vector2 m_position;
-	Vector2 m_rotation;
-	float m_size;
-	float m_radius;
-
+	Vector3 center;
+	Vector2 position;
+	Vector2 rotation;
+	float size;
 	float frameWidth, frameHeight;
+	float zNear, zFar;
 };
 
-///@}
 #endif
