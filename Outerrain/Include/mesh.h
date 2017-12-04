@@ -58,7 +58,7 @@ public:
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
 	
-	void WriteMesh(const char*); // TODO Nathan
+	void WriteMesh(const char*);
 	void ReadMesh(const char*);
 
 	Bounds GetBounds() const;

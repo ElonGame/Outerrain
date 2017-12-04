@@ -17,7 +17,6 @@ public:
 	int Index(int, int) const;
 	double At(int, int) const;
 	double GetValueBilinear(const Vector2&) const;
-	bool Inside(const Vector3&) const; // TODO Nathan
 };
 
 class Heightfield : public Scalarfield2D
@@ -33,7 +32,7 @@ public:
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
-
+	bool Inside(const Vector3&) const; // TODO Nathan
 private:
 	float Lerp(float a, float b, float f);
 };

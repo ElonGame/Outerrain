@@ -46,6 +46,7 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 }
 
 
+
 /* Heightfield */
 Heightfield::Heightfield(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) : Scalarfield2D(nx, ny, bottomLeft, topRight)
 {
@@ -166,6 +167,11 @@ float Heightfield::Lerp(float a, float b, float f)
 	return (a * (1.0f - f)) + (b * f);
 }
 
+bool Heightfield::Inside(const Vector3& point) const 
+{
+	float zt = At(point.x,point.y);
+	return point.z < zt;
+}
 
 /* LayerField */
 LayerField::LayerField(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
@@ -178,6 +184,8 @@ double LayerField::BeckrockValue(int i, int j)
 {
 	return bedrock.At(i, j);
 }
+
+
 
 double LayerField::SandValue(int i, int j)
 {
