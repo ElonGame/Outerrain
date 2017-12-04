@@ -3,7 +3,10 @@
 #include "shader.h"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
+#include <fstream>
 
+using namespace std;
 
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
@@ -72,6 +75,8 @@ void Mesh::AddTexcoord(const int& i, const Vector2& t)
 	updateBuffersNextDraw = true;
 	texcoords[i] = t;
 }
+
+
 
 void Mesh::SetShader(const Shader& s)
 {
@@ -281,6 +286,44 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformVec3("camPos", camPos);
 
 	Draw();
+}
+
+void Mesh::WriteMesh(const char *filename) {
+	cout << indices.size();
+	cout << "Saving obj file " << endl;
+	ofstream objfile;
+	objfile.open(filename);
+	objfile << "#Test COMMENT.\n";
+	for (int i = 0; i < vertices.size(); i++)
+		objfile << "v " << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << "\n";
+	for (int j = 0; j < texcoords.size(); j++)
+		objfile << "vt " << texcoords[j].x << " " << texcoords[j].y << "\n";
+	for (int k = 0; k < normals.size() ; k++)
+		objfile << "vn " << normals[k].x << " " << normals[k].y << " " << normals[k].z << "\n";
+	for (int i = 0; i < indices.size(); i += 3)
+		objfile << "f " << indices[i] + 1 << "/" << indices[i + 1] + 1 <<"/" << indices[i + 2] + 1 << "\n";
+	
+	bool has_texcoords = (texcoords.size() > 0);
+	bool has_normals = (normals.size() > 0);
+	bool has_indices = (indices.size() > 0);
+	unsigned int n = has_indices ? (unsigned int)indices.size() : (unsigned int)vertices.size();
+	for (unsigned int i = 0; i + 2 < n; i += 3)
+	{
+		objfile << "f ";
+		for (unsigned int k = 0; k < 3; k++)
+		{
+			unsigned int id = has_indices ? indices[i + k] + 1 : i + k + 1;
+			objfile << id;
+			if (has_texcoords && has_normals)
+				objfile << "/" << id << "/" << id << " ";
+			else if (has_texcoords)
+				objfile << "/" << id << " ";
+			else if (has_normals)
+				objfile << "//" << id << " ";
+		}
+		objfile << "\n";
+	}
+	objfile.close();
 }
 
 void Mesh::ReadMesh(const char *filename)
