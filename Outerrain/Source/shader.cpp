@@ -460,7 +460,7 @@ void Shader::UniformVec4(const char *uniform, const Vector4& v)
 
 void Shader::UniformTransform(const char *uniform, const Transform& v)
 {
-	glUniformMatrix4fv(location(program, uniform), 1, GL_TRUE, (const float*)v.buffer());
+	glUniformMatrix4fv(location(program, uniform), 1, GL_TRUE, (const float*)v.Buffer());
 }
 
 void Shader::UniformTexture(const char *uniform, const int unit, const GLuint texture, const GLuint sampler)

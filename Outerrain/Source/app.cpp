@@ -5,7 +5,7 @@
 App::App(const int& width, const int& height, const int& major, const int& minor) 
 		: m_window(nullptr), m_context(nullptr)
 {
-	m_window = create_window(width, height);
+	m_window = CreateWindow(width, height);
 	m_context = create_context(m_window, major, minor);
 }
 
@@ -14,7 +14,7 @@ App::~App()
 	if (m_context)
 		release_context(m_context);
 	if (m_window)
-		release_window(m_window);
+		ReleaseWindow(m_window);
 }
 
 int App::Init()
@@ -38,8 +38,8 @@ int App::Init()
 	mesh.SetShader(shader);
 	
 	orbiter.LookAt(mesh.GetBounds());
-	orbiter.SetFrameWidth(window_width());
-	orbiter.SetFrameHeight(window_height());
+	orbiter.SetFrameWidth(WindowWidth());
+	orbiter.SetFrameHeight(WindowHeight());
 
 	return 1;
 }
@@ -62,25 +62,25 @@ int App::Update(const float time, const float deltaTime)
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	if (mb & SDL_BUTTON(1))
-		orbiter.rotation(mx, my);
+		orbiter.Rotation(mx, my);
 	if (mb & SDL_BUTTON(3))
-		orbiter.move(my);
+		orbiter.Move(my);
 	if (mb & SDL_BUTTON(2))
-		orbiter.translation((float)mx / (float)window_width(), (float)my / (float)window_height());
+		orbiter.Translation((float)mx / (float)WindowWidth(), (float)my / (float)WindowHeight());
 
 	// Keyboard
 	if (key_state(SDLK_PAGEUP))
-		orbiter.move(1.0f);
+		orbiter.Move(1.0f);
 	if (key_state(SDLK_PAGEDOWN))
-		orbiter.move(-1.0f);
+		orbiter.Move(-1.0f);
 	if (key_state(SDLK_UP))
-		orbiter.translation(0.0f, 10.0f / (float)window_height());
+		orbiter.Translation(0.0f, 10.0f / (float)WindowHeight());
 	if (key_state(SDLK_DOWN))
-		orbiter.translation(0.0f, -10.0f / (float)window_height());
+		orbiter.Translation(0.0f, -10.0f / (float)WindowHeight());
 	if (key_state(SDLK_LEFT))
-		orbiter.translation(10.0f / (float)window_width(), 0.0f);
+		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
 	if (key_state(SDLK_RIGHT))
-		orbiter.translation(-10.0f / (float)window_width(), 0.0f);
+		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
 
 	return 1;
 }
@@ -90,10 +90,10 @@ void App::Run()
 	if (Init() < 0)
 		return;
 
-	glViewport(0, 0, window_width(), window_height());
-	while (events(m_window))
+	glViewport(0, 0, WindowWidth(), WindowHeight());
+	while (Events(m_window))
 	{
-		if (Update(global_time(), delta_time()) < 0)
+		if (Update(GlobalTime(), DeltaTime()) < 0)
 			break;
 		if (Render() < 1)
 			break;

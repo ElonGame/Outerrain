@@ -248,8 +248,8 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform mv = orbiter.view() * Identity();
-	Transform mvp = orbiter.projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
+	Transform mv = orbiter.View() * Identity();
+	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * mv;
 
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformTransform("mvMatrix", mv);
@@ -257,8 +257,7 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Draw();
 }
 
-
-void Mesh::read_mesh(const char *filename)
+void Mesh::ReadMesh(const char *filename)
 {
 	FILE *in = fopen(filename, "rt");
 

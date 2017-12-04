@@ -5,13 +5,12 @@
 
 #include "transform.h"
 
-
-float radians(const float deg)
+float Radians(const float deg)
 {
 	return ((float)3.14 / 180.f) * deg;
 }
 
-float degrees(const float rad)
+float Degrees(const float rad)
 {
 	return (180.f / (float)3.14) * rad;
 }
@@ -41,7 +40,6 @@ Vector3 Transform::operator[](int c) const
 	assert(c >= 0 && c <= 3);
 	return Vector3(m[0][c], m[1][c], m[2][c]);
 }
-
 
 //! renvoie le Vector3 transforme.
 Vector3 Transform::operator() (const Vector3& p) const
@@ -79,8 +77,7 @@ Vector4 Transform::operator() (const Vector4& v) const
 	return Vector4(xt, yt, zt, wt);
 }
 
-//! renvoie la transposee de la matrice.
-Transform Transform::transpose() const
+Transform Transform::Transpose() const
 {
 	return Transform(
 		m[0][0], m[1][0], m[2][0], m[3][0],
@@ -89,18 +86,16 @@ Transform Transform::transpose() const
 		m[0][3], m[1][3], m[2][3], m[3][3]);
 }
 
-
 Transform Transform::operator() (const Transform& b) const
 {
-	return compose_transform(*this, b);
+	return ComposeTransform(*this, b);
 }
 
 //! renvoie la transformation a appliquer aux normales d'un objet transforme par la matrice m.
-Transform Transform::normal() const
+Transform Transform::Normal() const
 {
-	return inverse().transpose();
+	return Inverse().Transpose();
 }
-
 
 Transform Identity()
 {
@@ -109,17 +104,17 @@ Transform Identity()
 
 Transform Transpose(const Transform& m)
 {
-	return m.transpose();
+	return m.Transpose();
 }
 
 Transform Inverse(const Transform& m)
 {
-	return m.inverse();
+	return m.Inverse();
 }
 
 Transform Normal(const Transform& m)
 {
-	return m.normal();
+	return m.Normal();
 }
 
 Transform Scale(const float x, const float y, const float z)
@@ -131,7 +126,7 @@ Transform Scale(const float x, const float y, const float z)
 		0, 0, 0, 1);
 }
 
-Transform Translation(const Vector3& v)
+Transform TranslationTransform(const Vector3& v)
 {
 	return Transform(
 		1, 0, 0, v.x,
@@ -140,15 +135,15 @@ Transform Translation(const Vector3& v)
 		0, 0, 0, 1);
 }
 
-Transform Translation(const float x, const float y, const float z)
+Transform TranslationTransform(const float x, const float y, const float z)
 {
-	return Translation(Vector3(x, y, z));
+	return TranslationTransform(Vector3(x, y, z));
 }
 
 Transform RotationX(const float a)
 {
-	float sin_t = sinf(radians(a));
-	float cos_t = cosf(radians(a));
+	float sin_t = sinf(Radians(a));
+	float cos_t = cosf(Radians(a));
 
 	return Transform(
 		1, 0, 0, 0,
@@ -159,8 +154,8 @@ Transform RotationX(const float a)
 
 Transform RotationY(const float a)
 {
-	float sin_t = sinf(radians(a));
-	float cos_t = cosf(radians(a));
+	float sin_t = sinf(Radians(a));
+	float cos_t = cosf(Radians(a));
 
 	return Transform(
 		cos_t, 0, sin_t, 0,
@@ -171,8 +166,8 @@ Transform RotationY(const float a)
 
 Transform RotationZ(const float a)
 {
-	float sin_t = sinf(radians(a));
-	float cos_t = cosf(radians(a));
+	float sin_t = sinf(Radians(a));
+	float cos_t = cosf(Radians(a));
 
 	return Transform(
 		cos_t, -sin_t, 0, 0,
@@ -184,8 +179,8 @@ Transform RotationZ(const float a)
 Transform Rotation(const Vector3& axis, const float angle)
 {
 	Vector3 a = Normalize(axis);
-	float s = sinf(radians(angle));
-	float c = cosf(radians(angle));
+	float s = sinf(Radians(angle));
+	float c = cosf(Radians(angle));
 
 	return Transform(
 		a.x * a.x + (1 - a.x * a.x) * c,
@@ -206,11 +201,10 @@ Transform Rotation(const Vector3& axis, const float angle)
 		0, 0, 0, 1);
 }
 
-
 Transform Perspective(const float fov, const float aspect, const float znear, const float zfar)
 {
 	// perspective, openGL version
-	float itan = 1 / tanf(radians(fov) * 0.5f);
+	float itan = 1 / tanf(Radians(fov) * 0.5f);
 	float id = 1 / (znear - zfar);
 
 	return Transform(
@@ -232,7 +226,7 @@ Transform Viewport(const float width, const float height)
 		0, 0, 0, 1);
 }
 
-Transform Lookat(const Vector3& from, const Vector3& to, const Vector3& up)
+Transform LookAt(const Vector3& from, const Vector3& to, const Vector3& up)
 {
 	Vector3 dir = Normalize(from - to);
 	Vector3 right = Normalize(Cross(dir, Normalize(up)));
@@ -244,10 +238,10 @@ Transform Lookat(const Vector3& from, const Vector3& to, const Vector3& up)
 		right.z, newUp.z, -dir.z, from.z,
 		0, 0, 0, 1);
 
-	return m.inverse();
+	return m.Inverse();
 }
 
-Transform compose_transform(const Transform& a, const Transform& b)
+Transform ComposeTransform(const Transform& a, const Transform& b)
 {
 	Transform m;
 	for (int i = 0; i < 4; i++)
@@ -257,12 +251,12 @@ Transform compose_transform(const Transform& a, const Transform& b)
 	return m;
 }
 
-Transform operator* (const Transform& a, const Transform& b)
+Transform operator*(const Transform& a, const Transform& b)
 {
-	return compose_transform(a, b);
+	return ComposeTransform(a, b);
 }
 
-Transform Transform::inverse() const
+Transform Transform::Inverse() const
 {
 	Transform minv = *this;
 

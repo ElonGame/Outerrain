@@ -5,70 +5,70 @@
 
 #define max(a, b) a > b ? a : b
 
-void CameraOrbiter::lookat(const Vector3& center, const float size)
+void CameraOrbiter::LookAt(const Vector3& c, const float s)
 {
-	m_center = center;
-	m_position = Vector2(0, 0);
-	m_rotation = Vector2(0, 0);
-	m_size = size;
-	m_radius = size;
+	center = c;
+	position = Vector2(0, 0);
+	rotation = Vector2(0, 0);
+	size = s;
+	radius = size;
 }
 
-void CameraOrbiter::lookat(const Vector3& pmin, const Vector3& pmax)
+void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
 {
-	lookat(Center(pmin, pmax), Magnitude(pmin - pmax));
+	LookAt(Center(pmin, pmax), Magnitude(pmin - pmax));
 }
 
 void CameraOrbiter::LookAt(const Bounds& b) 
 {
-	lookat(b.min, b.max);
+	LookAt(b.min, b.max);
 }
 
-void CameraOrbiter::rotation(const float x, const float y)
+void CameraOrbiter::Rotation(const float x, const float y)
 {
-	m_rotation.x = m_rotation.x + y;
-	m_rotation.y = m_rotation.y + x;
+	rotation.x = rotation.x + y;
+	rotation.y = rotation.y + x;
 }
 
-void CameraOrbiter::translation(const float x, const float y)
+void CameraOrbiter::Translation(const float x, const float y)
 {
-	m_position.x = m_position.x - m_size * x;
-	m_position.y = m_position.y + m_size * y;
+	position.x = position.x - size * x;
+	position.y = position.y + size * y;
 }
 
-void CameraOrbiter::move(const float z)
+void CameraOrbiter::Move(const float z)
 {
-	m_size = m_size - m_size * 0.01f * z;
-	if (m_size < 0.01f)
-		m_size = 0.01f;
+	size = size - size * 0.01f * z;
+	if (size < 0.01f)
+		size = 0.01f;
 }
 
-Transform CameraOrbiter::view() const
+Transform CameraOrbiter::View() const
 {
-	return Translation(-m_position.x, -m_position.y, -m_size)
-		* RotationX(m_rotation.x) * RotationY(m_rotation.y)
-		* Translation(-Vector3(m_center));
+	return TranslationTransform(-position.x, -position.y, -size) 
+			* RotationX(rotation.x) * RotationY(rotation.y)
+			* TranslationTransform(-Vector3(center));
 }
 
-Transform CameraOrbiter::projection(const float width, const float height, const float fov) const
+Transform CameraOrbiter::Projection(const float width, const float height, const float fov) const
 {
 	// calcule la distance entre le centre de l'objet et la camera
 	//~ Transform t= view();
 	//~ Vector3 c= t(m_center);
 	//~ float d= -c.z;
-	float d = Magnitude(m_center - Vector3(m_position.x, m_position.y, m_size));     // meme resultat plus rapide a calculer
+	float d = Magnitude(center - Vector3(position.x, position.y, size));     // meme resultat plus rapide a calculer
 
 																				 // regle near et far en fonction du centre et du rayon englobant l'objet 
-	return Perspective(fov, width / height, max(0.1f, d - m_radius), max(1.f, d + m_radius));
+	return Perspective(fov, width / height, max(0.1f, d - radius), max(1.f, d + radius));
 }
 
-void CameraOrbiter::frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
-	Transform v = view();
-	Transform p = projection(width, height, fov);
+	Transform v = View();
+	Transform p = Projection(width, height, fov);
 	Transform viewport = Viewport(width, height);
 	Transform t = viewport * p * v;              // passage monde vers image
-	Transform tinv = t.inverse();                // l'inverse, passage image vers monde
+	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde
 
 												 // origine du plan image
 	dO = tinv(Vector3(0, 0, z));
@@ -81,9 +81,9 @@ void CameraOrbiter::frame(const float width, const float height, const float z, 
 	dy = Vector3(dO - d2);
 }
 
-Vector3 CameraOrbiter::position()
+Vector3 CameraOrbiter::Position()
 {
-	Transform t = view(); // passage monde vers camera
-	Transform tinv = t.inverse(); // l'inverse, passage camera vers monde
+	Transform t = View(); // passage monde vers camera
+	Transform tinv = t.Inverse(); // l'inverse, passage camera vers monde
 	return tinv(Vector3(0, 0, 0)); // la camera se trouve a l'origine, dans le repere camera...
 }

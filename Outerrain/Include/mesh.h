@@ -58,7 +58,7 @@ public:
 	void AddTexcoord(const Vector2&);
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
-
+	void ReadMesh(const char*);
 
 	Bounds GetBounds() const;
 	Vector3 Vertex(int) const;
@@ -68,8 +68,4 @@ public:
 
 	void Draw();
 	void Draw(const CameraOrbiter&);
-	
-
-	void read_mesh(const char *filename);
-
 };

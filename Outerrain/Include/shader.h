@@ -34,4 +34,3 @@ public:
 
 	const GLuint& GetProgram() const { return program; }
 };
-

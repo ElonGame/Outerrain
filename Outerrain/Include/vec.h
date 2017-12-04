@@ -199,6 +199,7 @@ inline Vector4 operator-(const Vector4& v)
 	return Vector4(-v.x, -v.y, -v.z, -v.w);
 }
 
+
 /* Bounds */
 struct Bounds
 {

@@ -25,7 +25,6 @@ public:
 	Heightfield() : Scalarfield2D() { }
 	Heightfield(int, int, Vector2, Vector2);
 
-	// @Todo
 	void InitFromFile();
 	void InitFromNoise();
 
