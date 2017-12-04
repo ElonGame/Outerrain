@@ -27,16 +27,16 @@ protected:
 	void CreateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	void UpdateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 
-	const double* VertexBufferPtr() const { return &vertices.front().x; }
+	const float* VertexBufferPtr() const { return &vertices.front().x; }
 	std::size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }
 
-	const double *NormalBufferPtr() const { return &normals.front().x; }
+	const float *NormalBufferPtr() const { return &normals.front().x; }
 	size_t NormalBufferSize() const { return normals.size() * sizeof(Vector3); }
 
-	const double *TexcoordBufferPtr() const { return &texcoords.front().x; }
+	const float *TexcoordBufferPtr() const { return &texcoords.front().x; }
 	size_t TexcoordBufferSize() const { return texcoords.size() * sizeof(Vector2); }
 
-	const double *ColorBufferPtr() const { return &colors.front().x; }
+	const float *ColorBufferPtr() const { return &colors.front().x; }
 	size_t ColorBufferSize() const { return colors.size() * sizeof(Vector4); }
 
 	const void *IndexBufferPtr() const { return &indices.front(); }
@@ -44,7 +44,7 @@ protected:
 
 public:
 	Mesh();
-	Mesh(const GLenum primitives) : primitiveDrawn(primitives) {}
+	Mesh(const GLenum primitives) : primitiveDrawn(primitives) { }
 
 	void Destroy();
 

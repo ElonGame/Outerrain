@@ -12,28 +12,28 @@ public:
 	//! cree une camera par defaut. observe le centre (0, 0, 0) a une distance 5.
 	CameraOrbiter() : m_center(), m_position(), m_rotation(), m_size(5.f), m_radius(5.f) {}
 	//! cree une camera. observe le point center a une distance size.
-	CameraOrbiter(const Vector3& center, const double size) : m_center(center), m_position(), m_rotation(), m_size(size), m_radius(size) {}
+	CameraOrbiter(const Vector3& center, const float size) : m_center(center), m_position(), m_rotation(), m_size(size), m_radius(size) {}
 	//! cree une camera. observe une boite alignee sur les axes.
 	CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : m_center(Center(pmin, pmax)), m_position(), m_rotation(), m_size(Magnitude(pmin - pmax)), m_radius(m_size) {}
 
 	//! observe le point center a une distance size.
-	void lookat(const Vector3& center, const double size);
+	void lookat(const Vector3& center, const float size);
 	//! observe le centre d'une boite englobante.
 	void lookat(const Vector3& pmin, const Vector3& pmax);
 	void LookAt(const Bounds&);
 
 	//! change le point de vue / la direction d'observation.
-	void rotation(const double x, const double y);
+	void rotation(const float x, const float y);
 	//! deplace le centre / le point observe.
-	void translation(const double x, const double y);
+	void translation(const float x, const float y);
 	//! rapproche / eloigne la camera du centre.
-	void move(const double z);
+	void move(const float z);
 
 	//! renvoie la transformation vue.
 	Transform view() const;
 
 	//! renvoie la projection reglee pour une image d'aspect width / height, et une ouverture de fov degres.
-	Transform projection(const double width, const double height, const double fov) const;
+	Transform projection(const float width, const float height, const float fov) const;
 
 	/*! renvoie les coordonnees de l'origine d0 et les axes dx, dy du plan image dans le repere du monde.
 	permet de construire un rayon pour le pixel x, y :
@@ -65,28 +65,28 @@ public:
 	Point o= d0 + x*dx0 + y*dy0;
 	\endcode
 	*/
-	void frame(const double width, const double height, const double z, const double fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
+	void frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
 
 	//! renvoie la position de la camera dans le repere du monde.
 	Vector3 position();
 
 	//! renvoie le rayon de la scene.
-	double radius() const { return m_radius; }
+	float radius() const { return m_radius; }
 
-	void SetFrameWidth(double w) { frameWidth = w; }
-	void SetFrameHeight(double h) { frameHeight = h; }
+	void SetFrameWidth(float w) { frameWidth = w; }
+	void SetFrameHeight(float h) { frameHeight = h; }
 
-	double FrameWidth() const { return frameWidth; }
-	double FrameHeight() const { return frameHeight; }
+	float FrameWidth() const { return frameWidth; }
+	float FrameHeight() const { return frameHeight; }
 
 protected:
 	Vector3 m_center;
 	Vector2 m_position;
 	Vector2 m_rotation;
-	double m_size;
-	double m_radius;
+	float m_size;
+	float m_radius;
 
-	double frameWidth, frameHeight;
+	float frameWidth, frameHeight;
 };
 
 ///@}
