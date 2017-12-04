@@ -232,7 +232,7 @@ void Mesh::GenerateNormals()
 {
 	normals.resize(vertices.size());
 
-	for (unsigned int i = 0; i < indices.size() - 2; ++i)
+	for (unsigned int i = 0; i < indices.size(); i += 3)
 	{
 		// Sommets a, b, c de la face
 		int a = indices[i];
@@ -246,7 +246,6 @@ void Mesh::GenerateNormals()
 		normals[a] = normals[a] + normal;
 		normals[b] = normals[b] + normal;
 		normals[c] = normals[c] + normal;
-
 	}
 	for (unsigned int i = 0; i < normals.size(); i++)
 		normals[i] = Normalize(normals[i]);
