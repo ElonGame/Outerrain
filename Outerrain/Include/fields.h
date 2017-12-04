@@ -37,3 +37,19 @@ public:
 private:
 	float Lerp(float a, float b, float f);
 };
+
+class LayerField
+{
+protected:
+	int nx, ny;
+	Vector2 a, b;
+	Scalarfield2D bedrock;
+	Scalarfield2D sand;
+
+public:
+	LayerField() { }
+	LayerField(int, int, Vector2, Vector2);
+
+	double SandValue(int, int);
+	double BeckrockValue(int, int);
+};

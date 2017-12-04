@@ -262,6 +262,11 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 void Mesh::ReadMesh(const char *filename)
 {
 	FILE *in = fopen(filename, "rt");
+	if (in == NULL)
+	{
+		std::cout << "Error loading mesh - aborting" << std::endl;
+		return;
+	}
 
 	printf("loading mesh '%s'...\n", filename);
 
