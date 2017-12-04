@@ -28,10 +28,10 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
-	hf.InitFromNoise();
-	mesh = hf.GetMesh();
-	//mesh.read_mesh("Data/bigguy.obj");
+	//Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
+	//hf.InitFromNoise();
+	//mesh = hf.GetMesh();
+	mesh.ReadMesh("Data/test.obj");
 
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
@@ -81,7 +81,8 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
 	if (key_state(SDLK_RIGHT))
 		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
-
+	if (key_state('k'))
+		mesh.WriteMesh("Data/bigguy.obj");
 	return 1;
 }
 
