@@ -39,6 +39,8 @@ int App::Init()
 	
 	orbiter = CameraOrbiter(Vector3(0.0, 0.0, -100.0), 300.0);
 	//orbiter.LookAt(mesh.GetBounds());
+	orbiter.SetFrameWidth(window_width());
+	orbiter.SetFrameHeight(window_height());
 
 	return 1;
 }
@@ -50,7 +52,7 @@ void App::Quit()
 int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mesh.Draw(orbiter);
 	return 1;
 }
