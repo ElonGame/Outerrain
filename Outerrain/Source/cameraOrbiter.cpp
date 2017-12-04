@@ -94,7 +94,7 @@ void CameraOrbiter::Frame(const float width, const float height, const float z, 
 	dy = Vector3(dO - d2);
 }
 
-Vector3 CameraOrbiter::Position()
+Vector3 CameraOrbiter::Position() const
 {
 	Transform t = View(); // passage monde vers camera
 	Transform tinv = t.Inverse(); // l'inverse, passage camera vers monde

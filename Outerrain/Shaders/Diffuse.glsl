@@ -30,7 +30,7 @@ uniform vec3 camPos;
 
 const vec3 diffuseColor = vec3(1.0, 0.0, 0.0);
 const float shininess = 64.0;
-const vec3 ambientLight = vec4(0.1, 0.1, 0.1);
+const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
 const vec3 lightDir = vec3(0, -1, 0);
 const vec3 lightColor = vec3(1, 1, 1);
 const float lightStrength = 1.0;
