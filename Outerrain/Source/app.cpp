@@ -28,16 +28,14 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	/*Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
+	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
 	hf.InitFromNoise();
-	mesh = hf.GetMesh();*/
-	mesh.read_mesh("Data/bigguy.obj");
+	mesh = hf.GetMesh(); 
 
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
 	
-	//orbiter = CameraOrbiter(Vector3(0.0, 0.0, 0.0), 300.0);
 	orbiter.LookAt(mesh.GetBounds());
 
 	return 1;
@@ -50,7 +48,7 @@ void App::Quit()
 int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mesh.Draw(orbiter);
 	return 1;
 }

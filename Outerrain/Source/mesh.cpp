@@ -7,7 +7,7 @@
 
 Mesh::Mesh() : 
 	vertices(), texcoords(), normals(), colors(), indices(), 
-	primitiveDrawn(GL_POINTS), VAO(0), fullBuffer(0), indexBuffer(0), 
+	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
 	shader() { }
 
 void Mesh::AddVertex(const Vector3& v)
@@ -261,8 +261,6 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 void Mesh::read_mesh(const char *filename)
 {
 	FILE *in = fopen(filename, "rt");
-
-
 	printf("loading mesh '%s'...\n", filename);
 
 	std::vector<Vector3> vert;
