@@ -17,6 +17,7 @@ public:
 	int Index(int, int) const;
 	double At(int, int) const;
 	double GetValueBilinear(const Vector2&) const;
+	bool Inside(const Vector3&) const; // TODO Nathan
 };
 
 class Heightfield : public Scalarfield2D
