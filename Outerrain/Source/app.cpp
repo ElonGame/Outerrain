@@ -28,9 +28,9 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
+	//Heightfield hf(64, 64, Vector2(-64, -64), Vector2(64, 64));
 	//hf.InitFromNoise();
-	hf.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	//mesh = hf.GetMesh();
 	mesh = hf.GetMesh();
 	//mesh.read_mesh("Data/bigguy.obj");
 
@@ -82,7 +82,8 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
 	if (key_state(SDLK_RIGHT))
 		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
-
+	if (key_state('k'))
+		mesh.WriteMesh("Data/bigguy.obj");
 	return 1;
 }
 
