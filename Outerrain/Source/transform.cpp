@@ -6,21 +6,21 @@
 #include "transform.h"
 
 
-double radians(const double deg)
+float radians(const float deg)
 {
-	return ((double)3.14 / 180.f) * deg;
+	return ((float)3.14 / 180.f) * deg;
 }
 
-double degrees(const double rad)
+float degrees(const float rad)
 {
-	return (180.f / (double)3.14) * rad;
+	return (180.f / (float)3.14) * rad;
 }
 
 Transform::Transform(
-	const double t00, const double t01, const double t02, const double t03,
-	const double t10, const double t11, const double t12, const double t13,
-	const double t20, const double t21, const double t22, const double t23,
-	const double t30, const double t31, const double t32, const double t33)
+	const float t00, const float t01, const float t02, const float t03,
+	const float t10, const float t11, const float t12, const float t13,
+	const float t20, const float t21, const float t22, const float t23,
+	const float t30, const float t31, const float t32, const float t33)
 {
 	m[0][0] = t00; m[0][1] = t01; m[0][2] = t02; m[0][3] = t03;
 	m[1][0] = t10; m[1][1] = t11; m[1][2] = t12; m[1][3] = t13;
@@ -46,17 +46,17 @@ Vector3 Transform::operator[](int c) const
 //! renvoie le Vector3 transforme.
 Vector3 Transform::operator() (const Vector3& p) const
 {
-	double x = p.x;
-	double y = p.y;
-	double z = p.z;
+	float x = p.x;
+	float y = p.y;
+	float z = p.z;
 
-	double xt = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3];        // dot(Vector4(m[0]), Vector4(p, 1))
-	double yt = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3];        // dot(Vector4(m[1]), Vector4(p, 1))
-	double zt = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];        // dot(Vector4(m[2]), Vector4(p, 1))
-	double wt = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3];        // dot(Vector4(m[3]), Vector4(p, 1))
+	float xt = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3];        // dot(Vector4(m[0]), Vector4(p, 1))
+	float yt = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3];        // dot(Vector4(m[1]), Vector4(p, 1))
+	float zt = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3];        // dot(Vector4(m[2]), Vector4(p, 1))
+	float wt = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3];        // dot(Vector4(m[3]), Vector4(p, 1))
 
 	assert(wt != 0);
-	double w = 1.f / wt;
+	float w = 1.f / wt;
 	if (wt == 1.f)
 		return Vector3(xt, yt, zt);
 	else
@@ -66,15 +66,15 @@ Vector3 Transform::operator() (const Vector3& p) const
 //! renvoie le Vector3/vecteur homogene transforme.
 Vector4 Transform::operator() (const Vector4& v) const
 {
-	double x = v.x;
-	double y = v.y;
-	double z = v.z;
-	double w = v.w;
+	float x = v.x;
+	float y = v.y;
+	float z = v.z;
+	float w = v.w;
 
-	double xt = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3] * w;    // dot(Vector4(m[0]), v)
-	double yt = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3] * w;    // dot(Vector4(m[1]), v)
-	double zt = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3] * w;    // dot(Vector4(m[2]), v)
-	double wt = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3] * w;    // dot(Vector4(m[3]), v)
+	float xt = m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3] * w;    // dot(Vector4(m[0]), v)
+	float yt = m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3] * w;    // dot(Vector4(m[1]), v)
+	float zt = m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3] * w;    // dot(Vector4(m[2]), v)
+	float wt = m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3] * w;    // dot(Vector4(m[3]), v)
 
 	return Vector4(xt, yt, zt, wt);
 }
@@ -122,7 +122,7 @@ Transform Normal(const Transform& m)
 	return m.normal();
 }
 
-Transform Scale(const double x, const double y, const double z)
+Transform Scale(const float x, const float y, const float z)
 {
 	return Transform(
 		x, 0, 0, 0,
@@ -140,15 +140,15 @@ Transform Translation(const Vector3& v)
 		0, 0, 0, 1);
 }
 
-Transform Translation(const double x, const double y, const double z)
+Transform Translation(const float x, const float y, const float z)
 {
 	return Translation(Vector3(x, y, z));
 }
 
-Transform RotationX(const double a)
+Transform RotationX(const float a)
 {
-	double sin_t = sinf(radians(a));
-	double cos_t = cosf(radians(a));
+	float sin_t = sinf(radians(a));
+	float cos_t = cosf(radians(a));
 
 	return Transform(
 		1, 0, 0, 0,
@@ -157,10 +157,10 @@ Transform RotationX(const double a)
 		0, 0, 0, 1);
 }
 
-Transform RotationY(const double a)
+Transform RotationY(const float a)
 {
-	double sin_t = sinf(radians(a));
-	double cos_t = cosf(radians(a));
+	float sin_t = sinf(radians(a));
+	float cos_t = cosf(radians(a));
 
 	return Transform(
 		cos_t, 0, sin_t, 0,
@@ -169,10 +169,10 @@ Transform RotationY(const double a)
 		0, 0, 0, 1);
 }
 
-Transform RotationZ(const double a)
+Transform RotationZ(const float a)
 {
-	double sin_t = sinf(radians(a));
-	double cos_t = cosf(radians(a));
+	float sin_t = sinf(radians(a));
+	float cos_t = cosf(radians(a));
 
 	return Transform(
 		cos_t, -sin_t, 0, 0,
@@ -181,11 +181,11 @@ Transform RotationZ(const double a)
 		0, 0, 0, 1);
 }
 
-Transform Rotation(const Vector3& axis, const double angle)
+Transform Rotation(const Vector3& axis, const float angle)
 {
 	Vector3 a = Normalize(axis);
-	double s = sinf(radians(angle));
-	double c = cosf(radians(angle));
+	float s = sinf(radians(angle));
+	float c = cosf(radians(angle));
 
 	return Transform(
 		a.x * a.x + (1 - a.x * a.x) * c,
@@ -207,11 +207,11 @@ Transform Rotation(const Vector3& axis, const double angle)
 }
 
 
-Transform Perspective(const double fov, const double aspect, const double znear, const double zfar)
+Transform Perspective(const float fov, const float aspect, const float znear, const float zfar)
 {
 	// perspective, openGL version
-	double itan = 1 / tanf(radians(fov) * 0.5f);
-	double id = 1 / (znear - zfar);
+	float itan = 1 / tanf(radians(fov) * 0.5f);
+	float id = 1 / (znear - zfar);
 
 	return Transform(
 		itan / aspect, 0, 0, 0,
@@ -220,10 +220,10 @@ Transform Perspective(const double fov, const double aspect, const double znear,
 		0, 0, -1, 0);
 }
 
-Transform Viewport(const double width, const double height)
+Transform Viewport(const float width, const float height)
 {
-	double w = width / 2.f;
-	double h = height / 2.f;
+	float w = width / 2.f;
+	float h = height / 2.f;
 
 	return Transform(
 		w, 0, 0, w,
@@ -271,7 +271,7 @@ Transform Transform::inverse() const
 
 	for (int i = 0; i < 4; i++) {
 		int irow = -1, icol = -1;
-		double big = 0.f;
+		float big = 0.f;
 
 		// Choose pivot
 		for (int j = 0; j < 4; j++) {
@@ -306,7 +306,7 @@ Transform Transform::inverse() const
 			printf("singular matrix in make_inverse()\n");
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
-		double pivinv = 1.f / minv.m[icol][icol];
+		float pivinv = 1.f / minv.m[icol][icol];
 		minv.m[icol][icol] = 1.f;
 		for (int j = 0; j < 4; j++)
 			minv.m[icol][j] *= pivinv;
@@ -314,7 +314,7 @@ Transform Transform::inverse() const
 		// Subtract this row from others to zero out their columns
 		for (int j = 0; j < 4; j++) {
 			if (j != icol) {
-				double save = minv.m[j][icol];
+				float save = minv.m[j][icol];
 				minv.m[j][icol] = 0;
 				for (int k = 0; k < 4; k++)
 					minv.m[j][k] -= minv.m[icol][k] * save;

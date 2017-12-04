@@ -5,9 +5,9 @@
 #include <cassert>
 
 
-Mesh::Mesh() : 
-	vertices(), texcoords(), normals(), colors(), indices(), 
-	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0), 
+Mesh::Mesh() :
+	vertices(), texcoords(), normals(), colors(), indices(),
+	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
 	shader() { }
 
 void Mesh::AddVertex(const Vector3& v)
@@ -239,7 +239,7 @@ void Mesh::Draw()
 		glDrawElements(primitiveDrawn, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
 	else
 		glDrawArrays(primitiveDrawn, 0, (GLsizei)vertices.size());
-	 glBindVertexArray(0);
+	glBindVertexArray(0);
 }
 
 void Mesh::Draw(const CameraOrbiter& orbiter)
@@ -339,7 +339,7 @@ void Mesh::read_mesh(const char *filename)
 				else if (next == 0)      // fin de ligne
 					break;
 			}
-						
+
 			for (int v = 2; v + 1 < (int)idp.size(); v++)
 			{
 				int idv[3] = { 0, v - 1, v };

@@ -4,19 +4,19 @@
 #include "vec.h"
 
 //! conversion en radians.
-double radians(const double deg);
+float radians(const float deg);
 //! conversion en degres.
-double degrees(const double rad);
+float degrees(const float rad);
 
 //! representation d'une transformation, une matrice 4x4, organisee par ligne / row major.
 struct Transform
 {
 	//! constructeur.
 	Transform(
-		const double t00 = 1.f, const double t01 = 0.f, const double t02 = 0.f, const double t03 = 0.f,
-		const double t10 = 0.f, const double t11 = 1.f, const double t12 = 0.f, const double t13 = 0.f,
-		const double t20 = 0.f, const double t21 = 0.f, const double t22 = 1.f, const double t23 = 0.f,
-		const double t30 = 0.f, const double t31 = 0.f, const double t32 = 0.f, const double t33 = 1.f);
+		const float t00 = 1.f, const float t01 = 0.f, const float t02 = 0.f, const float t03 = 0.f,
+		const float t10 = 0.f, const float t11 = 1.f, const float t12 = 0.f, const float t13 = 0.f,
+		const float t20 = 0.f, const float t21 = 0.f, const float t22 = 1.f, const float t23 = 0.f,
+		const float t30 = 0.f, const float t31 = 0.f, const float t32 = 0.f, const float t33 = 1.f);
 
 	//! constructeur a partir de 4 Vector3 colonnes, met (0, 0, 0, 1) dans la 4e ligne 
 	Transform(const Vector3& x, const Vector3& y, const Vector3& z, const Vector3& w);
@@ -40,9 +40,9 @@ struct Transform
 	Transform normal() const;
 
 	//! renvoie l'adresse de la premiere valeur de la matrice.
-	const double *buffer() const { return &m[0][0]; }
+	const float *buffer() const { return &m[0][0]; }
 
-	double m[4][4];
+	float m[4][4];
 };
 
 //! construit la transformation identite.
@@ -56,26 +56,26 @@ Transform Inverse(const Transform& m);
 Transform Normal(const Transform& m);
 
 //! renvoie la matrice representant une mise a l'echelle / etirement.
-Transform Scale(const double x, const double y, const double z);
+Transform Scale(const float x, const float y, const float z);
 
 //! renvoie la matrice representant une translation par un vecteur.
 Transform Translation(const Vector3& v);
 //! renvoie la matrice representant une translation par un vecteur x y z.
-Transform Translation(const double x, const double y, const double z);
+Transform Translation(const float x, const float y, const float z);
 
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe X.
-Transform RotationX(const double angle);
+Transform RotationX(const float angle);
 //! renvoie la matrice representation une rotation de a degree autour de l'axe Y.
-Transform RotationY(const double angle);
+Transform RotationY(const float angle);
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe Z.
-Transform RotationZ(const double angle);
+Transform RotationZ(const float angle);
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe axis.
-Transform Rotation(const Vector3& axis, const double angle);
+Transform Rotation(const Vector3& axis, const float angle);
 
 //! renvoie la matrice representant une transformation viewport.
-Transform Viewport(const double width, const double height);
+Transform Viewport(const float width, const float height);
 //! renvoie la matrice representant une transformation projection perspective.
-Transform Perspective(const double fov, const double aspect, const double znear, const double zfar);
+Transform Perspective(const float fov, const float aspect, const float znear, const float zfar);
 //! renvoie la matrice representant le placement et l'orientation d'une camera pour observer le Vector3 to.
 Transform Lookat(const Vector3& from, const Vector3& to, const Vector3& up);
 
