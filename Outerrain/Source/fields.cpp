@@ -102,13 +102,6 @@ Mesh Heightfield::GetMesh() const
 		}
 	}
 
-	// Normals
-	for (int i = 0; i < nx; i++)
-	{
-		for (int j = 0; j < ny; j++)
-			ret.AddNormal(Normal(i, j));
-	}
-
 	// Triangles
 	int verticesPerLine = nx;
 	int nbTris = 2 * ((verticesPerLine - 1) * (verticesPerLine - 1));
@@ -123,6 +116,9 @@ Mesh Heightfield::GetMesh() const
 		}
 		c++;
 	}
+
+	// Normals
+	ret.GenerateNormals();
 
 	return ret;
 }

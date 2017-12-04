@@ -223,68 +223,28 @@ void Mesh::UpdateBuffers(const bool use_texcoord, const bool use_normal, const b
 	updateBuffersNextDraw = false;
 }
 
-void Mesh::SetNormals()
+void Mesh::GenerateNormals()
 {
-	// Normale d une face
-	Vector3 normale;
+	normals.resize(vertices.size());
 
-	// Norme d une normale
-	double Norme;
-
-	// Indices des sommets d une face
-	int a, b, c;
-
-	/* Parcours des normales des sommets du maillage */
-	if (normals.size() == 0)
-	{
-		for (unsigned int i = 0; i < vertices.size(); ++i)
-		{
-			// Initialisation des normales
-			normals.push_back(Vector3(0, 0, 0));
-		}
-	}
-	for (unsigned int i = 0; i < vertices.size(); ++i)
-		normals[i] = Vector3(0, 0, 0);
-
-	/* Parcours des faces du maillage */
-	for (unsigned int i = 0; i < indices.size(); ++i)
+	for (unsigned int i = 0; i < indices.size() - 2; ++i)
 	{
 		// Sommets a, b, c de la face
-		a = indices[3 * i];
-		b = indices[(3 * i) + 1];
-		c = indices[(3 * i) + 2];
+		int a = indices[i];
+		int b = indices[i + 1];
+		int c = indices[i + 2];
 
-		// Calcul de la normale de la face
-		Vector3 AB, AC;
+		Vector3 AB = (vertices[b] - vertices[a]);
+		Vector3 AC = (vertices[c] - vertices[a]);
+		Vector3 normal = Cross(AB, AC);
 
-		/* Coordonnee du vecteur AB */
-		AB = (vertices[b] - vertices[a]);
-
-		/* Coordonnee du vecteur AC */
-		AC = (vertices[c] - vertices[a]);
-
-		/* Coordonnees de la normale */
-		normale = Cross(AB, AC);
-
-		// Modification des normales des sommets de la face
-		// Normale du sommet a
-		normals[a] = normals[a] + normale;
-		normals[b] = normals[b] + normale;
-		normals[c] = normals[c] + normale;
-
-	}//for_i
-
-	 /* Parcours des normales des sommets */
-	float norme;
-
-	for (unsigned int i = 0; i < vertices.size(); i++)
-	{
-		norme = Magnitude(normals[i]);
-
-		if (norme != 0)
-			normals[i] = normals[i] * 1.0 / norme;
+		normals[a] = normals[a] + normal;
+		normals[b] = normals[b] + normal;
+		normals[c] = normals[c] + normal;
 
 	}
+	for (unsigned int i = 0; i < normals.size(); i++)
+		normals[i] = Normalize(normals[i]);
 }
 
 void Mesh::Draw()
