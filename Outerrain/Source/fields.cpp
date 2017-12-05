@@ -118,9 +118,9 @@ Vector3 Heightfield::Normal(int i, int j) const
 
 Vector3 Heightfield::Vertex(int i, int j) const
 {
-	double x = bottomLeft.x + i*(topRight.x - bottomLeft.x) / (nx - 1);
+	double x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
 	double y = At(i, j);
-	double z = bottomLeft.y + j* (topRight.y - bottomLeft.y) / (ny - 1);
+	double z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
@@ -129,9 +129,9 @@ Mesh Heightfield::GetMesh() const
 	Mesh ret;
 
 	// Vertices & Texcoords
-	for (int i = 0; i < nx; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < ny; j++)
+		for (int j = 0; j < nx; j++)
 		{
 			float u = j / ((float)nx - 1);
 			float v = i / ((float)ny - 1);
@@ -141,16 +141,14 @@ Mesh Heightfield::GetMesh() const
 	}
 
 	// Triangles
-	int verticesPerLine = nx;
-	int nbTris = 2 * ((verticesPerLine - 1) * (verticesPerLine - 1));
 	int c = 0;
-	int vertexArrayLength = verticesPerLine * verticesPerLine;
-	while (c < vertexArrayLength - verticesPerLine - 1)
+	int vertexArrayLength = ny * nx;
+	while (c < vertexArrayLength - nx - 1)
 	{
-		if (c == 0 || (((c + 1) % verticesPerLine != 0) && c <= vertexArrayLength - verticesPerLine))
+		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
 		{
-			ret.AddTriangle(c, c + verticesPerLine + 1, c + verticesPerLine);
-			ret.AddTriangle(c + verticesPerLine + 1, c, c + 1);
+			ret.AddTriangle(c, c + nx, c + nx + 1);
+			ret.AddTriangle(c + nx + 1, c + 1, c);
 		}
 		c++;
 	}
