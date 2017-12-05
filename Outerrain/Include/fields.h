@@ -3,6 +3,8 @@
 #include "vec.h"
 #include "mesh.h"
 
+/* TODO : REFACTOR FIELD CLASSES IN TEMPLATE */
+
 class Scalarfield2D
 {
 protected:

@@ -14,7 +14,7 @@ Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRigh
 
 int Scalarfield2D::Index(int row, int column) const
 {
-	return row * (nx - 1) + column;
+	return row * nx + column;
 }
 
 void Scalarfield2D::Set(int i, int j, double v)
@@ -61,7 +61,7 @@ Vector3field2D::Vector3field2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRi
 
 int Vector3field2D::Index(int row, int column) const
 {
-	return row * (nx - 1) + column;
+	return row * nx + column;
 }
 
 Vector3 Vector3field2D::Get(int i, int j) const
@@ -198,7 +198,7 @@ void Terrain2D::ComputeNormalFieldFromHeightField()
 		{
 			Vector3 AB = (Vertex(i + 1, j) - Vertex(i, j));
 			Vector3 AC = (Vertex(i + 1, j + 1) - Vertex(i, j));
-			Vector3 normal = Cross(AB, AC);
+			Vector3 normal = Normalize(Cross(AB, AC));
 
 			normalField.Set(i, j, normalField.Get(i, j) + normal);
 			normalField.Set(i + 1, j, normalField.Get(i + 1, j) + normal);
@@ -206,16 +206,16 @@ void Terrain2D::ComputeNormalFieldFromHeightField()
 			
 			AB = AC;
 			AC = (Vertex(i, j + 1) - Vertex(i, j));
-			normal = Cross(AB, AC);
+			normal = Normalize(Cross(AB, AC));
 
 			normalField.Set(i, j, normalField.Get(i, j) + normal);
 			normalField.Set(i + 1, j + 1, normalField.Get(i + 1, j + 1) + normal);
 			normalField.Set(i, j + 1, normalField.Get(i, j + 1) + normal);
 		}
 	}
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 			normalField.Set(i, j, Normalize(normalField.Get(i, j)));
 	}
 }
