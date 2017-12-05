@@ -17,6 +17,8 @@ public:
 	int Index(int, int) const;
 	double At(int, int) const;
 	double GetValueBilinear(const Vector2&) const;
+	double SizeX() const { return nx; }
+	double SizeY() const { return ny; }
 };
 
 
@@ -52,7 +54,9 @@ public:
 	LayerTerrain2D() { }
 	LayerTerrain2D(int, int, Vector2, Vector2);
 
+	double Height(int, int);
 	double SandValue(int, int);
 	double BeckrockValue(int, int);
 	void ThermalErosion(int);
+	Mesh GetMesh() const;
 };

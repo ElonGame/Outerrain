@@ -5,6 +5,7 @@
 #include "shader.h"
 
 class CameraOrbiter;
+class Scalarfield2D;
 
 class Mesh
 {
@@ -68,6 +69,7 @@ public:
 	Vector4 Color(int) const;
 
 	void CalculateNormals();
+	void CalculateFromScalarfield(const Scalarfield2D&);
 
 	void Draw();
 	void Draw(const CameraOrbiter&);

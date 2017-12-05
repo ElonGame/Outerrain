@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "cameraOrbiter.h"
 #include "shader.h"
+#include "fields.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -75,8 +76,6 @@ void Mesh::AddTexcoord(const int& i, const Vector2& t)
 	updateBuffersNextDraw = true;
 	texcoords[i] = t;
 }
-
-
 
 void Mesh::SetShader(const Shader& s)
 {
@@ -249,6 +248,39 @@ void Mesh::CalculateNormals()
 	}
 	for (unsigned int i = 0; i < normals.size(); i++)
 		normals[i] = Normalize(normals[i]);
+}
+
+void Mesh::CalculateFromScalarfield(const Scalarfield2D& field)
+{
+	//// Vertices & Texcoords
+	//for (int i = 0; i < field.n; i++)
+	//{
+	//	for (int j = 0; j < nx; j++)
+	//	{
+	//		float u = j / ((float)nx - 1);
+	//		float v = i / ((float)ny - 1);
+	//		ret.AddTexcoord(Vector2(u, 1 - v));
+	//		ret.AddVertex(Vertex(i, j));
+	//	}
+	//}
+
+	//// Triangles
+	//int c = 0;
+	//int vertexArrayLength = ny * nx;
+	//while (c < vertexArrayLength - nx - 1)
+	//{
+	//	if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
+	//	{
+	//		ret.AddTriangle(c, c + nx, c + nx + 1);
+	//		ret.AddTriangle(c + nx + 1, c + 1, c);
+	//	}
+	//	c++;
+	//}
+
+	//// Normals
+	//ret.CalculateNormals();
+
+	//return ret;
 }
 
 void Mesh::Draw()

@@ -179,6 +179,11 @@ LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), n
 	bedrock = Scalarfield2D(nx, ny, a, b);
 }
 
+double LayerTerrain2D::Height(int i, int j)
+{
+	return BeckrockValue(i, j) + SandValue(i, j);
+}
+
 double LayerTerrain2D::BeckrockValue(int i, int j)
 {
 	return bedrock.At(i, j);
@@ -195,4 +200,10 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 	{
 
 	}
+}
+
+Mesh LayerTerrain2D::GetMesh() const
+{
+	Mesh m;
+	return m;
 }
