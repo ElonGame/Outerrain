@@ -5,7 +5,8 @@
 #include "image.h"
 
 /* Scalarfield 2D */
-Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) 
+	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 {
 	values.resize(nx * ny);
 	std::fill(values.begin(), values.end(), 0);
@@ -172,18 +173,26 @@ bool Heightfield::Inside(const Vector3& point) const
 
 
 /* LayerField */
-LayerField::LayerField(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
+LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
 {
 	sand = Scalarfield2D(nx, ny, a, b);
 	bedrock = Scalarfield2D(nx, ny, a, b);
 }
 
-double LayerField::BeckrockValue(int i, int j)
+double LayerTerrain2D::BeckrockValue(int i, int j)
 {
 	return bedrock.At(i, j);
 }
 
-double LayerField::SandValue(int i, int j)
+double LayerTerrain2D::SandValue(int i, int j)
 {
 	return sand.At(i, j);
+}
+
+void LayerTerrain2D::ThermalErosion(int stepCount)
+{
+	for (int i = 0; i < stepCount; i++)
+	{
+
+	}
 }

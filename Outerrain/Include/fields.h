@@ -19,6 +19,7 @@ public:
 	double GetValueBilinear(const Vector2&) const;
 };
 
+
 class Heightfield : public Scalarfield2D
 {
 public:
@@ -33,11 +34,13 @@ public:
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
 	bool Inside(const Vector3&) const; // TODO Nathan
+
 private:
 	float Lerp(float a, float b, float f);
 };
 
-class LayerField
+
+class LayerTerrain2D
 {
 protected:
 	int nx, ny;
@@ -46,9 +49,10 @@ protected:
 	Scalarfield2D sand;
 
 public:
-	LayerField() { }
-	LayerField(int, int, Vector2, Vector2);
+	LayerTerrain2D() { }
+	LayerTerrain2D(int, int, Vector2, Vector2);
 
 	double SandValue(int, int);
 	double BeckrockValue(int, int);
+	void ThermalErosion(int);
 };
