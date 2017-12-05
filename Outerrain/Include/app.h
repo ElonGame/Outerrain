@@ -8,8 +8,8 @@
 class App
 {
 protected:
-	Window m_window;
-	Context m_context;
+	SDL_Window* m_window;
+	SDL_GLContext m_context;
 	Mesh mesh;
 	CameraOrbiter orbiter;
 
@@ -22,6 +22,7 @@ public:
 	virtual ~App();
 
 	virtual int Init();
+	virtual void InitImGUI();
 	virtual int Update(const float, const float);
 	virtual int Render();
 	virtual void Run();

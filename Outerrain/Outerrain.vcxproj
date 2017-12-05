@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imgui_opengl.h" />
     <ClInclude Include="Include\app.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\fields.h" />
     <ClInclude Include="Include\image.h" />
-    <ClInclude Include="Include\image_io.h" />
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\perlin.h" />
@@ -33,12 +33,15 @@
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="imgui_opengl.cpp" />
     <ClCompile Include="Include\cameraOrbiter.h" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\fields.cpp" />
-    <ClCompile Include="Source\image_io.cpp" />
+    <ClCompile Include="Source\image.cpp" />
+    <ClCompile Include="Source\imgui.cpp" />
+    <ClCompile Include="Source\imgui_draw.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\noise.cpp" />

@@ -5,7 +5,7 @@
 #include "image.h"
 
 /* Scalarfield 2D */
-Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) 
+Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 {
 	values.resize(nx * ny);
@@ -52,7 +52,7 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 
 
 /* Vector3field 2D*/
-Vector3field2D::Vector3field2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight) 
+Vector3field2D::Vector3field2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 {
 	values.resize(nx * ny);
@@ -116,19 +116,19 @@ void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteA
 		{
 			float u = j / ((float)nx - 1);
 			float v = i / ((float)ny - 1);
-			
+
 			int anchorX = u * (heightmap.Width() - 1);
 			int anchorY = v * (heightmap.Height() - 1);
 			if (anchorX == heightmap.Width() - 1)
 				anchorX--;
 			if (anchorY == heightmap.Height() - 1)
 				anchorY--;
-			
+
 			float a = heightmap(anchorX, anchorY).r;
 			float b = heightmap(anchorX, anchorY + 1).r;
 			float c = heightmap(anchorX + 1, anchorY + 1).r;
 			float d = heightmap(anchorX + 1, anchorY).r;
-			
+
 			float anchorU = anchorX * texelX;
 			float anchorV = anchorY * texelY;
 
@@ -137,7 +137,7 @@ void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteA
 
 			float abu = Lerp(a, b, localU);
 			float dcu = Lerp(d, c, localU);
-			
+
 			float value = Lerp(dcu, abu, localV);
 			heightField.Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 		}
@@ -152,9 +152,9 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
+			//float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
+			float v = blackAltitude + Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6.0, i, j) * (whiteAltitude - blackAltitude);
 			heightField.Set(i, j, v);
-			//values[Index(i, j)] = Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6.0, i, j);
 		}
 	}
 	ComputeNormalFieldFromHeightField();
@@ -208,7 +208,7 @@ void Terrain2D::ComputeNormalFieldFromHeightField()
 			normalField.Set(i, j, normalField.Get(i, j) + normal);
 			normalField.Set(i + 1, j, normalField.Get(i + 1, j) + normal);
 			normalField.Set(i + 1, j + 1, normalField.Get(i + 1, j + 1) + normal);
-			
+
 			AB = AC;
 			AC = (Vertex(i, j + 1) - Vertex(i, j));
 			normal = Normalize(Cross(AB, AC));

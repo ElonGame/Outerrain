@@ -108,7 +108,7 @@ float DeltaTime()
 }
 
 static int stop = 0;
-Window CreateWindow(const int w, const int h)
+SDL_Window* CreateWindow(const int w, const int h)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -119,7 +119,7 @@ Window CreateWindow(const int w, const int h)
 	atexit(SDL_Quit);
 
 	// creer la fenetre
-	Window window = SDL_CreateWindow("Outerrain",
+	SDL_Window* window = SDL_CreateWindow("Outerrain",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (window == NULL)
@@ -138,12 +138,12 @@ Window CreateWindow(const int w, const int h)
 
 	return window;
 }
-void ReleaseWindow(Window window)
+void ReleaseWindow(SDL_Window* window)
 {
 	SDL_StopTextInput();
 	SDL_DestroyWindow(window);
 }
-int Events(Window window)
+int Events(SDL_Window* window)
 {
 	// gestion des evenements
 	SDL_Event event;
@@ -228,7 +228,7 @@ void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severi
 #endif
 #endif
 
-Context create_context(Window window, const int major, const int minor)
+SDL_GLContext create_context(SDL_Window* window, const int major, const int minor)
 {
 	if (window == NULL)
 		return NULL;
@@ -244,7 +244,7 @@ Context create_context(Window window, const int major, const int minor)
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 15);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	Context context = SDL_GL_CreateContext(window);
+	SDL_GLContext context = SDL_GL_CreateContext(window);
 	if (context == NULL)
 	{
 		printf("[error] creating openGL context.\n");
@@ -280,7 +280,7 @@ Context create_context(Window window, const int major, const int minor)
 
 	return context;
 }
-void release_context(Context context)
+void release_context(SDL_GLContext context)
 {
 	SDL_GL_DeleteContext(context);
 }

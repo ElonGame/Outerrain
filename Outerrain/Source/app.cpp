@@ -1,15 +1,20 @@
 #include "app.h"
 #include "GL/glew.h"
 
-App::App(const int& width, const int& height, const int& major, const int& minor) 
-		: m_window(nullptr), m_context(nullptr)
+#include "imgui/imgui.h"
+#include "imgui_opengl.h"
+
+App::App(const int& width, const int& height, const int& major, const int& minor)
+	: m_window(nullptr), m_context(nullptr)
 {
 	m_window = CreateWindow(width, height);
 	m_context = create_context(m_window, major, minor);
+	InitImGUI();
 }
 
 App::~App()
 {
+	ImGui_OpenGL_Shutdown();
 	if (m_context)
 		release_context(m_context);
 	if (m_window)
@@ -35,13 +40,27 @@ int App::Init()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
-	
+
 	// Init Shader
 	orbiter.LookAt(mesh.GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
 
+	ImGui::Begin("Bienvenue dans Outerrain !");
+	ImGui::End();
+
 	return 1;
+}
+
+void App::InitImGUI()
+{
+	ImGui_OpenGL_Init(m_window);
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		ImGui_OpenGL_ProcessEvent(&event);
+	}
+	ImGui_OpenGL_NewFrame(m_window);
 }
 
 void App::Quit()
@@ -52,6 +71,7 @@ int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	ImGui::Render();
 	mesh.Draw(orbiter);
 	return 1;
 }
@@ -81,7 +101,6 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
 	if (key_state(SDLK_RIGHT))
 		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
-
 
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)

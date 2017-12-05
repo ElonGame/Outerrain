@@ -3,14 +3,12 @@
 #include <SDL2\SDL.h>
 #undef main SDLMain
 
-typedef SDL_Window *Window;
-typedef SDL_GLContext Context;
 
-Window CreateWindow(const int width, const int height);
-void ReleaseWindow(Window w);
+SDL_Window* CreateWindow(const int width, const int height);
+void ReleaseWindow(SDL_Window* w);
 
-Context create_context(Window window, const int major = 3, const int minor = 2);
-void release_context(Context context);
+SDL_GLContext create_context(SDL_Window* window, const int major = 3, const int minor = 2);
+void release_context(SDL_GLContext context);
 
 int WindowWidth();
 int WindowHeight();
@@ -30,7 +28,8 @@ void ClearWheelEvent();
 SDL_TextInputEvent text_event();
 void ClearTextEvent();
 
+
 float GlobalTime();
 float DeltaTime();
 
-int Events(Window window);
+int Events(SDL_Window* window);
