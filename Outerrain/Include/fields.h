@@ -57,6 +57,7 @@ public:
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
+	void SetHeight(int, int, double);
 
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
