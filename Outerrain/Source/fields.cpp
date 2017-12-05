@@ -17,10 +17,25 @@ int Scalarfield2D::Index(int row, int column) const
 	return row * (nx - 1) + column;
 }
 
+void Scalarfield2D::Set(int i, double v)
+{
+	values[i] = v;
+}
+
+void Scalarfield2D::Set(int i, int j, double v)
+{
+	values[Index(i, j)] = v;
+}
+
 double Scalarfield2D::At(int i, int j) const
 {
 	int index = Index(i, j);
 	return values[index];
+}
+
+double Scalarfield2D::At(int i) const
+{
+	return values[i];
 }
 
 double Scalarfield2D::GetValueBilinear(const Vector2& p) const
@@ -43,6 +58,14 @@ double Scalarfield2D::GetValueBilinear(const Vector2& p) const
 		+ (1 - u) * v * v2
 		+ u * (1 - v) * v3
 		+ u * v * v4;
+}
+
+Vector3 Scalarfield2D::Vertex(int i, int j) const
+{
+	double x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
+	double y = At(i, j);
+	double z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
+	return Vector3(x, y, z);
 }
 
 
@@ -117,47 +140,11 @@ Vector3 Heightfield::Normal(int i, int j) const
 	return Vector3(0.0);
 }
 
-Vector3 Heightfield::Vertex(int i, int j) const
-{
-	double x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
-	double y = At(i, j);
-	double z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
-	return Vector3(x, y, z);
-}
-
 Mesh Heightfield::GetMesh() const
 {
-	Mesh ret;
-
-	// Vertices & Texcoords
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / ((float)nx - 1);
-			float v = i / ((float)ny - 1);
-			ret.AddTexcoord(Vector2(u, 1 - v));
-			ret.AddVertex(Vertex(i, j));
-		}
-	}
-
-	// Triangles
-	int c = 0;
-	int vertexArrayLength = ny * nx;
-	while (c < vertexArrayLength - nx - 1)
-	{
-		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
-		{
-			ret.AddTriangle(c, c + nx, c + nx + 1);
-			ret.AddTriangle(c + nx + 1, c + 1, c);
-		}
-		c++;
-	}
-
-	// Normals
-	ret.CalculateNormals();
-
-	return ret;
+	Mesh m;
+	m.CalculateFromScalarfield(*this);
+	return m;
 }
 
 float Heightfield::Lerp(float a, float b, float f)
@@ -179,17 +166,17 @@ LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), n
 	bedrock = Scalarfield2D(nx, ny, a, b);
 }
 
-double LayerTerrain2D::Height(int i, int j)
+double LayerTerrain2D::Height(int i, int j) const
 {
 	return BeckrockValue(i, j) + SandValue(i, j);
 }
 
-double LayerTerrain2D::BeckrockValue(int i, int j)
+double LayerTerrain2D::BeckrockValue(int i, int j) const
 {
 	return bedrock.At(i, j);
 }
 
-double LayerTerrain2D::SandValue(int i, int j)
+double LayerTerrain2D::SandValue(int i, int j) const
 {
 	return sand.At(i, j);
 }
@@ -204,6 +191,15 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 Mesh LayerTerrain2D::GetMesh() const
 {
+	Scalarfield2D fullTerrain(nx, ny, a, b);
+	for (int i = 0; i < nx; i++)
+	{
+		for (int j = 0; j < ny; j++)
+		{
+			fullTerrain.Set(i, j, Height(i, j));
+		}
+	}
 	Mesh m;
+	m.CalculateFromScalarfield(fullTerrain);
 	return m;
 }

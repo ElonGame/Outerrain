@@ -15,8 +15,12 @@ public:
 	Scalarfield2D(int, int, Vector2, Vector2);
 
 	int Index(int, int) const;
+	double At(int) const;
 	double At(int, int) const;
+	void Set(int, double);
+	void Set(int, int, double);
 	double GetValueBilinear(const Vector2&) const;
+	Vector3 Vertex(int, int) const;
 	double SizeX() const { return nx; }
 	double SizeY() const { return ny; }
 };
@@ -32,7 +36,6 @@ public:
 	void InitFromNoise(int, int);
 
 	Vector3 Normal(int, int) const;
-	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
 	bool Inside(const Vector3&) const; // TODO Nathan
@@ -54,9 +57,9 @@ public:
 	LayerTerrain2D() { }
 	LayerTerrain2D(int, int, Vector2, Vector2);
 
-	double Height(int, int);
-	double SandValue(int, int);
-	double BeckrockValue(int, int);
+	double Height(int, int) const;
+	double SandValue(int, int) const;
+	double BeckrockValue(int, int) const;
 	void ThermalErosion(int);
 	Mesh GetMesh() const;
 };

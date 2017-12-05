@@ -252,35 +252,36 @@ void Mesh::CalculateNormals()
 
 void Mesh::CalculateFromScalarfield(const Scalarfield2D& field)
 {
-	//// Vertices & Texcoords
-	//for (int i = 0; i < field.n; i++)
-	//{
-	//	for (int j = 0; j < nx; j++)
-	//	{
-	//		float u = j / ((float)nx - 1);
-	//		float v = i / ((float)ny - 1);
-	//		ret.AddTexcoord(Vector2(u, 1 - v));
-	//		ret.AddVertex(Vertex(i, j));
-	//	}
-	//}
+	int nx = field.SizeX();
+	int ny = field.SizeY();
 
-	//// Triangles
-	//int c = 0;
-	//int vertexArrayLength = ny * nx;
-	//while (c < vertexArrayLength - nx - 1)
-	//{
-	//	if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
-	//	{
-	//		ret.AddTriangle(c, c + nx, c + nx + 1);
-	//		ret.AddTriangle(c + nx + 1, c + 1, c);
-	//	}
-	//	c++;
-	//}
+	// Vertices & Texcoords
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float u = j / ((float)nx - 1);
+			float v = i / ((float)ny - 1);
+			AddTexcoord(Vector2(u, 1 - v));
+			AddVertex(field.Vertex(i, j));
+		}
+	}
 
-	//// Normals
-	//ret.CalculateNormals();
+	// Triangles
+	int c = 0;
+	int vertexArrayLength = ny * nx;
+	while (c < vertexArrayLength - nx - 1)
+	{
+		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
+		{
+			AddTriangle(c, c + nx, c + nx + 1);
+			AddTriangle(c + nx + 1, c + 1, c);
+		}
+		c++;
+	}
 
-	//return ret;
+	// Normals
+	CalculateNormals();
 }
 
 void Mesh::Draw()
