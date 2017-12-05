@@ -15,33 +15,53 @@ public:
 	Scalarfield2D(int, int, Vector2, Vector2);
 
 	int Index(int, int) const;
-	double At(int) const;
-	double At(int, int) const;
-	void Set(int, double);
+	double Get(int, int) const;
 	void Set(int, int, double);
 	double GetValueBilinear(const Vector2&) const;
-	Vector3 Vertex(int, int) const;
 	double SizeX() const { return nx; }
 	double SizeY() const { return ny; }
 };
 
-
-class Heightfield : public Scalarfield2D
+class Vector3field2D
 {
-public:
-	Heightfield() : Scalarfield2D() { }
-	Heightfield(int, int, Vector2, Vector2);
+protected:
+	int nx, ny;
+	Vector2 bottomLeft, topRight;
+	std::vector<Vector3> values;
 
+public:
+	Vector3field2D() { }
+	Vector3field2D(int, int, Vector2, Vector2);
+	int Index(int, int) const;
+	Vector3 Get(int, int) const;
+	void Set(int, int, Vector3);
+	Vector3 GetValueBilinear(const Vector2&) const;
+};
+
+class Terrain2D
+{
+protected:
+	int nx, ny;
+	Vector2 bottomLeft, topRight;
+	Scalarfield2D heightField;
+	Vector3field2D normalField;
+
+public:
+	Terrain2D() { }
+	Terrain2D(int, int, Vector2, Vector2);
 	void InitFromFile(const char* file, float blackAltitude, float whiteAltitude);
 	void InitFromNoise(int, int);
-
 	Vector3 Normal(int, int) const;
+	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
-	bool Inside(const Vector3&) const; // TODO Nathan
+
+	int SizeX() const { return nx; }
+	int SizeY() const { return ny; }
 
 private:
 	float Lerp(float a, float b, float f);
+	void ComputeNormalFieldFromHeightField();
 };
 
 
@@ -57,6 +77,8 @@ public:
 	LayerTerrain2D() { }
 	LayerTerrain2D(int, int, Vector2, Vector2);
 
+	int SizeX() const { return nx; }
+	int SizeY() const { return ny; }
 	double Height(int, int) const;
 	double SandValue(int, int) const;
 	double BeckrockValue(int, int) const;

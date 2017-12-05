@@ -1,6 +1,5 @@
 #include "app.h"
 #include "GL/glew.h"
-#include "fields.h"
 
 App::App(const int& width, const int& height, const int& major, const int& minor) 
 		: m_window(nullptr), m_context(nullptr)
@@ -28,14 +27,16 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	Heightfield hf(256, 32, Vector2(-64, -64), Vector2(64, 64));
-	hf.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
-	mesh = hf.GetMesh();
+	terrain2D = Terrain2D(256, 32, Vector2(-64, -64), Vector2(64, 64));
+	terrain2D.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	mesh = terrain2D.GetMesh();
 
+	// Init Mesh
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh.SetShader(shader);
 	
+	// Init Shader
 	orbiter.LookAt(mesh.GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
@@ -80,6 +81,11 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
 	if (key_state(SDLK_RIGHT))
 		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
+
+
+	// Thermal Erosion
+	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
+		layerTerrain2D.ThermalErosion(1);
 
 	return 1;
 }

@@ -250,10 +250,10 @@ void Mesh::CalculateNormals()
 		normals[i] = Normalize(normals[i]);
 }
 
-void Mesh::CalculateFromScalarfield(const Scalarfield2D& field)
+void Mesh::CalculateFromTerrain2D(const Terrain2D& terrain)
 {
-	int nx = field.SizeX();
-	int ny = field.SizeY();
+	int nx = terrain.SizeX();
+	int ny = terrain.SizeY();
 
 	// Vertices & Texcoords
 	for (int i = 0; i < ny; i++)
@@ -263,7 +263,8 @@ void Mesh::CalculateFromScalarfield(const Scalarfield2D& field)
 			float u = j / ((float)nx - 1);
 			float v = i / ((float)ny - 1);
 			AddTexcoord(Vector2(u, 1 - v));
-			AddVertex(field.Vertex(i, j));
+			AddVertex(terrain.Vertex(i, j));
+			AddNormal(terrain.Normal(i, j));
 		}
 	}
 
@@ -279,9 +280,6 @@ void Mesh::CalculateFromScalarfield(const Scalarfield2D& field)
 		}
 		c++;
 	}
-
-	// Normals
-	CalculateNormals();
 }
 
 void Mesh::Draw()
