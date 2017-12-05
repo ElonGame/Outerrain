@@ -185,6 +185,11 @@ Mesh Terrain2D::GetMesh() const
 	return ret;
 }
 
+void Terrain2D::SetHeight(int i, int j, double v)
+{
+	heightField.Set(i, j, v);
+}
+
 float Terrain2D::Lerp(float a, float b, float f)
 {
 	return (a * (1.0f - f)) + (b * f);
@@ -253,13 +258,13 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 Mesh LayerTerrain2D::GetMesh() const
 {
-	/*Scalarfield2D fullTerrain(nx, ny, a, b);
+	Terrain2D terrain = Terrain2D(nx, ny, a, b);
 	for (int i = 0; i < nx; i++)
 	{
 		for (int j = 0; j < ny; j++)
-			fullTerrain.Set(i, j, Height(i, j));
+			terrain.SetHeight(i, j, Height(i, j));
 	}
-	m.CalculateFromScalarfield(fullTerrain);*/
 	Mesh m;
+	m.CalculateFromTerrain2D(terrain);
 	return m;
 }
