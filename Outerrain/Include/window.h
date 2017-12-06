@@ -28,8 +28,4 @@ void ClearWheelEvent();
 SDL_TextInputEvent text_event();
 void ClearTextEvent();
 
-
-float GlobalTime();
-float DeltaTime();
-
 int Events(SDL_Window* window);

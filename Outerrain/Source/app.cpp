@@ -1,24 +1,24 @@
 #include "app.h"
 #include "GL/glew.h"
-
+#include "Time.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
-	: m_window(nullptr), m_context(nullptr)
+	: window(nullptr), glContext(nullptr)
 {
-	m_window = CreateWindow(width, height);
-	m_context = create_context(m_window, major, minor);
+	window = CreateWindow(width, height);
+	glContext = create_context(window, major, minor);
 	InitImGUI();
 }
 
 App::~App()
 {
 	ImGui_OpenGL_Shutdown();
-	if (m_context)
-		release_context(m_context);
-	if (m_window)
-		ReleaseWindow(m_window);
+	if (glContext)
+		release_context(glContext);
+	if (window)
+		ReleaseWindow(window);
 }
 
 int App::Init()
@@ -54,17 +54,18 @@ int App::Init()
 
 void App::InitImGUI()
 {
-	ImGui_OpenGL_Init(m_window);
+	ImGui_OpenGL_Init(window);
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
 		ImGui_OpenGL_ProcessEvent(&event);
 	}
-	ImGui_OpenGL_NewFrame(m_window);
+	ImGui_OpenGL_NewFrame(window);
 }
 
 void App::Quit()
 {
+	ReleaseWindow(window);
 }
 
 int App::Render()
@@ -113,16 +114,14 @@ void App::Run()
 {
 	if (Init() < 0)
 		return;
-
 	glViewport(0, 0, WindowWidth(), WindowHeight());
-	while (Events(m_window))
+	while (Events(window))
 	{
-		if (Update(GlobalTime(), DeltaTime()) < 0)
+		if (Update(Time::GlobalTime(), Time::DeltaTime()) < 0)
 			break;
 		if (Render() < 1)
 			break;
-		SDL_GL_SwapWindow(m_window);
+		SDL_GL_SwapWindow(window);
 	}
-
 	Quit();
 }

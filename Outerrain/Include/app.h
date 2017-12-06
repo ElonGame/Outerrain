@@ -8,8 +8,8 @@
 class App
 {
 protected:
-	SDL_Window* m_window;
-	SDL_GLContext m_context;
+	SDL_Window* window;
+	SDL_GLContext glContext;
 	Mesh mesh;
 	CameraOrbiter orbiter;
 

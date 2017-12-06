@@ -28,6 +28,7 @@
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\perlin.h" />
     <ClInclude Include="Include\shader.h" />
+    <ClInclude Include="Include\Time.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Source\noise.cpp" />
     <ClCompile Include="Source\perlin.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\time.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
@@ -55,7 +57,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5AE1C777-AD03-46C4-B6AD-76EE6BEC839D}</ProjectGuid>
     <RootNamespace>Outerrain</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -12,11 +12,11 @@
 struct SDL_Window;
 typedef union SDL_Event SDL_Event;
 
-IMGUI_API bool        ImGui_Impl_Init(SDL_Window* window);
-IMGUI_API void        ImGui_Impl_Shutdown();
-IMGUI_API void        ImGui_Impl_NewFrame(SDL_Window* window);
-IMGUI_API bool        ImGui_Impl_ProcessEvent(SDL_Event* event);
+IMGUI_API bool        ImGui_OpenGL_Init(SDL_Window* window);
+IMGUI_API void        ImGui_OpenGL_Shutdown();
+IMGUI_API void        ImGui_OpenGL_NewFrame(SDL_Window* window);
+IMGUI_API bool        ImGui_OpenGL_ProcessEvent(SDL_Event* event);
 
 // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Impl_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Impl_CreateDeviceObjects();
+IMGUI_API void        ImGui_OpenGL_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_OpenGL_CreateDeviceObjects();

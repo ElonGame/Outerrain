@@ -1,6 +1,5 @@
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #include <cassert>
 #include <cstdio>
 #include <vector>
@@ -90,22 +89,6 @@ void ClearWheelEvent()
 	last_wheel.y = 0;
 }
 
-
-static unsigned int last_time = 0;
-static unsigned int last_delta = 1;
-float GlobalTime()
-{
-	unsigned int now = SDL_GetTicks();
-	if (now <= last_time)
-		now = last_time + 1;
-	last_delta = now - last_time;
-	last_time = now;
-	return (float)last_time;
-}
-float DeltaTime()
-{
-	return (float)last_delta;
-}
 
 static int stop = 0;
 SDL_Window* CreateWindow(const int w, const int h)

@@ -45,15 +45,15 @@ public:
 		int i = int(u * (nx - 1));
 		int j = int(v * (ny - 1));
 
-		double v1 = Get(i, j);
-		double v2 = Get(i + 1, j);
-		double v3 = Get(i + 1, j + 1);
-		double v4 = Get(i, j + 1);
+		T v1 = Get(i, j);
+		T v2 = Get(i + 1, j);
+		T v3 = Get(i + 1, j + 1);
+		T v4 = Get(i, j + 1);
 
 		return (1 - u) * (1 - v) * v1
-			+ (1 - u) * v * v2
-			+ u * (1 - v) * v3
-			+ u * v * v4;
+				+ (1 - u) * v * v2
+				+ u * (1 - v) * v3
+				+ u * v * v4;
 	}
 	
 	void Set(int row, int column, T v) 
