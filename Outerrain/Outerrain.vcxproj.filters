@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Vegetation">
+      <UniqueIdentifier>{ea4818c6-53dc-49f7-9068-5cc51998e593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Vegetation">
+      <UniqueIdentifier>{4254cfec-b232-4677-b653-897f34f54913}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\app.h">
@@ -54,8 +60,11 @@
     <ClInclude Include="Include\imgui_opengl.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Time.h">
+    <ClInclude Include="Include\time.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\vegetationObject.h">
+      <Filter>Fichiers d%27en-tête\Vegetation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="Source\time.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\vegetationObject.cpp">
+      <Filter>Fichiers sources\Vegetation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

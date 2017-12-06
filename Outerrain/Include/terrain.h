@@ -20,11 +20,14 @@ public:
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
+	double NormalizedHeight(const Vector2&) const;
 	Mesh GetMesh() const;
 	void SetHeight(int, int, double);
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+	void ComputeNormalField();
 
+	// @Todo avant vegetation
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
@@ -32,7 +35,6 @@ public:
 	
 private:
 	float Lerp(float a, float b, float f);
-	void ComputeNormalField();
 };
 
 
@@ -55,4 +57,23 @@ public:
 	double BeckrockValue(int, int) const;
 	void ThermalErosion(int);
 	Mesh GetMesh() const;
+};
+
+
+// Pour éviter de polluer trop Terrain2D et le garder clean
+// Juste pour faire un terrain simple.
+class VegetationTerrain : public Terrain2D
+{
+protected:
+	ScalarField2D vegetationDensityField;
+	ScalarField2D vegetationInstanceField;
+
+public:
+	VegetationTerrain() { }
+	VegetationTerrain(int, int, Vector2, Vector2);
+
+	void ComputeDensities();
+	void ComputeInstances();
+
+	std::vector<Mesh> GetTreesMeshes() const;
 };

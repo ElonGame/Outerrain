@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "vec.h"
 
 template<typename T>
@@ -91,5 +92,10 @@ public:
 		// Ecrit les valeurs de double du scalarfield dans une Image gkit
 		// pour visualiser en niveau de gris.
 		// Utile pour voir toutes les maps etc...
+	}
+
+	double MaxValue() const
+	{
+		return *std::max_element(values.begin(), values.end());
 	}
 };

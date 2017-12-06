@@ -3,6 +3,7 @@
 #include "vec.h"
 #include "perlin.h"
 #include "image.h"
+#include "vegetationObject.h"
 
 
 /* Terrain2D */
@@ -52,7 +53,6 @@ void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteA
 			heightField.Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 		}
 	}
-
 	ComputeNormalField();
 }
 
@@ -135,8 +135,25 @@ void Terrain2D::ComputeNormalField()
 	}
 }
 
+double Terrain2D::NormalizedHeight(const Vector2& p) const
+{
+	float h = Height(p);
+	return h / heightField.MaxValue();
+}
 
-/* LayerField */
+ScalarField2D Terrain2D::SlopeField() const
+{
+	ScalarField2D slopeField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			slopeField.Set(i, j, 1.0 - normalField.Get(i, j).y);
+	}
+	return slopeField;
+}
+
+
+/* LayerTerrain2D */
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) 
 	: nx(nx), ny(ny), a(a), b(b)
 {
@@ -169,13 +186,67 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 Mesh LayerTerrain2D::GetMesh() const
 {
+	// Final terrain
 	Terrain2D terrain = Terrain2D(nx, ny, a, b);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 			terrain.SetHeight(i, j, Height(i, j));
 	}
+	terrain.ComputeNormalField();
+
+	// Mesh
 	Mesh m;
 	m.CalculateFromTerrain2D(terrain);
 	return m;
+}
+
+
+/* VegetationTerrain */
+VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
+	: Terrain2D(nx, ny, bottomLeft, topRight), 
+	  vegetationDensityField(nx, ny, bottomLeft, topRight), 
+	  vegetationInstanceField(nx, ny, bottomLeft, topRight)
+{
+}
+
+void VegetationTerrain::ComputeDensities()
+{
+	// Crée une carte de densité de végétation
+	// En fonction de la pente du terrain uniquement
+	// Pour l'instant. La carte sera utilisé pour 
+	// spawner des Instances Dans ComputeInstances()
+	ScalarField2D slopeField = SlopeField();
+
+	// On aura une database d'arbre plus tard
+	VegetationObject vegObj;
+	
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float slope = slopeField.Get(i, j);
+			vegetationDensityField.Set(i, j, vegObj.SlopeDensityFactor(slope));
+		}
+	}
+}
+
+void VegetationTerrain::ComputeInstances()
+{
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float p = (float)(rand() % 100) / 100.0;
+			if (p < vegetationDensityField.Get(i, j))
+				vegetationInstanceField.Set(i, j, 1.0);
+		}
+	}
+}
+
+std::vector<Mesh> VegetationTerrain::GetTreesMeshes() const
+{
+	std::vector<Mesh> meshes;
+	// @Todo
+	return meshes;
 }

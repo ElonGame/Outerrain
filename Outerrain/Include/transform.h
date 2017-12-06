@@ -69,7 +69,7 @@ Transform Viewport(const float width, const float height);
 //! renvoie la matrice representant une transformation projection perspective.
 Transform Perspective(const float fov, const float aspect, const float znear, const float zfar);
 //! renvoie la matrice representant le placement et l'orientation d'une camera pour observer le Vector3 to.
-Transform Lookat(const Vector3& from, const Vector3& to, const Vector3& up);
+Transform LookAt(const Vector3& from, const Vector3& to, const Vector3& up);
 
 //! renvoie la composition des transformations a et b, t= a * b.
 Transform ComposeTransform(const Transform& a, const Transform& b);

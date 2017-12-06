@@ -28,10 +28,11 @@
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\perlin.h" />
     <ClInclude Include="Include\shader.h" />
-    <ClInclude Include="Include\Time.h" />
+    <ClInclude Include="Include\time.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
+    <ClInclude Include="Include\vegetationObject.h" />
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +52,7 @@
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\time.cpp" />
     <ClCompile Include="Source\transform.cpp" />
+    <ClCompile Include="Source\vegetationObject.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

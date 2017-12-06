@@ -1,0 +1,21 @@
+#pragma once
+#include "mesh.h"
+
+class VegetationObject
+{
+protected:
+
+public:
+	VegetationObject();
+
+	// Chaque arbre ou type d'arbre aura ses propriétés. 
+	// Les fonctions suivantes retournent une 'densité'
+	// Pour ce type en fonction de facteurs (height, slope...)
+	// Les paramètres doivent être normalisés [0, 1].
+	float SlopeDensityFactor(float);
+	float HeightDensityFactor(float);
+	float WetnessDensityFactor(float);
+	float StreamPowerDensityFactor(float);
+
+	virtual Mesh GetMesh();
+};
