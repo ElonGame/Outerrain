@@ -1,7 +1,7 @@
 #include "mesh.h"
 #include "cameraOrbiter.h"
 #include "shader.h"
-#include "fields.h"
+#include "terrain.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>

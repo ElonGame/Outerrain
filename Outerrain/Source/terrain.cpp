@@ -1,106 +1,16 @@
 #include <algorithm>
-#include "fields.h"
+#include "terrain.h"
 #include "vec.h"
 #include "perlin.h"
 #include "image.h"
-
-/* Scalarfield 2D */
-Scalarfield2D::Scalarfield2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
-	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
-{
-	values.resize(nx * ny);
-	std::fill(values.begin(), values.end(), 0);
-}
-
-int Scalarfield2D::Index(int row, int column) const
-{
-	return row * nx + column;
-}
-
-void Scalarfield2D::Set(int i, int j, double v)
-{
-	values[Index(i, j)] = v;
-}
-
-double Scalarfield2D::Get(int i, int j) const
-{
-	int index = Index(i, j);
-	return values[index];
-}
-
-double Scalarfield2D::GetValueBilinear(const Vector2& p) const
-{
-	Vector2 q = p - bottomLeft;
-	Vector2 d = topRight - bottomLeft;
-
-	double u = q[0] / d[0];
-	double v = q[1] / d[1];
-
-	int i = int(u * (nx - 1));
-	int j = int(v * (ny - 1));
-
-	double v1 = Get(i, j);
-	double v2 = Get(i + 1, j);
-	double v3 = Get(i + 1, j + 1);
-	double v4 = Get(i, j + 1);
-
-	return (1 - u) * (1 - v) * v1
-		+ (1 - u) * v * v2
-		+ u * (1 - v) * v3
-		+ u * v * v4;
-}
-
-
-/* Vector3field 2D*/
-Vector3field2D::Vector3field2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
-	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
-{
-	values.resize(nx * ny);
-	std::fill(values.begin(), values.end(), Vector3(0));
-}
-
-int Vector3field2D::Index(int row, int column) const
-{
-	return row * nx + column;
-}
-
-Vector3 Vector3field2D::Get(int i, int j) const
-{
-	int index = Index(i, j);
-	return values[index];
-}
-
-void Vector3field2D::Set(int i, int j, Vector3 v)
-{
-	int index = Index(i, j);
-	values[index] = v;
-}
-
-Vector3 Vector3field2D::GetValueBilinear(const Vector2& p) const
-{
-	Vector2 q = p - bottomLeft;
-	Vector2 d = topRight - bottomLeft;
-	float u = q[0] / d[0];
-	float v = q[1] / d[1];
-	int i = int(u * (nx - 1));
-	int j = int(v * (ny - 1));
-	Vector3 v1 = Get(i, j);
-	Vector3 v2 = Get(i + 1, j);
-	Vector3 v3 = Get(i + 1, j + 1);
-	Vector3 v4 = Get(i, j + 1);
-	return v1 * (1 - u) * (1 - v)
-		+ v2 * (1 - u) * v
-		+ v3 * u * (1 - v)
-		+ v4 * u * v;
-}
 
 
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 {
-	heightField = Scalarfield2D(nx, ny, bottomLeft, topRight);
-	normalField = Vector3field2D(nx, ny, bottomLeft, topRight);
+	heightField = ValueField<double>(nx, ny, bottomLeft, topRight);
+	normalField = ValueField<Vector3>(nx, ny, bottomLeft, topRight);
 }
 
 void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteAltitude)
@@ -227,10 +137,11 @@ void Terrain2D::ComputeNormalFieldFromHeightField()
 
 
 /* LayerField */
-LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) : nx(nx), ny(ny), a(a), b(b)
+LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) 
+	: nx(nx), ny(ny), a(a), b(b)
 {
-	sand = Scalarfield2D(nx, ny, a, b);
-	bedrock = Scalarfield2D(nx, ny, a, b);
+	sand = ValueField<double>(nx, ny, a, b);
+	bedrock = ValueField<double>(nx, ny, a, b);
 }
 
 double LayerTerrain2D::Height(int i, int j) const

@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "mesh.h"
 #include "cameraOrbiter.h"
-#include "fields.h"
+#include "terrain.h"
 
 class App
 {

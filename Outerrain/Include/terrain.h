@@ -2,51 +2,15 @@
 #include <vector>
 #include "vec.h"
 #include "mesh.h"
-
-/* TODO : REFACTOR FIELD CLASSES IN TEMPLATE */
-
-class Scalarfield2D
-{
-protected:
-	int nx, ny;
-	Vector2 bottomLeft, topRight;
-	std::vector<double> values;
-
-public:
-	Scalarfield2D() { }
-	Scalarfield2D(int, int, Vector2, Vector2);
-
-	int Index(int, int) const;
-	double Get(int, int) const;
-	void Set(int, int, double);
-	double GetValueBilinear(const Vector2&) const;
-	double SizeX() const { return nx; }
-	double SizeY() const { return ny; }
-};
-
-class Vector3field2D
-{
-protected:
-	int nx, ny;
-	Vector2 bottomLeft, topRight;
-	std::vector<Vector3> values;
-
-public:
-	Vector3field2D() { }
-	Vector3field2D(int, int, Vector2, Vector2);
-	int Index(int, int) const;
-	Vector3 Get(int, int) const;
-	void Set(int, int, Vector3);
-	Vector3 GetValueBilinear(const Vector2&) const;
-};
+#include "valueField.h"
 
 class Terrain2D
 {
 protected:
 	int nx, ny;
 	Vector2 bottomLeft, topRight;
-	Scalarfield2D heightField;
-	Vector3field2D normalField;
+	ValueField<double> heightField;
+	ValueField<Vector3> normalField;
 
 public:
 	Terrain2D() { }
@@ -73,8 +37,8 @@ class LayerTerrain2D
 protected:
 	int nx, ny;
 	Vector2 a, b;
-	Scalarfield2D bedrock;
-	Scalarfield2D sand;
+	ValueField<double> bedrock;
+	ValueField<double> sand;
 
 public:
 	LayerTerrain2D() { }
