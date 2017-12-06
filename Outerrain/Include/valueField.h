@@ -71,3 +71,25 @@ public:
 		return ny; 
 	}
 };
+
+class ScalarField2D : public ValueField<double> 
+{
+public:
+	ScalarField2D() : ValueField() 
+	{ 
+	}
+
+	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
+		: ValueField(nx, ny, bottomLeft, topRight)
+	{
+	}
+
+	// @Todo Nathan
+	void WriteImage(const char* path)
+	{
+		// @Todo Nathan
+		// Ecrit les valeurs de double du scalarfield dans une Image gkit
+		// pour visualiser en niveau de gris.
+		// Utile pour voir toutes les maps etc...
+	}
+};

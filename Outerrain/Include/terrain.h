@@ -9,7 +9,7 @@ class Terrain2D
 protected:
 	int nx, ny;
 	Vector2 bottomLeft, topRight;
-	ValueField<double> heightField;
+	ScalarField2D heightField;
 	ValueField<Vector3> normalField;
 
 public:
@@ -22,13 +22,17 @@ public:
 	double Height(const Vector2&) const;
 	Mesh GetMesh() const;
 	void SetHeight(int, int, double);
-
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
 
+	ScalarField2D WetnessField() const;
+	ScalarField2D StreamPowerField() const;
+	ScalarField2D SlopeField() const;
+	ScalarField2D AccessibilityField() const;
+	
 private:
 	float Lerp(float a, float b, float f);
-	void ComputeNormalFieldFromHeightField();
+	void ComputeNormalField();
 };
 
 
@@ -37,8 +41,8 @@ class LayerTerrain2D
 protected:
 	int nx, ny;
 	Vector2 a, b;
-	ValueField<double> bedrock;
-	ValueField<double> sand;
+	ScalarField2D bedrock;
+	ScalarField2D sand;
 
 public:
 	LayerTerrain2D() { }

@@ -6,8 +6,8 @@
 #include <cassert>
 #include <iostream>
 #include <fstream>
-
 using namespace std;
+
 
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),

@@ -3,8 +3,10 @@
 
 struct Color
 {
-	Color(const float _r = 0.f, const float _g = 0.f, const float _b = 0.f, const float _a = 1.f) : r(_r), g(_g), b(_b), a(_a) {}
-	Color(const Color& color, const float alpha) : r(color.r), g(color.g), b(color.b), a(alpha) {}
+	Color(const float _r = 0.f, const float _g = 0.f, const float _b = 0.f, const float _a = 1.f)
+		: r(_r), g(_g), b(_b), a(_a) {}
+	Color(const Color& color, const float alpha) 
+		: r(color.r), g(color.g), b(color.b), a(alpha) {}
 
 	float power() const;
 

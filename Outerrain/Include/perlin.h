@@ -1,7 +1,7 @@
 #pragma once
 #include "noise.h"
 
-class Perlin : Noise
+class Perlin : public Noise
 {
 private:
 	Perlin() {}

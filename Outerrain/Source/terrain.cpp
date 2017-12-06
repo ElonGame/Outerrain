@@ -9,7 +9,7 @@
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 {
-	heightField = ValueField<double>(nx, ny, bottomLeft, topRight);
+	heightField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	normalField = ValueField<Vector3>(nx, ny, bottomLeft, topRight);
 }
 
@@ -53,7 +53,7 @@ void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteA
 		}
 	}
 
-	ComputeNormalFieldFromHeightField();
+	ComputeNormalField();
 }
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
@@ -67,7 +67,7 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 			heightField.Set(i, j, v);
 		}
 	}
-	ComputeNormalFieldFromHeightField();
+	ComputeNormalField();
 }
 
 double Terrain2D::Height(const Vector2& p) const
@@ -105,7 +105,7 @@ float Terrain2D::Lerp(float a, float b, float f)
 	return (a * (1.0f - f)) + (b * f);
 }
 
-void Terrain2D::ComputeNormalFieldFromHeightField()
+void Terrain2D::ComputeNormalField()
 {
 	for (int i = 0; i < ny - 1; i++)
 	{
@@ -140,8 +140,8 @@ void Terrain2D::ComputeNormalFieldFromHeightField()
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) 
 	: nx(nx), ny(ny), a(a), b(b)
 {
-	sand = ValueField<double>(nx, ny, a, b);
-	bedrock = ValueField<double>(nx, ny, a, b);
+	sand = ScalarField2D(nx, ny, a, b);
+	bedrock = ScalarField2D(nx, ny, a, b);
 }
 
 double LayerTerrain2D::Height(int i, int j) const
@@ -170,9 +170,9 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 Mesh LayerTerrain2D::GetMesh() const
 {
 	Terrain2D terrain = Terrain2D(nx, ny, a, b);
-	for (int i = 0; i < nx; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < ny; j++)
+		for (int j = 0; j < nx; j++)
 			terrain.SetHeight(i, j, Height(i, j));
 	}
 	Mesh m;
