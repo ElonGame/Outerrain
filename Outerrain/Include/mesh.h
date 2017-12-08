@@ -3,11 +3,12 @@
 #include <GL\glew.h>
 #include "vec.h"
 #include "shader.h"
+#include "component.h"
 
 class Terrain2D;
 class CameraOrbiter;
 
-class Mesh
+class Mesh : public Component
 {
 protected:
 	std::vector<Vector3> vertices;

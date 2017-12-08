@@ -88,10 +88,10 @@ Vector3 Terrain2D::Vertex(int i, int j) const
 	return Vector3(x, y, z);
 }
 
-Mesh Terrain2D::GetMesh() const
+Mesh* Terrain2D::GetMesh() const
 {
-	Mesh ret;
-	ret.CalculateFromTerrain2D(*this);
+	Mesh* ret = new Mesh();
+	ret->CalculateFromTerrain2D(*this);
 	return ret;
 }
 
@@ -184,7 +184,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 	}
 }
 
-Mesh LayerTerrain2D::GetMesh() const
+Mesh* LayerTerrain2D::GetMesh() const
 {
 	// Final terrain
 	Terrain2D terrain = Terrain2D(nx, ny, a, b);
@@ -196,8 +196,8 @@ Mesh LayerTerrain2D::GetMesh() const
 	terrain.ComputeNormalField();
 
 	// Mesh
-	Mesh m;
-	m.CalculateFromTerrain2D(terrain);
+	Mesh* m;
+	m->CalculateFromTerrain2D(terrain);
 	return m;
 }
 

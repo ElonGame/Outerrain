@@ -12,15 +12,6 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 	InitImGUI();
 }
 
-App::~App()
-{
-	ImGui_OpenGL_Shutdown();
-	if (glContext)
-		release_context(glContext);
-	if (window)
-		ReleaseWindow(window);
-}
-
 int App::Init()
 {
 	// Default gl state
@@ -32,17 +23,19 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	terrain2D = Terrain2D(256, 32, Vector2(-64, -64), Vector2(64, 64));
+	// Terrain 
+	terrain2D = Terrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	terrain2D.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
-	mesh = terrain2D.GetMesh();
-
-	// Init Mesh
+	Mesh* mesh = terrain2D.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
-	mesh.SetShader(shader);
+	mesh->SetShader(shader);
+	GameObject* terrain = new GameObject();
+	terrain->AddComponent(mesh);
+	scene.AddChild(terrain);
 
-	// Init Shader
-	orbiter.LookAt(mesh.GetBounds());
+	// Camera
+	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
 
@@ -65,6 +58,11 @@ void App::InitImGUI()
 
 void App::Quit()
 {
+	ImGui_OpenGL_Shutdown();
+	if (glContext)
+		release_context(glContext);
+	if (window)
+		ReleaseWindow(window);
 	ReleaseWindow(window);
 }
 
@@ -73,7 +71,11 @@ int App::Render()
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	ImGui::Render();
-	mesh.Draw(orbiter);
+	
+	std::vector<GameObject*> sceneObjs = scene.GetAllChildren();
+	for (int i = 0; i < sceneObjs.size(); i++)
+		sceneObjs[i]->GetComponent<Mesh>()->Draw(orbiter);
+
 	return 1;
 }
 
