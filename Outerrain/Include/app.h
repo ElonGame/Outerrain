@@ -8,6 +8,8 @@
 class App
 {
 protected:
+	bool alreadyInit = false;
+
 	SDL_Window* window;
 	SDL_GLContext glContext;
 	Mesh mesh;
@@ -22,7 +24,6 @@ public:
 	virtual ~App();
 
 	virtual int Init();
-	virtual void InitImGUI();
 	virtual int Update(const float, const float);
 	virtual int Render();
 	virtual void Run();

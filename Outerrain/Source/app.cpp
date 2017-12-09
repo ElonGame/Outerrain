@@ -1,6 +1,7 @@
 #include "app.h"
 #include "GL/glew.h"
 #include "Time.h"
+
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
@@ -9,7 +10,6 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 {
 	window = CreateWindow(width, height);
 	glContext = create_context(window, major, minor);
-	InitImGUI();
 }
 
 App::~App()
@@ -23,6 +23,9 @@ App::~App()
 
 int App::Init()
 {
+	// Init ImGui
+	ImGui_OpenGL_Init(window);
+
 	// Default gl state
 	glClearDepthf(1);
 	glEnable(GL_DEPTH_TEST);
@@ -46,25 +49,12 @@ int App::Init()
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
 
-	ImGui::Begin("Bienvenue dans Outerrain !");
-	ImGui::End();
-
 	return 1;
-}
-
-void App::InitImGUI()
-{
-	ImGui_OpenGL_Init(window);
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		ImGui_OpenGL_ProcessEvent(&event);
-	}
-	ImGui_OpenGL_NewFrame(window);
 }
 
 void App::Quit()
 {
+	ImGui_OpenGL_Shutdown();
 	ReleaseWindow(window);
 }
 
@@ -72,14 +62,17 @@ int App::Render()
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	ImGui::Render();
 	mesh.Draw(orbiter);
 	return 1;
 }
 
 int App::Update(const float time, const float deltaTime)
 {
-	// Deplace la camera
+	ImGui::Begin("Welcome to Outerrain !");
+	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
+	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
+	ImGui::End();
+
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	if (mb & SDL_BUTTON(1))
@@ -117,10 +110,12 @@ void App::Run()
 	glViewport(0, 0, WindowWidth(), WindowHeight());
 	while (Events(window))
 	{
+		ImGui_OpenGL_NewFrame(window);
 		if (Update(Time::GlobalTime(), Time::DeltaTime()) < 0)
 			break;
 		if (Render() < 1)
 			break;
+		ImGui::Render();
 		SDL_GL_SwapWindow(window);
 	}
 	Quit();
