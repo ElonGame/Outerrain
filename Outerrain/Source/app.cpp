@@ -1,6 +1,6 @@
 #include "app.h"
 #include "GL/glew.h"
-#include "Time.h"
+#include "time.h"
 
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
@@ -10,15 +10,6 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 {
 	window = CreateWindow(width, height);
 	glContext = create_context(window, major, minor);
-}
-
-App::~App()
-{
-	ImGui_OpenGL_Shutdown();
-	if (glContext)
-		release_context(glContext);
-	if (window)
-		ReleaseWindow(window);
 }
 
 int App::Init()
@@ -37,15 +28,18 @@ int App::Init()
 
 	terrain2D = Terrain2D(256, 32, Vector2(-64, -64), Vector2(64, 64));
 	terrain2D.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
-	mesh = terrain2D.GetMesh();
 
-	// Init Mesh
+	Mesh* mesh = terrain2D.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
-	mesh.SetShader(shader);
+	mesh->SetShader(shader);
+
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
 
 	// Init Shader
-	orbiter.LookAt(mesh.GetBounds());
+	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
 
@@ -55,24 +49,34 @@ int App::Init()
 void App::Quit()
 {
 	ImGui_OpenGL_Shutdown();
-	ReleaseWindow(window);
+	if (glContext)
+		release_context(glContext);
+	if (window)
+		ReleaseWindow(window);
 }
 
 int App::Render()
 {
+	// Clear
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	mesh.Draw(orbiter);
-	return 1;
-}
 
-int App::Update(const float time, const float deltaTime)
-{
+	// Scene
+	std::vector<GameObject*> objs = scene.GetAllChildren();
+	for (int i = 0; i < objs.size(); i++)
+		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
+
+	// ImGui
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
 	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
 	ImGui::End();
 
+	return 1;
+}
+
+int App::Update(const float time, const float deltaTime)
+{
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	if (mb & SDL_BUTTON(1))
