@@ -23,6 +23,9 @@ protected:
 	// Scene Data
 	GameObject scene;
 
+	Uint64 lastTime;
+	Uint64 newTime;
+
 public:
 	App(const int&, const int&, const int&, const int&);
 
@@ -31,4 +34,6 @@ public:
 	virtual int Render();
 	virtual void Run();
 	virtual void Quit();
+
+	void UpdateObjects(const float time, const float delta);
 };

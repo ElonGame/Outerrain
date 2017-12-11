@@ -267,7 +267,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 				treeCount++;
 			}
 			if (treeCount >= maxTreeCount)
-				break;
+				return vegObjects;
 		}
 	}
 	return vegObjects;

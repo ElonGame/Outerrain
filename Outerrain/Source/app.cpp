@@ -113,6 +113,9 @@ int App::Update(const float time, const float deltaTime)
 			scene.AddChild(trees[i]);
 	}
 
+	// Update game objects
+	UpdateObjects(time, deltaTime);
+
 	return 1;
 }
 
@@ -132,4 +135,21 @@ void App::Run()
 		SDL_GL_SwapWindow(window);
 	}
 	Quit();
+}
+
+void App::UpdateObjects(const float time, const float delta)
+{
+	newTime = SDL_GetPerformanceCounter();
+	float delta2 = (double)((newTime - lastTime) * 1000) / SDL_GetPerformanceFrequency();
+
+	std::vector<GameObject*> objs = scene.GetAllChildren();
+	for (int i = 0; i < objs.size(); i++)
+	{
+		objs[i]->UpdateTransformIfNeeded();
+		std::vector<Component*> components = objs[i]->GetAllComponents();
+		for (int j = 0; j < components.size(); j++)
+			components[j]->Update(delta2);
+	}
+
+	lastTime = SDL_GetPerformanceCounter();
 }

@@ -16,6 +16,7 @@ GameObject* VegetationObject::GetGameObject()
 	m->SetShader(shader);
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
+	obj->SetScale(1.0, 4.0, 1.0);
 	return obj;
 }
 
