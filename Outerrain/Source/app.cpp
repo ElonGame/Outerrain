@@ -9,7 +9,6 @@
 //  -Thermal Erosion (Nathan)
 //  -Wetness Field (Vincent)
 //  -Noise Debug
-
 App::App(const int& width, const int& height, const int& major, const int& minor)
 	: window(nullptr), glContext(nullptr)
 {

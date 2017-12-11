@@ -14,7 +14,7 @@ GameObject* VegetationObject::GetGameObject()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	m->SetShader(shader);
-	m->SetMaterial(Material(Color::Green(), 0));
+	m->SetMaterial(Material(Color::Green(), 64));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
 	obj->SetScale(1.0, 4.0, 1.0);
@@ -30,7 +30,7 @@ float VegetationObject::HeightDensityFactor(float height)
 
 float VegetationObject::SlopeDensityFactor(float slope)
 {
-	return cos(slope * 1.6);
+	return 0.05;
 }
 
 float VegetationObject::StreamPowerDensityFactor(float streamPower)
