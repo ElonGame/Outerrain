@@ -1,9 +1,11 @@
 #include "app.h"
 #include "GL/glew.h"
 #include "time.h"
+#include "texture.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
+static GLuint wetnessTexture;
 
 // TODO :
 //  -Thermal Erosion (Nathan)
@@ -33,14 +35,16 @@ int App::Init()
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
-	ScalarField2D wetness = vegTerrain.WetnessField();
-	wetness.WriteImageGrayscale("Data/wetness.png");
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Blue(), 32));
+
+	ScalarField2D wetness = vegTerrain.WetnessField();
+	wetness.WriteImageGrayscale("Data/wetness.png");
+	GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
@@ -79,12 +83,18 @@ int App::Render()
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
 	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
+	ImGui::End();
 
 	// Shading
+	ImGui::Begin("Shaders");
 	const char* items[] = { "Diffuse", "Normal", "VegetationDensity", "Wetness" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 
+	// Debug Image 
+	ImGui::Begin("Wetness Image");
+	ImGui::Image((void*)wetnessTexture, ImVec2(150, 150));
+	ImGui::End();
 	return 1;
 }
 
