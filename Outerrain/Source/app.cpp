@@ -5,6 +5,11 @@
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
+// TODO :
+//  -Thermal Erosion (Nathan)
+//  -Wetness Field (Vincent)
+//  -Noise Debug
+
 App::App(const int& width, const int& height, const int& major, const int& minor)
 	: window(nullptr), glContext(nullptr)
 {
@@ -33,6 +38,7 @@ int App::Init()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Blue(), 32));
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);

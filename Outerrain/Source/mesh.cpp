@@ -13,12 +13,12 @@ using namespace std;
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
-	shader() { }
+	shader(), material(Color::Green(), 32) { }
 
 Mesh::Mesh(const GLenum primitives) :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(primitives), VAO(0), fullBuffer(0), indexBuffer(0),
-	shader() { }
+	shader(), material(Color::Green(), 32) { }
 
 void Mesh::AddVertex(const Vector3& v)
 {
@@ -86,6 +86,11 @@ void Mesh::AddTexcoord(const int& i, const Vector2& t)
 void Mesh::SetShader(const Shader& s)
 {
 	shader = s;
+}
+
+void Mesh::SetMaterial(const Material& m)
+{
+	material = m;
 }
 
 Vector3 Mesh::Vertex(int i) const
@@ -321,6 +326,9 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformVec3("camPos", camPos);
 
+	shader.UniformVec3("diffuseColor", Vector3(material.diffuse.r, material.diffuse.g, material.diffuse.b));
+	shader.UniformFloat("shininess", material.shininess);
+
 	Draw();
 }
 
@@ -371,8 +379,6 @@ void Mesh::ReadMesh(const char *filename)
 		std::cout << "Error loading mesh - aborting" << std::endl;
 		return;
 	}
-
-	printf("loading mesh '%s'...\n", filename);
 
 	std::vector<Vector3> vert;
 	std::vector<Vector2> tex;
