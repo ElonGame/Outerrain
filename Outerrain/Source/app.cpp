@@ -4,11 +4,17 @@
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
-
 // TODO :
 //  -Thermal Erosion (Nathan)
 //  -Wetness Field (Vincent)
 //  -Noise Debug
+//  -Représentation d'évènements (?)
+//  -Génération de routes (?)
+//  -Génération de villages (?)
+
+// Bug fix :
+//  -Release CameraOrbiter:: compile errors
+
 App::App(const int& width, const int& height, const int& major, const int& minor)
 	: window(nullptr), glContext(nullptr)
 {
@@ -33,8 +39,8 @@ int App::Init()
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
-	ScalarField2D wetness = vegTerrain.WetnessField();
-	wetness.WriteImageGrayscale("Data/wetness.png");
+	//ScalarField2D wetness = vegTerrain.WetnessField();
+	//wetness.WriteImageGrayscale("Data/wetness.png");
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
@@ -81,7 +87,7 @@ int App::Render()
 	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
 
 	// Shading
-	const char* items[] = { "Diffuse", "Normal", "VegetationDensity", "Wetness" };
+	const char* items[] = { "Diffuse", "Normal", "Wireframe" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 

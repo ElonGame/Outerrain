@@ -335,6 +335,11 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformFloat("shininess", material.shininess);
 	shader.UniformInt("renderMode", renderMode);
 
+	if (renderMode == WireframeMode)
+		primitiveDrawn = GL_LINES;
+	else
+		primitiveDrawn = GL_TRIANGLES;
+
 	Draw();
 }
 

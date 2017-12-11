@@ -69,9 +69,11 @@ vec3 DiffuseShading()
 
 void main()
 {
-	if (renderMode == 0)
-		fragment_color = vec4(DiffuseShading(), 1);
-	else
-		fragment_color = vec4(NormalShading(), 1);
+	if (renderMode == 1) // Normal
+		fragment_color = vec4(NormalShading(), 1.0);
+	else if (renderMode == 2) // WireFrame
+		fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
+	else // Diffuse
+		fragment_color = vec4(DiffuseShading(), 1.0);
 }
 #endif
