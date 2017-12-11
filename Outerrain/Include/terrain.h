@@ -27,13 +27,13 @@ public:
 	int SizeY() const { return ny; }
 	void ComputeNormalField();
 
-
 	int Distribute(Vector2 p, Vector2* neighbours, float* quantity) const;
 	ScalarField2D Drainage() const;
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
 	ScalarField2D AccessibilityField() const;	
+
 private:
 	float Lerp(float a, float b, float f);
 };

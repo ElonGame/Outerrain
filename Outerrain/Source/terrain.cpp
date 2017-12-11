@@ -148,6 +148,16 @@ double Terrain2D::NormalizedHeight(const Vector2& p) const
 	return h / heightField.MaxValue();
 }
 
+ScalarField2D Terrain2D::SlopeField() const
+{
+	ScalarField2D slopeField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			slopeField.Set(i, j, 1.0 - normalField.Get(i, j).y);
+	}
+	return slopeField;
+}
 
 int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
 {

@@ -33,7 +33,7 @@ int App::Init()
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
-	terrain2D.WetnessField();
+	//terrain2D.WetnessField();
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
