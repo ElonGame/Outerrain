@@ -23,6 +23,12 @@ public:
 		values.resize(nx * ny, T(0));
 	}
 
+	ValueField(int nx, int ny, Vector2 bottomLeft, Vector2 topRight, T value)
+		: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+	{
+		values.resize(nx * ny, value);
+	}
+
 	int Index(int row, int column) const
 	{
 		return row * nx + column;
@@ -81,6 +87,11 @@ public:
 
 	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 		: ValueField(nx, ny, bottomLeft, topRight)
+	{
+	}
+
+	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight, double value)
+		: ValueField(nx, ny, bottomLeft, topRight, value)
 	{
 	}
 

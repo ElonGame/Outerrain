@@ -1,9 +1,15 @@
 #include <algorithm>
+#include <math.h>
+#include <deque>
 #include "terrain.h"
 #include "vec.h"
 #include "perlin.h"
 #include "image.h"
 
+static bool compareHeight(Vector3 u, Vector3 v)
+{
+	return (u.y > v.y);
+}
 
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -136,8 +142,101 @@ void Terrain2D::ComputeNormalField()
 }
 
 
+
+int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
+{
+	int i = p.x, j = p.y;
+
+	int counter = 0;
+	double slope = 0.0f;
+	double maxSlope = 0.0f;
+	double pointHeight = p.y;
+
+	for (int k = -1; k <= 1; k++)
+	{
+		for (int l = -1; l <= 1; l++)
+		{
+			if (k == 0 || l == 0 || (i + k) < 0 || (i + k) > nx || (j + l) < 0 || (j + l) > ny)
+				continue;
+
+			double neighHeight = heightField.Get(i + k, j + l);
+			if (pointHeight > neighHeight)
+			{
+				if (k + l == -1 || k + l == 1)
+					slope = pointHeight - neighHeight;
+				else
+					slope = (pointHeight - neighHeight) / sqrt(2);
+
+				if (slope >= maxSlope)
+					maxSlope = slope;
+
+				neighbours[counter] = Vector2(i + k, j + l);
+				quantity[counter] = 1.0f;
+				counter++;
+			}
+		}
+	}
+	return counter;
+}
+
+ScalarField2D Terrain2D::Drainage() const
+{
+	std::deque<Vector3> points;
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			points.push_back(Vector3(i, heightField.Get(i, j), j));
+		}
+	}
+	std::sort(points.begin(), points.end(), compareHeight);
+	ScalarField2D drainage = ScalarField2D(nx, ny, bottomLeft, topRight, 1.0);
+
+	while (!points.empty())
+	{
+		Vector3 p = points.front();
+		points.pop_front();
+
+		int i = p.x, j = p.z;
+		Vector2 neighbours[8];
+		float quantity[8];
+		int n = Distribute(Vector2(i, j), neighbours, quantity);
+
+		for (int k = 0; k < n; k++)
+		{
+			int l = neighbours[k].x, m = neighbours[k].y;
+			drainage.Set(i, j, drainage.Get(i, j) + quantity[k]);
+		}
+	}
+	return drainage;
+}
+
+ScalarField2D Terrain2D::WetnessField() const
+{
+	ScalarField2D drainageField = Drainage();
+	ScalarField2D wetnessField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + (1.0 - normalField.Get(i, j).y))));
+		}
+	}
+	return wetnessField;
+}
+
+ScalarField2D Terrain2D::StreamPowerField() const
+{
+	return ScalarField2D();
+}
+
+ScalarField2D Terrain2D::AccessibilityField() const
+{
+	return ScalarField2D();
+}
+
 /* LayerField */
-LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) 
+LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)
 {
 	sand = ScalarField2D(nx, ny, a, b);

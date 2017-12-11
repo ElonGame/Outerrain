@@ -37,6 +37,7 @@ int App::Init()
 
 	terrain2D = Terrain2D(256, 32, Vector2(-64, -64), Vector2(64, 64));
 	terrain2D.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	terrain2D.WetnessField();
 	mesh = terrain2D.GetMesh();
 
 	// Init Mesh
