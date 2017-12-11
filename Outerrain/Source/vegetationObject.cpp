@@ -14,6 +14,7 @@ GameObject* VegetationObject::GetGameObject()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	m->SetShader(shader);
+	m->SetMaterial(Material(Color::Green(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
 	obj->SetScale(1.0, 4.0, 1.0);
