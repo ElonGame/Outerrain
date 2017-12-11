@@ -34,7 +34,7 @@ int App::Init()
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 	ScalarField2D wetness = vegTerrain.WetnessField();
-	wetness.WriteImage("Data/wetness.png");
+	wetness.WriteImageGrayscale("Data/wetness.png");
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
