@@ -3,6 +3,7 @@
 #include <GL\glew.h>
 #include "vec.h"
 #include "shader.h"
+#include "material.h"
 #include "component.h"
 
 class Terrain2D;
@@ -16,6 +17,8 @@ protected:
 	std::vector<Vector3> normals;
 	std::vector<Vector4> colors;
 	std::vector<unsigned int> indices;
+
+	Material material;
 
 	GLenum primitiveDrawn;
 	GLuint VAO;
@@ -60,6 +63,7 @@ public:
 	void AddTexcoord(const Vector2&);
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
+	void SetMaterial(const Material&);
 	
 	void WriteMesh(const char*);
 	void ReadMesh(const char*);

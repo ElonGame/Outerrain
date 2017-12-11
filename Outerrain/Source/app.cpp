@@ -32,12 +32,13 @@ int App::Init()
 	glCullFace(GL_BACK);
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	vegTerrain.InitFromFile("Data/heightmap1.png", 0.0f, 10.0);
+	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Blue(), 32));
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
