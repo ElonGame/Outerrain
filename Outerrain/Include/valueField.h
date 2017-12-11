@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "vec.h"
+#include "image.h"
 
 template<typename T>
 class ValueField 
@@ -112,13 +113,18 @@ public:
 	{
 	}
 
-	// @Todo Nathan
 	void WriteImage(const char* path)
 	{
-		// @Todo Nathan
-		// Ecrit les valeurs de double du scalarfield dans une Image gkit
-		// pour visualiser en niveau de gris.
-		// Utile pour voir toutes les maps etc...
+		Image im = Image(nx, ny);
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
+			{
+				double v = Get(i, j);
+				im(i, j) = Color(v, v, v, 1.0);
+			}
+		}
+		im.WriteImage(path);
 	}
 
 	double MaxValue() const

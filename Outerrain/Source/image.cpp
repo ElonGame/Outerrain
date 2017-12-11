@@ -29,8 +29,6 @@ void Image::ReadImage(const char *filename)
 	height = surface->h;
 	data.resize(width * height, Color::Black());
 
-	printf("loading image '%s' %dx%d %d channels...\n", filename, width, height, channels);
-
 	if (format.BitsPerPixel == 32)
 	{
 		int py = 0;
@@ -155,8 +153,6 @@ void ImageData::ReadImageData(const char *filename)
 	data.resize(width * height * c, 0);
 
 	ImageData image(width, height, channels);
-
-	printf("loading image '%s' %dx%d %d channels...\n", filename, width, height, channels);
 
 	if (format.BitsPerPixel == 32)
 	{
