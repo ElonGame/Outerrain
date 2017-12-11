@@ -92,8 +92,8 @@ int App::Render()
 	ImGui::End();
 
 	// Shading
-	ImGui::Begin("Shaders");
-	const char* items[] = { "Diffuse", "Normal", "VegetationDensity", "Wetness" };
+	ImGui::Begin("Shaders"); 
+	const char* items[] = { "Diffuse", "Normal", "Wireframe" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 
