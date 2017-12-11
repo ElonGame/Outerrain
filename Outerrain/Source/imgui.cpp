@@ -2483,9 +2483,9 @@ static void SettingsHandlerWindow_ReadLine(ImGuiContext&, void* entry, const cha
     ImGuiWindowSettings* settings = (ImGuiWindowSettings*)entry;
     float x, y; 
     int i;
-    if (sscanf(line, "Pos=%f,%f", &x, &y) == 2)         settings->Pos = ImVec2(x, y);
-    else if (sscanf(line, "Size=%f,%f", &x, &y) == 2)   settings->Size = ImMax(ImVec2(x, y), GImGui->Style.WindowMinSize);
-    else if (sscanf(line, "Collapsed=%d", &i) == 1)     settings->Collapsed = (i != 0);
+    if (sscanf_s(line, "Pos=%f,%f", &x, &y) == 2)         settings->Pos = ImVec2(x, y);
+    else if (sscanf_s(line, "Size=%f,%f", &x, &y) == 2)   settings->Size = ImMax(ImVec2(x, y), GImGui->Style.WindowMinSize);
+    else if (sscanf_s(line, "Collapsed=%d", &i) == 1)     settings->Collapsed = (i != 0);
 }
 
 static void SettingsHandlerWindow_WriteAll(ImGuiContext& g, ImGuiTextBuffer* buf)
@@ -6832,15 +6832,15 @@ static bool DataTypeApplyOpFromText(const char* buf, const char* initial_value_b
         int* v = (int*)data_ptr;
         const int old_v = *v;
         int arg0i = *v;
-        if (op && sscanf(initial_value_buf, scalar_format, &arg0i) < 1)
+        if (op && sscanf_s(initial_value_buf, scalar_format, &arg0i) < 1)
             return false;
 
         // Store operand in a float so we can use fractional value for multipliers (*1.1), but constant always parsed as integer so we can fit big integers (e.g. 2000000003) past float precision
         float arg1f = 0.0f;
-        if (op == '+')      { if (sscanf(buf, "%f", &arg1f) == 1) *v = (int)(arg0i + arg1f); }                 // Add (use "+-" to subtract)
-        else if (op == '*') { if (sscanf(buf, "%f", &arg1f) == 1) *v = (int)(arg0i * arg1f); }                 // Multiply
-        else if (op == '/') { if (sscanf(buf, "%f", &arg1f) == 1 && arg1f != 0.0f) *v = (int)(arg0i / arg1f); }// Divide
-        else                { if (sscanf(buf, scalar_format, &arg0i) == 1) *v = arg0i; }                       // Assign constant (read as integer so big values are not lossy)
+        if (op == '+')      { if (sscanf_s(buf, "%f", &arg1f) == 1) *v = (int)(arg0i + arg1f); }                 // Add (use "+-" to subtract)
+        else if (op == '*') { if (sscanf_s(buf, "%f", &arg1f) == 1) *v = (int)(arg0i * arg1f); }                 // Multiply
+        else if (op == '/') { if (sscanf_s(buf, "%f", &arg1f) == 1 && arg1f != 0.0f) *v = (int)(arg0i / arg1f); }// Divide
+        else                { if (sscanf_s(buf, scalar_format, &arg0i) == 1) *v = arg0i; }                       // Assign constant (read as integer so big values are not lossy)
         return (old_v != *v);
     }
     else if (data_type == ImGuiDataType_Float)
@@ -6850,11 +6850,11 @@ static bool DataTypeApplyOpFromText(const char* buf, const char* initial_value_b
         float* v = (float*)data_ptr;
         const float old_v = *v;
         float arg0f = *v;
-        if (op && sscanf(initial_value_buf, scalar_format, &arg0f) < 1)
+        if (op && sscanf_s(initial_value_buf, scalar_format, &arg0f) < 1)
             return false;
 
         float arg1f = 0.0f;
-        if (sscanf(buf, scalar_format, &arg1f) < 1)
+        if (sscanf_s(buf, scalar_format, &arg1f) < 1)
             return false;
         if (op == '+')      { *v = arg0f + arg1f; }                    // Add (use "+-" to subtract)
         else if (op == '*') { *v = arg0f * arg1f; }                    // Multiply
@@ -9844,9 +9844,9 @@ bool ImGui::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flag
                 p++;
             i[0] = i[1] = i[2] = i[3] = 0;
             if (alpha)
-                sscanf(p, "%02X%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2], (unsigned int*)&i[3]); // Treat at unsigned (%X is unsigned)
+                sscanf_s(p, "%02X%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2], (unsigned int*)&i[3]); // Treat at unsigned (%X is unsigned)
             else
-                sscanf(p, "%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2]);
+                sscanf_s(p, "%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2]);
         }
         if (!(flags & ImGuiColorEditFlags_NoOptions))
             OpenPopupOnItemClick("context");
