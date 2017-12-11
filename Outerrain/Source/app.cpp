@@ -5,6 +5,11 @@
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
+// TODO :
+//  -Thermal Erosion (Nathan)
+//  -Wetness Field (Vincent)
+//  -Noise Debug
+
 App::App(const int& width, const int& height, const int& major, const int& minor)
 	: window(nullptr), glContext(nullptr)
 {
@@ -27,7 +32,7 @@ int App::Init()
 	glCullFace(GL_BACK);
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	vegTerrain.InitFromFile("Data/heightmap1.png", 0.0f, 10.0);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
