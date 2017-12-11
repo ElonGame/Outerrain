@@ -6,6 +6,7 @@ class GameObject;
 class VegetationObject
 {
 protected:
+	float radius = 1.0f;
 
 public:
 	VegetationObject();
@@ -19,5 +20,8 @@ public:
 	float WetnessDensityFactor(float);
 	float StreamPowerDensityFactor(float);
 
-	virtual GameObject* GetGameObject();
+	GameObject* GetGameObject();
+
+	void SetRadius(float r);
+	float GetRadius();
 };

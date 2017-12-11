@@ -155,7 +155,7 @@ ScalarField2D Terrain2D::SlopeField() const
 
 
 /* LayerTerrain2D */
-LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b) 
+LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)
 {
 	sand = ScalarField2D(nx, ny, a, b);
@@ -205,9 +205,9 @@ Mesh* LayerTerrain2D::GetMesh() const
 
 /* VegetationTerrain */
 VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
-	: Terrain2D(nx, ny, bottomLeft, topRight), 
-	  vegetationDensityField(nx, ny, bottomLeft, topRight), 
-	  vegetationInstanceField(nx, ny, bottomLeft, topRight)
+	: Terrain2D(nx, ny, bottomLeft, topRight),
+	vegetationDensityField(nx, ny, bottomLeft, topRight),
+	vegetationInstanceField(nx, ny, bottomLeft, topRight)
 {
 }
 
@@ -221,7 +221,7 @@ void VegetationTerrain::ComputeDensities()
 
 	// On aura une database d'arbre plus tard
 	VegetationObject vegObj;
-	
+
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -250,25 +250,66 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	//
 	// @Todo : poisson disk instancing
 	//
-	std::vector<GameObject*> vegObjects;
 	VegetationObject veg;
+	veg.SetRadius(3.0f);
+	float tileSize = veg.GetRadius() * 10.0f;
+	std::vector<Vector2> points = GetRandomDistribution(veg.GetRadius(), tileSize, 100);
+
 	int maxTreeCount = 1000;
 	int treeCount = 0;
-	for (int i = 0; i < vegetationInstanceField.SizeY(); i++)
+
+	int tileCountX = (topRight.x - bottomLeft.x) / tileSize + 1;
+	int tileCountY = (topRight.y - bottomLeft.y) / tileSize + 1;
+	Vector2 lowerLeftPos = bottomLeft;
+
+	std::vector<GameObject*> vegObjects;
+	for(int i = 0; i < tileCountY; i++)
 	{
-		for (int j = 0; j < vegetationInstanceField.SizeX(); j++)
+		for (int j = 0; j < tileCountX; j++)
 		{
-			if (vegetationInstanceField.Get(i, j) != 0.0)
+			for (int x = 0; x < points.size(); x++)
 			{
-				GameObject* vegObj = veg.GetGameObject();
-				Vector3 pos = Vertex(i, j);
-				vegObj->SetPosition(pos);
-				vegObjects.push_back(vegObj);
-				treeCount++;
+				Vector2 point = lowerLeftPos
+					+ Vector2(tileSize, 0) * (float)j
+					+ Vector2(0, tileSize) * (float)i
+					+ points[x];
+				if (vegetationInstanceField.IsInsideField(point) == true
+						&& vegetationInstanceField.GetValueBilinear(point) != 0.0)
+				{
+					GameObject* vegObj = veg.GetGameObject();
+					Vector3 pos = Vector3(point.x, Height(point), point.y);
+					vegObj->SetPosition(pos);
+					vegObjects.push_back(vegObj);
+					treeCount++;
+				}
+				if (treeCount >= maxTreeCount)
+					return vegObjects;
 			}
-			if (treeCount >= maxTreeCount)
-				return vegObjects;
 		}
 	}
 	return vegObjects;
+}
+
+std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const
+{
+	std::vector<Vector2> res;
+	for(int i = 0; i < maxTries; i++)
+	{
+		float randX = rand() / (float)RAND_MAX;
+		float randY = rand() / (float)RAND_MAX;
+		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
+
+		bool canAdd = true;
+		for (int j = 0; j < res.size(); j++)
+		{
+			if(Magnitude(point - res[j]) <= objRadius)
+			{
+				canAdd = false;
+				break;
+			}
+		}
+		if (canAdd == true)
+			res.push_back(point);
+	}
+	return res;
 }
