@@ -1,6 +1,12 @@
 ﻿#include "gameobject.h"
 
 
+void GameObject::CallStartOnComponents()
+{
+	for (int i = 0; i < components.size(); i++)
+		components[i]->Start();
+}
+
 GameObject::~GameObject()
 {
 	for (int i = 0; i < children.size(); i++)

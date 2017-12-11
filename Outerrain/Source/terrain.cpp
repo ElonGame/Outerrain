@@ -206,22 +206,14 @@ Mesh* LayerTerrain2D::GetMesh() const
 /* VegetationTerrain */
 VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: Terrain2D(nx, ny, bottomLeft, topRight),
-	vegetationDensityField(nx, ny, bottomLeft, topRight),
-	vegetationInstanceField(nx, ny, bottomLeft, topRight)
+	vegetationDensityField(nx, ny, bottomLeft, topRight)
 {
 }
 
 void VegetationTerrain::ComputeDensities()
 {
-	// Crée une carte de densité de végétation
-	// En fonction de la pente du terrain uniquement
-	// Pour l'instant. La carte sera utilisé pour 
-	// spawner des Instances Dans ComputeInstances()
 	ScalarField2D slopeField = SlopeField();
-
-	// On aura une database d'arbre plus tard
 	VegetationObject vegObj;
-
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -232,24 +224,8 @@ void VegetationTerrain::ComputeDensities()
 	}
 }
 
-void VegetationTerrain::ComputeInstances()
-{
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float p = (float)(rand() % 100) / 100.0;
-			if (p < vegetationDensityField.Get(i, j))
-				vegetationInstanceField.Set(i, j, 1.0);
-		}
-	}
-}
-
 std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 {
-	//
-	// @Todo : poisson disk instancing
-	//
 	VegetationObject veg;
 	veg.SetRadius(3.0f);
 	float tileSize = veg.GetRadius() * 10.0f;
@@ -260,7 +236,6 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 
 	int tileCountX = (topRight.x - bottomLeft.x) / tileSize + 1;
 	int tileCountY = (topRight.y - bottomLeft.y) / tileSize + 1;
-	Vector2 lowerLeftPos = bottomLeft;
 
 	std::vector<GameObject*> vegObjects;
 	for(int i = 0; i < tileCountY; i++)
@@ -269,18 +244,22 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 		{
 			for (int x = 0; x < points.size(); x++)
 			{
-				Vector2 point = lowerLeftPos
-					+ Vector2(tileSize, 0) * (float)j
-					+ Vector2(0, tileSize) * (float)i
-					+ points[x];
-				if (vegetationInstanceField.IsInsideField(point) == true
-						&& vegetationInstanceField.GetValueBilinear(point) != 0.0)
+				Vector2 point = bottomLeft
+								+ Vector2(tileSize, 0) * (float)j
+								+ Vector2(0, tileSize) * (float)i
+								+ points[x];
+				if (vegetationDensityField.IsInsideField(point) == true)
 				{
-					GameObject* vegObj = veg.GetGameObject();
-					Vector3 pos = Vector3(point.x, Height(point), point.y);
-					vegObj->SetPosition(pos);
-					vegObjects.push_back(vegObj);
-					treeCount++;
+					float density = vegetationDensityField.GetValueBilinear(point);
+					float p = rand() / (float)RAND_MAX;
+					if (p < density)
+					{
+						GameObject* vegObj = veg.GetGameObject();
+						Vector3 pos = Vector3(point.x, Height(point), point.y);
+						vegObj->SetPosition(pos);
+						vegObjects.push_back(vegObj);
+						treeCount++;
+					}
 				}
 				if (treeCount >= maxTreeCount)
 					return vegObjects;

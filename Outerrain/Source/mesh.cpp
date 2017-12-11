@@ -13,12 +13,12 @@ using namespace std;
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
-	shader(), material(Color::Green(), 32) { }
+	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
 
 Mesh::Mesh(const GLenum primitives) :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(primitives), VAO(0), fullBuffer(0), indexBuffer(0),
-	shader(), material(Color::Green(), 32) { }
+	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
 
 void Mesh::AddVertex(const Vector3& v)
 {
@@ -91,6 +91,11 @@ void Mesh::SetShader(const Shader& s)
 void Mesh::SetMaterial(const Material& m)
 {
 	material = m;
+}
+
+void Mesh::SetRenderMode(const RenderMode& r)
+{
+	renderMode = r;
 }
 
 Vector3 Mesh::Vertex(int i) const
@@ -328,6 +333,7 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 
 	shader.UniformVec3("diffuseColor", Vector3(material.diffuse.r, material.diffuse.g, material.diffuse.b));
 	shader.UniformFloat("shininess", material.shininess);
+	shader.UniformInt("renderMode", renderMode);
 
 	Draw();
 }

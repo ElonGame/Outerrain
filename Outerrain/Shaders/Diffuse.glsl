@@ -23,9 +23,8 @@ void main( )
 #endif
 
 
-
-
 #ifdef FRAGMENT_SHADER
+uniform int renderMode;
 uniform vec3 camPos;
 uniform vec3 diffuseColor;
 uniform float shininess;
@@ -41,7 +40,13 @@ in vec3 worldNormal;
 
 out vec4 fragment_color;
 
-void main()
+
+vec3 NormalShading()
+{
+	return worldNormal;
+}
+
+vec3 DiffuseShading()
 {
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
@@ -57,9 +62,16 @@ void main()
 	}
 
 	// Final color
-	vec3 temp = ambientLight 
+	return ambientLight 
 		+ diffuse * diffuseColor * (lightColor * lightStrength) 
 		+ specular * (lightColor * lightStrength);
-	fragment_color = vec4(temp.rgb, 1);
+}
+
+void main()
+{
+	if (renderMode == 0)
+		fragment_color = vec4(DiffuseShading(), 1);
+	else
+		fragment_color = vec4(NormalShading(), 1);
 }
 #endif

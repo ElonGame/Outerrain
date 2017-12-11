@@ -23,6 +23,8 @@ protected:
 	// Scene Data
 	GameObject scene;
 
+	// GUI
+	int currentItem;
 	Uint64 lastTime;
 	Uint64 newTime;
 

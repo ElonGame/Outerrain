@@ -23,6 +23,8 @@ private:
 
 public:
 	~GameObject();
+
+	void CallStartOnComponents();
 	void SetName(std::string s);
 	std::string GetName();
 

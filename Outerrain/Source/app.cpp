@@ -1,9 +1,9 @@
 #include "app.h"
 #include "GL/glew.h"
 #include "time.h"
-
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
+
 
 // TODO :
 //  -Thermal Erosion (Nathan)
@@ -14,6 +14,7 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 {
 	window = CreateWindow(width, height);
 	glContext = create_context(window, major, minor);
+	currentItem = 0;
 }
 
 int App::Init()
@@ -72,9 +73,14 @@ int App::Render()
 		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
 
 	// ImGui
+	// Help
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
 	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
+
+	// Shading
+	const char* items[] = { "Diffuse", "Normal", "VegetationDensity", "Wetness" };
+	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 
 	return 1;
@@ -112,7 +118,6 @@ int App::Update(const float time, const float deltaTime)
 	if (key_state(SDLK_v))
 	{
 		vegTerrain.ComputeDensities();
-		vegTerrain.ComputeInstances();
 		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
 		for (int i = 0; i < trees.size(); i++)
 			scene.AddChild(trees[i]);
@@ -120,6 +125,7 @@ int App::Update(const float time, const float deltaTime)
 
 	// Update game objects
 	UpdateObjects(time, deltaTime);
+	scene.GetChildAt(0)->GetComponent<Mesh>()->SetRenderMode((RenderMode)currentItem);
 
 	return 1;
 }
@@ -146,7 +152,6 @@ void App::UpdateObjects(const float time, const float delta)
 {
 	newTime = SDL_GetPerformanceCounter();
 	float delta2 = (double)((newTime - lastTime) * 1000) / SDL_GetPerformanceFrequency();
-
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (int i = 0; i < objs.size(); i++)
 	{
@@ -155,6 +160,5 @@ void App::UpdateObjects(const float time, const float delta)
 		for (int j = 0; j < components.size(); j++)
 			components[j]->Update(delta2);
 	}
-
 	lastTime = SDL_GetPerformanceCounter();
 }

@@ -66,14 +66,12 @@ class VegetationTerrain : public Terrain2D
 {
 protected:
 	ScalarField2D vegetationDensityField;
-	ScalarField2D vegetationInstanceField;
 
 public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
 	void ComputeDensities();
-	void ComputeInstances();
 
 	std::vector<GameObject*> GetTreeObjects() const;
 	std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
