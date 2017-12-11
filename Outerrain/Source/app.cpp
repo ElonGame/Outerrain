@@ -6,11 +6,17 @@
 #include "imgui_opengl.h"
 
 static GLuint wetnessTexture;
-
 // TODO :
 //  -Thermal Erosion (Nathan)
 //  -Wetness Field (Vincent)
 //  -Noise Debug
+//  -Représentation d'évènements (?)
+//  -Génération de routes (?)
+//  -Génération de villages (?)
+
+// Bug fix :
+//  -Release CameraOrbiter:: compile errors
+
 App::App(const int& width, const int& height, const int& major, const int& minor)
 	: window(nullptr), glContext(nullptr)
 {

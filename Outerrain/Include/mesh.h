@@ -13,8 +13,7 @@ enum RenderMode
 {
 	DiffuseMode = 0,
 	NormalMode = 1,
-	VegetationDensity = 2,
-	Wetness = 3
+	WireframeMode = 2,
 };
 
 class Mesh : public Component
