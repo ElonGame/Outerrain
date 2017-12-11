@@ -41,3 +41,13 @@ float VegetationObject::WetnessDensityFactor(float wetness)
 {
 	return cos(wetness * 1.6);
 }
+
+void VegetationObject::SetRadius(float r)
+{
+	radius = r;
+}
+
+float VegetationObject::GetRadius()
+{
+	return radius;
+}

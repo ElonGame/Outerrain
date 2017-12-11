@@ -76,4 +76,5 @@ public:
 	void ComputeInstances();
 
 	std::vector<GameObject*> GetTreeObjects() const;
+	std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
 };

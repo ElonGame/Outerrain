@@ -35,6 +35,22 @@ public:
 		return values[index];
 	}
 
+	bool IsInsideField(const Vector2& p) const
+	{
+		Vector2 q = p - bottomLeft;
+		Vector2 d = topRight - bottomLeft;
+
+		double u = q[0] / d[0];
+		double v = q[1] / d[1];
+
+		int j = int(u * (nx - 1));
+		int i = int(v * (ny - 1));
+
+		if (i < 0 || i >= ny - 1 || j < 0 || j >= nx - 1)
+			return false;
+		return true;
+	}
+
 	T GetValueBilinear(const Vector2& p) const
 	{
 		Vector2 q = p - bottomLeft;
