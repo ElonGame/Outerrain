@@ -2,6 +2,7 @@
 #include "cameraOrbiter.h"
 #include "shader.h"
 #include "terrain.h"
+#include "gameobject.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -12,6 +13,11 @@ using namespace std;
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
+	shader() { }
+
+Mesh::Mesh(const GLenum primitives) :
+	vertices(), texcoords(), normals(), colors(), indices(),
+	primitiveDrawn(primitives), VAO(0), fullBuffer(0), indexBuffer(0),
 	shader() { }
 
 void Mesh::AddVertex(const Vector3& v)
@@ -307,7 +313,7 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform trs = Identity();
+	Transform trs = this->gameObject->GetObjectToWorldMatrix();
 	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * (orbiter.View() * trs);
 	Vector3 camPos = orbiter.Position();
 
