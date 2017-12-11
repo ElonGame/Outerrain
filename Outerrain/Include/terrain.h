@@ -75,5 +75,5 @@ public:
 	void ComputeDensities();
 	void ComputeInstances();
 
-	std::vector<Mesh> GetTreesMeshes() const;
+	std::vector<GameObject*> GetTreeObjects() const;
 };

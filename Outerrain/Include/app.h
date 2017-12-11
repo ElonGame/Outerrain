@@ -15,9 +15,10 @@ protected:
 	SDL_GLContext glContext;
 	CameraOrbiter orbiter;
 
-	// Heightfield Data
+	// Terrain Data
 	Terrain2D terrain2D;
 	LayerTerrain2D layerTerrain2D;
+	VegetationTerrain vegTerrain;
 
 	// Scene Data
 	GameObject scene;

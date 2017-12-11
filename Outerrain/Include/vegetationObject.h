@@ -1,6 +1,8 @@
 #pragma once
 #include "mesh.h"
 
+class GameObject;
+
 class VegetationObject
 {
 protected:
@@ -17,5 +19,5 @@ public:
 	float WetnessDensityFactor(float);
 	float StreamPowerDensityFactor(float);
 
-	virtual Mesh GetMesh();
+	virtual GameObject* GetGameObject();
 };

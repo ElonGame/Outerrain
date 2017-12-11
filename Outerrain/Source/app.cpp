@@ -26,10 +26,10 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	terrain2D = Terrain2D(256, 32, Vector2(-64, -64), Vector2(64, 64));
-	terrain2D.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	vegTerrain.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
 
-	Mesh* mesh = terrain2D.GetMesh();
+	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
@@ -103,6 +103,15 @@ int App::Update(const float time, const float deltaTime)
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
 		layerTerrain2D.ThermalErosion(1);
+	// Vegetation spawn
+	if (key_state(SDLK_v))
+	{
+		vegTerrain.ComputeDensities();
+		vegTerrain.ComputeInstances();
+		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
+		for (int i = 0; i < trees.size(); i++)
+			scene.AddChild(trees[i]);
+	}
 
 	return 1;
 }

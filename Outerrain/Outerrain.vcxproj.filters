@@ -66,6 +66,15 @@
     <ClInclude Include="Include\vegetationObject.h">
       <Filter>Fichiers d%27en-tête\Vegetation</Filter>
     </ClInclude>
+    <ClInclude Include="Include\component.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\gameobject.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\quaternion.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -121,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="Source\vegetationObject.cpp">
       <Filter>Fichiers sources\Vegetation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameobject.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

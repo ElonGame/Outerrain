@@ -1,17 +1,22 @@
 #include "vegetationObject.h"
+#include "gameobject.h"
 #include <math.h>
-
 
 VegetationObject::VegetationObject()
 {
 
 }
 
-Mesh VegetationObject::GetMesh()
+GameObject* VegetationObject::GetGameObject()
 {
-	Mesh m;
-	// @Todo
-	return m;
+	Mesh* m = new Mesh(GL_TRIANGLES);
+	m->ReadMesh("Data/cube.obj");
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	m->SetShader(shader);
+	GameObject* obj = new GameObject();
+	obj->AddComponent(m);
+	return obj;
 }
 
 

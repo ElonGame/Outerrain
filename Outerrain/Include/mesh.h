@@ -46,6 +46,7 @@ protected:
 public:
 	Mesh();
 	Mesh(const GLenum primitives) : primitiveDrawn(primitives) { }
+	~Mesh() { Destroy(); }
 
 	void Destroy();
 

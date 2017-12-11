@@ -4,6 +4,7 @@
 #include "perlin.h"
 #include "image.h"
 #include "vegetationObject.h"
+#include "gameobject.h"
 
 
 /* Terrain2D */
@@ -244,9 +245,30 @@ void VegetationTerrain::ComputeInstances()
 	}
 }
 
-std::vector<Mesh> VegetationTerrain::GetTreesMeshes() const
+std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 {
-	std::vector<Mesh> meshes;
-	// @Todo
-	return meshes;
+	//
+	// @Todo : poisson disk instancing
+	//
+	std::vector<GameObject*> vegObjects;
+	VegetationObject veg;
+	int maxTreeCount = 1000;
+	int treeCount = 0;
+	for (int i = 0; i < vegetationInstanceField.SizeY(); i++)
+	{
+		for (int j = 0; j < vegetationInstanceField.SizeX(); j++)
+		{
+			if (vegetationInstanceField.Get(i, j) != 0.0)
+			{
+				GameObject* vegObj = veg.GetGameObject();
+				Vector3 pos = Vertex(i, j);
+				vegObj->SetPosition(pos);
+				vegObjects.push_back(vegObj);
+				treeCount++;
+			}
+			if (treeCount >= maxTreeCount)
+				break;
+		}
+	}
+	return vegObjects;
 }
