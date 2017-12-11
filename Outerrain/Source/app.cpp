@@ -34,8 +34,7 @@ int App::Init()
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 	ScalarField2D wetness = vegTerrain.WetnessField();
-
-	wetness.WriteImage("Data/wetness.png");
+	wetness.WriteImageGrayscale("Data/wetness.png");
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
@@ -85,12 +84,6 @@ int App::Render()
 	const char* items[] = { "Diffuse", "Normal", "VegetationDensity", "Wetness" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
-
-	ImGui::Begin("Wetness Image");
-	ImTextureID wetnessTexture = "Data/wetness.png";
-	ImGui::Image(wetnessTexture, ImVec2(128, 128));
-	ImGui::End();
-
 
 	return 1;
 }

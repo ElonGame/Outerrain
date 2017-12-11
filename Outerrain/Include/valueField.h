@@ -113,14 +113,16 @@ public:
 	{
 	}
 
-	void WriteImage(const char* path)
+	void WriteImageGrayscale(const char* path)
 	{
 		Image im = Image(nx, ny);
+		double max = MaxValue();
+		double min = MinValue();
 		for (int i = 0; i < ny; i++)
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				double v = Get(i, j);
+				double v = (Get(i, j) - min) / (max - min);
 				im(i, j) = Color(v, v, v, 1.0);
 			}
 		}
@@ -130,5 +132,10 @@ public:
 	double MaxValue() const
 	{
 		return *std::max_element(values.begin(), values.end());
+	}
+
+	double MinValue() const 
+	{
+		return *std::min_element(values.begin(), values.end());
 	}
 };
