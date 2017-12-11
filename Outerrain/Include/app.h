@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "cameraOrbiter.h"
 #include "terrain.h"
+#include "gameobject.h"
 
 class App
 {
@@ -12,20 +13,29 @@ protected:
 
 	SDL_Window* window;
 	SDL_GLContext glContext;
-	Mesh mesh;
 	CameraOrbiter orbiter;
 
-	// Heightfield Data
+	// Terrain Data
 	Terrain2D terrain2D;
 	LayerTerrain2D layerTerrain2D;
+	VegetationTerrain vegTerrain;
+
+	// Scene Data
+	GameObject scene;
+
+	// GUI
+	int currentItem;
+	Uint64 lastTime;
+	Uint64 newTime;
 
 public:
 	App(const int&, const int&, const int&, const int&);
-	virtual ~App();
 
 	virtual int Init();
 	virtual int Update(const float, const float);
 	virtual int Render();
 	virtual void Run();
 	virtual void Quit();
+
+	void UpdateObjects(const float time, const float delta);
 };

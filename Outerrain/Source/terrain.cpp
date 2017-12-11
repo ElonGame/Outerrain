@@ -5,6 +5,8 @@
 #include "vec.h"
 #include "perlin.h"
 #include "image.h"
+#include "vegetationObject.h"
+#include "gameobject.h"
 
 static bool compareHeight(Vector3 u, Vector3 v)
 {
@@ -58,7 +60,6 @@ void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteA
 			heightField.Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 		}
 	}
-
 	ComputeNormalField();
 }
 
@@ -94,10 +95,10 @@ Vector3 Terrain2D::Vertex(int i, int j) const
 	return Vector3(x, y, z);
 }
 
-Mesh Terrain2D::GetMesh() const
+Mesh* Terrain2D::GetMesh() const
 {
-	Mesh ret;
-	ret.CalculateFromTerrain2D(*this);
+	Mesh* ret = new Mesh();
+	ret->CalculateFromTerrain2D(*this);
 	return ret;
 }
 
@@ -141,6 +142,11 @@ void Terrain2D::ComputeNormalField()
 	}
 }
 
+double Terrain2D::NormalizedHeight(const Vector2& p) const
+{
+	float h = Height(p);
+	return h / heightField.MaxValue();
+}
 
 
 int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
@@ -235,7 +241,6 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	return ScalarField2D();
 }
 
-/* LayerField */
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)
 {
@@ -266,15 +271,110 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 	}
 }
 
-Mesh LayerTerrain2D::GetMesh() const
+Mesh* LayerTerrain2D::GetMesh() const
 {
+	// Final terrain
 	Terrain2D terrain = Terrain2D(nx, ny, a, b);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 			terrain.SetHeight(i, j, Height(i, j));
 	}
-	Mesh m;
-	m.CalculateFromTerrain2D(terrain);
+	terrain.ComputeNormalField();
+
+	// Mesh
+	Mesh* m;
+	m->CalculateFromTerrain2D(terrain);
 	return m;
+}
+
+
+/* VegetationTerrain */
+VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
+	: Terrain2D(nx, ny, bottomLeft, topRight),
+	vegetationDensityField(nx, ny, bottomLeft, topRight)
+{
+}
+
+void VegetationTerrain::ComputeDensities()
+{
+	ScalarField2D slopeField = SlopeField();
+	VegetationObject vegObj;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float slope = slopeField.Get(i, j);
+			vegetationDensityField.Set(i, j, vegObj.SlopeDensityFactor(slope));
+		}
+	}
+}
+
+std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
+{
+	VegetationObject veg;
+	veg.SetRadius(3.0f);
+	float tileSize = veg.GetRadius() * 10.0f;
+	std::vector<Vector2> points = GetRandomDistribution(veg.GetRadius(), tileSize, 100);
+
+	int maxTreeCount = 1000;
+	int treeCount = 0;
+
+	int tileCountX = (topRight.x - bottomLeft.x) / tileSize + 1;
+	int tileCountY = (topRight.y - bottomLeft.y) / tileSize + 1;
+
+	std::vector<GameObject*> vegObjects;
+	for(int i = 0; i < tileCountY; i++)
+	{
+		for (int j = 0; j < tileCountX; j++)
+		{
+			for (int x = 0; x < points.size(); x++)
+			{
+				Vector2 point = bottomLeft
+								+ Vector2(tileSize, 0) * (float)j
+								+ Vector2(0, tileSize) * (float)i
+								+ points[x];
+				if (vegetationDensityField.IsInsideField(point) == true)
+				{
+					float density = vegetationDensityField.GetValueBilinear(point);
+					float p = rand() / (float)RAND_MAX;
+					if (p < density)
+					{
+						GameObject* vegObj = veg.GetGameObject();
+						Vector3 pos = Vector3(point.x, Height(point), point.y);
+						vegObj->SetPosition(pos);
+						vegObjects.push_back(vegObj);
+						treeCount++;
+					}
+				}
+				if (treeCount >= maxTreeCount)
+					return vegObjects;
+			}
+		}
+	}
+	return vegObjects;
+}
+
+std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const
+{
+	std::vector<Vector2> res;
+	for(int i = 0; i < maxTries; i++)
+	{
+		float randX = rand() / (float)RAND_MAX;
+		float randY = rand() / (float)RAND_MAX;
+		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
+
+		bool canAdd = true;
+		for (int j = 0; j < res.size(); j++)
+		{
+			if(Magnitude(point - res[j]) <= objRadius)
+			{
+				canAdd = false;
+				break;
+			}
+		}
+		if (canAdd == true)
+			res.push_back(point);
+	}
+	return res;
 }

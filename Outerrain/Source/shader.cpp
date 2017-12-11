@@ -20,9 +20,6 @@ static std::string read(const char *filename)
 	std::ifstream in(filename);
 	if (in.good() == false)
 		printf("[error] loading program '%s'...\n", filename);
-	else
-		printf("loading program '%s'...\n", filename);
-
 	in.get(source, 0);        // lire tout le fichier, le caractere '\0' ne peut pas se trouver dans le source de shader
 	return source.str();
 }
@@ -173,7 +170,7 @@ static const char *shader_string(const GLenum type)
 	}
 }
 
-static const char *shader_keys[] = {"VERTEX_SHADER", "FRAGMENT_SHADER", "GEOMETRY_SHADER", "TESSELATION_CONTROL", "EVALUATION_CONTROL", "COMPUTE_SHADER" };
+static const char *shader_keys[] = { "VERTEX_SHADER", "FRAGMENT_SHADER", "GEOMETRY_SHADER", "TESSELATION_CONTROL", "EVALUATION_CONTROL", "COMPUTE_SHADER" };
 const int shader_keys_max = 6;
 
 static GLenum shader_types[] = { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER,

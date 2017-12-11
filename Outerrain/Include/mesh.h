@@ -3,11 +3,21 @@
 #include <GL\glew.h>
 #include "vec.h"
 #include "shader.h"
+#include "material.h"
+#include "component.h"
 
 class Terrain2D;
 class CameraOrbiter;
 
-class Mesh
+enum RenderMode
+{
+	DiffuseMode = 0,
+	NormalMode = 1,
+	VegetationDensity = 2,
+	Wetness = 3
+};
+
+class Mesh : public Component
 {
 protected:
 	std::vector<Vector3> vertices;
@@ -15,6 +25,9 @@ protected:
 	std::vector<Vector3> normals;
 	std::vector<Vector4> colors;
 	std::vector<unsigned int> indices;
+
+	Material material;
+	RenderMode renderMode;
 
 	GLenum primitiveDrawn;
 	GLuint VAO;
@@ -44,7 +57,8 @@ protected:
 
 public:
 	Mesh();
-	Mesh(const GLenum primitives) : primitiveDrawn(primitives) { }
+	Mesh(const GLenum primitives);
+	~Mesh() { Destroy(); }
 
 	void Destroy();
 
@@ -58,10 +72,13 @@ public:
 	void AddTexcoord(const Vector2&);
 	void AddTexcoord(const int&, const Vector2&);
 	void SetShader(const Shader&);
+	void SetMaterial(const Material&);
+	void SetRenderMode(const RenderMode&);
 	
 	void WriteMesh(const char*);
 	void ReadMesh(const char*);
 
+	Shader* GetShader() { return &shader; }
 	Bounds GetBounds() const;
 	Vector3 Vertex(int) const;
 	Vector3 Normal(int) const;

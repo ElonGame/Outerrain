@@ -2,6 +2,7 @@
 #include "cameraOrbiter.h"
 #include "shader.h"
 #include "terrain.h"
+#include "gameobject.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -12,7 +13,12 @@ using namespace std;
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
-	shader() { }
+	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
+
+Mesh::Mesh(const GLenum primitives) :
+	vertices(), texcoords(), normals(), colors(), indices(),
+	primitiveDrawn(primitives), VAO(0), fullBuffer(0), indexBuffer(0),
+	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
 
 void Mesh::AddVertex(const Vector3& v)
 {
@@ -80,6 +86,16 @@ void Mesh::AddTexcoord(const int& i, const Vector2& t)
 void Mesh::SetShader(const Shader& s)
 {
 	shader = s;
+}
+
+void Mesh::SetMaterial(const Material& m)
+{
+	material = m;
+}
+
+void Mesh::SetRenderMode(const RenderMode& r)
+{
+	renderMode = r;
 }
 
 Vector3 Mesh::Vertex(int i) const
@@ -307,13 +323,17 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform trs = Identity();
+	Transform trs = this->gameObject->GetObjectToWorldMatrix();
 	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45) * (orbiter.View() * trs);
 	Vector3 camPos = orbiter.Position();
 
 	shader.UniformTransform("trsMatrix", trs);
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformVec3("camPos", camPos);
+
+	shader.UniformVec3("diffuseColor", Vector3(material.diffuse.r, material.diffuse.g, material.diffuse.b));
+	shader.UniformFloat("shininess", material.shininess);
+	shader.UniformInt("renderMode", renderMode);
 
 	Draw();
 }
@@ -365,8 +385,6 @@ void Mesh::ReadMesh(const char *filename)
 		std::cout << "Error loading mesh - aborting" << std::endl;
 		return;
 	}
-
-	printf("loading mesh '%s'...\n", filename);
 
 	std::vector<Vector3> vert;
 	std::vector<Vector2> tex;

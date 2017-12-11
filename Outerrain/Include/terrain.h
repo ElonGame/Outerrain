@@ -20,10 +20,12 @@ public:
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
-	Mesh GetMesh() const;
+	double NormalizedHeight(const Vector2&) const;
+	Mesh* GetMesh() const;
 	void SetHeight(int, int, double);
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+	void ComputeNormalField();
 
 
 	int Distribute(Vector2 p, Vector2* neighbours, float* quantity) const;
@@ -34,7 +36,6 @@ public:
 	ScalarField2D AccessibilityField() const;	
 private:
 	float Lerp(float a, float b, float f);
-	void ComputeNormalField();
 };
 
 
@@ -56,5 +57,23 @@ public:
 	double SandValue(int, int) const;
 	double BeckrockValue(int, int) const;
 	void ThermalErosion(int);
-	Mesh GetMesh() const;
+	Mesh* GetMesh() const;
+};
+
+
+// Pour éviter de polluer trop Terrain2D et le garder clean
+// Juste pour faire un terrain simple.
+class VegetationTerrain : public Terrain2D
+{
+protected:
+	ScalarField2D vegetationDensityField;
+
+public:
+	VegetationTerrain() { }
+	VegetationTerrain(int, int, Vector2, Vector2);
+
+	void ComputeDensities();
+
+	std::vector<GameObject*> GetTreeObjects() const;
+	std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
 };
