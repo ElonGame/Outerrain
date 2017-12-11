@@ -27,7 +27,7 @@ int App::Init()
 	glCullFace(GL_BACK);
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	vegTerrain.InitFromFile("Data/circuit.png", 0.0f, 7.0f);
+	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
