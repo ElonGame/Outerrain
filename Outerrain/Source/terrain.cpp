@@ -174,7 +174,7 @@ int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
 	{
 		for (int l = -1; l <= 1; l++)
 		{
-			if (k == 0 || l == 0 || (i + k) < 0 || (i + k) > nx || (j + l) < 0 || (j + l) > ny)
+			if (k == 0 || l == 0 || heightField.InsideVertex(i + k, j + l) == false)
 				continue;
 
 			double neighHeight = heightField.Get(i + k, j + l);
@@ -252,6 +252,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 {
 	return ScalarField2D();
 }
+
 
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)

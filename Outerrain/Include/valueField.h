@@ -31,6 +31,13 @@ public:
 		values.resize(nx * ny, value);
 	}
 
+	bool InsideVertex(int i, int j) const
+	{
+		if (i < 0 || x >= nx || j < 0 || j >= ny)
+			return false;
+		return true;
+	}
+
 	int Index(int row, int column) const
 	{
 		return row * nx + column;
