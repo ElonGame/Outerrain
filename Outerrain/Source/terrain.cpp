@@ -161,13 +161,13 @@ ScalarField2D Terrain2D::SlopeField() const
 	return slopeField;
 }
 
-int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
+int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* height, float* slope) const
 {
 	int i = p.x, j = p.y;
 
 	int counter = 0;
-	double slope = 0.0f;
-	double maxSlope = 0.0f;
+	double currentSlope = 0.0f;
+	double currentHeight = 0.0f;
 	double pointHeight = p.y;
 
 	for (int k = -1; k <= 1; k++)
@@ -180,16 +180,15 @@ int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* quantity) const
 			double neighHeight = heightField.Get(i + k, j + l);
 			if (pointHeight > neighHeight)
 			{
+				currentHeight = pointHeight - neighHeight;
 				if (k + l == -1 || k + l == 1)
-					slope = pointHeight - neighHeight;
+					currentSlope = -currentHeight;
 				else
-					slope = (pointHeight - neighHeight) / sqrt(2);
-
-				if (slope >= maxSlope)
-					maxSlope = slope;
+					currentSlope = currentHeight / sqrt(2);
 
 				neighbours[counter] = Vector2(i + k, j + l);
-				quantity[counter] = 1.0f;
+				height[counter] = currentHeight;
+				slope[counter] = currentSlope;
 				counter++;
 			}
 		}
@@ -208,8 +207,8 @@ ScalarField2D Terrain2D::Drainage() const
 		}
 	}
 	std::sort(points.begin(), points.end(), compareHeight);
-	ScalarField2D drainage = ScalarField2D(nx, ny, bottomLeft, topRight, 1.0);
 
+	ScalarField2D drainage = ScalarField2D(nx, ny, bottomLeft, topRight, 1.0);
 	while (!points.empty())
 	{
 		Vector3 p = points.front();
@@ -217,13 +216,18 @@ ScalarField2D Terrain2D::Drainage() const
 
 		int i = p.x, j = p.z;
 		Vector2 neighbours[8];
-		float quantity[8];
-		int n = Distribute(Vector2(i, j), neighbours, quantity);
+		float slope[8];
+		float height[8];
+		int n = Distribute(Vector2(i, j), neighbours, height, slope);
+
+		double sum = 0.0;
+		for (int k = 0; k < n; k++)
+			sum += slope[k];
 
 		for (int k = 0; k < n; k++)
 		{
 			int l = neighbours[k].x, m = neighbours[k].y;
-			drainage.Set(i, j, drainage.Get(i, j) + quantity[k]);
+			drainage.Set(i, j, drainage.Get(l, m) + (slope[k] / sum));
 		}
 	}
 	return drainage;
@@ -248,9 +252,46 @@ ScalarField2D Terrain2D::StreamPowerField() const
 	return ScalarField2D();
 }
 
+double Terrain2D::ComputeIllumination(int i, int j) const
+{
+	ScalarField2D slopeField = SlopeField();
+
+	double epsilon = 10 ^ -2;
+	Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
+
+	return 0.0;
+	/*
+
+	Pour tout k
+		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction aléatoire));
+
+	SF2 slopeField = slope()
+	k = max(slopeField)
+	DeltaY = Y(qi) - Yterrain(qi) > 0 < 0
+	step = DeltaY / K;
+	*/
+
+	// Classe Ray
+	// Fonction Inside(q) : On calcul le Y du terrain, et on regarde si on est au dessus ou en dessous. Comparaison Yterrain vs Yq
+}
+
 ScalarField2D Terrain2D::AccessibilityField() const
 {
-	return ScalarField2D();
+	/*
+		Calculer de la map d'éclairement :
+			Pour tout i et j, calculer eclairement de ij
+
+		Map global d'éclairement -> eclairement en chaque point
+	*/
+	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			accessibilityField.Set(i, j, ComputeIllumination(i, j));
+		}
+	}
+	return accessibilityField;
 }
 
 
@@ -334,16 +375,16 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int tileCountY = (topRight.y - bottomLeft.y) / tileSize + 1;
 
 	std::vector<GameObject*> vegObjects;
-	for(int i = 0; i < tileCountY; i++)
+	for (int i = 0; i < tileCountY; i++)
 	{
 		for (int j = 0; j < tileCountX; j++)
 		{
 			for (int x = 0; x < points.size(); x++)
 			{
 				Vector2 point = bottomLeft
-								+ Vector2(tileSize, 0) * (float)j
-								+ Vector2(0, tileSize) * (float)i
-								+ points[x];
+					+ Vector2(tileSize, 0) * (float)j
+					+ Vector2(0, tileSize) * (float)i
+					+ points[x];
 				if (vegetationDensityField.IsInsideField(point) == true)
 				{
 					float density = vegetationDensityField.GetValueBilinear(point);
@@ -368,7 +409,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const
 {
 	std::vector<Vector2> res;
-	for(int i = 0; i < maxTries; i++)
+	for (int i = 0; i < maxTries; i++)
 	{
 		float randX = rand() / (float)RAND_MAX;
 		float randY = rand() / (float)RAND_MAX;
@@ -377,7 +418,7 @@ std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, f
 		bool canAdd = true;
 		for (int j = 0; j < res.size(); j++)
 		{
-			if(Magnitude(point - res[j]) <= objRadius)
+			if (Magnitude(point - res[j]) <= objRadius)
 			{
 				canAdd = false;
 				break;
