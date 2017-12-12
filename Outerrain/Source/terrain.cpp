@@ -200,9 +200,9 @@ int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slop
 ScalarField2D Terrain2D::Drainage() const
 {
 	std::deque<Vector3> points;
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 		{
 			points.push_back(Vector3(i, heightField.Get(i, j), j));
 		}
@@ -239,9 +239,9 @@ ScalarField2D Terrain2D::DrainageSqrt() const
 {
 	ScalarField2D drainageField = Drainage();
 	ScalarField2D sqrtDrainageField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 		{
 			sqrtDrainageField.Set(i, j, sqrt(drainageField.Get(i, j)));
 		}
@@ -255,9 +255,9 @@ ScalarField2D Terrain2D::WetnessField() const
 	ScalarField2D drainageField = Drainage();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 		{
 			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + slopeField.Get(i, j))));
 		}
@@ -271,9 +271,9 @@ ScalarField2D Terrain2D::StreamPowerField() const
 	ScalarField2D drainageField = Drainage();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D streamPowerField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 		{
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
 		}
@@ -282,16 +282,57 @@ ScalarField2D Terrain2D::StreamPowerField() const
 	return streamPowerField;
 }
 
-double Terrain2D::ComputeIllumination(int i, int j) const
+// @TODO paramétrer epsilon
+ScalarField2D Terrain2D::Illumination() const
 {
+	double epsilon = 0.01;
 	ScalarField2D slopeField = SlopeField();
+	double maxSlope = slopeField.MaxValue();
 
-	double epsilon = 10 ^ -2;
-	Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
+	ScalarField2D illuminationField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
+			double h = heightField.Get(i, j);
 
-	return 0.0;
+			int numbers = 10;
+			int intersect = 0;
+
+			for (int k = 0; k < numbers; k++)
+			{
+				double step = 0.0;
+				Vector3 ray = p;
+				float angleH = (rand() % 360) * 0.0174533f;
+				float angleV = rand() / (float)RAND_MAX;
+				Vector3 direction = Vector3(cos(angleH), 0.0f, sin(angleH));
+				direction = Slerp(direction, Vector3(0.0f, 1.0f, 0.0f), angleV);
+				for (int l = 0; l < 32; l++)
+				{
+					ray = p + direction * step;
+
+					Vector2 terrainRay = Vector2(ray.x, ray.z);
+					if (heightField.IsInsideField(terrainRay) == false)
+						break;
+
+					double terrainHeight = Height(terrainRay);
+					double deltaY = ray.y - terrainHeight;
+
+					if (deltaY < 0)
+					{
+						intersect++;
+						break;
+					}
+					step = deltaY / maxSlope;
+				}
+			}
+			double illumination = 1.0 - (intersect / (double)numbers);
+			illuminationField.Set(i, j, illumination);
+		}
+	}
+	return illuminationField;
 	/*
-
 	Pour tout k
 		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction aléatoire));
 
@@ -307,14 +348,16 @@ double Terrain2D::ComputeIllumination(int i, int j) const
 
 ScalarField2D Terrain2D::AccessibilityField() const
 {
+	ScalarField2D illuminationField = Illumination();
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	for (int i = 0; i < ny - 1; i++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int j = 0; j < nx - 1; j++)
+		for (int j = 0; j < nx; j++)
 		{
-			accessibilityField.Set(i, j, ComputeIllumination(i, j));
+			accessibilityField.Set(i, j, illuminationField.Get(i, j));
 		}
 	}
+	accessibilityField.WriteImageGrayscale("Data/accessibility.png");
 	return accessibilityField;
 }
 

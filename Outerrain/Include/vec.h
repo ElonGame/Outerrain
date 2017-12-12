@@ -140,6 +140,20 @@ inline Vector3 Normalize(const Vector3& v)
 	float kk = 1 / Magnitude(v);
 	return v * kk;
 }
+inline Vector3 Slerp(Vector3 start, Vector3 end, float percent)
+{
+	// Dot product - the cosine of the angle between 2 vectors.
+	float dot = Dot(start, end);
+	if (dot < -1.0f)
+		dot = -1.0f;
+	if (dot > 1.0f)
+		dot = 1.0f;
+	float theta = acos(dot)*percent;
+	Vector3 RelativeVec = end - start*dot;
+	RelativeVec = Normalize(RelativeVec);
+	return ((start * cos(theta)) + (RelativeVec * sin(theta)));
+}
+
 inline Vector3 Center(const Vector3& a, const Vector3& b)
 {
 	return Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);

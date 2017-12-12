@@ -8,6 +8,7 @@
 static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
+static GLuint accessibilityTexture;
 
 // TODO :
 //  -Thermal Erosion (Nathan)
@@ -61,10 +62,12 @@ int App::Init()
 
 	ScalarField2D wetness = vegTerrain.WetnessField();
 	ScalarField2D streampower = vegTerrain.StreamPowerField();
+	ScalarField2D accessibility = vegTerrain.AccessibilityField();
 
 	GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
 	GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	GLuint accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
@@ -120,6 +123,9 @@ int App::Render()
 	ImGui::End();
 	ImGui::Begin("Stream Power Image");
 	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
+	ImGui::End();
+	ImGui::Begin("Accessibility Image");
+	ImGui::Image((void*)accessibilityTexture, ImVec2(150, 150));
 	ImGui::End();
 	return 1;
 }
