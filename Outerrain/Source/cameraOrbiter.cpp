@@ -1,11 +1,9 @@
 #include <cstdio>
 #include <algorithm>
-
 #include "CameraOrbiter.h"
 
-#define max(a, b) a > b ? a : b
 
-CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(100.0)
+CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(1000.0)
 {
 }
 
@@ -72,7 +70,7 @@ Transform CameraOrbiter::Projection(const float width, const float height, const
 	float d = Magnitude(center - Vector3(position.x, position.y, size));     // meme resultat plus rapide a calculer
 
 	// regle near et far en fonction du centre et du rayon englobant l'objet 
-	return Perspective(fov, width / height, 0.1f, max(1.f, d + zFar));
+	return Perspective(fov, width / height, 0.1f, std::max(1.f, d + zFar));
 }
 
 void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const

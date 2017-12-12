@@ -17,15 +17,13 @@ static GLuint streampowerTexture;
 //  -Vegetation bug fix placement + plusieurs espèces (Thomas)	==> Todo/Debug
 
 // To do :
-//  -Routes
+//  -Routes : regarder algo article galin/peytavie et adapter
 //  -Villages (?)
 
 // Bug fix :
-//  -Affichage texture dans imgui
 //  -Release CameraOrbiter:: compile errors
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
-	: window(nullptr), glContext(nullptr)
 {
 	window = CreateWindow(width, height);
 	glContext = create_context(window, major, minor);
@@ -46,8 +44,8 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain.InitFromFile("Data/island.png", 0.0f, 100.0);
 	//layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	//layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
 
@@ -55,15 +53,15 @@ int App::Init()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Blue(), 32));
+	mesh->SetMaterial(Material(Color::Grey(), 128));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
 	// Maps
-	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	/*vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");*/
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGBA);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
@@ -88,7 +86,7 @@ void App::Quit()
 int App::Render()
 {
 	// Clear
-	glClearColor(0.2f, 0.2f, 0.2f, 1);
+	glClearColor(0.3f, 0.55f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Scene

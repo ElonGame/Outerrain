@@ -17,6 +17,7 @@ struct Color
 	static Color Red();
 	static Color Green();
 	static Color Blue();
+	static Color Grey();
 };
 
 Color operator+ (const Color& a, const Color& b);

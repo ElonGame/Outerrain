@@ -30,6 +30,11 @@ Color Color::Blue()
 	return Color(0, 0, 1);
 }
 
+Color Color::Grey()
+{
+	return Color(0.7, 0.7, 0.7);
+}
+
 Color operator+ (const Color& a, const Color& b)
 {
 	return Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
