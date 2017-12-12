@@ -1,6 +1,7 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <math.h>
 #include <deque>
+#include <queue>
 #include "terrain.h"
 #include "vec.h"
 #include "perlin.h"
@@ -8,11 +9,12 @@
 #include "vegetationObject.h"
 #include "gameobject.h"
 
+#define max(a, b) a > b ? a : b
+
 static bool compareHeight(Vector3 u, Vector3 v)
 {
 	return (u.y > v.y);
 }
-
 
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -161,6 +163,16 @@ ScalarField2D Terrain2D::SlopeField() const
 	return slopeField;
 }
 
+void Terrain2D::Erode(int index, double epsilon)
+{
+	heightField.Set(index, heightField.Get(index) - epsilon);
+}
+
+void Terrain2D::Transport(int index, double epsilon)
+{
+	heightField.Set(index, heightField.Get(index) + epsilon);
+}
+
 // @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
 int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slope) const
 {
@@ -293,7 +305,7 @@ double Terrain2D::ComputeIllumination(int i, int j) const
 	/*
 
 	Pour tout k
-		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction al�atoire));
+		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction aléatoire));
 
 	SF2 slopeField = slope()
 	k = max(slopeField)
@@ -344,12 +356,58 @@ double LayerTerrain2D::SandValue(int i, int j) const
 
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
-	for (int i = 0; i < stepCount; i++)
+	for (int k = 0; k < stepCount; k++)
 	{
+		std::queue<int> instables;
+		std::queue<int> matter; // quantit� de mati�re qui est transport�e
+		for (int i = 0; i < bedrock.SizeX(); i++)
+		{
+			for (int j = 0; j < bedrock.SizeY(); j++)
+			{
+				// On calcule le delta H 
+				// Pour �a on fait le max des delta H des voisins de I
+				//double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
+				double dH1 = 0;
+				double dH2 = 0;
+				double dH3 = 0;
+				double dH4 = 0;
+				if (j < bedrock.SizeY() - 1) {
+					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
+				}
+				if (i < bedrock.SizeX() - 1)
+					dH2 = bedrock.Get(i, j) - bedrock.Get(i + 1, j);
+				if (i > 0)
+					dH3 = bedrock.Get(i, j) - bedrock.Get(i - 1, j);
+				if (j > 0)
+					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
+				double dH = max(dH1, max(dH2, max(dH3, dH4)));
 
+				//Pour calculer stress, c'est � dire quantit� de mati�re � �roder :
+				// stress = k * dH
+				double k = 0.1;
+				//alpha = 40� +- 5�
+				double alpha = 42;
+				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
+				if (abs(dH) / delta > tan(alpha))
+				{
+					//AddToQueue INSTABLE
+					instables.push(bedrock.Index(i, j));
+					matter.push(dH*k);
+				}
+			}
+		}
+		while (!instables.empty()) {
+			int index = instables.front();
+			instables.pop();
+			int indexLVoisin = bedrock.LowestNeighbor(index);
+			double eps = matter.front();
+			matter.pop();
+			bedrock.Set(index, bedrock.Get(index) - eps);
+			sand.Set(indexLVoisin, eps);
+			//TODO : Push(Voisin) ? 
+		}
 	}
 }
-
 Mesh* LayerTerrain2D::GetMesh() const
 {
 	// Final terrain

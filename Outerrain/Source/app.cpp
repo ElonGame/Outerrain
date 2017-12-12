@@ -50,8 +50,9 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	// @Todo : Init LayerTerrain avec une heightmap + une value de sand() aléatoire
+	//vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	//vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
@@ -59,12 +60,11 @@ int App::Init()
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Blue(), 32));
 
-	ScalarField2D wetness = vegTerrain.WetnessField();
-	ScalarField2D streampower = vegTerrain.StreamPowerField();
-
-	GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
-	GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	//ScalarField2D wetness = vegTerrain.WetnessField();
+	//ScalarField2D streampower = vegTerrain.StreamPowerField();
+	//GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
+	//GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	//GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);

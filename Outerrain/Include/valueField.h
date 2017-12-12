@@ -6,7 +6,7 @@
 #include "image.h"
 
 template<typename T>
-class ValueField 
+class ValueField
 {
 protected:
 	int nx, ny;
@@ -15,8 +15,8 @@ protected:
 
 public:
 	ValueField()
-		: nx(0), ny(0), bottomLeft(Vector2(0)), topRight(Vector2(0)) 
-	{ 
+		: nx(0), ny(0), bottomLeft(Vector2(0)), topRight(Vector2(0))
+	{
 	}
 
 	ValueField(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -38,14 +38,25 @@ public:
 		return true;
 	}
 
+	void Index2D(int index, int& i, int& j) const
+	{
+		i = index / nx;
+		j = index % nx;
+	}
+
 	int Index(int row, int column) const
 	{
 		return row * nx + column;
 	}
-	
+
 	T Get(int row, int column) const
 	{
 		int index = Index(row, column);
+		return values[index];
+	}
+
+	T Get(int index) const
+	{
 		return values[index];
 	}
 
@@ -82,32 +93,48 @@ public:
 		T v4 = Get(i, j + 1);
 
 		return (1 - u) * (1 - v) * v1
-				+ (1 - u) * v * v2
-				+ u * (1 - v) * v3
-				+ u * v * v4;
+			+ (1 - u) * v * v2
+			+ u * (1 - v) * v3
+			+ u * v * v4;
 	}
-	
-	void Set(int row, int column, T v) 
+
+	void Set(int row, int column, T v)
 	{
 		values[Index(row, column)] = v;
 	}
-	
-	double SizeX() const 
-	{ 
-		return nx; 
+
+	void Set(int index, T v)
+	{
+		values[index] = v;
 	}
-	
-	double SizeY() const 
+
+	int SizeX() const
+	{
+		return nx;
+	}
+
+	int SizeY() const
+	{
+		return ny;
+	}
+
+	Vector2 BottomLeft() const
+	{
+		return bottomLeft;
+	}
+
+	Vector2 TopRight() const 
 	{ 
-		return ny; 
+		return topRight;
 	}
 };
 
-class ScalarField2D : public ValueField<double> 
+
+class ScalarField2D : public ValueField<double>
 {
 public:
-	ScalarField2D() : ValueField() 
-	{ 
+	ScalarField2D() : ValueField()
+	{
 	}
 
 	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -155,9 +182,43 @@ public:
 		else if (j == nx - 1)
 			ret.y = (Get(i, j) - Get(i, j - 1)) / d;
 		else
-			ret.y = (Get(i, j + 1) - Get(i, j - 1)) /  (2.0 * d);
+			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0 * d);
 
 		return ret;
+	}
+
+	int LowestNeighbor(int index) const
+	{
+		int i, j;
+		Index2D(index, i, j);
+
+		// Todo
+		//InsideVertex();
+
+		int indexLVoisin = -1;
+		if (j < SizeY() - 1) {
+			if (Get(i, j) > Get(i, j + 1))
+				indexLVoisin = Index(i, j + 1);
+		}
+		if (i < SizeX() - 1) {
+			if (Get(i, j) > Get(i + 1, j)) {
+				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i + 1, j))
+					indexLVoisin = Index(i + 1, j);
+			}
+		}
+		if (i > 0) {
+			if (Get(i, j) > Get(i - 1, j)) {
+				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i - 1, j))
+					indexLVoisin = Index(i - 1, j);
+			}
+		}
+		if (j > 0) {
+			if (Get(i, j) > Get(i, j - 1)) {
+				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i, j - 1))
+					indexLVoisin = Index(i, j - 1);
+			}
+		}
+		return indexLVoisin;
 	}
 
 	double MaxValue() const
@@ -165,7 +226,7 @@ public:
 		return *std::max_element(values.begin(), values.end());
 	}
 
-	double MinValue() const 
+	double MinValue() const
 	{
 		return *std::min_element(values.begin(), values.end());
 	}

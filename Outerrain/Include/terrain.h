@@ -35,6 +35,9 @@ public:
 	int SizeY() const { return ny; }
 	void ComputeNormalField();
 
+	void Erode(int, double);
+	void Transport(int, double);
+
 	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
 	ScalarField2D Drainage() const;
 	ScalarField2D DrainageSqrt() const;

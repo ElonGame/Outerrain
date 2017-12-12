@@ -66,7 +66,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5AE1C777-AD03-46C4-B6AD-76EE6BEC839D}</ProjectGuid>
     <RootNamespace>Outerrain</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
