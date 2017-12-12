@@ -98,6 +98,16 @@ void Mesh::SetRenderMode(const RenderMode& r)
 	renderMode = r;
 }
 
+void Mesh::SetVertices(const std::vector<Vector3>& verts)
+{
+	vertices.clear();
+	normals.clear();
+	for (int i = 0; i < verts.size(); i++)
+		AddVertex(verts[i]);
+	CalculateNormals();
+	updateBuffersNextDraw = true;
+}
+
 Vector3 Mesh::Vertex(int i) const
 {
 	return vertices[i];
@@ -271,7 +281,7 @@ void Mesh::CalculateFromTerrain2D(const Terrain2D& terrain)
 	int nx = terrain.SizeX();
 	int ny = terrain.SizeY();
 
-	// Vertices & Texcoords
+	// Vertices & Texcoords & Normals
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)

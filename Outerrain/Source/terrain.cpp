@@ -1,6 +1,7 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <math.h>
 #include <deque>
+#include <queue>
 #include "terrain.h"
 #include "vec.h"
 #include "perlin.h"
@@ -8,11 +9,12 @@
 #include "vegetationObject.h"
 #include "gameobject.h"
 
+
+
 static bool compareHeight(Vector3 u, Vector3 v)
 {
 	return (u.y > v.y);
 }
-
 
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -20,48 +22,6 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 {
 	heightField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	normalField = ValueField<Vector3>(nx, ny, bottomLeft, topRight);
-}
-
-void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteAltitude)
-{
-	Image heightmap;
-	heightmap.ReadImage(file);
-	float texelX = 1.0f / (heightmap.Width());
-	float texelY = 1.0f / (heightmap.Height());
-
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / ((float)nx - 1);
-			float v = i / ((float)ny - 1);
-
-			int anchorX = u * (heightmap.Width() - 1);
-			int anchorY = v * (heightmap.Height() - 1);
-			if (anchorX == heightmap.Width() - 1)
-				anchorX--;
-			if (anchorY == heightmap.Height() - 1)
-				anchorY--;
-
-			float a = heightmap(anchorX, anchorY).r;
-			float b = heightmap(anchorX, anchorY + 1).r;
-			float c = heightmap(anchorX + 1, anchorY + 1).r;
-			float d = heightmap(anchorX + 1, anchorY).r;
-
-			float anchorU = anchorX * texelX;
-			float anchorV = anchorY * texelY;
-
-			float localU = (u - anchorU) / texelX;
-			float localV = (v - anchorV) / texelY;
-
-			float abu = Lerp(a, b, localU);
-			float dcu = Lerp(d, c, localU);
-
-			float value = Lerp(dcu, abu, localV);
-			heightField.Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
-		}
-	}
-	ComputeNormalField();
 }
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
@@ -75,6 +35,12 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 			heightField.Set(i, j, v);
 		}
 	}
+	ComputeNormalField();
+}
+
+void Terrain2D::InitFromFile(const char* path, int blackAltitude, int whiteAltitude)
+{
+	heightField.ReadImageGrayscale(path, blackAltitude, whiteAltitude);
 	ComputeNormalField();
 }
 
@@ -106,11 +72,6 @@ Mesh* Terrain2D::GetMesh() const
 void Terrain2D::SetHeight(int i, int j, double v)
 {
 	heightField.Set(i, j, v);
-}
-
-float Terrain2D::Lerp(float a, float b, float f)
-{
-	return (a * (1.0f - f)) + (b * f);
 }
 
 void Terrain2D::ComputeNormalField()
@@ -197,7 +158,7 @@ int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slop
 	return counter;
 }
 
-ScalarField2D Terrain2D::Drainage() const
+ScalarField2D Terrain2D::DrainageField() const
 {
 	std::deque<Vector3> points;
 	for (int i = 0; i < ny; i++)
@@ -235,9 +196,9 @@ ScalarField2D Terrain2D::Drainage() const
 	return drainage;
 }
 
-ScalarField2D Terrain2D::DrainageSqrt() const
+ScalarField2D Terrain2D::DrainageSqrtField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D sqrtDrainageField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
@@ -252,7 +213,7 @@ ScalarField2D Terrain2D::DrainageSqrt() const
 
 ScalarField2D Terrain2D::WetnessField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
@@ -268,7 +229,7 @@ ScalarField2D Terrain2D::WetnessField() const
 
 ScalarField2D Terrain2D::StreamPowerField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D streamPowerField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
@@ -334,7 +295,7 @@ ScalarField2D Terrain2D::Illumination() const
 	return illuminationField;
 	/*
 	Pour tout k
-		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction al�atoire));
+		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction aléatoire));
 
 	SF2 slopeField = slope()
 	k = max(slopeField)
@@ -370,6 +331,20 @@ LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	bedrock = ScalarField2D(nx, ny, a, b);
 }
 
+void LayerTerrain2D::InitFromFile(const char* file, int blackAltitude, int whiteAltitude, float sandValue)
+{
+	bedrock.ReadImageGrayscale(file, blackAltitude, whiteAltitude);
+	sand.Fill(sandValue);
+}
+
+Vector3 LayerTerrain2D::Vertex(int i, int j) const
+{
+	double x = a.x + j * (b.x - a.x) / (nx - 1);
+	double y = Height(i, j);
+	double z = a.y + i * (b.y - a.y) / (ny - 1);
+	return Vector3(x, y, z);
+}
+
 double LayerTerrain2D::Height(int i, int j) const
 {
 	return BeckrockValue(i, j) + SandValue(i, j);
@@ -387,9 +362,65 @@ double LayerTerrain2D::SandValue(int i, int j) const
 
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
-	for (int i = 0; i < stepCount; i++)
-	{
+	// Constants
+	double K = 0.1;		 // Stress factor
+	double Alpha = 42.0; // Threshold Angle for stability (40 +- 5)
+	double tanAlpha = tan(Alpha);
 
+	for (int a = 0; a < stepCount; a++)
+	{
+		std::queue<int> instables;
+		std::queue<double> matter; // quantite de matiere qui est transportee
+		for (int i = 0; i < bedrock.SizeX(); i++)
+		{
+			for (int j = 0; j < bedrock.SizeY(); j++)
+			{
+				// On calcule le delta H 
+				// Pour ca on fait le max des delta H des voisins de I
+				// double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
+				double dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
+				if (j < bedrock.SizeY() - 1)
+					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
+				if (i < bedrock.SizeX() - 1)
+					dH2 = bedrock.Get(i, j) - bedrock.Get(i + 1, j);
+				if (i > 0)
+					dH3 = bedrock.Get(i, j) - bedrock.Get(i - 1, j);
+				if (j > 0)
+					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
+				double dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
+
+				// If dH < 0, it means that no neighbours are lower than us
+				// So we discard the point
+				if (dH <= 0.0)
+					continue;
+
+				// Instability criteria
+				// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
+				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
+				if (abs(dH) / delta > tanAlpha)
+				{
+					// AddToQueue INSTABLE
+					instables.push(bedrock.Index(i, j));
+
+					// Pour calculer stress, c'est a dire quantite de matiere a eroder :
+					// Stress = k * dH
+					matter.push(abs(dH * K));
+				}
+			}
+		}
+		while (instables.empty() == false)
+		{
+			int index = instables.front();
+			instables.pop();
+			double eps = matter.front();
+			matter.pop();
+
+			int indexLVoisin = bedrock.LowestNeighbour(index);
+			bedrock.Set(index, bedrock.Get(index) - eps);
+			sand.Set(indexLVoisin, sand.Get(indexLVoisin) + eps);
+
+			//TODO : Push(Voisin) ?
+		}
 	}
 }
 
@@ -406,6 +437,17 @@ Mesh* LayerTerrain2D::GetMesh() const
 	return terrain.GetMesh();
 }
 
+std::vector<Vector3> LayerTerrain2D::GetAllVertices() const
+{
+	std::vector<Vector3> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			ret.push_back(Vertex(i, j));
+	}
+	return ret;
+}
+
 
 /* VegetationTerrain */
 VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -414,7 +456,7 @@ VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2
 {
 }
 
-void VegetationTerrain::ComputeDensities()
+void VegetationTerrain::ComputeVegetationDensities()
 {
 	ScalarField2D slopeField = SlopeField();
 	VegetationObject vegObj;

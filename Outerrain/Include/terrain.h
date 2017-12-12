@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "valueField.h"
 
+/* Utiity struct */
 struct Point
 {
 	int x, y;
@@ -12,6 +13,8 @@ struct Point
 	Point(int a, int b) : x(a), y(b) { }
 };
 
+
+/* Terrain2D */
 class Terrain2D
 {
 protected:
@@ -23,8 +26,12 @@ protected:
 public:
 	Terrain2D() { }
 	Terrain2D(int, int, Vector2, Vector2);
-	void InitFromFile(const char* file, float blackAltitude, float whiteAltitude);
+
 	void InitFromNoise(int, int);
+	void InitFromFile(const char*, int, int);
+	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
+	double ComputeIllumination(int i, int j) const;
+
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
@@ -33,23 +40,19 @@ public:
 	void SetHeight(int, int, double);
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+
+	/* Useful fields */
 	void ComputeNormalField();
-
-	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
-	ScalarField2D Drainage() const;
-	ScalarField2D DrainageSqrt() const;
-	ScalarField2D Illumination() const;
-
+	ScalarField2D DrainageField() const;
+	ScalarField2D DrainageSqrtField() const;
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
 	ScalarField2D AccessibilityField() const;
-
-private:
-	float Lerp(float a, float b, float f);
 };
 
 
+/* LayerTerrain2D */
 class LayerTerrain2D
 {
 protected:
@@ -62,16 +65,21 @@ public:
 	LayerTerrain2D() { }
 	LayerTerrain2D(int, int, Vector2, Vector2);
 
+	void InitFromFile(const char*, int, int, float);
+	void ThermalErosion(int);
+
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+	Vector3 Vertex(int, int) const;
 	double Height(int, int) const;
 	double SandValue(int, int) const;
 	double BeckrockValue(int, int) const;
-	void ThermalErosion(int);
 	Mesh* GetMesh() const;
+	std::vector<Vector3> GetAllVertices() const;
 };
 
 
+/* Vegetation Terrain */
 class VegetationTerrain : public Terrain2D
 {
 protected:
@@ -81,8 +89,8 @@ public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
-	void ComputeDensities();
+	void ComputeVegetationDensities();
 
 	std::vector<GameObject*> GetTreeObjects() const;
-	std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
+	std::vector<Vector2> GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
 };

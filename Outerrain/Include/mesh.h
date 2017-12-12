@@ -73,7 +73,8 @@ public:
 	void SetShader(const Shader&);
 	void SetMaterial(const Material&);
 	void SetRenderMode(const RenderMode&);
-	
+	void SetVertices(const std::vector<Vector3>&);
+
 	void WriteMesh(const char*);
 	void ReadMesh(const char*);
 

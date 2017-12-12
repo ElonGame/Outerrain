@@ -10,22 +10,18 @@ static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 static GLuint accessibilityTexture;
 
-// TODO :
-//  -Thermal Erosion (Nathan)
-//  -Wetness Field / Accessibility Field (Vincent)
-//  -InitFromNoise()
-//  -Refactor LayerField pour utiliser des stacks
+// In Progress :
+//  -Thermal Erosion (Nathan & Axel)							==> Debug
+//  -StreamPower Erosion (Axel)									==> Todo
+//  -Accessibility Field (Vincent)								==> Debug
+//  -InitFromNoise() (Nathan)									==> Debug
+//  -Vegetation bug fix placement + plusieurs espèces (Thomas)	==> Todo/Debug
 
-// A terme :
-//  -Tous les fields : wetness, slope, accessibility, streamPower
-//  -Sum de Noise et LoadImage
-//  -Erosion thermal/hydro
-//  -Vegetation : carte de densité avec paramètre par espèce + poisson distrib
+// To do :
 //  -Routes
 //  -Villages (?)
 
 // Bug fix :
-//  -Bordures WriteImage
 //  -Affichage texture dans imgui
 //  -Release CameraOrbiter:: compile errors
 
@@ -53,25 +49,27 @@ int App::Init()
 
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	//layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	//layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Blue(), 32));
-
-	ScalarField2D wetness = vegTerrain.WetnessField();
-	ScalarField2D streampower = vegTerrain.StreamPowerField();
 	ScalarField2D accessibility = vegTerrain.AccessibilityField();
-
-	GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
-	GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	GLuint accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
-
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
+
+	// Maps
+	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGBA);
+	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
 
 	// Init Shader
 	orbiter.LookAt(mesh->GetBounds());
@@ -115,13 +113,13 @@ int App::Render()
 	ImGui::End();
 
 	// Debug Image 
-	ImGui::Begin("Drainage Image");
+	ImGui::Begin("Drainage Map");
 	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
 	ImGui::End();
-	ImGui::Begin("Wetness Image");
-	ImGui::Image((void*)wetnessTexture, ImVec2(150, 150));
+	ImGui::Begin("Wetness Map");
+	ImGui::Image((GLuint*)wetnessTexture, ImVec2(150, 150));
 	ImGui::End();
-	ImGui::Begin("Stream Power Image");
+	ImGui::Begin("Stream Power Map");
 	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Accessibility Image");
@@ -134,7 +132,7 @@ int App::Update(const float time, const float deltaTime)
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
-	if (mb & SDL_BUTTON(1))
+	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
 		orbiter.Rotation(mx, my);
 	if (mb & SDL_BUTTON(3))
 		orbiter.Move(my);
@@ -157,11 +155,14 @@ int App::Update(const float time, const float deltaTime)
 
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
-		layerTerrain2D.ThermalErosion(1);
+	{
+		layerTerrain2D.ThermalErosion(100);
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
+	}
 	// Vegetation spawn
 	if (key_state(SDLK_v))
 	{
-		vegTerrain.ComputeDensities();
+		vegTerrain.ComputeVegetationDensities();
 		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
 		for (int i = 0; i < trees.size(); i++)
 			scene.AddChild(trees[i]);

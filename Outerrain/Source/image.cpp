@@ -24,7 +24,6 @@ void Image::ReadImage(const char *filename)
 		return;
 	}
 
-	int channels = (format.BitsPerPixel == 32) ? 4 : 3;
 	width = surface->w;
 	height = surface->h;
 	data.resize(width * height, Color::Black());
@@ -150,9 +149,8 @@ void ImageData::ReadImageData(const char *filename)
 	width = surface->w;
 	height = surface->h;
 	channels = c;
-	data.resize(width * height * c, 0);
-
-	ImageData image(width, height, channels);
+	size = 1;
+	data.resize(width * height * c * size, 0);
 
 	if (format.BitsPerPixel == 32)
 	{
