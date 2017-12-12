@@ -33,7 +33,7 @@ public:
 
 	bool InsideVertex(int i, int j) const
 	{
-		if (i < 0 || x >= nx || j < 0 || j >= ny)
+		if (i < 0 || i >= nx || j < 0 || j >= ny)
 			return false;
 		return true;
 	}
@@ -123,8 +123,8 @@ public:
 	void WriteImageGrayscale(const char* path)
 	{
 		Image im = Image(nx, ny);
-		double max = MaxValue();
 		double min = MinValue();
+		double max = MaxValue();
 		for (int i = 0; i < ny; i++)
 		{
 			for (int j = 0; j < nx; j++)

@@ -182,7 +182,7 @@ int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* height, float* 
 			{
 				currentHeight = pointHeight - neighHeight;
 				if (k + l == -1 || k + l == 1)
-					currentSlope = currentHeight;
+					currentSlope = -currentHeight;
 				else
 					currentSlope = currentHeight / sqrt(2);
 
@@ -220,7 +220,6 @@ ScalarField2D Terrain2D::Drainage() const
 		float height[8];
 		int n = Distribute(Vector2(i, j), neighbours, height, slope);
 
-		drainage.Get(i, j);
 		double sum = 0.0;
 		for (int k = 0; k < n; k++)
 			sum += slope[k];
@@ -228,7 +227,7 @@ ScalarField2D Terrain2D::Drainage() const
 		for (int k = 0; k < n; k++)
 		{
 			int l = neighbours[k].x, m = neighbours[k].y;
-			drainage.Set(i, j, drainage.Get(i, j) + (slope[k] / sum));
+			drainage.Set(i, j, drainage.Get(l, m) + (slope[k] / sum));
 		}
 	}
 	return drainage;
