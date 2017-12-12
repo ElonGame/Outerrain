@@ -28,6 +28,9 @@ protected:
 	Uint64 lastTime;
 	Uint64 newTime;
 
+	void InitSceneVegetationTerrain();
+	void InitSceneLayerTerrain();
+
 public:
 	App(const int&, const int&, const int&, const int&);
 

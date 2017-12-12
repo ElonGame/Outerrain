@@ -24,6 +24,7 @@ static GLuint accessibilityTexture;
 // Bug fix :
 //  -Release CameraOrbiter:: compile errors
 
+
 App::App(const int& width, const int& height, const int& major, const int& minor)
 {
 	window = CreateWindow(width, height);
@@ -45,29 +46,8 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
-	vegTerrain.InitFromFile("Data/island.png", 0.0f, 100.0);
-	//layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	//layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
-
-	Mesh* mesh = vegTerrain.GetMesh();
-	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
-	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 128));
-	GameObject* obj = new GameObject();
-	obj->AddComponent(mesh);
-	scene.AddChild(obj);
-
-	// Maps
-	/*vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
-	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
-	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");*/
-	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
-	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+	InitSceneVegetationTerrain();
+	// InitSceneLayerTerrain();
 
 	// Init Shader
 	orbiter.LookAt(mesh->GetBounds());
@@ -84,6 +64,11 @@ void App::Quit()
 		release_context(glContext);
 	if (window)
 		ReleaseWindow(window);
+	
+	glDeleteTextures(1, &draignageTexture);
+	glDeleteTextures(1, &wetnessTexture);
+	glDeleteTextures(1, &accessibilityTexture);
+	glDeleteTextures(1, &streampowerTexture);
 }
 
 int App::Render()
@@ -204,4 +189,50 @@ void App::UpdateObjects(const float time, const float delta)
 			components[j]->Update(delta2);
 	}
 	lastTime = SDL_GetPerformanceCounter();
+}
+
+
+/* Init Scenes */
+void App::InitSceneVegetationTerrain()
+{
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain.InitFromFile("Data/island.png", 0.0f, 100.0);
+
+	Mesh* mesh = vegTerrain.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 128));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+}
+
+void App::InitSceneLayerTerrain()
+{
+	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
+
+	Mesh* mesh = layerTerrain2D.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 128));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 }
