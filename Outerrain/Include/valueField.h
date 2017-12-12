@@ -81,21 +81,30 @@ public:
 		Vector2 q = p - bottomLeft;
 		Vector2 d = topRight - bottomLeft;
 
+		double texelX = 1.0 / ((double)nx - 1);
+		double texelY = 1.0 / ((double)ny - 1);
+
 		double u = q[0] / d[0];
 		double v = q[1] / d[1];
 
-		int i = int(u * (nx - 1));
-		int j = int(v * (ny - 1));
+		int i = int(v * (ny - 1));
+		int j = int(u * (nx - 1));
+
+		float anchorU = j * texelX;
+		float anchorV = i * texelY;
+
+		float localU = (u - anchorU) / texelX;
+		float localV = (v - anchorV) / texelY;
 
 		T v1 = Get(i, j);
 		T v2 = Get(i + 1, j);
 		T v3 = Get(i + 1, j + 1);
 		T v4 = Get(i, j + 1);
-
-		return (1 - u) * (1 - v) * v1
-			+ (1 - u) * v * v2
-			+ u * (1 - v) * v3
-			+ u * v * v4;
+		
+		return (1 - localU) * (1 - localV) * v1
+			+ (1 - localU) * localV * v2
+			+ localU * (1 - localV) * v4
+			+ localU * localV * v3;
 	}
 
 	void Set(int row, int column, T v)

@@ -8,6 +8,7 @@
 static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
+static GLuint accessibilityTexture;
 
 // In Progress :
 //  -Thermal Erosion (Nathan & Axel)							==> Debug
@@ -62,9 +63,11 @@ int App::Init()
 	/*vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
 	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");*/
+	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGBA);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 
 	// Init Shader
 	orbiter.LookAt(mesh->GetBounds());
@@ -116,6 +119,9 @@ int App::Render()
 	ImGui::End();
 	ImGui::Begin("Stream Power Map");
 	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
+	ImGui::End();
+	ImGui::Begin("Accessibility Image");
+	ImGui::Image((void*)accessibilityTexture, ImVec2(150, 150));
 	ImGui::End();
 	return 1;
 }

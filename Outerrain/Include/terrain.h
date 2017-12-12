@@ -30,7 +30,7 @@ public:
 	void InitFromNoise(int, int);
 	void InitFromFile(const char*, int, int);
 	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
-	double ComputeIllumination(int i, int j) const;
+	ScalarField2D Illumination() const;
 
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
