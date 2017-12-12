@@ -10,10 +10,10 @@ static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 
 // TODO :
-//  -Thermal Erosion (Nathan)
-//  -Wetness Field / Accessibility Field (Vincent)
-//  -InitFromNoise()
-//  -Refactor LayerField pour utiliser des stacks
+//  -Thermal Erosion (Nathan & Axel)
+//  -StreamPower Erosion (Axel)
+//  -Accessibility Field (Vincent)
+//  -InitFromNoise() (Nathan)
 
 // A terme :
 //  -Tous les fields : wetness, slope, accessibility, streamPower
@@ -24,7 +24,6 @@ static GLuint streampowerTexture;
 //  -Villages (?)
 
 // Bug fix :
-//  -Bordures WriteImage
 //  -Affichage texture dans imgui
 //  -Release CameraOrbiter:: compile errors
 
@@ -114,13 +113,13 @@ int App::Render()
 	ImGui::End();
 
 	// Debug Image 
-	ImGui::Begin("Drainage Image");
+	ImGui::Begin("Drainage Map");
 	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
 	ImGui::End();
-	ImGui::Begin("Wetness Image");
+	ImGui::Begin("Wetness Map");
 	ImGui::Image((void*)wetnessTexture, ImVec2(150, 150));
 	ImGui::End();
-	ImGui::Begin("Stream Power Image");
+	ImGui::Begin("Stream Power Map");
 	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
 	ImGui::End();
 	return 1;

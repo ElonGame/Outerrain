@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "valueField.h"
 
+
 struct Point
 {
 	int x, y;
@@ -12,6 +13,8 @@ struct Point
 	Point(int a, int b) : x(a), y(b) { }
 };
 
+
+/* Terrain2D */
 class Terrain2D
 {
 protected:
@@ -50,6 +53,7 @@ public:
 };
 
 
+/* LayerTerrain2D */
 class LayerTerrain2D
 {
 protected:
@@ -63,17 +67,19 @@ public:
 	LayerTerrain2D(int, int, Vector2, Vector2);
 
 	void InitFromFile(const char*, int, int, float);
+	void ThermalErosion(int);
+	void StreamPowerErosion(int);
 
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
 	double Height(int, int) const;
 	double SandValue(int, int) const;
 	double BeckrockValue(int, int) const;
-	void ThermalErosion(int);
 	Mesh* GetMesh() const;
 };
 
 
+/* Vegetation Terrain */
 class VegetationTerrain : public Terrain2D
 {
 protected:

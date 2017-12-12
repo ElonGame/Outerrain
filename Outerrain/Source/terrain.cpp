@@ -324,14 +324,14 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 	for (int k = 0; k < stepCount; k++)
 	{
 		std::queue<int> instables;
-		std::queue<double> matter; // quantite de mati�re qui est transport�e
+		std::queue<double> matter; // quantite de matiere qui est transport�e
 		for (int i = 0; i < bedrock.SizeX(); i++)
 		{
 			for (int j = 0; j < bedrock.SizeY(); j++)
 			{
 				// On calcule le delta H 
-				// Pour �a on fait le max des delta H des voisins de I
-				//double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
+				// Pour ca on fait le max des delta H des voisins de I
+				// double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
 				double dH1 = 0;
 				double dH2 = 0;
 				double dH3 = 0;
@@ -346,10 +346,10 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
 				double dH = max(dH1, max(dH2, max(dH3, dH4)));
 
-				// Pour calculer stress, c'est � dire quantit� de mati�re � �roder :
+				// Pour calculer stress, c'est a dire quantite de matiere a eroder :
 				// stress = k * dH
 				double k = 0.1;
-				//alpha = 40� +- 5�
+				//alpha = 40 +- 5
 				double alpha = 42;
 				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
 				if (abs(dH) / delta > tan(alpha))
