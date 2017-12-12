@@ -98,6 +98,16 @@ void Mesh::SetRenderMode(const RenderMode& r)
 	renderMode = r;
 }
 
+void Mesh::SetVertices(const std::vector<Vector3>& verts)
+{
+	vertices.clear();
+	normals.clear();
+	for (int i = 0; i < verts.size(); i++)
+		AddVertex(verts[i]);
+	CalculateNormals();
+	updateBuffersNextDraw = true;
+}
+
 Vector3 Mesh::Vertex(int i) const
 {
 	return vertices[i];

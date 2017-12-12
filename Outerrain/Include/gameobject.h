@@ -38,7 +38,6 @@ public:
 			if (castAttempt != nullptr)
 			{
 				auto it = components.erase(components.begin() + i);
-				delete *it;
 				return;
 			}
 		}

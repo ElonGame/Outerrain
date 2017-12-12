@@ -9,17 +9,14 @@ static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 
-// TODO :
-//  -Thermal Erosion (Nathan & Axel)
-//  -StreamPower Erosion (Axel)
-//  -Accessibility Field (Vincent)
-//  -InitFromNoise() (Nathan)
+// In Progress :
+//  -Thermal Erosion (Nathan & Axel)							==> Debug
+//  -StreamPower Erosion (Axel)									==> Todo
+//  -Accessibility Field (Vincent)								==> Debug
+//  -InitFromNoise() (Nathan)									==> Debug
+//  -Vegetation bug fix placement + plusieurs espèces (Thomas)	==> Todo/Debug
 
-// A terme :
-//  -Tous les fields : wetness, slope, accessibility, streamPower
-//  -Sum de Noise et LoadImage
-//  -Erosion thermal/hydro
-//  -Vegetation : carte de densité avec paramètre par espèce + poisson distrib
+// To do :
 //  -Routes
 //  -Villages (?)
 
@@ -53,7 +50,7 @@ int App::Init()
 	//vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 
 	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.2f);
+	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
 
 	Mesh* mesh = layerTerrain2D.GetMesh();
 	Shader shader;
@@ -153,9 +150,8 @@ int App::Update(const float time, const float deltaTime)
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
 	{
-		layerTerrain2D.ThermalErosion(1);
-		scene.GetChildAt(0)->RemoveComponent<Mesh>();
-		scene.GetChildAt(0)->AddComponent(layerTerrain2D.GetMesh());
+		layerTerrain2D.ThermalErosion(100);
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
 	}
 	// Vegetation spawn
 	if (key_state(SDLK_v))

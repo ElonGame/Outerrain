@@ -9,7 +9,7 @@
 #include "vegetationObject.h"
 #include "gameobject.h"
 
-#define max(a, b) a > b ? a : b
+
 
 static bool compareHeight(Vector3 u, Vector3 v)
 {
@@ -304,6 +304,14 @@ void LayerTerrain2D::InitFromFile(const char* file, int blackAltitude, int white
 	sand.Fill(sandValue);
 }
 
+Vector3 LayerTerrain2D::Vertex(int i, int j) const
+{
+	double x = a.x + j * (b.x - a.x) / (nx - 1);
+	double y = Height(i, j);
+	double z = a.y + i * (b.y - a.y) / (ny - 1);
+	return Vector3(x, y, z);
+}
+
 double LayerTerrain2D::Height(int i, int j) const
 {
 	return BeckrockValue(i, j) + SandValue(i, j);
@@ -321,10 +329,15 @@ double LayerTerrain2D::SandValue(int i, int j) const
 
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
-	for (int k = 0; k < stepCount; k++)
+	// Constants
+	double K = 0.1;		 // Stress factor
+	double Alpha = 42.0; // Threshold Angle for stability (40 +- 5)
+	double tanAlpha = tan(Alpha);
+
+	for (int a = 0; a < stepCount; a++)
 	{
 		std::queue<int> instables;
-		std::queue<double> matter; // quantite de matiere qui est transport�e
+		std::queue<double> matter; // quantite de matiere qui est transportee
 		for (int i = 0; i < bedrock.SizeX(); i++)
 		{
 			for (int j = 0; j < bedrock.SizeY(); j++)
@@ -332,10 +345,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 				// On calcule le delta H 
 				// Pour ca on fait le max des delta H des voisins de I
 				// double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
-				double dH1 = 0;
-				double dH2 = 0;
-				double dH3 = 0;
-				double dH4 = 0;
+				double dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
 				if (j < bedrock.SizeY() - 1)
 					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
 				if (i < bedrock.SizeX() - 1)
@@ -344,32 +354,39 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 					dH3 = bedrock.Get(i, j) - bedrock.Get(i - 1, j);
 				if (j > 0)
 					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
-				double dH = max(dH1, max(dH2, max(dH3, dH4)));
+				double dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
 
-				// Pour calculer stress, c'est a dire quantite de matiere a eroder :
-				// stress = k * dH
-				double k = 0.1;
-				//alpha = 40 +- 5
-				double alpha = 42;
+				// If dH < 0, it means that no neighbours are lower than us
+				// So we discard the point
+				if (dH <= 0.0)
+					continue;
+
+				// Instability criteria
+				// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
 				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
-				if (abs(dH) / delta > tan(alpha))
+				if (abs(dH) / delta > tanAlpha)
 				{
 					// AddToQueue INSTABLE
 					instables.push(bedrock.Index(i, j));
-					matter.push(abs(dH * k));
+
+					// Pour calculer stress, c'est a dire quantite de matiere a eroder :
+					// Stress = k * dH
+					matter.push(abs(dH * K));
 				}
 			}
 		}
-		while (!instables.empty())
+		while (instables.empty() == false)
 		{
 			int index = instables.front();
 			instables.pop();
-			int indexLVoisin = bedrock.LowestNeighbour(index);
 			double eps = matter.front();
 			matter.pop();
+
+			int indexLVoisin = bedrock.LowestNeighbour(index);
 			bedrock.Set(index, bedrock.Get(index) - eps);
 			sand.Set(indexLVoisin, sand.Get(indexLVoisin) + eps);
-			//TODO : Push(Voisin) ? 
+
+			//TODO : Push(Voisin) ?
 		}
 	}
 }
@@ -385,6 +402,17 @@ Mesh* LayerTerrain2D::GetMesh() const
 	}
 	terrain.ComputeNormalField();
 	return terrain.GetMesh();
+}
+
+std::vector<Vector3> LayerTerrain2D::GetAllVertices() const
+{
+	std::vector<Vector3> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			ret.push_back(Vertex(i, j));
+	}
+	return ret;
 }
 
 

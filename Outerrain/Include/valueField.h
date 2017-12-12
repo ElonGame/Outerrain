@@ -232,41 +232,28 @@ public:
 	{
 		int i, j;
 		Index2D(index, i, j);
+		double v = Get(i, j);
 
-		// Todo
-		//InsideVertex();
-
-		int indexLVoisin = -1;
-		if (j < SizeY() - 1)
-		{
-			if (Get(i, j) > Get(i, j + 1))
-				indexLVoisin = Index(i, j + 1);
-		}
-		if (i < SizeX() - 1)
-		{
-			if (Get(i, j) > Get(i + 1, j)) 
-			{
-				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i + 1, j))
-					indexLVoisin = Index(i + 1, j);
-			}
-		}
+		double dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
+		if (j < ny - 1)
+			dH1 = v - Get(i, j + 1);
+		if (i < nx - 1)
+			dH2 = v - Get(i + 1, j);
 		if (i > 0)
-		{
-			if (Get(i, j) > Get(i - 1, j))
-			{
-				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i - 1, j))
-					indexLVoisin = Index(i - 1, j);
-			}
-		}
+			dH3 = v - Get(i - 1, j);
 		if (j > 0)
-		{
-			if (Get(i, j) > Get(i, j - 1))
-			{
-				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i, j - 1))
-					indexLVoisin = Index(i, j - 1);
-			}
-		}
-		return indexLVoisin;
+			dH4 = v - Get(i, j - 1);
+		double dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
+
+		if (dH == dH1)
+			return Index(i, j + 1);
+		if (dH == dH2)
+			return Index(i + 1, j);
+		if (dH == dH3)
+			return Index(i - 1, j);
+		if (dH == dH4)
+			return Index(i, j - 1);
+		return -1;
 	}
 
 	void Fill(double v)

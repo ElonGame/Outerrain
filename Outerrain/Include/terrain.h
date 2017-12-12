@@ -72,10 +72,12 @@ public:
 
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+	Vector3 Vertex(int, int) const;
 	double Height(int, int) const;
 	double SandValue(int, int) const;
 	double BeckrockValue(int, int) const;
 	Mesh* GetMesh() const;
+	std::vector<Vector3> GetAllVertices() const;
 };
 
 
@@ -92,5 +94,5 @@ public:
 	void ComputeDensities();
 
 	std::vector<GameObject*> GetTreeObjects() const;
-	std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
+	std::vector<Vector2> GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
 };
