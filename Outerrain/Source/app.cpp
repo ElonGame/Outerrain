@@ -57,8 +57,6 @@ int App::Init()
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Blue(), 32));
-	ScalarField2D accessibility = vegTerrain.AccessibilityField();
-	GLuint accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
@@ -67,9 +65,11 @@ int App::Init()
 	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
 	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGBA);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 
 	// Init Shader
 	orbiter.LookAt(mesh->GetBounds());

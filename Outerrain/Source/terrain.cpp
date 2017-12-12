@@ -192,7 +192,6 @@ ScalarField2D Terrain2D::DrainageField() const
 			drainage.Set(l, m, drainage.Get(l, m) + drainage.Get(i, j) * (slope[k] / sum));
 		}
 	}
-	drainage.WriteImageGrayscale("Data/drainage.png");
 	return drainage;
 }
 
@@ -207,7 +206,6 @@ ScalarField2D Terrain2D::DrainageSqrtField() const
 			sqrtDrainageField.Set(i, j, sqrt(drainageField.Get(i, j)));
 		}
 	}
-	sqrtDrainageField.WriteImageGrayscale("Data/drainagesqrt.png");
 	return sqrtDrainageField;
 }
 
@@ -223,7 +221,6 @@ ScalarField2D Terrain2D::WetnessField() const
 			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + slopeField.Get(i, j))));
 		}
 	}
-	wetnessField.WriteImageGrayscale("Data/wetness.png");
 	return wetnessField;
 }
 
@@ -239,11 +236,10 @@ ScalarField2D Terrain2D::StreamPowerField() const
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
 		}
 	}
-	streamPowerField.WriteImageGrayscale("Data/streampower.png");
 	return streamPowerField;
 }
 
-// @TODO paramétrer epsilon
+// @TODO paramï¿½trer epsilon
 ScalarField2D Terrain2D::Illumination() const
 {
 	double epsilon = 0.01;
@@ -293,18 +289,6 @@ ScalarField2D Terrain2D::Illumination() const
 		}
 	}
 	return illuminationField;
-	/*
-	Pour tout k
-		On compte le nombre dintersectons entre terrain et rayon. Intersect(Ray(p, direction alÃ©atoire));
-
-	SF2 slopeField = slope()
-	k = max(slopeField)
-	DeltaY = Y(qi) - Yterrain(qi) > 0 < 0
-	step = DeltaY / K;
-	*/
-
-	// Classe Ray
-	// Fonction Inside(q) : On calcul le Y du terrain, et on regarde si on est au dessus ou en dessous. Comparaison Yterrain vs Yq
 }
 
 ScalarField2D Terrain2D::AccessibilityField() const
@@ -318,7 +302,6 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			accessibilityField.Set(i, j, illuminationField.Get(i, j));
 		}
 	}
-	accessibilityField.WriteImageGrayscale("Data/accessibility.png");
 	return accessibilityField;
 }
 
