@@ -4,11 +4,14 @@
 #include "texture.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
+#include <chrono>
+#include <sstream>
 
 static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 static GLuint accessibilityTexture;
+static GLuint m_time_query;
 
 // In Progress :
 //  -Thermal Erosion (Nathan & Axel)							==> Debug
@@ -22,7 +25,10 @@ static GLuint accessibilityTexture;
 //  -Villages (?)
 
 // Bug fix :
-//  -Release CameraOrbiter:: compile errors
+//  -CameraOrbiter:: compile errors
+//  -Mode release ne fonctionne pas
+//  -Intégrer FlyCam de Thomas
+//  -OpenMP pour accélérer
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -46,8 +52,11 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	// InitSceneVegetationTerrain();
-	InitSceneLayerTerrain();
+	// Queries to GPU
+	glGenQueries(1, &m_time_query);
+
+	InitSceneVegetationTerrain();
+	//InitSceneLayerTerrain();
 
 	return 1;
 }
@@ -59,15 +68,21 @@ void App::Quit()
 		release_context(glContext);
 	if (window)
 		ReleaseWindow(window);
-	
+
 	glDeleteTextures(1, &draignageTexture);
 	glDeleteTextures(1, &wetnessTexture);
 	glDeleteTextures(1, &accessibilityTexture);
 	glDeleteTextures(1, &streampowerTexture);
-}	
+
+	glDeleteQueries(1, &m_time_query);
+}
 
 int App::Render()
 {
+	// Time query
+	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
+	std::chrono::high_resolution_clock::time_point cpu_start = std::chrono::high_resolution_clock::now();
+
 	// Clear
 	glClearColor(0.3f, 0.55f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -77,19 +92,29 @@ int App::Render()
 	for (int i = 0; i < objs.size(); i++)
 		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
 
+	// CPU/GPU/Wait time computation
+	std::chrono::high_resolution_clock::time_point cpu_stop = std::chrono::high_resolution_clock::now();
+	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
+	glEndQuery(GL_TIME_ELAPSED);
+
+	GLint64 gpu_time = 0;
+	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+
+	std::stringstream cpuStr, gpuStr;
+	cpuStr << "CPU " << (int)(cpu_time / 1000000) << "ms" << (int)((cpu_time / 1000) % 1000) << "us";
+	gpuStr << "GPU " << (int)(gpu_time / 1000000) << "ms" << (int)((gpu_time / 1000) % 1000) << "us";
+
 	// ImGui
 	// Help
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
 	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion\n - V to spawn vegetation");
 	ImGui::End();
-
 	// Shading
-	ImGui::Begin("Shaders"); 
+	ImGui::Begin("Shaders");
 	const char* items[] = { "Diffuse", "Normal", "Wireframe" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
-
 	// Debug Image 
 	ImGui::Begin("Drainage Map");
 	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
@@ -103,6 +128,13 @@ int App::Render()
 	ImGui::Begin("Accessibility Image");
 	ImGui::Image((void*)accessibilityTexture, ImVec2(150, 150));
 	ImGui::End();
+
+	// Time Info
+	ImGui::Begin("Rendering Time");
+	ImGui::Text(cpuStr.str().data());
+	ImGui::Text(gpuStr.str().data());
+	ImGui::End();
+
 	return 1;
 }
 

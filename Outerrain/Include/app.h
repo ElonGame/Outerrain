@@ -16,7 +16,6 @@ protected:
 	CameraOrbiter orbiter;
 
 	// Terrain Data
-	Terrain2D terrain2D;
 	LayerTerrain2D layerTerrain2D;
 	VegetationTerrain vegTerrain;
 
