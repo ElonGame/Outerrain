@@ -319,6 +319,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 }
 
 
+/* LayerTerrain2D */
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)
 {
@@ -359,11 +360,7 @@ Mesh* LayerTerrain2D::GetMesh() const
 			terrain.SetHeight(i, j, Height(i, j));
 	}
 	terrain.ComputeNormalField();
-
-	// Mesh
-	Mesh* m;
-	m->CalculateFromTerrain2D(terrain);
-	return m;
+	return terrain.GetMesh();
 }
 
 
