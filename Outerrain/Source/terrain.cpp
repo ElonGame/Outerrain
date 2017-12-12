@@ -161,14 +161,15 @@ ScalarField2D Terrain2D::SlopeField() const
 	return slopeField;
 }
 
-int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* height, float* slope) const
+// @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
+int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slope) const
 {
 	int i = p.x, j = p.y;
 
 	int counter = 0;
 	double currentSlope = 0.0f;
 	double currentHeight = 0.0f;
-	double pointHeight = p.y;
+	double pointHeight = heightField.Get(i, j);
 
 	for (int k = -1; k <= 1; k++)
 	{
@@ -182,11 +183,11 @@ int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* height, float* 
 			{
 				currentHeight = pointHeight - neighHeight;
 				if (k + l == -1 || k + l == 1)
-					currentSlope = -currentHeight;
+					currentSlope = currentHeight;
 				else
 					currentSlope = currentHeight / sqrt(2);
 
-				neighbours[counter] = Vector2(i + k, j + l);
+				neighbours[counter] = Point(i + k, j + l);
 				height[counter] = currentHeight;
 				slope[counter] = currentSlope;
 				counter++;
@@ -215,10 +216,10 @@ ScalarField2D Terrain2D::Drainage() const
 		points.pop_front();
 
 		int i = p.x, j = p.z;
-		Vector2 neighbours[8];
+		Point neighbours[8];
 		float slope[8];
 		float height[8];
-		int n = Distribute(Vector2(i, j), neighbours, height, slope);
+		int n = Distribute(Point(i, j), neighbours, height, slope);
 
 		double sum = 0.0;
 		for (int k = 0; k < n; k++)
@@ -227,29 +228,58 @@ ScalarField2D Terrain2D::Drainage() const
 		for (int k = 0; k < n; k++)
 		{
 			int l = neighbours[k].x, m = neighbours[k].y;
-			drainage.Set(i, j, drainage.Get(l, m) + (slope[k] / sum));
+			drainage.Set(l, m, drainage.Get(l, m) + drainage.Get(i, j) * (slope[k] / sum));
 		}
 	}
+	drainage.WriteImageGrayscale("Data/drainage.png");
 	return drainage;
+}
+
+ScalarField2D Terrain2D::DrainageSqrt() const
+{
+	ScalarField2D drainageField = Drainage();
+	ScalarField2D sqrtDrainageField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			sqrtDrainageField.Set(i, j, sqrt(drainageField.Get(i, j)));
+		}
+	}
+	sqrtDrainageField.WriteImageGrayscale("Data/drainagesqrt.png");
+	return sqrtDrainageField;
 }
 
 ScalarField2D Terrain2D::WetnessField() const
 {
 	ScalarField2D drainageField = Drainage();
+	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny - 1; i++)
 	{
 		for (int j = 0; j < nx - 1; j++)
 		{
-			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + (1.0 - normalField.Get(i, j).y))));
+			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + slopeField.Get(i, j))));
 		}
 	}
+	wetnessField.WriteImageGrayscale("Data/wetness.png");
 	return wetnessField;
 }
 
 ScalarField2D Terrain2D::StreamPowerField() const
 {
-	return ScalarField2D();
+	ScalarField2D drainageField = Drainage();
+	ScalarField2D slopeField = SlopeField();
+	ScalarField2D streamPowerField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
+		}
+	}
+	streamPowerField.WriteImageGrayscale("Data/streampower.png");
+	return streamPowerField;
 }
 
 double Terrain2D::ComputeIllumination(int i, int j) const
@@ -277,12 +307,6 @@ double Terrain2D::ComputeIllumination(int i, int j) const
 
 ScalarField2D Terrain2D::AccessibilityField() const
 {
-	/*
-		Calculer de la map d'éclairement :
-			Pour tout i et j, calculer eclairement de ij
-
-		Map global d'éclairement -> eclairement en chaque point
-	*/
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny - 1; i++)
 	{

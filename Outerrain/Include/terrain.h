@@ -4,6 +4,14 @@
 #include "mesh.h"
 #include "valueField.h"
 
+struct Point
+{
+	int x, y;
+
+	Point() { }
+	Point(int a, int b) : x(a), y(b) { }
+};
+
 class Terrain2D
 {
 protected:
@@ -27,14 +35,15 @@ public:
 	int SizeY() const { return ny; }
 	void ComputeNormalField();
 
-	int Distribute(Vector2 p, Vector2* neighbours, float* height, float* slope) const;
+	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
 	ScalarField2D Drainage() const;
+	ScalarField2D DrainageSqrt() const;
 	double ComputeIllumination(int i, int j) const;
 
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
-	ScalarField2D AccessibilityField() const;	
+	ScalarField2D AccessibilityField() const;
 
 private:
 	float Lerp(float a, float b, float f);

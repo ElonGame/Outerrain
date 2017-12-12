@@ -5,7 +5,10 @@
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
+static GLuint draignageTexture;
 static GLuint wetnessTexture;
+static GLuint streampowerTexture;
+
 // TODO :
 //  -Thermal Erosion (Nathan)
 //  -Wetness Field / Accessibility Field (Vincent)
@@ -48,8 +51,11 @@ int App::Init()
 	mesh->SetMaterial(Material(Color::Blue(), 32));
 
 	ScalarField2D wetness = vegTerrain.WetnessField();
-	wetness.WriteImageGrayscale("Data/wetness.png");
+	ScalarField2D streampower = vegTerrain.StreamPowerField();
+
+	GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
 	GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
@@ -97,8 +103,14 @@ int App::Render()
 	ImGui::End();
 
 	// Debug Image 
+	ImGui::Begin("Drainage Image");
+	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
+	ImGui::End();
 	ImGui::Begin("Wetness Image");
 	ImGui::Image((void*)wetnessTexture, ImVec2(150, 150));
+	ImGui::End();
+	ImGui::Begin("Stream Power Image");
+	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
 	ImGui::End();
 	return 1;
 }
