@@ -12,7 +12,16 @@ static GLuint wetnessTexture;
 //  -InitFromNoise()
 //  -Refactor LayerField pour utiliser des stacks
 
+// A terme :
+//  -Tous les fields : wetness, slope, accessibility, streamPower
+//  -Sum de Noise et LoadImage
+//  -Erosion thermal/hydro
+//  -Vegetation : carte de densité avec paramètre par espèce + poisson distrib
+//  -Routes
+//  -Villages (?)
+
 // Bug fix :
+//  -Bordures WriteImage
 //  -Affichage texture dans imgui
 //  -Release CameraOrbiter:: compile errors
 
