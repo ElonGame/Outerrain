@@ -136,7 +136,7 @@ public:
 			q[0] = sin_half_angle*axis.x / norm;
 			q[1] = sin_half_angle*axis.y / norm;
 			q[2] = sin_half_angle*axis.z / norm;
-			q[3] = cos(angle / 2.0);
+			q[3] = cos(angle / 2.0f);
 		}
 	}
 

@@ -32,7 +32,7 @@ Color Color::Blue()
 
 Color Color::Grey()
 {
-	return Color(0.7, 0.7, 0.7);
+	return Color(0.7f, 0.7f, 0.7f);
 }
 
 Color operator+ (const Color& a, const Color& b)

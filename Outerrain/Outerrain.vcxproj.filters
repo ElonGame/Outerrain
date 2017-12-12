@@ -75,6 +75,9 @@
     <ClInclude Include="Include\valueField.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Include\cameraOrbiter.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -91,9 +94,6 @@
     </ClCompile>
     <ClCompile Include="Source\shader.cpp">
       <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Include\cameraOrbiter.h">
-      <Filter>Fichiers d%27en-tête</Filter>
     </ClCompile>
     <ClCompile Include="Source\transform.cpp">
       <Filter>Fichiers sources</Filter>

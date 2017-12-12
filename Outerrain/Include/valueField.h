@@ -65,8 +65,8 @@ public:
 		Vector2 q = p - bottomLeft;
 		Vector2 d = topRight - bottomLeft;
 
-		double u = q[0] / d[0];
-		double v = q[1] / d[1];
+		float u = q[0] / d[0];
+		float v = q[1] / d[1];
 
 		int j = int(u * (nx - 1));
 		int i = int(v * (ny - 1));
@@ -81,11 +81,11 @@ public:
 		Vector2 q = p - bottomLeft;
 		Vector2 d = topRight - bottomLeft;
 
-		double texelX = 1.0 / ((double)nx - 1);
-		double texelY = 1.0 / ((double)ny - 1);
+		float texelX = 1.0f / ((float)nx - 1);
+		float texelY = 1.0f / ((float)ny - 1);
 
-		double u = q[0] / d[0];
-		double v = q[1] / d[1];
+		float u = q[0] / d[0];
+		float v = q[1] / d[1];
 
 		int i = int(v * (ny - 1));
 		int j = int(u * (nx - 1));
@@ -139,7 +139,7 @@ public:
 };
 
 
-class ScalarField2D : public ValueField<double>
+class ScalarField2D : public ValueField<float>
 {
 public:
 	ScalarField2D() : ValueField()
@@ -151,7 +151,7 @@ public:
 	{
 	}
 
-	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight, double value)
+	ScalarField2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight, float value)
 		: ValueField(nx, ny, bottomLeft, topRight, value)
 	{
 	}
@@ -159,20 +159,20 @@ public:
 	void WriteImageGrayscale(const char* path)
 	{
 		Image im = Image(nx, ny);
-		double min = MinValue();
-		double max = MaxValue();
+		float min = MinValue();
+		float max = MaxValue();
 		for (int i = 0; i < ny; i++)
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				double v = (Get(i, j) - min) / (max - min);
+				float v = (Get(i, j) - min) / (max - min);
 				im(i, j) = Color(v, v, v, 1.0);
 			}
 		}
 		im.WriteImage(path);
 	}
 
-	void ReadImageGrayscale(const char* file, float blackAltitude, float whiteAltitude)
+	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude)
 	{
 		Image heightmap;
 		heightmap.ReadImage(file);
@@ -186,8 +186,8 @@ public:
 				float u = j / ((float)nx - 1);
 				float v = i / ((float)ny - 1);
 
-				int anchorX = u * (heightmap.Width() - 1);
-				int anchorY = v * (heightmap.Height() - 1);
+				int anchorX = (int)(u * (heightmap.Width() - 1));
+				int anchorY = (int)(v * (heightmap.Height() - 1));
 				if (anchorX == heightmap.Width() - 1)
 					anchorX--;
 				if (anchorY == heightmap.Height() - 1)
@@ -216,7 +216,7 @@ public:
 	Vector2 Gradient(int i, int j) const
 	{
 		Vector2 ret;
-		double d = nx - 1;
+		float d = (float)nx - 1;
 
 		// X Gradient
 		if (i == 0)
@@ -224,7 +224,7 @@ public:
 		else if (i == ny - 1)
 			ret.x = (Get(i, j) - Get(i - 1, j)) / d;
 		else
-			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0 * d);
+			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0f * d);
 
 		// Y Gradient
 		if (j == 0)
@@ -232,7 +232,7 @@ public:
 		else if (j == nx - 1)
 			ret.y = (Get(i, j) - Get(i, j - 1)) / d;
 		else
-			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0 * d);
+			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * d);
 
 		return ret;
 	}
@@ -241,9 +241,9 @@ public:
 	{
 		int i, j;
 		Index2D(index, i, j);
-		double v = Get(i, j);
+		float v = Get(i, j);
 
-		double dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
+		float dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
 		if (j < ny - 1)
 			dH1 = v - Get(i, j + 1);
 		if (i < nx - 1)
@@ -252,7 +252,7 @@ public:
 			dH3 = v - Get(i - 1, j);
 		if (j > 0)
 			dH4 = v - Get(i, j - 1);
-		double dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
+		float dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
 
 		if (dH == dH1)
 			return Index(i, j + 1);
@@ -265,17 +265,17 @@ public:
 		return -1;
 	}
 
-	void Fill(double v)
+	void Fill(float v)
 	{
 		std::fill(values.begin(), values.end(), v);
 	}
 
-	double MaxValue() const
+	float MaxValue() const
 	{
 		return *std::max_element(values.begin(), values.end());
 	}
 
-	double MinValue() const
+	float MinValue() const
 	{
 		return *std::min_element(values.begin(), values.end());
 	}

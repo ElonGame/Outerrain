@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SDL2\SDL.h>
-#undef main SDLMain
 
+#undef main
 
 SDL_Window* CreateWindow(const int width, const int height);
 void ReleaseWindow(SDL_Window* w);

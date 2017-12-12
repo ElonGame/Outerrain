@@ -26,12 +26,13 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
+	float diff = (float)whiteAltitude - (float)blackAltitude;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			//float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
-			float v = blackAltitude + Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6.0, i, j) * (whiteAltitude - blackAltitude);
+			float v = (float)blackAltitude + (float)Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, (double)i, (double)j) * diff;
 			heightField.Set(i, j, v);
 		}
 	}
@@ -44,7 +45,7 @@ void Terrain2D::InitFromFile(const char* path, int blackAltitude, int whiteAltit
 	ComputeNormalField();
 }
 
-double Terrain2D::Height(const Vector2& p) const
+float Terrain2D::Height(const Vector2& p) const
 {
 	return heightField.GetValueBilinear(p);
 }
@@ -56,9 +57,9 @@ Vector3 Terrain2D::Normal(int i, int j) const
 
 Vector3 Terrain2D::Vertex(int i, int j) const
 {
-	double x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
-	double y = heightField.Get(i, j);
-	double z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
+	float x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
+	float y = heightField.Get(i, j);
+	float z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
@@ -69,7 +70,7 @@ Mesh* Terrain2D::GetMesh() const
 	return ret;
 }
 
-void Terrain2D::SetHeight(int i, int j, double v)
+void Terrain2D::SetHeight(int i, int j, float v)
 {
 	heightField.Set(i, j, v);
 }
@@ -104,7 +105,7 @@ void Terrain2D::ComputeNormalField()
 	}
 }
 
-double Terrain2D::NormalizedHeight(const Vector2& p) const
+float Terrain2D::NormalizedHeight(const Vector2& p) const
 {
 	float h = Height(p);
 	return h / heightField.MaxValue();
@@ -128,9 +129,9 @@ int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slop
 	int i = p.x, j = p.y;
 
 	int counter = 0;
-	double currentSlope = 0.0f;
-	double currentHeight = 0.0f;
-	double pointHeight = heightField.Get(i, j);
+	float currentSlope = 0.0f;
+	float currentHeight = 0.0f;
+	float pointHeight = heightField.Get(i, j);
 
 	for (int k = -1; k <= 1; k++)
 	{
@@ -139,14 +140,14 @@ int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slop
 			if (k == 0 || l == 0 || heightField.InsideVertex(i + k, j + l) == false)
 				continue;
 
-			double neighHeight = heightField.Get(i + k, j + l);
+			float neighHeight = heightField.Get(i + k, j + l);
 			if (pointHeight > neighHeight)
 			{
 				currentHeight = pointHeight - neighHeight;
 				if (k + l == -1 || k + l == 1)
 					currentSlope = currentHeight;
 				else
-					currentSlope = currentHeight / sqrt(2);
+					currentSlope = currentHeight / sqrt(2.0f);
 
 				neighbours[counter] = Point(i + k, j + l);
 				height[counter] = currentHeight;
@@ -165,6 +166,9 @@ ScalarField2D Terrain2D::DrainageField() const
 	{
 		for (int j = 0; j < nx; j++)
 		{
+			// Todo : refactor Vector3 in points.
+			// Don't use Vector3 to store integers. Float/Int problem.
+			// Warning conversion from int to float.
 			points.push_back(Vector3(i, heightField.Get(i, j), j));
 		}
 	}
@@ -176,13 +180,14 @@ ScalarField2D Terrain2D::DrainageField() const
 		Vector3 p = points.front();
 		points.pop_front();
 
+		// @Todo : baaaaaaaah
 		int i = p.x, j = p.z;
 		Point neighbours[8];
 		float slope[8];
 		float height[8];
 		int n = Distribute(Point(i, j), neighbours, height, slope);
 
-		double sum = 0.0;
+		float sum = 0.0;
 		for (int k = 0; k < n; k++)
 			sum += slope[k];
 
@@ -242,9 +247,9 @@ ScalarField2D Terrain2D::StreamPowerField() const
 // @TODO param�trer epsilon
 ScalarField2D Terrain2D::Illumination() const
 {
-	double epsilon = 0.01;
+	float epsilon = 0.01f;
 	ScalarField2D slopeField = SlopeField();
-	double maxSlope = slopeField.MaxValue();
+	float maxSlope = slopeField.MaxValue();
 
 	ScalarField2D illuminationField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
@@ -252,14 +257,14 @@ ScalarField2D Terrain2D::Illumination() const
 		for (int j = 0; j < nx; j++)
 		{
 			Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
-			double h = heightField.Get(i, j);
+			float h = heightField.Get(i, j);
 
 			int numbers = 10;
 			int intersect = 0;
 
 			for (int k = 0; k < numbers; k++)
 			{
-				double step = 0.0;
+				float step = 0.0f;
 				Vector3 ray = p;
 				float angleH = (rand() % 360) * 0.0174533f;
 				float angleV = rand() / (float)RAND_MAX;
@@ -273,10 +278,10 @@ ScalarField2D Terrain2D::Illumination() const
 					if (heightField.IsInsideField(terrainRay) == false)
 						break;
 
-					double terrainHeight = Height(terrainRay);
-					double deltaY = ray.y - terrainHeight;
+					float terrainHeight = Height(terrainRay);
+					float deltaY = ray.y - terrainHeight;
 
-					if (deltaY < 0)
+					if (deltaY < 0.0f)
 					{
 						intersect++;
 						break;
@@ -284,7 +289,7 @@ ScalarField2D Terrain2D::Illumination() const
 					step = deltaY / maxSlope;
 				}
 			}
-			double illumination = 1.0 - (intersect / (double)numbers);
+			float illumination = 1.0f - (intersect / (float)numbers);
 			illuminationField.Set(i, j, illumination);
 		}
 	}
@@ -322,23 +327,23 @@ void LayerTerrain2D::InitFromFile(const char* file, int blackAltitude, int white
 
 Vector3 LayerTerrain2D::Vertex(int i, int j) const
 {
-	double x = a.x + j * (b.x - a.x) / (nx - 1);
-	double y = Height(i, j);
-	double z = a.y + i * (b.y - a.y) / (ny - 1);
+	float x = a.x + j * (b.x - a.x) / (nx - 1);
+	float y = Height(i, j);
+	float z = a.y + i * (b.y - a.y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
-double LayerTerrain2D::Height(int i, int j) const
+float LayerTerrain2D::Height(int i, int j) const
 {
 	return BeckrockValue(i, j) + SandValue(i, j);
 }
 
-double LayerTerrain2D::BeckrockValue(int i, int j) const
+float LayerTerrain2D::BeckrockValue(int i, int j) const
 {
 	return bedrock.Get(i, j);
 }
 
-double LayerTerrain2D::SandValue(int i, int j) const
+float LayerTerrain2D::SandValue(int i, int j) const
 {
 	return sand.Get(i, j);
 }
@@ -346,22 +351,22 @@ double LayerTerrain2D::SandValue(int i, int j) const
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
-	double K = 0.1;		 // Stress factor
-	double Alpha = 42.0; // Threshold Angle for stability (40 +- 5)
-	double tanAlpha = tan(Alpha);
+	float K = 0.1f;		 // Stress factor
+	float Alpha = 42.0f; // Threshold Angle for stability (40 +- 5)
+	float tanAlpha = tan(Alpha);
 
 	for (int a = 0; a < stepCount; a++)
 	{
 		std::queue<int> instables;
-		std::queue<double> matter; // quantite de matiere qui est transportee
+		std::queue<float> matter; // quantite de matiere qui est transportee
 		for (int i = 0; i < bedrock.SizeX(); i++)
 		{
 			for (int j = 0; j < bedrock.SizeY(); j++)
 			{
 				// On calcule le delta H 
 				// Pour ca on fait le max des delta H des voisins de I
-				// double dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
-				double dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
+				// float dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
+				float dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
 				if (j < bedrock.SizeY() - 1)
 					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
 				if (i < bedrock.SizeX() - 1)
@@ -370,7 +375,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 					dH3 = bedrock.Get(i, j) - bedrock.Get(i - 1, j);
 				if (j > 0)
 					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
-				double dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
+				float dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
 
 				// If dH < 0, it means that no neighbours are lower than us
 				// So we discard the point
@@ -379,7 +384,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 				// Instability criteria
 				// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
-				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
+				float delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
 				if (abs(dH) / delta > tanAlpha)
 				{
 					// AddToQueue INSTABLE
@@ -395,7 +400,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 		{
 			int index = instables.front();
 			instables.pop();
-			double eps = matter.front();
+			float eps = matter.front();
 			matter.pop();
 
 			int indexLVoisin = bedrock.LowestNeighbour(index);
@@ -463,8 +468,8 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int maxTreeCount = 1000;
 	int treeCount = 0;
 
-	int tileCountX = (topRight.x - bottomLeft.x) / tileSize + 1;
-	int tileCountY = (topRight.y - bottomLeft.y) / tileSize + 1;
+	int tileCountX = (int)((topRight.x - bottomLeft.x) / tileSize + 1);
+	int tileCountY = (int)((topRight.y - bottomLeft.y) / tileSize + 1);
 
 	std::vector<GameObject*> vegObjects;
 	for (int i = 0; i < tileCountY; i++)

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\app.h" />
+    <ClInclude Include="Include\cameraOrbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\gameobject.h" />
@@ -41,7 +42,6 @@
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Include\cameraOrbiter.h" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -150,7 +150,7 @@
       </SDLCheck>
       <AdditionalIncludeDirectories>.;..\Dependencies\include;Include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4305;4312;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -184,6 +184,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.;..\Dependencies\include;Include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4312</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

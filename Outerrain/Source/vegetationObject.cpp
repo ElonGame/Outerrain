@@ -25,22 +25,22 @@ GameObject* VegetationObject::GetGameObject()
 /* Density functions */
 float VegetationObject::HeightDensityFactor(float height)
 {
-	return cos(height * 1.6);
+	return cos(height * 1.6f);
 }
 
 float VegetationObject::SlopeDensityFactor(float slope)
 {
-	return 0.05;
+	return 0.05f;
 }
 
 float VegetationObject::StreamPowerDensityFactor(float streamPower)
 {
-	return cos(streamPower * 1.6);
+	return cos(streamPower * 1.6f);
 }
 
 float VegetationObject::WetnessDensityFactor(float wetness)
 {
-	return cos(wetness * 1.6);
+	return cos(wetness * 1.6f);
 }
 
 void VegetationObject::SetRadius(float r)

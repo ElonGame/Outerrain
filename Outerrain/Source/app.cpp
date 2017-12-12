@@ -16,7 +16,6 @@ static GLuint m_time_query;
 // In Progress :
 //  -Thermal Erosion (Nathan & Axel)							==> Debug
 //  -StreamPower Erosion (Axel)									==> Todo
-//  -Accessibility Field (Vincent)								==> Debug
 //  -InitFromNoise() (Nathan)									==> Debug
 //  -Vegetation bug fix placement + plusieurs espèces (Thomas)	==> Todo/Debug
 
@@ -68,12 +67,6 @@ void App::Quit()
 		release_context(glContext);
 	if (window)
 		ReleaseWindow(window);
-
-	glDeleteTextures(1, &draignageTexture);
-	glDeleteTextures(1, &wetnessTexture);
-	glDeleteTextures(1, &accessibilityTexture);
-	glDeleteTextures(1, &streampowerTexture);
-
 	glDeleteQueries(1, &m_time_query);
 }
 
@@ -83,23 +76,19 @@ int App::Render()
 	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
 	std::chrono::high_resolution_clock::time_point cpu_start = std::chrono::high_resolution_clock::now();
 
-	// Clear
+	// Scene Rendering
 	glClearColor(0.3f, 0.55f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// Scene
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (int i = 0; i < objs.size(); i++)
 		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
 
-	// CPU/GPU/Wait time computation
+	// CPU/GPU time computation
 	std::chrono::high_resolution_clock::time_point cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
 	glEndQuery(GL_TIME_ELAPSED);
-
 	GLint64 gpu_time = 0;
 	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
-
 	std::stringstream cpuStr, gpuStr;
 	cpuStr << "CPU " << (int)(cpu_time / 1000000) << "ms" << (int)((cpu_time / 1000) % 1000) << "us";
 	gpuStr << "GPU " << (int)(gpu_time / 1000000) << "ms" << (int)((gpu_time / 1000) % 1000) << "us";
@@ -117,18 +106,17 @@ int App::Render()
 	ImGui::End();
 	// Debug Image 
 	ImGui::Begin("Drainage Map");
-	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
+	ImGui::Image((void*)(GLuint)draignageTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Wetness Map");
-	ImGui::Image((GLuint*)wetnessTexture, ImVec2(150, 150));
+	ImGui::Image((void*)(GLuint)wetnessTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Stream Power Map");
-	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
+	ImGui::Image((void*)(GLuint)streampowerTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Accessibility Image");
-	ImGui::Image((void*)accessibilityTexture, ImVec2(150, 150));
+	ImGui::Image((void*)(GLuint)accessibilityTexture, ImVec2(150, 150));
 	ImGui::End();
-
 	// Time Info
 	ImGui::Begin("Rendering Time");
 	ImGui::Text(cpuStr.str().data());
@@ -143,9 +131,9 @@ int App::Update(const float time, const float deltaTime)
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
-		orbiter.Rotation(mx, my);
+		orbiter.Rotation((float)mx, (float)my);
 	if (mb & SDL_BUTTON(3))
-		orbiter.Move(my);
+		orbiter.Move((float)my);
 	if (mb & SDL_BUTTON(2))
 		orbiter.Translation((float)mx / (float)WindowWidth(), (float)my / (float)WindowHeight());
 
@@ -206,7 +194,7 @@ void App::Run()
 void App::UpdateObjects(const float time, const float delta)
 {
 	newTime = SDL_GetPerformanceCounter();
-	float delta2 = (double)((newTime - lastTime) * 1000) / SDL_GetPerformanceFrequency();
+	float delta2 = (float)((newTime - lastTime) * 1000.0f) / SDL_GetPerformanceFrequency();
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (int i = 0; i < objs.size(); i++)
 	{
@@ -223,7 +211,7 @@ void App::UpdateObjects(const float time, const float delta)
 void App::InitSceneVegetationTerrain()
 {
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
-	vegTerrain.InitFromFile("Data/island.png", 0.0f, 100.0);
+	vegTerrain.InitFromFile("Data/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
@@ -251,7 +239,7 @@ void App::InitSceneVegetationTerrain()
 void App::InitSceneLayerTerrain()
 {
 	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, -256), Vector2(256, 256));
-	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 100.0, 0.8f);
+	layerTerrain2D.InitFromFile("Data/island.png", 0, 100, 0.8f);
 
 	Mesh* mesh = layerTerrain2D.GetMesh();
 	Shader shader;

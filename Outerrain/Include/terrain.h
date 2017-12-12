@@ -34,10 +34,10 @@ public:
 
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
-	double Height(const Vector2&) const;
-	double NormalizedHeight(const Vector2&) const;
+	float Height(const Vector2&) const;
+	float NormalizedHeight(const Vector2&) const;
 	Mesh* GetMesh() const;
-	void SetHeight(int, int, double);
+	void SetHeight(int, int, float);
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
 
@@ -71,9 +71,9 @@ public:
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
 	Vector3 Vertex(int, int) const;
-	double Height(int, int) const;
-	double SandValue(int, int) const;
-	double BeckrockValue(int, int) const;
+	float Height(int, int) const;
+	float SandValue(int, int) const;
+	float BeckrockValue(int, int) const;
 	Mesh* GetMesh() const;
 	std::vector<Vector3> GetAllVertices() const;
 };

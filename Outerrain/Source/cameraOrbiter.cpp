@@ -3,7 +3,7 @@
 #include "CameraOrbiter.h"
 
 
-CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.f), zNear(0.1), zFar(1000.0)
+CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)
 {
 }
 
@@ -13,7 +13,7 @@ CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const floa
 }
 
 CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax)
-	: center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1), zFar(1000.0)
+	: center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1f), zFar(1000.0f)
 {
 }
 
@@ -99,22 +99,22 @@ Vector3 CameraOrbiter::Position() const
 	return tinv(Vector3(0, 0, 0)); // la camera se trouve a l'origine, dans le repere camera...
 }
 
-void CameraOrbiter::SetFrameWidth(float w)
+void CameraOrbiter::SetFrameWidth(int w)
 { 
 	frameWidth = w; 
 }
 
-void CameraOrbiter::SetFrameHeight(float h) 
+void CameraOrbiter::SetFrameHeight(int h)
 { 
 	frameHeight = h; 
 }
 
-float CameraOrbiter::FrameWidth() const 
+int CameraOrbiter::FrameWidth() const
 { 
 	return frameWidth; 
 }
 
-float CameraOrbiter::FrameHeight() const
+int CameraOrbiter::FrameHeight() const
 { 
 	return frameHeight; 
 }
