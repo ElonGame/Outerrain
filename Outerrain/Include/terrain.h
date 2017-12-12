@@ -27,8 +27,10 @@ public:
 	int SizeY() const { return ny; }
 	void ComputeNormalField();
 
-	int Distribute(Vector2 p, Vector2* neighbours, float* quantity) const;
+	int Distribute(Vector2 p, Vector2* neighbours, float* height, float* slope) const;
 	ScalarField2D Drainage() const;
+	double ComputeIllumination(int i, int j) const;
+
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
