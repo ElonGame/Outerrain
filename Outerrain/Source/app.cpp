@@ -8,13 +8,12 @@
 static GLuint wetnessTexture;
 // TODO :
 //  -Thermal Erosion (Nathan)
-//  -Wetness Field (Vincent)
-//  -Noise Debug
-//  -Représentation d'évènements (?)
-//  -Génération de routes (?)
-//  -Génération de villages (?)
+//  -Wetness Field / Accessibility Field (Vincent)
+//  -InitFromNoise()
+//  -Refactor LayerField pour utiliser des stacks
 
 // Bug fix :
+//  -Affichage texture dans imgui
 //  -Release CameraOrbiter:: compile errors
 
 App::App(const int& width, const int& height, const int& major, const int& minor)

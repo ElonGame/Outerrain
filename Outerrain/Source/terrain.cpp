@@ -13,6 +13,7 @@ static bool compareHeight(Vector3 u, Vector3 v)
 	return (u.y > v.y);
 }
 
+
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
@@ -150,11 +151,12 @@ double Terrain2D::NormalizedHeight(const Vector2& p) const
 
 ScalarField2D Terrain2D::SlopeField() const
 {
+	// Slope(i, j) : ||Gradient(i, j)||
 	ScalarField2D slopeField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			slopeField.Set(i, j, 1.0 - normalField.Get(i, j).y);
+			slopeField.Set(i, j, Magnitude(heightField.Gradient(i, j)));
 	}
 	return slopeField;
 }
@@ -172,7 +174,7 @@ int Terrain2D::Distribute(Vector2 p, Vector2* neighbours, float* height, float* 
 	{
 		for (int l = -1; l <= 1; l++)
 		{
-			if (k == 0 || l == 0 || (i + k) < 0 || (i + k) > nx || (j + l) < 0 || (j + l) > ny)
+			if (k == 0 || l == 0 || heightField.InsideVertex(i + k, j + l) == false)
 				continue;
 
 			double neighHeight = heightField.Get(i + k, j + l);
@@ -292,6 +294,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	}
 	return accessibilityField;
 }
+
 
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	: nx(nx), ny(ny), a(a), b(b)

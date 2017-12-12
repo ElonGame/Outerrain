@@ -63,8 +63,6 @@ public:
 };
 
 
-// Pour éviter de polluer trop Terrain2D et le garder clean
-// Juste pour faire un terrain simple.
 class VegetationTerrain : public Terrain2D
 {
 protected:
