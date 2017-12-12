@@ -23,8 +23,8 @@ protected:
 public:
 	Terrain2D() { }
 	Terrain2D(int, int, Vector2, Vector2);
-	void InitFromFile(const char* file, float blackAltitude, float whiteAltitude);
 	void InitFromNoise(int, int);
+	void InitFromFile(const char*, int, int);
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
@@ -47,9 +47,6 @@ public:
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
 	ScalarField2D AccessibilityField() const;
-
-private:
-	float Lerp(float a, float b, float f);
 };
 
 
@@ -64,6 +61,8 @@ protected:
 public:
 	LayerTerrain2D() { }
 	LayerTerrain2D(int, int, Vector2, Vector2);
+
+	void InitFromFile(const char*, int, int, float);
 
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }

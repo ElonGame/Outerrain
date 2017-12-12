@@ -123,8 +123,8 @@ public:
 		return bottomLeft;
 	}
 
-	Vector2 TopRight() const 
-	{ 
+	Vector2 TopRight() const
+	{
 		return topRight;
 	}
 };
@@ -163,6 +163,47 @@ public:
 		im.WriteImage(path);
 	}
 
+	void ReadImageGrayscale(const char* file, float blackAltitude, float whiteAltitude)
+	{
+		Image heightmap;
+		heightmap.ReadImage(file);
+		float texelX = 1.0f / (heightmap.Width());
+		float texelY = 1.0f / (heightmap.Height());
+
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
+			{
+				float u = j / ((float)nx - 1);
+				float v = i / ((float)ny - 1);
+
+				int anchorX = u * (heightmap.Width() - 1);
+				int anchorY = v * (heightmap.Height() - 1);
+				if (anchorX == heightmap.Width() - 1)
+					anchorX--;
+				if (anchorY == heightmap.Height() - 1)
+					anchorY--;
+
+				float a = heightmap(anchorX, anchorY).r;
+				float b = heightmap(anchorX, anchorY + 1).r;
+				float c = heightmap(anchorX + 1, anchorY + 1).r;
+				float d = heightmap(anchorX + 1, anchorY).r;
+
+				float anchorU = anchorX * texelX;
+				float anchorV = anchorY * texelY;
+
+				float localU = (u - anchorU) / texelX;
+				float localV = (v - anchorV) / texelY;
+
+				float abu = Lerp(a, b, localU);
+				float dcu = Lerp(d, c, localU);
+
+				float value = Lerp(dcu, abu, localV);
+				Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
+			}
+		}
+	}
+
 	Vector2 Gradient(int i, int j) const
 	{
 		Vector2 ret;
@@ -187,7 +228,7 @@ public:
 		return ret;
 	}
 
-	int LowestNeighbor(int index) const
+	int LowestNeighbour(int index) const
 	{
 		int i, j;
 		Index2D(index, i, j);
@@ -196,29 +237,41 @@ public:
 		//InsideVertex();
 
 		int indexLVoisin = -1;
-		if (j < SizeY() - 1) {
+		if (j < SizeY() - 1)
+		{
 			if (Get(i, j) > Get(i, j + 1))
 				indexLVoisin = Index(i, j + 1);
 		}
-		if (i < SizeX() - 1) {
-			if (Get(i, j) > Get(i + 1, j)) {
+		if (i < SizeX() - 1)
+		{
+			if (Get(i, j) > Get(i + 1, j)) 
+			{
 				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i + 1, j))
 					indexLVoisin = Index(i + 1, j);
 			}
 		}
-		if (i > 0) {
-			if (Get(i, j) > Get(i - 1, j)) {
+		if (i > 0)
+		{
+			if (Get(i, j) > Get(i - 1, j))
+			{
 				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i - 1, j))
 					indexLVoisin = Index(i - 1, j);
 			}
 		}
-		if (j > 0) {
-			if (Get(i, j) > Get(i, j - 1)) {
+		if (j > 0)
+		{
+			if (Get(i, j) > Get(i, j - 1))
+			{
 				if (indexLVoisin = -1 || Get(indexLVoisin) > Get(i, j - 1))
 					indexLVoisin = Index(i, j - 1);
 			}
 		}
 		return indexLVoisin;
+	}
+
+	void Fill(double v)
+	{
+		std::fill(values.begin(), values.end(), v);
 	}
 
 	double MaxValue() const

@@ -24,48 +24,6 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	normalField = ValueField<Vector3>(nx, ny, bottomLeft, topRight);
 }
 
-void Terrain2D::InitFromFile(const char* file, float blackAltitude, float whiteAltitude)
-{
-	Image heightmap;
-	heightmap.ReadImage(file);
-	float texelX = 1.0f / (heightmap.Width());
-	float texelY = 1.0f / (heightmap.Height());
-
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / ((float)nx - 1);
-			float v = i / ((float)ny - 1);
-
-			int anchorX = u * (heightmap.Width() - 1);
-			int anchorY = v * (heightmap.Height() - 1);
-			if (anchorX == heightmap.Width() - 1)
-				anchorX--;
-			if (anchorY == heightmap.Height() - 1)
-				anchorY--;
-
-			float a = heightmap(anchorX, anchorY).r;
-			float b = heightmap(anchorX, anchorY + 1).r;
-			float c = heightmap(anchorX + 1, anchorY + 1).r;
-			float d = heightmap(anchorX + 1, anchorY).r;
-
-			float anchorU = anchorX * texelX;
-			float anchorV = anchorY * texelY;
-
-			float localU = (u - anchorU) / texelX;
-			float localV = (v - anchorV) / texelY;
-
-			float abu = Lerp(a, b, localU);
-			float dcu = Lerp(d, c, localU);
-
-			float value = Lerp(dcu, abu, localV);
-			heightField.Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
-		}
-	}
-	ComputeNormalField();
-}
-
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
 	for (int i = 0; i < ny; i++)
@@ -77,6 +35,12 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 			heightField.Set(i, j, v);
 		}
 	}
+	ComputeNormalField();
+}
+
+void Terrain2D::InitFromFile(const char* path, int blackAltitude, int whiteAltitude)
+{
+	heightField.ReadImageGrayscale(path, blackAltitude, whiteAltitude);
 	ComputeNormalField();
 }
 
@@ -108,11 +72,6 @@ Mesh* Terrain2D::GetMesh() const
 void Terrain2D::SetHeight(int i, int j, double v)
 {
 	heightField.Set(i, j, v);
-}
-
-float Terrain2D::Lerp(float a, float b, float f)
-{
-	return (a * (1.0f - f)) + (b * f);
 }
 
 void Terrain2D::ComputeNormalField()
@@ -339,6 +298,12 @@ LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 	bedrock = ScalarField2D(nx, ny, a, b);
 }
 
+void LayerTerrain2D::InitFromFile(const char* file, int blackAltitude, int whiteAltitude, float sandValue)
+{
+	bedrock.ReadImageGrayscale(file, blackAltitude, whiteAltitude);
+	sand.Fill(sandValue);
+}
+
 double LayerTerrain2D::Height(int i, int j) const
 {
 	return BeckrockValue(i, j) + SandValue(i, j);
@@ -359,7 +324,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 	for (int k = 0; k < stepCount; k++)
 	{
 		std::queue<int> instables;
-		std::queue<int> matter; // quantit� de mati�re qui est transport�e
+		std::queue<double> matter; // quantite de mati�re qui est transport�e
 		for (int i = 0; i < bedrock.SizeX(); i++)
 		{
 			for (int j = 0; j < bedrock.SizeY(); j++)
@@ -371,9 +336,8 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 				double dH2 = 0;
 				double dH3 = 0;
 				double dH4 = 0;
-				if (j < bedrock.SizeY() - 1) {
+				if (j < bedrock.SizeY() - 1)
 					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
-				}
 				if (i < bedrock.SizeX() - 1)
 					dH2 = bedrock.Get(i, j) - bedrock.Get(i + 1, j);
 				if (i > 0)
@@ -382,7 +346,7 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
 				double dH = max(dH1, max(dH2, max(dH3, dH4)));
 
-				//Pour calculer stress, c'est � dire quantit� de mati�re � �roder :
+				// Pour calculer stress, c'est � dire quantit� de mati�re � �roder :
 				// stress = k * dH
 				double k = 0.1;
 				//alpha = 40� +- 5�
@@ -390,24 +354,26 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 				double delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
 				if (abs(dH) / delta > tan(alpha))
 				{
-					//AddToQueue INSTABLE
+					// AddToQueue INSTABLE
 					instables.push(bedrock.Index(i, j));
-					matter.push(dH*k);
+					matter.push(abs(dH * k));
 				}
 			}
 		}
-		while (!instables.empty()) {
+		while (!instables.empty())
+		{
 			int index = instables.front();
 			instables.pop();
-			int indexLVoisin = bedrock.LowestNeighbor(index);
+			int indexLVoisin = bedrock.LowestNeighbour(index);
 			double eps = matter.front();
 			matter.pop();
 			bedrock.Set(index, bedrock.Get(index) - eps);
-			sand.Set(indexLVoisin, eps);
+			sand.Set(indexLVoisin, sand.Get(indexLVoisin) + eps);
 			//TODO : Push(Voisin) ? 
 		}
 	}
 }
+
 Mesh* LayerTerrain2D::GetMesh() const
 {
 	// Final terrain

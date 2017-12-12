@@ -214,3 +214,9 @@ typedef struct Bounds
 	Vector3 min;
 	Vector3 max;
 } Bounds;
+
+
+inline float Lerp(float a, float b, float f)
+{
+	return (a * (1.0f - f)) + (b * f);
+}

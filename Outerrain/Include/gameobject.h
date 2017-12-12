@@ -36,9 +36,12 @@ public:
 		{
 			T* castAttempt = dynamic_cast<T*>(components[i]);
 			if (castAttempt != nullptr)
-				components.erase(components.begin() + i);
+			{
+				auto it = components.erase(components.begin() + i);
+				delete *it;
+				return;
+			}
 		}
-		return nullptr;
 	}
 	template<typename T> T* GetComponent()
 	{

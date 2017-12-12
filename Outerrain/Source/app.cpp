@@ -50,11 +50,13 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	// @Todo : Init LayerTerrain avec une heightmap + une value de sand() aléatoire
 	//vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
 	//vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
 
-	Mesh* mesh = vegTerrain.GetMesh();
+	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.2f);
+
+	Mesh* mesh = layerTerrain2D.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
@@ -151,7 +153,11 @@ int App::Update(const float time, const float deltaTime)
 
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
+	{
 		layerTerrain2D.ThermalErosion(1);
+		scene.GetChildAt(0)->RemoveComponent<Mesh>();
+		scene.GetChildAt(0)->AddComponent(layerTerrain2D.GetMesh());
+	}
 	// Vegetation spawn
 	if (key_state(SDLK_v))
 	{

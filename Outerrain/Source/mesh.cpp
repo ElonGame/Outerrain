@@ -271,7 +271,7 @@ void Mesh::CalculateFromTerrain2D(const Terrain2D& terrain)
 	int nx = terrain.SizeX();
 	int ny = terrain.SizeY();
 
-	// Vertices & Texcoords
+	// Vertices & Texcoords & Normals
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
