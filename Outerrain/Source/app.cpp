@@ -46,13 +46,8 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	InitSceneVegetationTerrain();
-	// InitSceneLayerTerrain();
-
-	// Init Shader
-	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(WindowWidth());
-	orbiter.SetFrameHeight(WindowHeight());
+	// InitSceneVegetationTerrain();
+	InitSceneLayerTerrain();
 
 	return 1;
 }
@@ -69,7 +64,7 @@ void App::Quit()
 	glDeleteTextures(1, &wetnessTexture);
 	glDeleteTextures(1, &accessibilityTexture);
 	glDeleteTextures(1, &streampowerTexture);
-}
+}	
 
 int App::Render()
 {
@@ -86,7 +81,7 @@ int App::Render()
 	// Help
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
-	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion");
+	ImGui::Text("KEYBOARD : \n - Arrows to move\n - T to start Thermal Erosion\n - V to spawn vegetation");
 	ImGui::End();
 
 	// Shading
@@ -143,7 +138,7 @@ int App::Update(const float time, const float deltaTime)
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
 	}
 	// Vegetation spawn
-	if (key_state(SDLK_v))
+	if (key_state(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
 		vegTerrain.ComputeVegetationDensities();
 		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
@@ -215,12 +210,16 @@ void App::InitSceneVegetationTerrain()
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
 	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(WindowWidth());
+	orbiter.SetFrameHeight(WindowHeight());
 }
 
 void App::InitSceneLayerTerrain()
 {
-	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
+	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 100.0, 0.8f);
 
 	Mesh* mesh = layerTerrain2D.GetMesh();
 	Shader shader;
@@ -235,4 +234,8 @@ void App::InitSceneLayerTerrain()
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
 	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(WindowWidth());
+	orbiter.SetFrameHeight(WindowHeight());
 }
