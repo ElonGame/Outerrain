@@ -8,11 +8,9 @@
 static GLuint wetnessTexture;
 // TODO :
 //  -Thermal Erosion (Nathan)
+//  -Refactor LayerField pour utiliser des stacks
 //  -Wetness Field (Vincent)
 //  -Noise Debug
-//  -Représentation d'évènements (?)
-//  -Génération de routes (?)
-//  -Génération de villages (?)
 
 // Bug fix :
 //  -Release CameraOrbiter:: compile errors

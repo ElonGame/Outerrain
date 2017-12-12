@@ -13,6 +13,7 @@ static bool compareHeight(Vector3 u, Vector3 v)
 	return (u.y > v.y);
 }
 
+
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 	: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
@@ -150,11 +151,12 @@ double Terrain2D::NormalizedHeight(const Vector2& p) const
 
 ScalarField2D Terrain2D::SlopeField() const
 {
+	// Slope(i, j) : ||Gradient(i, j)||
 	ScalarField2D slopeField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			slopeField.Set(i, j, 1.0 - normalField.Get(i, j).y);
+			slopeField.Set(i, j, Magnitude(heightField.Gradient(i, j)));
 	}
 	return slopeField;
 }

@@ -129,6 +129,30 @@ public:
 		im.WriteImage(path);
 	}
 
+	Vector2 Gradient(int i, int j) const
+	{
+		Vector2 ret;
+		double d = nx - 1;
+
+		// X Gradient
+		if (i == 0)
+			ret.x = (Get(i + 1, j) - Get(i, j)) / d;
+		else if (i == ny - 1)
+			ret.x = (Get(i, j) - Get(i - 1, j)) / d;
+		else
+			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0 * d);
+
+		// Y Gradient
+		if (j == 0)
+			ret.y = (Get(i, j + 1) - Get(i, j)) / d;
+		else if (j == nx - 1)
+			ret.y = (Get(i, j) - Get(i, j - 1)) / d;
+		else
+			ret.y = (Get(i, j + 1) - Get(i, j - 1)) /  (2.0 * d);
+
+		return ret;
+	}
+
 	double MaxValue() const
 	{
 		return *std::max_element(values.begin(), values.end());
