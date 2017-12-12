@@ -122,16 +122,6 @@ ScalarField2D Terrain2D::SlopeField() const
 	return slopeField;
 }
 
-void Terrain2D::Erode(int index, double epsilon)
-{
-	heightField.Set(index, heightField.Get(index) - epsilon);
-}
-
-void Terrain2D::Transport(int index, double epsilon)
-{
-	heightField.Set(index, heightField.Get(index) + epsilon);
-}
-
 // @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
 int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slope) const
 {
@@ -168,7 +158,7 @@ int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slop
 	return counter;
 }
 
-ScalarField2D Terrain2D::Drainage() const
+ScalarField2D Terrain2D::DrainageField() const
 {
 	std::deque<Vector3> points;
 	for (int i = 0; i < ny - 1; i++)
@@ -206,9 +196,9 @@ ScalarField2D Terrain2D::Drainage() const
 	return drainage;
 }
 
-ScalarField2D Terrain2D::DrainageSqrt() const
+ScalarField2D Terrain2D::DrainageSqrtField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D sqrtDrainageField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny - 1; i++)
 	{
@@ -223,7 +213,7 @@ ScalarField2D Terrain2D::DrainageSqrt() const
 
 ScalarField2D Terrain2D::WetnessField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny - 1; i++)
@@ -239,7 +229,7 @@ ScalarField2D Terrain2D::WetnessField() const
 
 ScalarField2D Terrain2D::StreamPowerField() const
 {
-	ScalarField2D drainageField = Drainage();
+	ScalarField2D drainageField = DrainageField();
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D streamPowerField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny - 1; i++)
@@ -423,7 +413,7 @@ VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2
 {
 }
 
-void VegetationTerrain::ComputeDensities()
+void VegetationTerrain::ComputeVegetationDensities()
 {
 	ScalarField2D slopeField = SlopeField();
 	VegetationObject vegObj;

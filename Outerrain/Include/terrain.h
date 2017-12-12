@@ -4,7 +4,7 @@
 #include "mesh.h"
 #include "valueField.h"
 
-
+/* Utiity struct */
 struct Point
 {
 	int x, y;
@@ -26,8 +26,12 @@ protected:
 public:
 	Terrain2D() { }
 	Terrain2D(int, int, Vector2, Vector2);
+
 	void InitFromNoise(int, int);
 	void InitFromFile(const char*, int, int);
+	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
+	double ComputeIllumination(int i, int j) const;
+
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
 	double Height(const Vector2&) const;
@@ -36,16 +40,11 @@ public:
 	void SetHeight(int, int, double);
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
+
+	/* Useful fields */
 	void ComputeNormalField();
-
-	void Erode(int, double);
-	void Transport(int, double);
-
-	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
-	ScalarField2D Drainage() const;
-	ScalarField2D DrainageSqrt() const;
-	double ComputeIllumination(int i, int j) const;
-
+	ScalarField2D DrainageField() const;
+	ScalarField2D DrainageSqrtField() const;
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
@@ -68,7 +67,6 @@ public:
 
 	void InitFromFile(const char*, int, int, float);
 	void ThermalErosion(int);
-	void StreamPowerErosion(int);
 
 	int SizeX() const { return nx; }
 	int SizeY() const { return ny; }
@@ -91,7 +89,7 @@ public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
-	void ComputeDensities();
+	void ComputeVegetationDensities();
 
 	std::vector<GameObject*> GetTreeObjects() const;
 	std::vector<Vector2> GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;

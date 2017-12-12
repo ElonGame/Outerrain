@@ -46,27 +46,27 @@ int App::Init()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	//vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	//vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	vegTerrain.InitFromFile("Data/island.png", 0.0f, 20.0);
+	//layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
+	//layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
 
-	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-64, -64), Vector2(64, 64));
-	layerTerrain2D.InitFromFile("Data/island.png", 0.0f, 20.0f, 0.8f);
-
-	Mesh* mesh = layerTerrain2D.GetMesh();
+	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Blue(), 32));
-
-	//ScalarField2D wetness = vegTerrain.WetnessField();
-	//ScalarField2D streampower = vegTerrain.StreamPowerField();
-	//GLuint draignageTexture = ReadTexture(0, "Data/drainage.png", GL_RGB);
-	//GLuint wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	//GLuint streampowerTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
+
+	// Maps
+	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGBA);
+	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
 
 	// Init Shader
 	orbiter.LookAt(mesh->GetBounds());
@@ -114,7 +114,7 @@ int App::Render()
 	ImGui::Image((void*)draignageTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Wetness Map");
-	ImGui::Image((void*)wetnessTexture, ImVec2(150, 150));
+	ImGui::Image((GLuint*)wetnessTexture, ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Stream Power Map");
 	ImGui::Image((void*)streampowerTexture, ImVec2(150, 150));
@@ -126,7 +126,7 @@ int App::Update(const float time, const float deltaTime)
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
-	if (mb & SDL_BUTTON(1))
+	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
 		orbiter.Rotation(mx, my);
 	if (mb & SDL_BUTTON(3))
 		orbiter.Move(my);
@@ -156,7 +156,7 @@ int App::Update(const float time, const float deltaTime)
 	// Vegetation spawn
 	if (key_state(SDLK_v))
 	{
-		vegTerrain.ComputeDensities();
+		vegTerrain.ComputeVegetationDensities();
 		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
 		for (int i = 0; i < trees.size(); i++)
 			scene.AddChild(trees[i]);
