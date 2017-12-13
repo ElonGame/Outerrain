@@ -125,9 +125,26 @@ int App::Render()
 	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(150, 150));
 	ImGui::End();
 	// Erosion
-	ImGui::Begin("Stream Power Erosion");
+
+	// Shading
+	ImGui::Begin("Erosion");
+	ImGui::Text("Stream Power Erosion");
 	ImGui::SliderInt("Iterations", &streamPowerErosionIteration, 1, 500);
+	if (ImGui::Button("Compute"))
+	{
+		vegTerrain.StreamPowerErosion(streamPowerErosionIteration);
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
+		CalculateAllMaps();
+	}
+	ImGui::Text("\n");
+	ImGui::Text("Thermal Erosion");
+	if (ImGui::Button("Compute"))
+	{
+		layerTerrain2D.ThermalErosion(100);
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
+	}
 	ImGui::End();
+
 	// Time Info
 	ImGui::Begin("Rendering Time");
 	ImGui::Text(cpuStr.str().data());
