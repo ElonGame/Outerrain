@@ -114,6 +114,22 @@ float Terrain2D::NormalizedHeight(const Vector2& p) const
 	return h / heightField.MaxValue();
 }
 
+/* Erosion */
+void Terrain2D::StreamPowerErosion()
+{
+	ScalarField2D streamPower = StreamPowerField();
+	float K = 2.0f;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float newHeight = heightField.Get(i, j) - (streamPower.Get(i, j) * K);
+			heightField.Set(i, j, newHeight);
+		}
+	}
+}
+
+/* Useful Fields */
 ScalarField2D Terrain2D::SlopeField() const
 {
 	// Slope(i, j) : ||Gradient(i, j)||
@@ -126,11 +142,10 @@ ScalarField2D Terrain2D::SlopeField() const
 	return slopeField;
 }
 
-// @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
 int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<float, 8>& height, std::array<float, 8>& slope) const
 {
+	// @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
 	int i = p.x, j = p.y;
-
 	int counter = 0;
 	float currentSlope = 0.0f;
 	float currentHeight = 0.0f;
@@ -235,14 +250,14 @@ ScalarField2D Terrain2D::StreamPowerField() const
 	return streamPowerField;
 }
 
-// @TODO parametrer epsilon
-ScalarField2D Terrain2D::Illumination() const
+ScalarField2D Terrain2D::AccessibilityField() const
 {
+	// @TODO parametrer epsilon
 	float epsilon = 0.01f;
 	ScalarField2D slopeField = SlopeField();
 	float maxSlope = slopeField.MaxValue();
 
-	ScalarField2D illuminationField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -281,22 +296,21 @@ ScalarField2D Terrain2D::Illumination() const
 				}
 			}
 			float illumination = 1.0f - (intersect / static_cast<float>(numbers));
-			illuminationField.Set(i, j, illumination);
+			accessibilityField.Set(i, j, illumination);
 		}
 	}
-	return illuminationField;
+	return accessibilityField;
 }
 
-ScalarField2D Terrain2D::AccessibilityField() const
+std::vector<Vector3> Terrain2D::GetAllVertices() const
 {
-	ScalarField2D illuminationField = Illumination();
-	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	std::vector<Vector3> ret;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			accessibilityField.Set(i, j, illuminationField.Get(i, j));
+			ret.push_back(Vertex(i, j));
 	}
-	return accessibilityField;
+	return ret;
 }
 
 

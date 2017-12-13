@@ -25,10 +25,7 @@ static GLuint m_time_query;
 //  -Villages (?)
 
 // Bug fix :
-//  -CameraOrbiter:: compile errors
-//  -Mode release ne fonctionne pas
 //  -Intégrer FlyCam de Thomas
-//  -OpenMP pour accélérer
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -165,6 +162,13 @@ int App::Update(const float time, const float deltaTime)
 		layerTerrain2D.ThermalErosion(100);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
 	}
+	// Stream Power erosion
+	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	{
+		vegTerrain.StreamPowerErosion();
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
+		CalculateAllMaps();
+	}
 	// Vegetation spawn
 	if (key_state(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
@@ -268,4 +272,18 @@ void App::InitSceneLayerTerrain()
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
+}
+
+void App::CalculateAllMaps()
+{
+	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
+	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
+	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
+	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
 }

@@ -41,5 +41,6 @@ public:
 	virtual void Run();
 	virtual void Quit();
 
+	void CalculateAllMaps();
 	void UpdateObjects(const float time, const float delta);
 };
