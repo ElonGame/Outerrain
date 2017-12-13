@@ -7,12 +7,16 @@
 #include <chrono>
 #include <sstream>
 
+/* ImGui Textures*/
 static GLuint slopeTexture;
 static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 static GLuint accessibilityTexture;
 static GLuint m_time_query;
+
+/* ImGui Erosion */
+static int streamPowerErosionIteration = 1.0;
 
 // In Progress :
 //  -Thermal Erosion (Nathan & Axel)							==> Debug
@@ -120,6 +124,10 @@ int App::Render()
 	ImGui::Begin("Accessibility Image");
 	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(150, 150));
 	ImGui::End();
+	// Erosion
+	ImGui::Begin("Stream Power Erosion");
+	ImGui::SliderInt("Iterations", &streamPowerErosionIteration, 1, 500);
+	ImGui::End();
 	// Time Info
 	ImGui::Begin("Rendering Time");
 	ImGui::Text(cpuStr.str().data());
@@ -165,7 +173,7 @@ int App::Update(const float time, const float deltaTime)
 	// Stream Power erosion
 	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.StreamPowerErosion();
+		vegTerrain.StreamPowerErosion(streamPowerErosionIteration);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
 		CalculateAllMaps();
 	}
@@ -234,16 +242,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
-	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
-	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
-	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
-	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
-	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
-	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+	CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());

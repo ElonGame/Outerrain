@@ -115,16 +115,19 @@ float Terrain2D::NormalizedHeight(const Vector2& p) const
 }
 
 /* Erosion */
-void Terrain2D::StreamPowerErosion()
+void Terrain2D::StreamPowerErosion(int iteration)
 {
 	ScalarField2D streamPower = StreamPowerField();
-	float K = 2.0f;
-	for (int i = 0; i < ny; i++)
+	float a = 2.0f;
+	for (int k = 0; k < iteration; k++)
 	{
-		for (int j = 0; j < nx; j++)
+		for (int i = 0; i < ny; i++)
 		{
-			float newHeight = heightField.Get(i, j) - (streamPower.Get(i, j) * K);
-			heightField.Set(i, j, newHeight);
+			for (int j = 0; j < nx; j++)
+			{
+				float newHeight = heightField.Get(i, j) - (streamPower.Get(i, j) * a);
+				heightField.Set(i, j, newHeight);
+			}
 		}
 	}
 }

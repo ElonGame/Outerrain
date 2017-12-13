@@ -42,7 +42,7 @@ public:
 	std::vector<Vector3> GetAllVertices() const;
 
 	/* Erosion */
-	void StreamPowerErosion();
+	void StreamPowerErosion(int iteration);
 
 	/* Useful fields */
 	void ComputeNormalField();
