@@ -81,8 +81,8 @@ public:
 		Vector2 q = p - bottomLeft;
 		Vector2 d = topRight - bottomLeft;
 
-		float texelX = 1.0f / ((float)nx - 1);
-		float texelY = 1.0f / ((float)ny - 1);
+		float texelX = 1.0f / (static_cast<float>(nx - 1));
+		float texelY = 1.0f / (static_cast<float>(ny - 1));
 
 		float u = q[0] / d[0];
 		float v = q[1] / d[1];
@@ -183,11 +183,11 @@ public:
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				float u = j / ((float)nx - 1);
-				float v = i / ((float)ny - 1);
+				float u = j / (static_cast<float>(nx - 1));
+				float v = i / (static_cast<float>(ny - 1));
 
-				int anchorX = (int)(u * (heightmap.Width() - 1));
-				int anchorY = (int)(v * (heightmap.Height() - 1));
+				int anchorX = static_cast<int>((u * (heightmap.Width() - 1)));
+				int anchorY = static_cast<int>((v * (heightmap.Height() - 1)));
 				if (anchorX == heightmap.Width() - 1)
 					anchorX--;
 				if (anchorY == heightmap.Height() - 1)
@@ -216,7 +216,7 @@ public:
 	Vector2 Gradient(int i, int j) const
 	{
 		Vector2 ret;
-		float d = (float)nx - 1;
+		float d = static_cast<float>(nx - 1);
 
 		// X Gradient
 		if (i == 0)

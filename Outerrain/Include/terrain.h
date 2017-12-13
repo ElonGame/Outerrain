@@ -29,7 +29,7 @@ public:
 
 	void InitFromNoise(int, int);
 	void InitFromFile(const char*, int, int);
-	int Distribute(Point p, Point* neighbours, float* height, float* slope) const;
+	int Distribute(Point p, std::array<Point, 8>& neighbours, std::array<float, 8>& height, std::array<float, 8>& slope) const;
 	ScalarField2D Illumination() const;
 
 	Vector3 Normal(int, int) const;
