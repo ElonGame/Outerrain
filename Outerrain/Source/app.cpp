@@ -36,6 +36,8 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 	window = CreateWindow(width, height);
 	glContext = create_context(window, major, minor);
 	currentItem = 0;
+	windowWidth = static_cast<float>(width);
+	windowHeight = static_cast<float>(height);;
 }
 
 int App::Init()
@@ -134,12 +136,14 @@ int App::Update(const float time, const float deltaTime)
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
+	float mxF = static_cast<float>(mx);
+	float myF = static_cast<float>(my);
 	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
-		orbiter.Rotation(static_cast<float>(mx), static_cast<float>(my));
+		orbiter.Rotation(mxF, myF);
 	if (mb & SDL_BUTTON(3))
-		orbiter.Move(static_cast<float>(my));
+		orbiter.Move(myF);
 	if (mb & SDL_BUTTON(2))
-		orbiter.Translation(static_cast<float>(mx) / static_cast<float>(WindowWidth()), static_cast<float>(my) / static_cast<float>(WindowHeight()));
+		orbiter.Translation(mxF / windowWidth, myF / windowHeight);
 
 	// Keyboard
 	if (key_state(SDLK_PAGEUP))
@@ -147,13 +151,13 @@ int App::Update(const float time, const float deltaTime)
 	if (key_state(SDLK_PAGEDOWN))
 		orbiter.Move(-1.0f);
 	if (key_state(SDLK_UP))
-		orbiter.Translation(0.0f, 10.0f / static_cast<float>(WindowHeight()));
+		orbiter.Translation(0.0f, 10.0f / windowHeight);
 	if (key_state(SDLK_DOWN))
-		orbiter.Translation(0.0f, -10.0f / static_cast<float>(WindowHeight()));
+		orbiter.Translation(0.0f, -10.0f / windowHeight);
 	if (key_state(SDLK_LEFT))
-		orbiter.Translation(10.0f / static_cast<float>(WindowWidth()), 0.0f);
+		orbiter.Translation(10.0f / windowWidth, 0.0f);
 	if (key_state(SDLK_RIGHT))
-		orbiter.Translation(-10.0f / static_cast<float>(WindowWidth()), 0.0f);
+		orbiter.Translation(-10.0f / windowWidth, 0.0f);
 
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)

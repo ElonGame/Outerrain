@@ -11,11 +11,11 @@
 #include "gameobject.h"
 
 
-
-static bool compareHeight(Vector3 u, Vector3 v)
+static bool compareHeight(Point u, Point v)
 {
 	return (u.y > v.y);
 }
+
 
 /* Terrain2D */
 Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
@@ -27,13 +27,15 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
-	float diff = static_cast<float>(whiteAltitude) - static_cast<float>(blackAltitude);
+	float whiteFloat = static_cast<float>(whiteAltitude);
+	float blackFloat = static_cast<float>(blackAltitude);
+	float diff = whiteFloat - blackFloat;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			//float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
-			float v = static_cast<float>(blackAltitude) + static_cast<float>(Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, static_cast<double>(i), static_cast<double>(j)) * diff);
+			float v = blackFloat + static_cast<float>(Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, static_cast<double>(i), static_cast<double>(j)) * diff);
 			heightField.Set(i, j, v);
 		}
 	}
@@ -150,7 +152,7 @@ int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<
 				else
 					currentSlope = currentHeight / sqrt(2.0f);
 
-				neighbours[counter] = Point(i + k, j + l);
+				neighbours[counter] = Point(i + k, j + l, 0.0f);
 				height[counter] = currentHeight;
 				slope[counter] = currentSlope;
 				counter++;
@@ -162,31 +164,25 @@ int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<
 
 ScalarField2D Terrain2D::DrainageField() const
 {
-	std::deque<Vector3> points;
+	std::deque<Point> points;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
-			// Todo : refactor Vector3 in points.
-			// Don't use Vector3 to store integers. Float/Int problem.
-			// Warning conversion from int to float.
-			points.push_back(Vector3(i, heightField.Get(i, j), j));
-		}
+			points.push_back(Point(i, j, heightField.Get(i, j)));
 	}
 	std::sort(points.begin(), points.end(), compareHeight);
 
 	ScalarField2D drainage = ScalarField2D(nx, ny, bottomLeft, topRight, 1.0);
 	while (!points.empty())
 	{
-		Vector3 p = points.front();
+		Point p = points.front();
 		points.pop_front();
 
-		// @Todo : baaaaaaaah
-		int i = p.x, j = p.z;
+		int i = p.x, j = p.y;
 		std::array<Point, 8> neighbours;
 		std::array<float, 8> slope;
 		std::array<float, 8> height;
-		int n = Distribute(Point(i, j), neighbours, height, slope);
+		int n = Distribute(p, neighbours, height, slope);
 
 		float sum = 0.0;
 		for (int k = 0; k < n; k++)
@@ -208,9 +204,7 @@ ScalarField2D Terrain2D::DrainageSqrtField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
 			sqrtDrainageField.Set(i, j, sqrt(drainageField.Get(i, j)));
-		}
 	}
 	return sqrtDrainageField;
 }
@@ -223,9 +217,7 @@ ScalarField2D Terrain2D::WetnessField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
 			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + slopeField.Get(i, j))));
-		}
 	}
 	return wetnessField;
 }
@@ -238,14 +230,12 @@ ScalarField2D Terrain2D::StreamPowerField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
-		}
 	}
 	return streamPowerField;
 }
 
-// @TODO param�trer epsilon
+// @TODO parametrer epsilon
 ScalarField2D Terrain2D::Illumination() const
 {
 	float epsilon = 0.01f;
@@ -304,9 +294,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
 			accessibilityField.Set(i, j, illuminationField.Get(i, j));
-		}
 	}
 	return accessibilityField;
 }

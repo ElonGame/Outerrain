@@ -30,6 +30,8 @@ protected:
 	void InitSceneVegetationTerrain();
 	void InitSceneLayerTerrain();
 
+	float windowWidth, windowHeight;
+
 public:
 	App(const int&, const int&, const int&, const int&);
 

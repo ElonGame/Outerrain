@@ -8,9 +8,9 @@
 struct Point
 {
 	int x, y;
-
+	float height;
 	Point() { }
-	Point(int a, int b) : x(a), y(b) { }
+	Point(int a, int b, float h) : x(a), y(b), height(h) { }
 };
 
 

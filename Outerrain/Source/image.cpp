@@ -3,9 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <SDL2/SDL_image.h>
-
 #include "image.h"
-
 
 void Image::ReadImage(const char *filename)
 {
@@ -37,18 +35,17 @@ void Image::ReadImage(const char *filename)
 
 			for (int x = 0; x < width; x++)
 			{
-				Uint8 r = pixel[format.Rshift / 8];
-				Uint8 g = pixel[format.Gshift / 8];
-				Uint8 b = pixel[format.Bshift / 8];
-				Uint8 a = pixel[format.Ashift / 8];
+				float r = static_cast<float>(pixel[format.Rshift / 8]);
+				float g = static_cast<float>(pixel[format.Gshift / 8]);
+				float b = static_cast<float>(pixel[format.Bshift / 8]);
+				float a = static_cast<float>(pixel[format.Ashift / 8]);
 
 				int index = y * width + x;
-				data[index] = Color(static_cast<float>(r) / 255.f, static_cast<float>(g) / 255.f, static_cast<float>(b) / 255.f, static_cast<float>(a) / 255.f);
+				data[index] = Color(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
 	}
-
 	else if (format.BitsPerPixel == 24)
 	{
 		int py = 0;
@@ -58,12 +55,12 @@ void Image::ReadImage(const char *filename)
 
 			for (int x = 0; x < surface->w; x++)
 			{
-				const Uint8 r = pixel[format.Rshift / 8];
-				const Uint8 g = pixel[format.Gshift / 8];
-				const Uint8 b = pixel[format.Bshift / 8];
+				float r = static_cast<float>(pixel[format.Rshift / 8]);
+				float g = static_cast<float>(pixel[format.Gshift / 8]);
+				float b = static_cast<float>(pixel[format.Bshift / 8]);
 
 				int index = y * width + x;
-				data[index] = Color(static_cast<float>(r)/ 255.f, static_cast<float>(g) / 255.f, static_cast<float>(b) / 255.f);
+				data[index] = Color(r / 255.f, g / 255.f, b / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
@@ -100,7 +97,7 @@ int Image::WriteImage(const char *filename)
 			p = p + 4;
 		}
 
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), width, height,
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void*)&flip.front(), width, height,
 		32, width * 4,
 #if 0
 		0xFF000000,
