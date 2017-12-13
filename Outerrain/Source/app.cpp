@@ -221,7 +221,7 @@ void App::InitSceneVegetationTerrain()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 128));
+	mesh->SetMaterial(Material(Color::Grey(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
@@ -251,7 +251,7 @@ void App::InitSceneLayerTerrain()
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 128));
+	mesh->SetMaterial(Material(Color::Grey(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);

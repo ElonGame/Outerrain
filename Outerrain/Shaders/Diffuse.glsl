@@ -53,7 +53,7 @@ vec3 DiffuseShading()
 
 	// Specular term (Blinn Phong)
 	float specular = 0;
-	if(diffuse > 0)
+	if(diffuse > 0 && shininess > 0)
 	{
 		vec3 viewDir = normalize(camPos - worldPos);
 		vec3 halfDir = normalize(-lightDir + viewDir);
