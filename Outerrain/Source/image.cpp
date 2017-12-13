@@ -43,7 +43,7 @@ void Image::ReadImage(const char *filename)
 				Uint8 a = pixel[format.Ashift / 8];
 
 				int index = y * width + x;
-				data[index] = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f, (float)a / 255.f);
+				data[index] = Color(static_cast<float>(r) / 255.f, static_cast<float>(g) / 255.f, static_cast<float>(b) / 255.f, static_cast<float>(a) / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}
@@ -63,7 +63,7 @@ void Image::ReadImage(const char *filename)
 				const Uint8 b = pixel[format.Bshift / 8];
 
 				int index = y * width + x;
-				data[index] = Color((float)r / 255.f, (float)g / 255.f, (float)b / 255.f);
+				data[index] = Color(static_cast<float>(r)/ 255.f, static_cast<float>(g) / 255.f, static_cast<float>(b) / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
 		}

@@ -2,6 +2,7 @@
 #include <math.h>
 #include <deque>
 #include <queue>
+#include <array>
 #include "terrain.h"
 #include "vec.h"
 #include "perlin.h"
@@ -26,13 +27,13 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
-	float diff = (float)whiteAltitude - (float)blackAltitude;
+	float diff = static_cast<float>(whiteAltitude) - static_cast<float>(blackAltitude);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			//float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
-			float v = (float)blackAltitude + (float)Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, (double)i, (double)j) * diff;
+			float v = static_cast<float>(blackAltitude) + static_cast<float>(Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, static_cast<double>(i), static_cast<double>(j)) * diff);
 			heightField.Set(i, j, v);
 		}
 	}
@@ -124,7 +125,7 @@ ScalarField2D Terrain2D::SlopeField() const
 }
 
 // @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
-int Terrain2D::Distribute(Point p, Point* neighbours, float* height, float* slope) const
+int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<float, 8>& height, std::array<float, 8>& slope) const
 {
 	int i = p.x, j = p.y;
 
@@ -182,9 +183,9 @@ ScalarField2D Terrain2D::DrainageField() const
 
 		// @Todo : baaaaaaaah
 		int i = p.x, j = p.z;
-		Point neighbours[8];
-		float slope[8];
-		float height[8];
+		std::array<Point, 8> neighbours;
+		std::array<float, 8> slope;
+		std::array<float, 8> height;
 		int n = Distribute(Point(i, j), neighbours, height, slope);
 
 		float sum = 0.0;
@@ -267,7 +268,7 @@ ScalarField2D Terrain2D::Illumination() const
 				float step = 0.0f;
 				Vector3 ray = p;
 				float angleH = (rand() % 360) * 0.0174533f;
-				float angleV = rand() / (float)RAND_MAX;
+				float angleV = rand() / static_cast<float>(RAND_MAX);
 				Vector3 direction = Vector3(cos(angleH), 0.0f, sin(angleH));
 				direction = Slerp(direction, Vector3(0.0f, 1.0f, 0.0f), angleV);
 				for (int l = 0; l < 32; l++)
@@ -289,7 +290,7 @@ ScalarField2D Terrain2D::Illumination() const
 					step = deltaY / maxSlope;
 				}
 			}
-			float illumination = 1.0f - (intersect / (float)numbers);
+			float illumination = 1.0f - (intersect / static_cast<float>(numbers));
 			illuminationField.Set(i, j, illumination);
 		}
 	}
@@ -468,8 +469,8 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int maxTreeCount = 1000;
 	int treeCount = 0;
 
-	int tileCountX = (int)((topRight.x - bottomLeft.x) / tileSize + 1);
-	int tileCountY = (int)((topRight.y - bottomLeft.y) / tileSize + 1);
+	int tileCountX = static_cast<int>(((topRight.x - bottomLeft.x) / tileSize + 1));
+	int tileCountY = static_cast<int>(((topRight.y - bottomLeft.y) / tileSize + 1));
 
 	std::vector<GameObject*> vegObjects;
 	for (int i = 0; i < tileCountY; i++)
@@ -479,13 +480,13 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 			for (int x = 0; x < points.size(); x++)
 			{
 				Vector2 point = bottomLeft
-					+ Vector2(tileSize, 0) * (float)j
-					+ Vector2(0, tileSize) * (float)i
+					+ Vector2(tileSize, 0) * static_cast<float>(j)
+					+ Vector2(0, tileSize) * static_cast<float>(i)
 					+ points[x];
 				if (vegetationDensityField.IsInsideField(point) == true)
 				{
 					float density = vegetationDensityField.GetValueBilinear(point);
-					float p = rand() / (float)RAND_MAX;
+					float p = rand() / static_cast<float>(RAND_MAX);
 					if (p < density)
 					{
 						GameObject* vegObj = veg.GetGameObject();
@@ -508,8 +509,8 @@ std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, f
 	std::vector<Vector2> res;
 	for (int i = 0; i < maxTries; i++)
 	{
-		float randX = rand() / (float)RAND_MAX;
-		float randY = rand() / (float)RAND_MAX;
+		float randX = rand() / static_cast<float>(RAND_MAX);
+		float randY = rand() / static_cast<float>(RAND_MAX);
 		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
 
 		bool canAdd = true;

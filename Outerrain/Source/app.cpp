@@ -91,8 +91,8 @@ int App::Render()
 	GLint64 gpu_time = 0;
 	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
 	std::stringstream cpuStr, gpuStr;
-	cpuStr << "CPU " << (int)(cpu_time / 1000000) << "ms" << (int)((cpu_time / 1000) % 1000) << "us";
-	gpuStr << "GPU " << (int)(gpu_time / 1000000) << "ms" << (int)((gpu_time / 1000) % 1000) << "us";
+	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
+	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 
 	// ImGui
 	// Help
@@ -135,11 +135,11 @@ int App::Update(const float time, const float deltaTime)
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
-		orbiter.Rotation((float)mx, (float)my);
+		orbiter.Rotation(static_cast<float>(mx), static_cast<float>(my));
 	if (mb & SDL_BUTTON(3))
-		orbiter.Move((float)my);
+		orbiter.Move(static_cast<float>(my));
 	if (mb & SDL_BUTTON(2))
-		orbiter.Translation((float)mx / (float)WindowWidth(), (float)my / (float)WindowHeight());
+		orbiter.Translation(static_cast<float>(mx) / static_cast<float>(WindowWidth()), static_cast<float>(my) / static_cast<float>(WindowHeight()));
 
 	// Keyboard
 	if (key_state(SDLK_PAGEUP))
@@ -147,13 +147,13 @@ int App::Update(const float time, const float deltaTime)
 	if (key_state(SDLK_PAGEDOWN))
 		orbiter.Move(-1.0f);
 	if (key_state(SDLK_UP))
-		orbiter.Translation(0.0f, 10.0f / (float)WindowHeight());
+		orbiter.Translation(0.0f, 10.0f / static_cast<float>(WindowHeight()));
 	if (key_state(SDLK_DOWN))
-		orbiter.Translation(0.0f, -10.0f / (float)WindowHeight());
+		orbiter.Translation(0.0f, -10.0f / static_cast<float>(WindowHeight()));
 	if (key_state(SDLK_LEFT))
-		orbiter.Translation(10.0f / (float)WindowWidth(), 0.0f);
+		orbiter.Translation(10.0f / static_cast<float>(WindowWidth()), 0.0f);
 	if (key_state(SDLK_RIGHT))
-		orbiter.Translation(-10.0f / (float)WindowWidth(), 0.0f);
+		orbiter.Translation(-10.0f / static_cast<float>(WindowWidth()), 0.0f);
 
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
@@ -198,7 +198,7 @@ void App::Run()
 void App::UpdateObjects(const float time, const float delta)
 {
 	newTime = SDL_GetPerformanceCounter();
-	float delta2 = (float)((newTime - lastTime) * 1000.0f) / SDL_GetPerformanceFrequency();
+	float delta2 = static_cast<float>(((newTime - lastTime) * 1000.0f)) / SDL_GetPerformanceFrequency();
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (int i = 0; i < objs.size(); i++)
 	{

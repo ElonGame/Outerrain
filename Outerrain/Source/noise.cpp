@@ -279,7 +279,7 @@ double Noise::ValueNoise2D(int x, int y, int s)
 	int n = (xNoise * x + yNoise * y + seedNoise * s) & 0x7fffffff;
 	n = (n >> 13) ^ n;
 	double noise = (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
-	return 1.0 - ((double)noise / 1073741824.0);
+	return 1.0 - (static_cast<float>(noise) / 1073741824.0);
 }
 
 double Noise::GradientCoherentNoise2D(double x, double y, int seed)

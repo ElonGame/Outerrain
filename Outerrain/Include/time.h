@@ -16,11 +16,11 @@ public:
 			now = last_time + 1;
 		last_delta = now - last_time;
 		last_time = now;
-		return (float)last_time;
+		return static_cast<float>(last_time);
 	}
 	
 	static float DeltaTime()
 	{
-		return (float)last_delta;
+		return static_cast<float>(last_delta);
 	}
 };
