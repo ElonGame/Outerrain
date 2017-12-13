@@ -16,7 +16,8 @@ static GLuint accessibilityTexture;
 static GLuint m_time_query;
 
 /* ImGui Erosion */
-static int streamPowerErosionIteration = 1.0;
+static int streamPowerErosionIteration = 1;
+static int thermalErosionIteration = 1;
 
 // In Progress :
 //  -Thermal Erosion (Nathan & Axel)							==> Debug
@@ -124,13 +125,12 @@ int App::Render()
 	ImGui::Begin("Accessibility Image");
 	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(150, 150));
 	ImGui::End();
-	// Erosion
 
-	// Shading
+	// Erosion
 	ImGui::Begin("Erosion");
 	ImGui::Text("Stream Power Erosion");
-	ImGui::SliderInt("Iterations", &streamPowerErosionIteration, 1, 500);
-	if (ImGui::Button("Compute"))
+	ImGui::SliderInt("Iterations 1", &streamPowerErosionIteration, 1, 100);
+	if (ImGui::Button("Compute") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
 		vegTerrain.StreamPowerErosion(streamPowerErosionIteration);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
@@ -138,9 +138,10 @@ int App::Render()
 	}
 	ImGui::Text("\n");
 	ImGui::Text("Thermal Erosion");
-	if (ImGui::Button("Compute"))
+	ImGui::SliderInt("Iterations 2", &thermalErosionIteration, 1, 100);
+	if (ImGui::Button("Compute") && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
 	{
-		layerTerrain2D.ThermalErosion(100);
+		layerTerrain2D.ThermalErosion(thermalErosionIteration);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
 	}
 	ImGui::End();
