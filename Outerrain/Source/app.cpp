@@ -7,6 +7,7 @@
 #include <chrono>
 #include <sstream>
 
+static GLuint slopeTexture;
 static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
@@ -105,17 +106,20 @@ int App::Render()
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 	// Debug Image 
+	ImGui::Begin("Slope Map");
+	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(150, 150));
+	ImGui::End();
 	ImGui::Begin("Drainage Map");
-	ImGui::Image((void*)(GLuint)draignageTexture, ImVec2(150, 150));
+	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Wetness Map");
-	ImGui::Image((void*)(GLuint)wetnessTexture, ImVec2(150, 150));
+	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Stream Power Map");
-	ImGui::Image((void*)(GLuint)streampowerTexture, ImVec2(150, 150));
+	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(150, 150));
 	ImGui::End();
 	ImGui::Begin("Accessibility Image");
-	ImGui::Image((void*)(GLuint)accessibilityTexture, ImVec2(150, 150));
+	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(150, 150));
 	ImGui::End();
 	// Time Info
 	ImGui::Begin("Rendering Time");
@@ -222,10 +226,12 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
+	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
 	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
 	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
 	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
