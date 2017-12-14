@@ -17,13 +17,13 @@ static GLuint m_time_query;
 
 /* ImGui Erosion */
 static int streamPowerErosionIteration = 1;
+static float streamPowerErosionAmplitude = 2.0f;
 static int thermalErosionIteration = 1;
 
 // In Progress :
-//  -Thermal Erosion (Nathan & Axel)							==> Debug
-//  -StreamPower Erosion (Axel)									==> Todo
+//  -Bug fix thermal Erosion (Nathan & Axel)					==> Debug
 //  -InitFromNoise() (Nathan)									==> Debug
-//  -Vegetation bug fix placement + plusieurs espèces (Thomas)	==> Todo/Debug
+//  -Vegetation plusieurs espèces (Thomas)						==> Todo/Debug
 
 // To do :
 //  -Routes : regarder algo article galin/peytavie et adapter
@@ -59,8 +59,9 @@ int App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	InitSceneVegetationTerrain();
+	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
+	InitSceneNoiseTerrain();
 
 	return 1;
 }
@@ -132,7 +133,7 @@ int App::Render()
 	ImGui::SliderInt("Iterations 1", &streamPowerErosionIteration, 1, 100);
 	if (ImGui::Button("Compute") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.StreamPowerErosion(streamPowerErosionIteration);
+		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, streamPowerErosionAmplitude);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
 		CalculateAllMaps();
 	}
@@ -185,13 +186,13 @@ int App::Update(const float time, const float deltaTime)
 	// Thermal Erosion
 	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
 	{
-		layerTerrain2D.ThermalErosion(100);
+		layerTerrain2D.ThermalErosion(thermalErosionIteration);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
 	}
 	// Stream Power erosion
 	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.StreamPowerErosion(streamPowerErosionIteration);
+		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, 2.0f);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
 		CalculateAllMaps();
 	}
@@ -246,6 +247,27 @@ void App::UpdateObjects(const float time, const float delta)
 
 
 /* Init Scenes */
+void App::InitSceneNoiseTerrain()
+{
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain.InitFromNoise(0, 150);
+
+	Mesh* mesh = vegTerrain.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 0));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	CalculateAllMaps();
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(WindowWidth());
+	orbiter.SetFrameHeight(WindowHeight());
+}
+
 void App::InitSceneVegetationTerrain()
 {
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));

@@ -27,6 +27,7 @@ protected:
 	Uint64 lastTime;
 	Uint64 newTime;
 
+	void InitSceneNoiseTerrain();
 	void InitSceneVegetationTerrain();
 	void InitSceneLayerTerrain();
 

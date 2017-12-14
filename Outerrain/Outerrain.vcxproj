@@ -31,7 +31,6 @@
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\noise.h" />
-    <ClInclude Include="Include\perlin.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\texture.h" />
     <ClInclude Include="Include\time.h" />
@@ -54,7 +53,6 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\noise.cpp" />
-    <ClCompile Include="Source\perlin.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\time.cpp" />

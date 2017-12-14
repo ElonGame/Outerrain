@@ -19,6 +19,10 @@ public:
 	Vector2(float n) : x(n), y(n) {}
 	Vector2(float x, float y) : x(x), y(y) {}
 
+	Vector2 operator*(const Vector2& v) const
+	{
+		return Vector2(x * v.x, y * v.y);
+	}
 	Vector2 operator*(const float& k) const
 	{
 		return Vector2(x * k, y * k);
@@ -39,7 +43,15 @@ public:
 	{
 		return Vector2(x + u.x, y + u.y);
 	}
-	float operator[](int i)
+	Vector2 operator+(const float& k) const
+	{
+		return Vector2(x + k, y + k);
+	}
+	Vector2 operator-(const float& k) const
+	{
+		return Vector2(x - k, y - k);
+	}
+	float operator[](int i) const
 	{
 		if (i == 0)
 			return x;
@@ -105,7 +117,11 @@ public:
 	{
 		return Vector3(x + u.x, y + u.y, z + u.z);
 	}
-	float operator[](int i)
+	Vector3 operator+(const float& k) const
+	{
+		return Vector3(x + k, y + k, z + k);
+	}
+	float operator[](int i) const
 	{
 		if (i == 0)
 			return x;

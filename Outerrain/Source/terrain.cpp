@@ -13,7 +13,7 @@
 
 static bool compareHeight(Point u, Point v)
 {
-	return (u.y > v.y);
+	return (u.height > v.height);
 }
 
 
@@ -30,12 +30,15 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 	float whiteFloat = static_cast<float>(whiteAltitude);
 	float blackFloat = static_cast<float>(blackAltitude);
 	float diff = whiteFloat - blackFloat;
+	PerlinNoise noise;
+	float multiplier = 307.06571f;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			//float v = blackAltitude + Noise::ValueNoise2D(i, j, 14589) * (whiteAltitude - blackAltitude);
-			float v = blackFloat + static_cast<float>(Perlin::Perlin2DAt(1.0, 2.0, 0.5, 6, static_cast<double>(i), static_cast<double>(j)) * diff);
+			float iF = ((float)(i + 1)) * multiplier;
+			float jF = ((float)(j + 1)) * multiplier;
+			float v = blackFloat + noise.Fbm(Vector2(iF, jF), (float)diff, 0.00001f, 8);
 			heightField.Set(i, j, v);
 		}
 	}
@@ -115,17 +118,16 @@ float Terrain2D::NormalizedHeight(const Vector2& p) const
 }
 
 /* Erosion */
-void Terrain2D::StreamPowerErosion(int iteration)
+void Terrain2D::StreamPowerErosion(int iteration, float maxAmplitude)
 {
 	ScalarField2D streamPower = StreamPowerField();
-	float a = 2.0f;
 	for (int k = 0; k < iteration; k++)
 	{
 		for (int i = 0; i < ny; i++)
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				float newHeight = heightField.Get(i, j) - (streamPower.Get(i, j) * a);
+				float newHeight = heightField.Get(i, j) - (streamPower.Get(i, j) * maxAmplitude);
 				heightField.Set(i, j, newHeight);
 			}
 		}
@@ -235,7 +237,7 @@ ScalarField2D Terrain2D::WetnessField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1 + slopeField.Get(i, j))));
+			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1.0f + slopeField.Get(i, j))));
 	}
 	return wetnessField;
 }
@@ -255,11 +257,8 @@ ScalarField2D Terrain2D::StreamPowerField() const
 
 ScalarField2D Terrain2D::AccessibilityField() const
 {
-	// @TODO parametrer epsilon
 	float epsilon = 0.01f;
-	ScalarField2D slopeField = SlopeField();
-	float maxSlope = slopeField.MaxValue();
-
+	float maxSlope = SlopeField().MaxValue();
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{

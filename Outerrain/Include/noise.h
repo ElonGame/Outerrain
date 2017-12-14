@@ -1,25 +1,16 @@
 #pragma once
+#include "vec.h"
 
-class Noise
+class PerlinNoise
 {
-protected:
-	static int xNoise;
-	static int yNoise;
-	static int shiftNoise;
-	static int seedNoise;
-
-	Noise() {}
-	Noise(int, int, int, int);
-
+private:
+	int *p;
+	float *Gx;
+	float *Gy;
+	float *Gz;
 public:
-	/* Noise 2D */
-	static double ValueNoise2D(int, int, int);
-
-	static double GradientNoise2D(double, double, int, int, int);
-	static double GradientCoherentNoise2D(double, double, int seed = 0);
-
-	/* Utilities Functions */
-	static double LinearInterp(double, double, double);
-	static double MakeInt32Range(double n);
+	PerlinNoise();
+	~PerlinNoise();
+	float GetValue(const Vector2&);
+	float Fbm(const Vector2& p, float, float, int);
 };
-#pragma once
