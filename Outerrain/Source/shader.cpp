@@ -8,6 +8,7 @@
 #include <set>
 
 #include "vec.h"
+#include "color.h"
 #include "shader.h"
 #include "transform.h"
 
@@ -453,6 +454,11 @@ void Shader::UniformVec3(const char *uniform, const Vector3& a)
 void Shader::UniformVec4(const char *uniform, const Vector4& v)
 {
 	glUniform4fv(location(program, uniform), 1, (float*)&v.x);
+}
+
+void Shader::UniformColor(const char* uniform, const Color& c)
+{
+	glUniform4fv(location(program, uniform), 1, (float*)&c.r);
 }
 
 void Shader::UniformTransform(const char *uniform, const Transform& v)

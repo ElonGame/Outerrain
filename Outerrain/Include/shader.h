@@ -2,6 +2,7 @@
 #include <string>
 #include <GL\glew.h>
 
+struct Color;
 struct Transform;
 struct Vector2;
 struct Vector3;
@@ -24,6 +25,7 @@ public:
 	void UniformUInt(const char *uniform, const unsigned int& v);
 	void UniformInt(const char *uniform, const int& v);
 	void UniformFloat(const char *uniform, const float& v);
+	void UniformColor(const char* uniform, const Color& c);
 
 	void UniformVec2(const char *uniform, const Vector2& v);
 	void UniformVec3(const char *uniform, const Vector3& v);

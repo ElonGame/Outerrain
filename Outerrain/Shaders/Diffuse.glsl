@@ -17,8 +17,8 @@ void main( )
 {
 	gl_Position = mvpMatrix * vec4(position, 1);
 	vertex_texcoord = texcoord;
-	worldPos = (trsMatrix * vec4(position, 1)).xyz;
-	worldNormal = (trsMatrix * vec4(normal, 0)).xyz;
+	worldpos = (trsmatrix * vec4(position, 1)).xyz;
+	worldnormal = (trsmatrix * vec4(normal, 0)).xyz;
 }
 #endif
 
@@ -26,7 +26,7 @@ void main( )
 #ifdef FRAGMENT_SHADER
 uniform int renderMode;
 uniform vec3 camPos;
-uniform vec3 diffuseColor;
+uniform vec4 diffuseColor;
 uniform float shininess;
 
 const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
@@ -63,17 +63,17 @@ vec3 DiffuseShading()
 
 	// Final color
 	return ambientLight 
-		+ diffuse * diffuseColor * (lightColor * lightStrength) 
-		+ specular * (lightColor * lightStrength);
+			+ diffuse * diffuseColor.xyz * (lightColor * lightStrength) 
+			+ specular * (lightColor * lightStrength);
 }
 
 void main()
 {
-	if (renderMode == 1) // Normal
+	if (renderMode == 1) 	  // Normal
 		fragment_color = vec4(NormalShading(), 1.0);
 	else if (renderMode == 2) // WireFrame
 		fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
-	else // Diffuse
+	else 					  // Diffuse
 		fragment_color = vec4(DiffuseShading(), 1.0);
 }
 #endif
