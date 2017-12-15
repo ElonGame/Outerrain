@@ -2,7 +2,6 @@
 #include <math.h>
 #include <deque>
 #include <queue>
-#include <array>
 #include "terrain.h"
 #include "vec.h"
 #include "noise.h"
@@ -13,7 +12,7 @@
 
 static bool compareHeight(Point u, Point v)
 {
-	return (u.height > v.height);
+	return (u.value > v.value);
 }
 
 
@@ -356,63 +355,80 @@ float LayerTerrain2D::SandValue(int i, int j) const
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
-	float K = 0.1f;		 // Stress factor
-	float Alpha = 42.0f; // Threshold Angle for stability (40 +- 5)
-	float tanAlpha = tan(Alpha);
+	float stressFactor = 0.1f;		 // Stress factor
+	float angle = 22.0f; // Threshold Angle for stability (40 +- 5)
+	float thresholdAngle = tan(angle);
 
+	// Instability criteria
+	// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
+	float delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
 	for (int a = 0; a < stepCount; a++)
 	{
-		std::queue<int> instables;
-		std::queue<float> matter; // quantite de matiere qui est transportee
-		for (int i = 0; i < bedrock.SizeX(); i++)
+		std::queue<Point> instables;
+		for (int i = 0; i < bedrock.SizeY(); i++)
 		{
-			for (int j = 0; j < bedrock.SizeY(); j++)
+			for (int j = 0; j < bedrock.SizeX(); j++)
 			{
-				// On calcule le delta H 
-				// Pour ca on fait le max des delta H des voisins de I
-				// float dH = bedrock.At(i,j) - bedrock.At(i, j + 1);
-				float dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
-				if (j < bedrock.SizeY() - 1)
-					dH1 = bedrock.Get(i, j) - bedrock.Get(i, j + 1);
-				if (i < bedrock.SizeX() - 1)
-					dH2 = bedrock.Get(i, j) - bedrock.Get(i + 1, j);
-				if (i > 0)
-					dH3 = bedrock.Get(i, j) - bedrock.Get(i - 1, j);
-				if (j > 0)
-					dH4 = bedrock.Get(i, j) - bedrock.Get(i, j - 1);
-				float dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
+				float deltaH = 0.0f;
+				float terrainHeight = bedrock.Get(i, j);
+				for (int k = -1; k <= 1; k++)
+				{
+					for (int l = -1; l <= 1; l++)
+					{
+						if (k == 0 || l == 0 || bedrock.InsideVertex(i + k, j + l) == false)
+							continue;
 
-				// If dH < 0, it means that no neighbours are lower than us
-				// So we discard the point
-				if (dH <= 0.0)
+						float neighHeight = bedrock.Get(i + k, j + l);
+						deltaH = std::max(deltaH, terrainHeight - neighHeight);
+					}
+				}
+
+				if (deltaH <= 0.0)
 					continue;
 
-				// Instability criteria
-				// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
-				float delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
-				if (abs(dH) / delta > tanAlpha)
+				if (abs(deltaH) / delta > thresholdAngle)
 				{
-					// AddToQueue INSTABLE
-					instables.push(bedrock.Index(i, j));
-
-					// Pour calculer stress, c'est a dire quantite de matiere a eroder :
-					// Stress = k * dH
-					matter.push(abs(dH * K));
+					float matter = abs(deltaH * stressFactor);
+					Point p = Point(i, j, matter);
+					instables.push(p);
 				}
 			}
 		}
+
 		while (instables.empty() == false)
 		{
-			int index = instables.front();
+			Point p = instables.front();
 			instables.pop();
-			float eps = matter.front();
-			matter.pop();
 
-			int indexLVoisin = bedrock.LowestNeighbour(index);
-			bedrock.Set(index, bedrock.Get(index) - eps);
-			sand.Set(indexLVoisin, sand.Get(indexLVoisin) + eps);
+			int i = p.x, j = p.y;
+			float matter = p.value;
+			Point dH = Point(0, 0, 0.0f);
+			float terrainHeight = bedrock.Get(p.x, p.y);
+			for (int k = -1; k <= 1; k++)
+			{
+				for (int l = -1; l <= 1; l++)
+				{
+					if (k == 0 || l == 0 || bedrock.InsideVertex(i + k, j + l) == false)
+						continue;
 
-			//TODO : Push(Voisin) ?
+					float neighHeight = bedrock.Get(i + k, j + l);
+					if (dH.value < terrainHeight - neighHeight)
+					{
+						dH = Point(i + k, j + l, terrainHeight - neighHeight);
+					}
+				}
+			}
+			bedrock.Set(i, j, bedrock.Get(i, j) - matter);
+			sand.Set(dH.x, dH.y, sand.Get(dH.x, dH.y) + matter);
+			
+			/*
+			if (abs(dH.value) / delta > thresholdAngle)
+			{
+				float m = abs(dH.value * stressFactor);
+				Point a = Point(dH.x, dH.y, m);
+				instables.push(a);
+			}
+			*/
 		}
 	}
 }
@@ -575,7 +591,7 @@ std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributio
 					break;
 			}
 		}
-		
+
 		// If all tests have passed, add points at 4 possible rotations
 		if (canAdd == true)
 		{

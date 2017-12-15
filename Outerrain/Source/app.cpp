@@ -63,7 +63,7 @@ int App::Init()
 
 	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	InitSceneNoiseTerrain();
+	InitSceneLayerTerrain();
 
 	return 1;
 }
@@ -310,9 +310,7 @@ void App::InitSceneLayerTerrain()
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
-
-	CalculateAllMaps();
-
+	
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());

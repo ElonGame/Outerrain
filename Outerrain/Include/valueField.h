@@ -1,9 +1,19 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <algorithm>
 #include "vec.h"
 #include "image.h"
+
+/* Utiity struct */
+typedef struct Point
+{
+	int x, y;
+	float value;
+	Point() { }
+	Point(int a, int b, float h) : x(a), y(b), value(h) { }
+} Point;
 
 template<typename T>
 class ValueField
@@ -100,7 +110,7 @@ public:
 		T v2 = Get(i + 1, j);
 		T v3 = Get(i + 1, j + 1);
 		T v4 = Get(i, j + 1);
-		
+
 		return (1 - localU) * (1 - localV) * v1
 			+ (1 - localU) * localV * v2
 			+ localU * (1 - localV) * v4
@@ -235,34 +245,6 @@ public:
 			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * d);
 
 		return ret;
-	}
-
-	int LowestNeighbour(int index) const
-	{
-		int i, j;
-		Index2D(index, i, j);
-		float v = Get(i, j);
-
-		float dH1 = 0.0, dH2 = 0.0, dH3 = 0.0, dH4 = 0.0;
-		if (j < ny - 1)
-			dH1 = v - Get(i, j + 1);
-		if (i < nx - 1)
-			dH2 = v - Get(i + 1, j);
-		if (i > 0)
-			dH3 = v - Get(i - 1, j);
-		if (j > 0)
-			dH4 = v - Get(i, j - 1);
-		float dH = std::max(dH1, std::max(dH2, std::max(dH3, dH4)));
-
-		if (dH == dH1)
-			return Index(i, j + 1);
-		if (dH == dH2)
-			return Index(i + 1, j);
-		if (dH == dH3)
-			return Index(i - 1, j);
-		if (dH == dH4)
-			return Index(i, j - 1);
-		return -1;
 	}
 
 	void Fill(float v)

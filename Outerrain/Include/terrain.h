@@ -4,16 +4,6 @@
 #include "mesh.h"
 #include "valueField.h"
 
-/* Utiity struct */
-struct Point
-{
-	int x, y;
-	float height;
-	Point() { }
-	Point(int a, int b, float h) : x(a), y(b), height(h) { }
-};
-
-
 /* Terrain2D */
 class Terrain2D
 {
