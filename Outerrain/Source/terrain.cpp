@@ -355,9 +355,8 @@ float LayerTerrain2D::SandValue(int i, int j) const
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
-	float stressFactor = 0.1f;		 // Stress factor ==> Not used at the moment
-	float thresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
-	float epsilonMaterial = 0.05f;   // Material displacement constant
+	float epsilonDisplacement = 0.05f;
+	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
 
 	float cellDistX = (b[0] - a[0]) / (nx - 1);
 	for (int a = 0; a < stepCount; a++)
@@ -380,16 +379,16 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 					}
 				}
 
-				if (maxZDiff > thresholdAngle)
+				if (maxZDiff / cellDistX > tanThresholdAngle)
 				{
-					float matter = epsilonMaterial; //abs(maxSlope * stressFactor);
+					float matter = epsilonDisplacement;
 					Point p = Point(i, j, matter);
 					instables.push(p);
 				}
 			}
 		}
 
-		// Move matters between points and add new point to stabilize
+		// Move matters between points and add new points to stabilize
 		while (instables.empty() == false)
 		{
 			Point p = instables.front();
@@ -415,14 +414,18 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 				}
 			}
 
+			// Remove from base point
 			bedrock.Set(i, j, bedrock.Get(i, j) - matter);
 			sand.Set(i, j, sand.Get(i, j) - matter);
 			
+			// Add to lowest neighbour
 			bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
 			sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
-			if (maxZDiff > thresholdAngle)
-			{
-				float m = epsilonMaterial; //abs(maxSlope * stressFactor);
+
+			// Add neighbour to stabilize if angle > tanThresholdAngle
+			if (maxZDiff / cellDistX > tanThresholdAngle)
+			{	
+				float m = epsilonDisplacement;
 				Point p = Point(neighbour.x, neighbour.y, matter);
 				instables.push(p);
 			}
