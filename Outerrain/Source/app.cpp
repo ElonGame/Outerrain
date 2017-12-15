@@ -1,4 +1,5 @@
 #include "app.h"
+#include "gameobject.h"
 #include "GL/glew.h"
 #include "time.h"
 #include "texture.h"

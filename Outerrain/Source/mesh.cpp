@@ -318,13 +318,10 @@ void Mesh::Draw()
 		UpdateBuffers(true, true, true);
 
 	glBindVertexArray(VAO);
-	glUseProgram(shader.GetProgram());
-
 	if (indices.size() > 0)
 		glDrawElements(primitiveDrawn, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
 	else
 		glDrawArrays(primitiveDrawn, 0, (GLsizei)vertices.size());
-	glBindVertexArray(0);
 }
 
 void Mesh::Draw(const CameraOrbiter& orbiter)
@@ -333,15 +330,15 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	assert(m_program != 0);
 	glUseProgram(m_program);
 
-	Transform trs = this->gameObject->GetObjectToWorldMatrix();
-	Transform mvp = orbiter.Projection((float)orbiter.FrameWidth(), (float)orbiter.FrameHeight(), 45.0f) * (orbiter.View() * trs);
+	Transform trs = gameObject->GetObjectToWorldMatrix();
+	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45.0f) * (orbiter.View() * trs);
 	Vector3 camPos = orbiter.Position();
 
 	shader.UniformTransform("trsMatrix", trs);
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformVec3("camPos", camPos);
 
-	shader.UniformVec3("diffuseColor", Vector3(material.diffuse.r, material.diffuse.g, material.diffuse.b));
+	shader.UniformColor("diffuseColor", material.diffuse);
 	shader.UniformFloat("shininess", material.shininess);
 	shader.UniformInt("renderMode", renderMode);
 
