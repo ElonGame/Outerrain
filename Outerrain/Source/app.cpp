@@ -273,6 +273,7 @@ void App::InitSceneNoiseTerrain()
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetClippingPlanes(1.0f, 1000.0f);
 }
 
 void App::InitSceneVegetationTerrain()

@@ -63,14 +63,7 @@ Transform CameraOrbiter::View() const
 
 Transform CameraOrbiter::Projection(const float width, const float height, const float fov) const
 {
-	// calcule la distance entre le centre de l'objet et la camera
-	//~ Transform t= view();
-	//~ Vector3 c= t(m_center);
-	//~ float d= -c.z;
-	float d = Magnitude(center - Vector3(position.x, position.y, size));     // meme resultat plus rapide a calculer
-
-	// regle near et far en fonction du centre et du rayon englobant l'objet 
-	return Perspective(fov, width / height, 0.1f, std::max(1.f, d + zFar));
+	return Perspective(fov, width / height, zNear, zFar);
 }
 
 void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
@@ -117,4 +110,10 @@ int CameraOrbiter::FrameWidth() const
 int CameraOrbiter::FrameHeight() const
 { 
 	return frameHeight; 
+}
+
+void CameraOrbiter::SetClippingPlanes(float n, float f)
+{
+	zNear = n;
+	zFar = f;
 }

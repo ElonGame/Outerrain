@@ -27,6 +27,7 @@ public:
 	void SetFrameHeight(int h);
 	int FrameWidth() const;
 	int FrameHeight() const;
+	void SetClippingPlanes(float n, float f);
 
 protected:
 	Vector3 center;
@@ -34,7 +35,8 @@ protected:
 	Vector2 rotation;
 	float size;
 	int frameWidth, frameHeight;
-	float zNear, zFar;
+	float zNear = 1.0f;
+	float zFar = 1000.0f;
 };
 
 #endif
