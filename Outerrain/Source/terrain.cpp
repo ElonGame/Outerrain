@@ -5,7 +5,7 @@
 #include <array>
 #include "terrain.h"
 #include "vec.h"
-#include "perlin.h"
+#include "noise.h"
 #include "image.h"
 #include "vegetationObject.h"
 #include "gameobject.h"

@@ -131,6 +131,7 @@ int App::Render()
 	ImGui::Begin("Erosion");
 	ImGui::Text("Stream Power Erosion");
 	ImGui::SliderInt("Iterations 1", &streamPowerErosionIteration, 1, 100);
+	ImGui::SliderFloat("Amplitude 1", &streamPowerErosionAmplitude, 0.1f, 10.0f);
 	if (ImGui::Button("Compute") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
 		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, streamPowerErosionAmplitude);
@@ -303,10 +304,7 @@ void App::InitSceneLayerTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
-	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
+	CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
