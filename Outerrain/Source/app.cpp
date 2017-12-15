@@ -137,7 +137,7 @@ int App::Render()
 	ImGui::Text("Stream Power Erosion");
 	ImGui::SliderInt("Iterations 1", &streamPowerErosionIteration, 1, 100);
 	ImGui::SliderFloat("Amplitude 1", &streamPowerErosionAmplitude, 0.1f, 10.0f);
-	if (ImGui::Button("Compute") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (ImGui::Button("Compute SP Erosion") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
 		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, streamPowerErosionAmplitude);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
@@ -146,7 +146,7 @@ int App::Render()
 	ImGui::Text("\n");
 	ImGui::Text("Thermal Erosion");
 	ImGui::SliderInt("Iterations 2", &thermalErosionIteration, 1, 100);
-	if (ImGui::Button("Compute") && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
+	if (ImGui::Button("Compute Thermal Erosion") && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
 	{
 		layerTerrain2D.ThermalErosion(thermalErosionIteration);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());

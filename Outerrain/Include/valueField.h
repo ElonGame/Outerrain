@@ -226,23 +226,24 @@ public:
 	Vector2 Gradient(int i, int j) const
 	{
 		Vector2 ret;
-		float cellSize = abs(TopRight().x - BottomLeft().x) / SizeX();
+		float cellSizeX = (topRight.x - bottomLeft.x) / (nx - 1);
+		float cellSizeY = (topRight.y - bottomLeft.y) / (ny - 1);
 
 		// X Gradient
 		if (i == 0)
-			ret.x = (Get(i + 1, j) - Get(i, j)) / cellSize;
+			ret.x = (Get(i + 1, j) - Get(i, j)) / cellSizeX;
 		else if (i == ny - 1)
-			ret.x = (Get(i, j) - Get(i - 1, j)) / cellSize;
+			ret.x = (Get(i, j) - Get(i - 1, j)) / cellSizeX;
 		else
-			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0f * cellSize);
+			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0f * cellSizeX);
 
 		// Y Gradient
 		if (j == 0)
-			ret.y = (Get(i, j + 1) - Get(i, j)) / cellSize;
+			ret.y = (Get(i, j + 1) - Get(i, j)) / cellSizeY;
 		else if (j == nx - 1)
-			ret.y = (Get(i, j) - Get(i, j - 1)) / cellSize;
+			ret.y = (Get(i, j) - Get(i, j - 1)) / cellSizeY;
 		else
-			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * cellSize);
+			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * cellSizeY);
 
 		return ret;
 	}

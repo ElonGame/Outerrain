@@ -355,43 +355,41 @@ float LayerTerrain2D::SandValue(int i, int j) const
 void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
-	float stressFactor = 0.1f;		 // Stress factor
-	float thresholdAngle = 10.0f;	 // Threshold Angle for stability (40 +- 5)
+	float stressFactor = 0.1f;		 // Stress factor ==> Not used at the moment
+	float thresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
+	float epsilonMaterial = 0.05f;   // Material displacement constant
 
-	float maxMaxAngle = 0.0f;
+	float cellDistX = (b[0] - a[0]) / (nx - 1);
 	for (int a = 0; a < stepCount; a++)
 	{
+		// Create queue of instable points
 		std::queue<Point> instables;
 		for (int i = 0; i < bedrock.SizeY(); i++)
 		{
 			for (int j = 0; j < bedrock.SizeX(); j++)
 			{
-				float maxSlope = 0.0f;
+				float maxZDiff = 0.0f;
 				for (int k = -1; k <= 1; k++)
 				{
 					for (int l = -1; l <= 1; l++)
 					{
 						if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
 							continue;
-						maxSlope = std::max(maxSlope, Magnitude(bedrock.Gradient(i + k, j + l)));
+						float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l) + sand.Get(i, j) - sand.Get(i + k, j + l);
+						maxZDiff = std::max(maxZDiff, z);
 					}
 				}
-				if (maxSlope <= 0.0)
-					continue;
 
-				maxMaxAngle = std::max(maxMaxAngle, maxSlope);
-
-				if (maxSlope > thresholdAngle)
+				if (maxZDiff > thresholdAngle)
 				{
-					float matter = abs(maxSlope * stressFactor);
+					float matter = epsilonMaterial; //abs(maxSlope * stressFactor);
 					Point p = Point(i, j, matter);
 					instables.push(p);
 				}
 			}
 		}
 
-		std::cout << maxMaxAngle << std::endl;
-
+		// Move matters between points and add new point to stabilize
 		while (instables.empty() == false)
 		{
 			Point p = instables.front();
@@ -399,33 +397,35 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 			int i = p.x, j = p.y;
 			float matter = p.value;
-			Point dH = Point(0, 0, 0.0f);
-			float terrainHeight = bedrock.Get(p.x, p.y);
+			Point neighbour = Point(0, 0, 0.0f);
+			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
 				for (int l = -1; l <= 1; l++)
 				{
-					if (k == 0 || l == 0 || bedrock.InsideVertex(i + k, j + l) == false)
+					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
 						continue;
-
-					float neighHeight = bedrock.Get(i + k, j + l);
-					if (dH.value < terrainHeight - neighHeight)
+					float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l) + sand.Get(i, j) - sand.Get(i + k, j + l);
+					if (z > maxZDiff)
 					{
-						dH = Point(i + k, j + l, terrainHeight - neighHeight);
+						maxZDiff = z;
+						neighbour.x = i + k;
+						neighbour.y = j + l;
 					}
 				}
 			}
+
 			bedrock.Set(i, j, bedrock.Get(i, j) - matter);
-			sand.Set(dH.x, dH.y, sand.Get(dH.x, dH.y) + matter);
+			sand.Set(i, j, sand.Get(i, j) - matter);
 			
-			/*
-			if (abs(dH.value) / delta > thresholdAngle)
+			bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
+			sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
+			if (maxZDiff > thresholdAngle)
 			{
-				float m = abs(dH.value * stressFactor);
-				Point a = Point(dH.x, dH.y, m);
-				instables.push(a);
+				float m = epsilonMaterial; //abs(maxSlope * stressFactor);
+				Point p = Point(neighbour.x, neighbour.y, matter);
+				instables.push(p);
 			}
-			*/
 		}
 	}
 }
