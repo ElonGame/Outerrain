@@ -20,6 +20,8 @@ public:
 	float WetnessDensityFactor(float);
 	float StreamPowerDensityFactor(float);
 
+	float ComputeDensityFactor(float height, float slope, float wetness, float streampower);
+
 	GameObject* GetGameObject();
 
 	void SetRadius(float r);

@@ -92,6 +92,8 @@ public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
+	ScalarField2D VegetationDensityField() const;
+
 	void ComputeVegetationDensities();
 
 	std::vector<GameObject*> GetTreeObjects() const;

@@ -1,5 +1,6 @@
 #include "vegetationObject.h"
 #include "gameobject.h"
+#include <algorithm>
 #include <math.h>
 
 VegetationObject::VegetationObject()
@@ -25,24 +26,24 @@ GameObject* VegetationObject::GetGameObject()
 /* Density functions */
 float VegetationObject::HeightDensityFactor(float height)
 {
-	return cos(height * 1.6f);
+	return cos(height * 1.6f) * 0.5f + 0.5f;
 }
 
 float VegetationObject::SlopeDensityFactor(float slope)
 {
-	return 0.05f;
-}
-
-float VegetationObject::StreamPowerDensityFactor(float streamPower)
-{
-	return cos(streamPower * 1.6f);
+	return cos(slope * 0.05f) * 0.5f + 0.5f;
 }
 
 float VegetationObject::WetnessDensityFactor(float wetness)
 {
-	return cos(wetness * 1.6f);
+	return cos(wetness * 1.6f) * 0.5f + 0.5f;
 }
 
+
+float VegetationObject::StreamPowerDensityFactor(float streamPower)
+{
+	return cos(streamPower * 1.6f) * 0.5f + 0.5f;
+}
 void VegetationObject::SetRadius(float r)
 {
 	radius = r;
@@ -51,4 +52,11 @@ void VegetationObject::SetRadius(float r)
 float VegetationObject::GetRadius()
 {
 	return radius;
+}
+
+float VegetationObject::ComputeDensityFactor(float height, float slope, float wetness, float streampower)
+{
+	float min1 = std::min(HeightDensityFactor(height), SlopeDensityFactor(slope));
+	float min2 = std::min(WetnessDensityFactor(wetness), StreamPowerDensityFactor(streampower));
+	return std::min(min1, min2);
 }

@@ -452,13 +452,18 @@ VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2
 void VegetationTerrain::ComputeVegetationDensities()
 {
 	ScalarField2D slopeField = SlopeField();
+	ScalarField2D wetnessField = WetnessField();
+	ScalarField2D streampowerField = StreamPowerField();
 	VegetationObject vegObj;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
+			float height = heightField.Get(i, j);
 			float slope = slopeField.Get(i, j);
-			vegetationDensityField.Set(i, j, vegObj.SlopeDensityFactor(slope));
+			float wetness = wetnessField.Get(i, j);
+			float streampower = streampowerField.Get(i, j);
+			vegetationDensityField.Set(i, j, vegObj.ComputeDensityFactor(height, slope, wetness, streampower));
 		}
 	}
 }
@@ -494,7 +499,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 					if (p < density)
 					{
 						GameObject* vegObj = veg.GetGameObject();
-						Vector3 pos = Vector3(point.x, Height(point), point.y);
+						Vector3 pos = Vector3(point.x, Height(point) + vegObj->GetScale().y / 2.0f, point.y);
 						vegObj->SetPosition(pos);
 						vegObjects.push_back(vegObj);
 						treeCount++;
@@ -530,4 +535,9 @@ std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, f
 			res.push_back(point);
 	}
 	return res;
+}
+
+ScalarField2D VegetationTerrain::VegetationDensityField() const
+{
+	return vegetationDensityField;
 }
