@@ -226,23 +226,23 @@ public:
 	Vector2 Gradient(int i, int j) const
 	{
 		Vector2 ret;
-		float d = static_cast<float>(nx - 1);
+		float cellSize = abs(TopRight().x - BottomLeft().x) / SizeX();
 
 		// X Gradient
 		if (i == 0)
-			ret.x = (Get(i + 1, j) - Get(i, j)) / d;
+			ret.x = (Get(i + 1, j) - Get(i, j)) / cellSize;
 		else if (i == ny - 1)
-			ret.x = (Get(i, j) - Get(i - 1, j)) / d;
+			ret.x = (Get(i, j) - Get(i - 1, j)) / cellSize;
 		else
-			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0f * d);
+			ret.x = (Get(i + 1, j) - Get(i - 1, j)) / (2.0f * cellSize);
 
 		// Y Gradient
 		if (j == 0)
-			ret.y = (Get(i, j + 1) - Get(i, j)) / d;
+			ret.y = (Get(i, j + 1) - Get(i, j)) / cellSize;
 		else if (j == nx - 1)
-			ret.y = (Get(i, j) - Get(i, j - 1)) / d;
+			ret.y = (Get(i, j) - Get(i, j - 1)) / cellSize;
 		else
-			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * d);
+			ret.y = (Get(i, j + 1) - Get(i, j - 1)) / (2.0f * cellSize);
 
 		return ret;
 	}

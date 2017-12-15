@@ -356,12 +356,9 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
 	float stressFactor = 0.1f;		 // Stress factor
-	float angle = 22.0f; // Threshold Angle for stability (40 +- 5)
-	float thresholdAngle = tan(angle);
+	float thresholdAngle = 10.0f;	 // Threshold Angle for stability (40 +- 5)
 
-	// Instability criteria
-	// @Todo : Refactor delta in a function (sqrt(2) for diagonal neighbours)
-	float delta = abs(bedrock.TopRight().x - bedrock.BottomLeft().x) / bedrock.SizeX();
+	float maxMaxAngle = 0.0f;
 	for (int a = 0; a < stepCount; a++)
 	{
 		std::queue<Point> instables;
@@ -369,31 +366,31 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 		{
 			for (int j = 0; j < bedrock.SizeX(); j++)
 			{
-				float deltaH = 0.0f;
-				float terrainHeight = bedrock.Get(i, j);
+				float maxSlope = 0.0f;
 				for (int k = -1; k <= 1; k++)
 				{
 					for (int l = -1; l <= 1; l++)
 					{
-						if (k == 0 || l == 0 || bedrock.InsideVertex(i + k, j + l) == false)
+						if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
 							continue;
-
-						float neighHeight = bedrock.Get(i + k, j + l);
-						deltaH = std::max(deltaH, terrainHeight - neighHeight);
+						maxSlope = std::max(maxSlope, Magnitude(bedrock.Gradient(i + k, j + l)));
 					}
 				}
-
-				if (deltaH <= 0.0)
+				if (maxSlope <= 0.0)
 					continue;
 
-				if (abs(deltaH) / delta > thresholdAngle)
+				maxMaxAngle = std::max(maxMaxAngle, maxSlope);
+
+				if (maxSlope > thresholdAngle)
 				{
-					float matter = abs(deltaH * stressFactor);
+					float matter = abs(maxSlope * stressFactor);
 					Point p = Point(i, j, matter);
 					instables.push(p);
 				}
 			}
 		}
+
+		std::cout << maxMaxAngle << std::endl;
 
 		while (instables.empty() == false)
 		{

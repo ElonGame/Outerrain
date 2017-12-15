@@ -273,7 +273,7 @@ void App::InitSceneNoiseTerrain()
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
-	orbiter.SetClippingPlanes(1.0f, 1000.0f);
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
 void App::InitSceneVegetationTerrain()
@@ -295,6 +295,7 @@ void App::InitSceneVegetationTerrain()
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
 void App::InitSceneLayerTerrain()
@@ -314,6 +315,7 @@ void App::InitSceneLayerTerrain()
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
 void App::CalculateAllMaps()
