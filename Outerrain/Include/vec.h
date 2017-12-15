@@ -85,6 +85,13 @@ inline Vector2 operator-(const Vector2& v)
 {
 	return Vector2(-v.x, -v.y);
 }
+inline Vector2 RotateAround(const Vector2& point, const Vector2& axis, float degrees)
+{
+	float theta = degrees * 0.0174533f;
+	float px = cos(theta) * (point.x - axis.x) - sin(theta) * (point.y - axis.y) + axis.x;
+	float py = sin(theta) * (point.x - axis.x) + cos(theta) * (point.y - axis.y) + axis.y;
+	return Vector2(px, py);
+}
 
 
 /* Vector3 */

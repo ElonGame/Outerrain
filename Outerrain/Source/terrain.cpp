@@ -473,7 +473,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	VegetationObject veg;
 	veg.SetRadius(3.0f);
 	float tileSize = veg.GetRadius() * 10.0f;
-	std::vector<Vector2> points = GetRandomDistribution(veg.GetRadius(), tileSize, 100);
+	std::vector<std::vector<Vector2>> points = GetRotatedRandomDistributions(veg.GetRadius(), tileSize, 1000);
 
 	int maxTreeCount = 1000;
 	int treeCount = 0;
@@ -486,12 +486,13 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	{
 		for (int j = 0; j < tileCountX; j++)
 		{
+			int tile = rand() % 4;
 			for (int x = 0; x < points.size(); x++)
 			{
 				Vector2 point = bottomLeft
 					+ Vector2(tileSize, 0) * static_cast<float>(j)
 					+ Vector2(0, tileSize) * static_cast<float>(i)
-					+ points[x];
+					+ points[tile][x];
 				if (vegetationDensityField.IsInsideField(point) == true)
 				{
 					float density = vegetationDensityField.GetValueBilinear(point);
@@ -513,26 +514,76 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	return vegObjects;
 }
 
-std::vector<Vector2> VegetationTerrain::GetRandomDistribution(float objRadius, float tileSize, int maxTries) const
+std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributions(float objRadius, float tileSize, int maxTries) const
 {
-	std::vector<Vector2> res;
+	Vector2 tileCenter = Vector2(tileSize / 2.0f, tileSize / 2.0f);
+	std::vector<std::vector<Vector2>> res;
+	res.resize(4);
 	for (int i = 0; i < maxTries; i++)
 	{
+		// Get random sample point
 		float randX = rand() / static_cast<float>(RAND_MAX);
 		float randY = rand() / static_cast<float>(RAND_MAX);
 		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
 
+		// Test point against local neighbours
 		bool canAdd = true;
-		for (int j = 0; j < res.size(); j++)
+		for (int k = 0; k < res[0].size(); k++)
 		{
-			if (Magnitude(point - res[j]) <= objRadius)
+			if (Magnitude(point - res[0][k]) <= objRadius)
 			{
 				canAdd = false;
 				break;
 			}
 		}
+
+		// Test point against all possible rotated tiled neighbours left and right
+		if (canAdd == true && (point.x - objRadius < 0.0f || point.x + objRadius > tileSize))
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < res[j].size(); k++)
+				{
+					float branch = point.x - objRadius < 0.0f ? -1.0f : 1.0f;
+					Vector2 neighbourPoint = res[j][k] + (Vector2(tileSize, 0.0f) * branch);
+					if (Magnitude(point - neighbourPoint) <= objRadius)
+					{
+						canAdd = false;
+						break;
+					}
+				}
+				if (canAdd == false)
+					break;
+			}
+		}
+		// Test point against all possible rotated tiled neighbours down and up
+		if (canAdd == true && (point.y - objRadius < 0.0f || point.y + objRadius > tileSize))
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < res[j].size(); k++)
+				{
+					float branch = point.y - objRadius < 0.0f ? -1.0f : 1.0f;
+					Vector2 neighbourPoint = res[j][k] + (Vector2(0.0f, tileSize) * branch);
+					if (Magnitude(point - neighbourPoint) <= objRadius)
+					{
+						canAdd = false;
+						break;
+					}
+				}
+				if (canAdd == false)
+					break;
+			}
+		}
+		
+		// If all tests have passed, add points at 4 possible rotations
 		if (canAdd == true)
-			res.push_back(point);
+		{
+			res[0].push_back(point);
+			res[1].push_back(RotateAround(point, tileCenter, 90.0f));
+			res[2].push_back(RotateAround(point, tileCenter, 180.0f));
+			res[3].push_back(RotateAround(point, tileCenter, 270.0f));
+		}
 	}
 	return res;
 }

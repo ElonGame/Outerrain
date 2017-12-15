@@ -97,5 +97,5 @@ public:
 	void ComputeVegetationDensities();
 
 	std::vector<GameObject*> GetTreeObjects() const;
-	std::vector<Vector2> GetRandomDistribution(float objRadius, float tileSize, int maxTries) const;
+	std::vector<std::vector<Vector2>> GetRotatedRandomDistributions(float objRadius, float tileSize, int maxTries) const;
 };
