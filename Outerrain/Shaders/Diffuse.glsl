@@ -17,8 +17,8 @@ void main( )
 {
 	gl_Position = mvpMatrix * vec4(position, 1);
 	vertex_texcoord = texcoord;
-	worldpos = (trsmatrix * vec4(position, 1)).xyz;
-	worldnormal = (trsmatrix * vec4(normal, 0)).xyz;
+	worldPos = (trsMatrix * vec4(position, 1)).xyz;
+	worldNormal = (trsMatrix * vec4(normal, 0)).xyz;
 }
 #endif
 
