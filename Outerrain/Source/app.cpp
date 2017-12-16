@@ -15,6 +15,14 @@ static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 static GLuint accessibilityTexture;
 static GLuint vegetationDensityTexture;
+
+static Vector2 minMaxSlope;
+static Vector2 minMaxDrainage;
+static Vector2 minMaxWetness;
+static Vector2 minMaxStreampower;
+static Vector2 minMaxAccessibility;
+static Vector2 minMaxVegetationDensity;
+
 static GLuint m_time_query;
 
 /* ImGui Erosion */
@@ -116,30 +124,42 @@ int App::Render()
 	// Debug Image 
 	ImGui::Begin("Maps");
 	ImGui::SetNextWindowContentWidth(1000);
-	ImGui::BeginChild("", ImVec2(0, 160), false, ImGuiWindowFlags_HorizontalScrollbar);
+	ImGui::BeginChild("", ImVec2(0, 190), false, ImGuiWindowFlags_HorizontalScrollbar);
 	ImGui::Columns(6);
 	ImGui::Text("Slope");
 	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxSlope.x);
+	ImGui::Value("White", minMaxSlope.y);
 	ImGui::SetColumnWidth(0, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Drainage");
 	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxDrainage.x);
+	ImGui::Value("White", minMaxDrainage.y);
 	ImGui::SetColumnWidth(1, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Wetness");
 	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxWetness.x);
+	ImGui::Value("White", minMaxWetness.y);
 	ImGui::SetColumnWidth(2, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Stream Power");
 	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxStreampower.x);
+	ImGui::Value("White", minMaxStreampower.y);
 	ImGui::SetColumnWidth(3, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Accessibility");
 	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxAccessibility.x);
+	ImGui::Value("White", minMaxAccessibility.y);
 	ImGui::SetColumnWidth(4, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Plants Density");
 	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationDensityTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxVegetationDensity.x);
+	ImGui::Value("White", minMaxVegetationDensity.y);
 	ImGui::SetColumnWidth(5, 135);
 	ImGui::Columns(1);
 	ImGui::EndChild();
@@ -331,12 +351,29 @@ void App::InitSceneLayerTerrain()
 
 void App::CalculateAllMaps()
 {
-	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
-	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
+	ScalarField2D field = vegTerrain.SlopeField();
+	field.WriteImageGrayscale("Data/slope.png");
+	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.WetnessField();
+	field.WriteImageGrayscale("Data/wetness.png");
+	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.StreamPowerField();
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.DrainageSqrtField();
 	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
-	//vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
-	//vegTerrain.VegetationDensityField().WriteImageGrayscale("Data/vegetationDensity.png");
+	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.AccessibilityField();
+	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.VegetationDensityField();
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+
 	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
