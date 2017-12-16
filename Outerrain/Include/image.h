@@ -57,8 +57,8 @@ public:
 		return &data.front();
 	}
 
-	void ReadImage(const char *filename);
-	int WriteImage(const char *filename);
+	void ReadImage(const char *filename, bool flipY);
+	int WriteImage(const char *filename, bool flipY);
 
 	int Width() const { return width; }
 	int Height() const { return height; }

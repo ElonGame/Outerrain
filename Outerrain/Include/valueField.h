@@ -179,13 +179,13 @@ public:
 				im(i, j) = Color(v, v, v, 1.0);
 			}
 		}
-		im.WriteImage(path);
+		im.WriteImage(path, false);
 	}
 
 	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude)
 	{
 		Image heightmap;
-		heightmap.ReadImage(file);
+		heightmap.ReadImage(file, true);
 		float texelX = 1.0f / (heightmap.Width());
 		float texelY = 1.0f / (heightmap.Height());
 

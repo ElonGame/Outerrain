@@ -5,7 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include "image.h"
 
-void Image::ReadImage(const char *filename)
+void Image::ReadImage(const char *filename, bool flipY)
 {
 	SDL_Surface *surface = IMG_Load(filename);
 	if (surface == NULL)
@@ -40,7 +40,7 @@ void Image::ReadImage(const char *filename)
 				float b = static_cast<float>(pixel[format.Bshift / 8]);
 				float a = static_cast<float>(pixel[format.Ashift / 8]);
 
-				int index = y * width + x;
+				int index = (flipY ? height - y - 1 : y) * width + x;
 				data[index] = Color(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
@@ -59,7 +59,7 @@ void Image::ReadImage(const char *filename)
 				float g = static_cast<float>(pixel[format.Gshift / 8]);
 				float b = static_cast<float>(pixel[format.Bshift / 8]);
 
-				int index = y * width + x;
+				int index = (flipY ? height - y - 1 : y) * width + x;
 				data[index] = Color(r / 255.f, g / 255.f, b / 255.f);
 				pixel = pixel + format.BytesPerPixel;
 			}
@@ -69,7 +69,7 @@ void Image::ReadImage(const char *filename)
 	SDL_FreeSurface(surface);
 }
 
-int Image::WriteImage(const char *filename)
+int Image::WriteImage(const char *filename, bool flipY)
 {
 	if (std::string(filename).rfind(".png") == std::string::npos && std::string(filename).rfind(".bmp") == std::string::npos)
 	{
@@ -84,7 +84,7 @@ int Image::WriteImage(const char *filename)
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color color = this->operator()(x, height - y - 1);
+			Color color = this->operator()(x, flipY ? height - y - 1 : y);
 			Uint8 r = (Uint8)std::min(std::floor(color.r * 255.f), 255.f);
 			Uint8 g = (Uint8)std::min(std::floor(color.g * 255.f), 255.f);
 			Uint8 b = (Uint8)std::min(std::floor(color.b * 255.f), 255.f);
