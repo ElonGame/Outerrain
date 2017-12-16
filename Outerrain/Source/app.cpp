@@ -355,24 +355,24 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.WetnessField();
+	/*field = vegTerrain.WetnessField();
 	field.WriteImageGrayscale("Data/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.StreamPowerField();
-	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
+	field.WriteImageGrayscale("Data/streamPower.png");
 	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.DrainageSqrtField();
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	field.WriteImageGrayscale("Data/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.AccessibilityField();
-	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	field.WriteImageGrayscale("Data/accessibility.png");
 	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.VegetationDensityField();
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());*/
 
 	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);

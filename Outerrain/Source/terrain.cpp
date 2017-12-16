@@ -141,7 +141,10 @@ ScalarField2D Terrain2D::SlopeField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			slopeField.Set(i, j, Magnitude(heightField.Gradient(i, j)));
+		{
+			float s = Magnitude(heightField.Gradient(i, j));
+			slopeField.Set(i, j, s);
+		}
 	}
 	return slopeField;
 }
@@ -256,10 +259,11 @@ ScalarField2D Terrain2D::StreamPowerField() const
 
 ScalarField2D Terrain2D::AccessibilityField() const
 {
+	// Todo :
+	//  -Change step += 1.0f to something involving the maximum slope.
+	//   (kind of Lipshitz computation to be sure to hit the terrain)
 	float epsilon = 0.01f;
-	float maxSlope = SlopeField().MaxValue();
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -288,13 +292,12 @@ ScalarField2D Terrain2D::AccessibilityField() const
 
 					float terrainHeight = Height(terrainRay);
 					float deltaY = ray.y - terrainHeight;
-
 					if (deltaY < 0.0f)
 					{
 						intersect++;
 						break;
 					}
-					step = deltaY / maxSlope;
+					step += 1.0f;
 				}
 			}
 			float illumination = 1.0f - (intersect / static_cast<float>(numbers));
