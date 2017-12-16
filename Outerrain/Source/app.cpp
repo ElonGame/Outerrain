@@ -61,9 +61,9 @@ int App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	//InitSceneVegetationTerrain();
+	InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	InitSceneNoiseTerrain();
+	//InitSceneNoiseTerrain();
 
 	return 1;
 }
@@ -289,7 +289,7 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain = VegetationTerrain(2048, 2048, Vector2(-256, -256), Vector2(256, 256));
 	vegTerrain.InitFromFile("Data/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
@@ -331,12 +331,12 @@ void App::InitSceneLayerTerrain()
 
 void App::CalculateAllMaps()
 {
-	/*vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
+	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
 	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");*/
-	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
-	vegTerrain.VegetationDensityField().WriteImageGrayscale("Data/vegetationDensity.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	//vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
+	//vegTerrain.VegetationDensityField().WriteImageGrayscale("Data/vegetationDensity.png");
 	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
 	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
