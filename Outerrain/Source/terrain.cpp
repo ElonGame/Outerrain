@@ -159,7 +159,7 @@ int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<
 	{
 		for (int l = -1; l <= 1; l++)
 		{
-			if (k == 0 || l == 0 || heightField.InsideVertex(i + k, j + l) == false)
+			if ((k == 0 && l == 0) || heightField.InsideVertex(i + k, j + l) == false)
 				continue;
 
 			float neighHeight = heightField.Get(i + k, j + l);
@@ -259,6 +259,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	float epsilon = 0.01f;
 	float maxSlope = SlopeField().MaxValue();
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
+	
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -266,7 +267,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
 			float h = heightField.Get(i, j);
 
-			int numbers = 10;
+			int numbers = 32;
 			int intersect = 0;
 
 			for (int k = 0; k < numbers; k++)
@@ -417,14 +418,14 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 			// Remove from base point
 			bedrock.Set(i, j, bedrock.Get(i, j) - matter);
 			sand.Set(i, j, sand.Get(i, j) - matter);
-			
+
 			// Add to lowest neighbour
 			bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
 			sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
 
 			// Add neighbour to stabilize if angle > tanThresholdAngle
 			if (maxZDiff / cellDistX > tanThresholdAngle)
-			{	
+			{
 				float m = epsilonDisplacement;
 				Point p = Point(neighbour.x, neighbour.y, matter);
 				instables.push(p);

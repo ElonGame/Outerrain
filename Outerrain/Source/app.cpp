@@ -63,7 +63,7 @@ int App::Init()
 
 	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	InitSceneLayerTerrain();
+	InitSceneNoiseTerrain();
 
 	return 1;
 }
@@ -97,6 +97,7 @@ int App::Render()
 	glEndQuery(GL_TIME_ELAPSED);
 	GLint64 gpu_time = 0;
 	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+
 	std::stringstream cpuStr, gpuStr;
 	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
 	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
@@ -113,25 +114,36 @@ int App::Render()
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 	// Debug Image 
-	ImGui::Begin("Slope Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(150, 150));
+	ImGui::Begin("Maps");
+	ImGui::SetNextWindowContentWidth(1000);
+	ImGui::BeginChild("", ImVec2(0, 160), false, ImGuiWindowFlags_HorizontalScrollbar);
+	ImGui::Columns(6);
+	ImGui::Text("Slope");
+	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(0, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Drainage");
+	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(1, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Wetness");
+	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(2, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Stream Power");
+	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(3, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Accessibility");
+	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(4, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Plants Density");
+	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationDensityTexture), ImVec2(120, 120));
+	ImGui::SetColumnWidth(5, 135);
+	ImGui::Columns(1);
+	ImGui::EndChild();
 	ImGui::End();
-	ImGui::Begin("Drainage Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(150, 150));
-	ImGui::End();
-	ImGui::Begin("Wetness Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(150, 150));
-	ImGui::End();
-	ImGui::Begin("Stream Power Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(150, 150));
-	ImGui::End();
-	ImGui::Begin("Accessibility Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(150, 150));
-	ImGui::End();
-	ImGui::Begin("Vegetation Density Map");
-	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationDensityTexture), ImVec2(150, 150));
-	ImGui::End();
-
 	// Erosion
 	ImGui::Begin("Erosion");
 	ImGui::Text("Stream Power Erosion");
@@ -158,7 +170,6 @@ int App::Render()
 	ImGui::Text(cpuStr.str().data());
 	ImGui::Text(gpuStr.str().data());
 	ImGui::End();
-
 	return 1;
 }
 
@@ -311,7 +322,7 @@ void App::InitSceneLayerTerrain()
 	GameObject* obj = new GameObject();
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
-	
+
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
@@ -320,10 +331,10 @@ void App::InitSceneLayerTerrain()
 
 void App::CalculateAllMaps()
 {
-	vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
+	/*vegTerrain.SlopeField().WriteImageGrayscale("Data/slope.png");
 	vegTerrain.WetnessField().WriteImageGrayscale("Data/wetness.png");
 	vegTerrain.StreamPowerField().WriteImageGrayscale("Data/streamPower.png");
-	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");
+	vegTerrain.DrainageSqrtField().WriteImageGrayscale("Data/drainageSqrt.png");*/
 	vegTerrain.AccessibilityField().WriteImageGrayscale("Data/accessibility.png");
 	vegTerrain.VegetationDensityField().WriteImageGrayscale("Data/vegetationDensity.png");
 	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
