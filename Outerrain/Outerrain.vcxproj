@@ -41,6 +41,7 @@
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\app-callbacks.cpp" />
     <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />

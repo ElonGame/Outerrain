@@ -33,6 +33,12 @@ protected:
 
 	float windowWidth, windowHeight;
 
+	// Callbacks
+	void ThermalErosionCallback(int stepCount);
+	void StreamPowerErosionCallback(int stepCount, float amplitude);
+	void SpawnVegetationCallback();
+	
+
 public:
 	App(const int&, const int&, const int&, const int&);
 

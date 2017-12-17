@@ -117,10 +117,10 @@ float Terrain2D::NormalizedHeight(const Vector2& p) const
 }
 
 /* Erosion */
-void Terrain2D::StreamPowerErosion(int iteration, float maxAmplitude)
+void Terrain2D::StreamPowerErosion(int stepCount, float maxAmplitude)
 {
 	ScalarField2D streamPower = StreamPowerField();
-	for (int k = 0; k < iteration; k++)
+	for (int k = 0; k < stepCount; k++)
 	{
 		for (int i = 0; i < ny; i++)
 		{
@@ -132,6 +132,86 @@ void Terrain2D::StreamPowerErosion(int iteration, float maxAmplitude)
 		}
 	}
 }
+
+void Terrain2D::ThermalErosion(int stepCount)
+{
+	// Constants
+	float epsilonDisplacement = 0.05f;
+	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
+
+	float cellDistX = (topRight[0] - bottomLeft[0]) / (nx - 1);
+	for (int a = 0; a < stepCount; a++)
+	{
+		// Create queue of instable points
+		std::queue<Point> instables;
+		for (int i = 0; i < heightField.SizeY(); i++)
+		{
+			for (int j = 0; j < heightField.SizeX(); j++)
+			{
+				float maxZDiff = 0.0f;
+				for (int k = -1; k <= 1; k++)
+				{
+					for (int l = -1; l <= 1; l++)
+					{
+						if ((k == 0 && l == 0) || heightField.InsideVertex(i + k, j + l) == false)
+							continue;
+						float z = heightField.Get(i, j) - heightField.Get(i + k, j + l);
+						maxZDiff = std::max(maxZDiff, z);
+					}
+				}
+
+				if (maxZDiff / cellDistX > tanThresholdAngle)
+				{
+					float matter = epsilonDisplacement;
+					Point p = Point(i, j, matter);
+					instables.push(p);
+				}
+			}
+		}
+
+		// Move matters between points and add new points to stabilize
+		while (instables.empty() == false)
+		{
+			Point p = instables.front();
+			instables.pop();
+
+			int i = p.x, j = p.y;
+			float matter = p.value;
+			Point neighbour = Point(0, 0, 0.0f);
+			float maxZDiff = 0.0f;
+			for (int k = -1; k <= 1; k++)
+			{
+				for (int l = -1; l <= 1; l++)
+				{
+					if ((k == 0 && l == 0) || heightField.InsideVertex(i + k, j + l) == false)
+						continue;
+					float z = heightField.Get(i, j) - heightField.Get(i + k, j + l);
+					if (z > maxZDiff)
+					{
+						maxZDiff = z;
+						neighbour.x = i + k;
+						neighbour.y = j + l;
+					}
+				}
+			}
+
+			// Remove from base point
+			heightField.Set(i, j, heightField.Get(i, j) - matter);
+
+			// Add to lowest neighbour
+			heightField.Set(neighbour.x, neighbour.y, heightField.Get(neighbour.x, neighbour.y) + matter);
+
+			// Add neighbour to stabilize if angle > tanThresholdAngle
+			if (maxZDiff / cellDistX > tanThresholdAngle)
+			{
+				float m = epsilonDisplacement;
+				Point p = Point(neighbour.x, neighbour.y, matter);
+				instables.push(p);
+			}
+		}
+	}
+}
+
 
 /* Useful Fields */
 ScalarField2D Terrain2D::SlopeField() const

@@ -32,7 +32,8 @@ public:
 	std::vector<Vector3> GetAllVertices() const;
 
 	/* Erosion */
-	void StreamPowerErosion(int iteration, float);
+	void StreamPowerErosion(int stepCount, float);
+	void ThermalErosion(int stepCount);
 
 	/* Useful fields */
 	void ComputeNormalField();

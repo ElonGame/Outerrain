@@ -171,17 +171,14 @@ int App::Render()
 	ImGui::SliderFloat("Amplitude 1", &streamPowerErosionAmplitude, 0.1f, 10.0f);
 	if (ImGui::Button("Compute SP Erosion") && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, streamPowerErosionAmplitude);
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
-		CalculateAllMaps();
+		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
 	}
 	ImGui::Text("\n");
 	ImGui::Text("Thermal Erosion");
 	ImGui::SliderInt("Iterations 2", &thermalErosionIteration, 1, 100);
-	if (ImGui::Button("Compute Thermal Erosion") && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
+	if (ImGui::Button("Compute Thermal Erosion") )
 	{
-		layerTerrain2D.ThermalErosion(thermalErosionIteration);
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
+		ThermalErosionCallback(thermalErosionIteration);
 	}
 	ImGui::End();
 
@@ -221,26 +218,20 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(-10.0f / windowWidth, 0.0f);
 
 	// Thermal Erosion
-	if (key_state(SDLK_t) && layerTerrain2D.SizeX() > 0 && layerTerrain2D.SizeY() > 0)
+	if (key_state(SDLK_t))
 	{
-		layerTerrain2D.ThermalErosion(thermalErosionIteration);
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(layerTerrain2D.GetAllVertices());
+		ThermalErosionCallback(thermalErosionIteration);
 	}
+	
 	// Stream Power erosion
 	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.StreamPowerErosion(streamPowerErosionIteration, 2.0f);
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
-		CalculateAllMaps();
+		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
 	}
 	// Vegetation spawn
 	if (key_state(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
-		vegTerrain.ComputeVegetationDensities();
-		std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
-		for (int i = 0; i < trees.size(); i++)
-			scene.AddChild(trees[i]);
-		CalculateAllMaps();
+		SpawnVegetationCallback();
 	}
 
 	// Update game objects
@@ -309,7 +300,7 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(2048, 2048, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
 	vegTerrain.InitFromFile("Data/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
@@ -355,7 +346,7 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
-	/*field = vegTerrain.WetnessField();
+	field = vegTerrain.WetnessField();
 	field.WriteImageGrayscale("Data/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 
@@ -372,7 +363,7 @@ void App::CalculateAllMaps()
 	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.VegetationDensityField();
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());*/
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
 	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
