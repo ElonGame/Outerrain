@@ -11,14 +11,14 @@ VegetationObject::VegetationObject()
 GameObject* VegetationObject::GetGameObject()
 {
 	Mesh* m = new Mesh(GL_TRIANGLES);
-	m->ReadMesh("Data/cube.obj");
+	m->ReadMesh("Data/Objs/pineTree.obj");
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	m->SetShader(shader);
-	m->SetMaterial(Material(Color::Green(), 64));
+	m->SetMaterial(Material(Color::Green(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
-	obj->SetScale(1.0, 4.0, 1.0);
+	obj->SetScale(3.0, 3.0, 3.0);
 	return obj;
 }
 
