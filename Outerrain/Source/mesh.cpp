@@ -3,6 +3,7 @@
 #include "shader.h"
 #include "terrain.h"
 #include "gameobject.h"
+#include "image.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -288,8 +289,8 @@ void Mesh::CalculateFromTerrain2D(const Terrain2D& terrain)
 		{
 			float u = j / ((float)nx - 1);
 			float v = i / ((float)ny - 1);
-			AddTexcoord(Vector2(u, 1 - v));
 			AddVertex(terrain.Vertex(i, j));
+			AddTexcoord(Vector2(u, v));
 			AddNormal(terrain.Normal(i, j));
 		}
 	}
@@ -342,6 +343,8 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformFloat("shininess", material.shininess);
 	shader.UniformInt("renderMode", renderMode);
 
+	shader.UniformTexture("texture0", 0, texture0);
+
 	if (renderMode == WireframeMode)
 		primitiveDrawn = GL_LINES;
 	else
@@ -350,7 +353,7 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	Draw();
 }
 
-void Mesh::WriteMesh(const char *filename) 
+void Mesh::WriteMesh(const char* filename) 
 {
 	cout << indices.size();
 	cout << "Saving obj file " << endl;
@@ -389,7 +392,7 @@ void Mesh::WriteMesh(const char *filename)
 	objfile.close();
 }
 
-void Mesh::ReadMesh(const char *filename)
+void Mesh::ReadMesh(const char* filename)
 {
 	FILE *in;
 	errno_t err;
@@ -498,4 +501,56 @@ void Mesh::ReadMesh(const char *filename)
 
 	if (error)
 		printf("loading mesh '%s'...\n[error]\n%s\n\n", filename, line_buffer);
+}
+
+void Mesh::SetTexture(const char* filename, const GLenum texel_type)
+{
+	ImageData temp;
+	temp.ReadImageData(filename);
+	texture0 = MakeTexture(0, temp, texel_type);
+}
+
+GLuint Mesh::MakeTexture(const int unit, const ImageData& im, const GLenum texel_type)
+{
+	if (im.data.empty())
+		return 0;
+
+	// cree la texture openGL
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// fixe les parametres de filtrage par defaut
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	GLenum format;
+	switch (im.channels)
+	{
+	case 1: format = GL_RED; break;
+	case 2: format = GL_RG; break;
+	case 3: format = GL_RGB; break;
+	case 4: format = GL_RGBA; break;
+	default: format = GL_RGBA;
+	}
+
+	GLenum type;
+	switch (im.size)
+	{
+	case 1: type = GL_UNSIGNED_BYTE; break;
+	case 4: type = GL_FLOAT; break;
+	default: type = GL_UNSIGNED_BYTE;
+	}
+
+	// transfere les donnees dans la texture
+	glTexImage2D(GL_TEXTURE_2D, 0,
+		texel_type, im.width, im.height, 0,
+		format, type, im.buffer());
+
+	// prefiltre la texture
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return texture;
 }

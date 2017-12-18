@@ -21,6 +21,7 @@ protected:
 
 	// Scene Data
 	GameObject scene;
+	Mesh* terrainMesh;
 
 	// GUI
 	int currentItem;

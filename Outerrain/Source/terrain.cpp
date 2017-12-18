@@ -387,6 +387,11 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	return accessibilityField;
 }
 
+ScalarField2D Terrain2D::HeightField() const
+{
+	return heightField;
+}
+
 std::vector<Vector3> Terrain2D::GetAllVertices() const
 {
 	std::vector<Vector3> ret;

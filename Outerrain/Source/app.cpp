@@ -300,21 +300,22 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain = VegetationTerrain(512, 512, Vector2(-256, -256), Vector2(256, 256));
 	vegTerrain.InitFromFile("Data/island.png", 0, 100);
 
-	Mesh* mesh = vegTerrain.GetMesh();
+	terrainMesh = vegTerrain.GetMesh();
 	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
-	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 0));
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
+	terrainMesh->SetShader(shader);
+	terrainMesh->SetMaterial(Material(Color::Grey(), 0));
 	GameObject* obj = new GameObject();
-	obj->AddComponent(mesh);
+	obj->AddComponent(terrainMesh);
 	scene.AddChild(obj);
 
 	CalculateAllMaps();
+	terrainMesh->SetTexture("Data/slope.png", GL_RGB);
 
-	orbiter.LookAt(mesh->GetBounds());
+	orbiter.LookAt(terrainMesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
 	orbiter.SetFrameHeight(WindowHeight());
 	orbiter.SetClippingPlanes(1.0f, 3000.0f);
@@ -342,7 +343,8 @@ void App::InitSceneLayerTerrain()
 
 void App::CalculateAllMaps()
 {
-	ScalarField2D field = vegTerrain.SlopeField();
+	//ScalarField2D field = vegTerrain.SlopeField();
+	ScalarField2D field = vegTerrain.HeightField();
 	field.WriteImageGrayscale("Data/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
