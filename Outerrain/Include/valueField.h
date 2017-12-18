@@ -263,6 +263,20 @@ public:
 		return *std::min_element(values.begin(), values.end());
 	}
 
+	void Normalize()
+	{
+		float min = MinValue();
+		float max = MaxValue();
+		for (int i = 0; i < ny * nx; i++)
+			values[i] = (values[i] - min) / (max - min);
+	}
+
+	void Normalize(float min, float max)
+	{
+		for (int i = 0; i < ny * nx; i++)
+			values[i] = (values[i] - min) / (max - min);
+	}
+
 	float AverageValue() const
 	{
 		float ret = 0.0f;

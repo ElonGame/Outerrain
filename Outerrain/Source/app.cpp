@@ -176,7 +176,7 @@ int App::Render()
 	ImGui::Text("\n");
 	ImGui::Text("Thermal Erosion");
 	ImGui::SliderInt("Iterations 2", &thermalErosionIteration, 1, 100);
-	if (ImGui::Button("Compute Thermal Erosion") )
+	if (ImGui::Button("Compute Thermal Erosion"))
 	{
 		ThermalErosionCallback(thermalErosionIteration);
 	}
@@ -222,7 +222,7 @@ int App::Update(const float time, const float deltaTime)
 	{
 		ThermalErosionCallback(thermalErosionIteration);
 	}
-	
+
 	// Stream Power erosion
 	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 	{
@@ -354,7 +354,7 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/streamPower.png");
 	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.DrainageSqrtField();
+	field = vegTerrain.DrainageField();
 	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
 

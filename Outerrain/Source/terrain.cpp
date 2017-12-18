@@ -222,11 +222,12 @@ ScalarField2D Terrain2D::SlopeField() const
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			float tanSlope = Magnitude(heightField.Gradient(i, j));
-			float s = atan(tanSlope) * 180.0 / 3.14;
+			float s = Magnitude(heightField.Gradient(i, j));
 			slopeField.Set(i, j, s);
 		}
+	
 	}
+	slopeField.Normalize();
 	return slopeField;
 }
 
@@ -300,18 +301,6 @@ ScalarField2D Terrain2D::DrainageField() const
 	return drainage;
 }
 
-ScalarField2D Terrain2D::DrainageSqrtField() const
-{
-	ScalarField2D drainageField = DrainageField();
-	ScalarField2D sqrtDrainageField = ScalarField2D(nx, ny, bottomLeft, topRight);
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-			sqrtDrainageField.Set(i, j, sqrt(drainageField.Get(i, j)));
-	}
-	return sqrtDrainageField;
-}
-
 ScalarField2D Terrain2D::WetnessField() const
 {
 	ScalarField2D drainageField = DrainageField();
@@ -321,9 +310,12 @@ ScalarField2D Terrain2D::WetnessField() const
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1.0f + slopeField.Get(i, j))));
+			float w = log(drainageField.Get(i, j) / (1.0f + slopeField.Get(i, j)));
+			w = w < 0 ? -w : w;
+			wetnessField.Set(i, j, w);
 		}
 	}
+	wetnessField.Normalize();
 	return wetnessField;
 }
 
@@ -337,6 +329,7 @@ ScalarField2D Terrain2D::StreamPowerField() const
 		for (int j = 0; j < nx; j++)
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
 	}
+	streamPowerField.Normalize();
 	return streamPowerField;
 }
 
@@ -387,6 +380,7 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			accessibilityField.Set(i, j, illumination);
 		}
 	}
+	accessibilityField.Normalize();
 	return accessibilityField;
 }
 

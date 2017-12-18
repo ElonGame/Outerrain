@@ -38,7 +38,6 @@ public:
 	/* Useful fields */
 	void ComputeNormalField();
 	ScalarField2D DrainageField() const;
-	ScalarField2D DrainageSqrtField() const;
 	ScalarField2D WetnessField() const;
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
