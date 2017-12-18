@@ -301,7 +301,7 @@ void App::InitSceneNoiseTerrain()
 void App::InitSceneVegetationTerrain()
 {
 	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
-	vegTerrain.InitFromFile("Data/island.png", 0, 100);
+	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
@@ -323,7 +323,7 @@ void App::InitSceneVegetationTerrain()
 void App::InitSceneLayerTerrain()
 {
 	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, -256), Vector2(256, 256));
-	layerTerrain2D.InitFromFile("Data/island.png", 0, 100, 0.8f);
+	layerTerrain2D.InitFromFile("Data/Heightmaps/island.png", 0, 100, 0.8f);
 
 	Mesh* mesh = layerTerrain2D.GetMesh();
 	Shader shader;
@@ -343,32 +343,32 @@ void App::InitSceneLayerTerrain()
 void App::CalculateAllMaps()
 {
 	ScalarField2D field = vegTerrain.SlopeField();
-	field.WriteImageGrayscale("Data/slope.png");
+	field.WriteImageGrayscale("Data/Maps/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.WetnessField();
-	field.WriteImageGrayscale("Data/wetness.png");
+	field.WriteImageGrayscale("Data/Maps/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.StreamPowerField();
-	field.WriteImageGrayscale("Data/streamPower.png");
+	field.WriteImageGrayscale("Data/Maps/streamPower.png");
 	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.DrainageSqrtField();
-	field.WriteImageGrayscale("Data/drainageSqrt.png");
+	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.AccessibilityField();
-	field.WriteImageGrayscale("Data/accessibility.png");
+	field.WriteImageGrayscale("Data/Maps/accessibility.png");
 	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
 
 	field = vegTerrain.VegetationDensityField();
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
-	slopeTexture = ReadTexture(0, "Data/slope.png", GL_RGB);
-	draignageTexture = ReadTexture(0, "Data/drainageSqrt.png", GL_RGB);
-	wetnessTexture = ReadTexture(0, "Data/wetness.png", GL_RGB);
-	streampowerTexture = ReadTexture(0, "Data/streamPower.png", GL_RGB);
-	accessibilityTexture = ReadTexture(0, "Data/accessibility.png", GL_RGB);
-	vegetationDensityTexture = ReadTexture(0, "Data/vegetationDensity.png", GL_RGB);
+	slopeTexture = ReadTexture(0, "Data/Maps/slope.png", GL_RGB);
+	draignageTexture = ReadTexture(0, "Data/Maps/drainageSqrt.png", GL_RGB);
+	wetnessTexture = ReadTexture(0, "Data/Maps/wetness.png", GL_RGB);
+	streampowerTexture = ReadTexture(0, "Data/Maps/streamPower.png", GL_RGB);
+	accessibilityTexture = ReadTexture(0, "Data/Maps/accessibility.png", GL_RGB);
+	vegetationDensityTexture = ReadTexture(0, "Data/Maps/vegetationDensity.png", GL_RGB);
 }
