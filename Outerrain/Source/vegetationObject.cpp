@@ -64,10 +64,9 @@ float VegetationObject::GetRadius()
 	return radius;
 }
 
-float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness, float streampower)
+float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness, float accessibilitys)
 {
-
 	float min1 = std::min(HeightDensityFactor(s, height), SlopeDensityFactor(s, slope));
-	float min2 = std::min(WetnessDensityFactor(s, wetness), StreamPowerDensityFactor(s, streampower));
+	float min2 = std::min(WetnessDensityFactor(s, wetness), StreamPowerDensityFactor(s, accessibilitys));
 	return std::min(min1, min2);
 }

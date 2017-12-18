@@ -560,7 +560,7 @@ void VegetationTerrain::ComputeVegetationDensities()
 {
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = WetnessField();
-	ScalarField2D streampowerField = StreamPowerField();
+	ScalarField2D accessibilityField = AccessibilityField();
 	VegetationObject vegObj;
 
 	for (int k = 0; k < speciesNumber; k++)
@@ -572,7 +572,7 @@ void VegetationTerrain::ComputeVegetationDensities()
 				float height = heightField.Get(i, j);
 				float slope = slopeField.Get(i, j);
 				float wetness = wetnessField.Get(i, j);
-				float streampower = streampowerField.Get(i, j);
+				float streampower = accessibilityField.Get(i, j);
 				vegetationDensityField[k].Set(i, j, vegObj.ComputeDensityFactor((Specie)k, height, slope, wetness, streampower));
 			}
 		}
