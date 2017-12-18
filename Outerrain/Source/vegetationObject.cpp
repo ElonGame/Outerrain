@@ -8,40 +8,50 @@ VegetationObject::VegetationObject()
 
 }
 
-GameObject* VegetationObject::GetGameObject()
+GameObject* VegetationObject::GetGameObject(Specie s)
 {
 	Mesh* m = new Mesh(GL_TRIANGLES);
-	m->ReadMesh("Data/Objs/pineTree.obj");
+	if (s == PineTree)
+		m->ReadMesh("Data/Objs/pineTree.obj");
+	else
+		m->ReadMesh("Data/Objs/broadleaf.obj");
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	m->SetShader(shader);
 	m->SetMaterial(Material(Color::Green(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
-	obj->SetScale(3.0, 3.0, 3.0);
 	return obj;
 }
 
 
 /* Density functions */
-float VegetationObject::HeightDensityFactor(float height)
+float VegetationObject::HeightDensityFactor(const Specie s, float height)
 {
+	if (s == PineTree)
+		return cos(height * 1.6f) * 0.5f + 0.5f;
 	return cos(height * 1.6f) * 0.5f + 0.5f;
 }
 
-float VegetationObject::SlopeDensityFactor(float slope)
+float VegetationObject::SlopeDensityFactor(const Specie s, float slope)
 {
+	if (s == PineTree)
+		return cos(slope * 0.05f) * 0.5f + 0.5f;
 	return cos(slope * 0.05f) * 0.5f + 0.5f;
 }
 
-float VegetationObject::WetnessDensityFactor(float wetness)
+float VegetationObject::WetnessDensityFactor(const Specie s, float wetness)
 {
+	if (s == PineTree)
+		return cos(wetness * 1.6f) * 0.5f + 0.5f;
 	return cos(wetness * 1.6f) * 0.5f + 0.5f;
 }
 
 
-float VegetationObject::StreamPowerDensityFactor(float streamPower)
+float VegetationObject::StreamPowerDensityFactor(const Specie s, float streamPower)
 {
+	if (s == PineTree)
+		return cos(streamPower * 1.6f) * 0.5f + 0.5f;
 	return cos(streamPower * 1.6f) * 0.5f + 0.5f;
 }
 void VegetationObject::SetRadius(float r)
@@ -54,9 +64,9 @@ float VegetationObject::GetRadius()
 	return radius;
 }
 
-float VegetationObject::ComputeDensityFactor(float height, float slope, float wetness, float streampower)
+float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness, float accessibilitys)
 {
-	float min1 = std::min(HeightDensityFactor(height), SlopeDensityFactor(slope));
-	float min2 = std::min(WetnessDensityFactor(wetness), StreamPowerDensityFactor(streampower));
+	float min1 = std::min(HeightDensityFactor(s, height), SlopeDensityFactor(s, slope));
+	float min2 = std::min(WetnessDensityFactor(s, wetness), StreamPowerDensityFactor(s, accessibilitys));
 	return std::min(min1, min2);
 }

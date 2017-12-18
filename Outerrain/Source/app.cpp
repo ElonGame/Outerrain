@@ -14,7 +14,8 @@ static GLuint draignageTexture;
 static GLuint wetnessTexture;
 static GLuint streampowerTexture;
 static GLuint accessibilityTexture;
-static GLuint vegetationDensityTexture;
+static GLuint vegetationPineDensityTexture;
+static GLuint vegetationBroadDensityTexture;
 
 static Vector2 minMaxSlope;
 static Vector2 minMaxDrainage;
@@ -125,7 +126,7 @@ int App::Render()
 	ImGui::Begin("Maps");
 	ImGui::SetNextWindowContentWidth(1000);
 	ImGui::BeginChild("", ImVec2(0, 190), false, ImGuiWindowFlags_HorizontalScrollbar);
-	ImGui::Columns(6);
+	ImGui::Columns(7);
 	ImGui::Text("Slope");
 	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120));
 	ImGui::Value("Black", minMaxSlope.x);
@@ -156,11 +157,17 @@ int App::Render()
 	ImGui::Value("White", minMaxAccessibility.y);
 	ImGui::SetColumnWidth(4, 135);
 	ImGui::NextColumn();
-	ImGui::Text("Plants Density");
-	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationDensityTexture), ImVec2(120, 120));
+	ImGui::Text("Pine Density");
+	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationPineDensityTexture), ImVec2(120, 120));
 	ImGui::Value("Black", minMaxVegetationDensity.x);
 	ImGui::Value("White", minMaxVegetationDensity.y);
 	ImGui::SetColumnWidth(5, 135);
+	ImGui::NextColumn();
+	ImGui::Text("Broadleaf Density");
+	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationBroadDensityTexture), ImVec2(120, 120));
+	ImGui::Value("Black", minMaxVegetationDensity.x);
+	ImGui::Value("White", minMaxVegetationDensity.y);
+	ImGui::SetColumnWidth(6, 135);
 	ImGui::Columns(1);
 	ImGui::EndChild();
 	ImGui::End();
@@ -362,7 +369,12 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/accessibility.png");
 	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.VegetationDensityField();
+	field = vegTerrain.VegetationDensityField(0);
+	field.WriteImageGrayscale("Data/Maps/vegetationPineDensity.png");
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+
+	field = vegTerrain.VegetationDensityField(0);
+	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
 	slopeTexture = ReadTexture(0, "Data/Maps/slope.png", GL_RGB);
@@ -370,5 +382,6 @@ void App::CalculateAllMaps()
 	wetnessTexture = ReadTexture(0, "Data/Maps/wetness.png", GL_RGB);
 	streampowerTexture = ReadTexture(0, "Data/Maps/streamPower.png", GL_RGB);
 	accessibilityTexture = ReadTexture(0, "Data/Maps/accessibility.png", GL_RGB);
-	vegetationDensityTexture = ReadTexture(0, "Data/Maps/vegetationDensity.png", GL_RGB);
+	vegetationPineDensityTexture = ReadTexture(0, "Data/Maps/vegetationPineDensity.png", GL_RGB);
+	vegetationBroadDensityTexture = ReadTexture(0, "Data/Maps/vegetationBroadDensity.png", GL_RGB);
 }

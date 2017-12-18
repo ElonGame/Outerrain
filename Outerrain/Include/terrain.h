@@ -2,6 +2,7 @@
 #include <vector>
 #include "vec.h"
 #include "mesh.h"
+#include <vector>
 #include "valueField.h"
 
 /* Terrain2D */
@@ -76,13 +77,14 @@ public:
 class VegetationTerrain : public Terrain2D
 {
 protected:
-	ScalarField2D vegetationDensityField;
+	int speciesNumber = 2;
+	std::vector<ScalarField2D> vegetationDensityField;
 
 public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
-	ScalarField2D VegetationDensityField() const;
+	ScalarField2D VegetationDensityField(int k) const;
 
 	void ComputeVegetationDensities();
 

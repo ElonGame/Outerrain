@@ -3,6 +3,11 @@
 
 class GameObject;
 
+enum Specie
+{
+	PineTree,
+	Broadleaf
+};
 class VegetationObject
 {
 protected:
@@ -15,14 +20,14 @@ public:
 	// Les fonctions suivantes retournent une 'densité'
 	// Pour ce type en fonction de facteurs (height, slope...)
 	// Les paramètres doivent être normalisés [0, 1].
-	float SlopeDensityFactor(float);
-	float HeightDensityFactor(float);
-	float WetnessDensityFactor(float);
-	float StreamPowerDensityFactor(float);
+	float SlopeDensityFactor(const Specie s, float);
+	float HeightDensityFactor(const Specie s, float);
+	float WetnessDensityFactor(const Specie s, float);
+	float StreamPowerDensityFactor(const Specie s, float);
 
-	float ComputeDensityFactor(float height, float slope, float wetness, float streampower);
+	float ComputeDensityFactor(Specie s, float height, float slope, float wetness, float streampower);
 
-	GameObject* GetGameObject();
+	GameObject* GetGameObject(Specie s);
 
 	void SetRadius(float r);
 	float GetRadius();

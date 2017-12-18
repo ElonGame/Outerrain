@@ -177,7 +177,7 @@ void Terrain2D::ThermalErosion(int stepCount)
 
 			int i = p.x, j = p.y;
 			float matter = p.value;
-			Point neighbour = Point(0, 0, 0.0f);
+			Point neighbour = Point(-1, -1, 0.0f);
 			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
@@ -199,14 +199,16 @@ void Terrain2D::ThermalErosion(int stepCount)
 			heightField.Set(i, j, heightField.Get(i, j) - matter);
 
 			// Add to lowest neighbour
-			heightField.Set(neighbour.x, neighbour.y, heightField.Get(neighbour.x, neighbour.y) + matter);
+			if(neighbour.x != -1 && neighbour.y != -1){
+				heightField.Set(neighbour.x, neighbour.y, heightField.Get(neighbour.x, neighbour.y) + matter);
 
-			// Add neighbour to stabilize if angle > tanThresholdAngle
-			if (maxZDiff / cellDistX > tanThresholdAngle)
-			{
-				float m = epsilonDisplacement;
-				Point p = Point(neighbour.x, neighbour.y, matter);
-				instables.push(p);
+				// Add neighbour to stabilize if angle > tanThresholdAngle
+				if (maxZDiff / cellDistX > tanThresholdAngle)
+				{
+					float m = epsilonDisplacement;
+					Point p = Point(neighbour.x, neighbour.y, matter);
+					instables.push(p);
+				}
 			}
 		}
 	}
@@ -477,14 +479,15 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 			int i = p.x, j = p.y;
 			float matter = p.value;
-			Point neighbour = Point(0, 0, 0.0f);
+			Point neighbour = Point(-1, -1, 0.0f);
 			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
 				for (int l = -1; l <= 1; l++)
 				{
-					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
+					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false){
 						continue;
+					}
 					float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l) + sand.Get(i, j) - sand.Get(i + k, j + l);
 					if (z > maxZDiff)
 					{
@@ -500,9 +503,10 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 			sand.Set(i, j, sand.Get(i, j) - matter);
 
 			// Add to lowest neighbour
-			bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
-			sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
-
+			if(neighbour.x!=-1 && neighbour.y!=-1){
+				bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
+				sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
+			}
 			// Add neighbour to stabilize if angle > tanThresholdAngle
 			if (maxZDiff / cellDistX > tanThresholdAngle)
 			{
@@ -541,26 +545,33 @@ std::vector<Vector3> LayerTerrain2D::GetAllVertices() const
 
 /* VegetationTerrain */
 VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
-	: Terrain2D(nx, ny, bottomLeft, topRight),
-	vegetationDensityField(nx, ny, bottomLeft, topRight)
+	: Terrain2D(nx, ny, bottomLeft, topRight)
 {
+	for (int k = 0; k < speciesNumber; k++)
+	{
+		vegetationDensityField.push_back(ScalarField2D(nx, ny, bottomLeft, topRight));
+	}
 }
 
 void VegetationTerrain::ComputeVegetationDensities()
 {
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = WetnessField();
-	ScalarField2D streampowerField = StreamPowerField();
+	ScalarField2D accessibilityField = AccessibilityField();
 	VegetationObject vegObj;
-	for (int i = 0; i < ny; i++)
+
+	for (int k = 0; k < speciesNumber; k++)
 	{
-		for (int j = 0; j < nx; j++)
+		for (int i = 0; i < ny; i++)
 		{
-			float height = heightField.Get(i, j);
-			float slope = slopeField.Get(i, j);
-			float wetness = wetnessField.Get(i, j);
-			float streampower = streampowerField.Get(i, j);
-			vegetationDensityField.Set(i, j, vegObj.ComputeDensityFactor(height, slope, wetness, streampower));
+			for (int j = 0; j < nx; j++)
+			{
+				float height = heightField.Get(i, j);
+				float slope = slopeField.Get(i, j);
+				float wetness = wetnessField.Get(i, j);
+				float streampower = accessibilityField.Get(i, j);
+				vegetationDensityField[k].Set(i, j, vegObj.ComputeDensityFactor((Specie)k, height, slope, wetness, streampower));
+			}
 		}
 	}
 }
@@ -579,6 +590,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int tileCountY = static_cast<int>(((topRight.y - bottomLeft.y) / tileSize + 1));
 
 	std::vector<GameObject*> vegObjects;
+
 	for (int i = 0; i < tileCountY; i++)
 	{
 		for (int j = 0; j < tileCountX; j++)
@@ -590,21 +602,26 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 					+ Vector2(tileSize, 0) * static_cast<float>(j)
 					+ Vector2(0, tileSize) * static_cast<float>(i)
 					+ points[tile][x];
-				if (vegetationDensityField.IsInsideField(point) == true)
+
+				for (int k = 0; k < speciesNumber; k++)
 				{
-					float density = vegetationDensityField.GetValueBilinear(point);
-					float p = rand() / static_cast<float>(RAND_MAX);
-					if (p < density)
+					if (vegetationDensityField[k].IsInsideField(point) == true)
 					{
-						GameObject* vegObj = veg.GetGameObject();
-						Vector3 pos = Vector3(point.x, Height(point) + vegObj->GetScale().y / 2.0f, point.y);
-						vegObj->SetPosition(pos);
-						vegObjects.push_back(vegObj);
-						treeCount++;
+						float density = vegetationDensityField[k].GetValueBilinear(point);
+						float p = rand() / static_cast<float>(RAND_MAX);
+						if (p < density)
+						{
+							GameObject* vegObj = veg.GetGameObject((Specie)k);
+							Vector3 pos = Vector3(point.x, Height(point) + vegObj->GetScale().y / 2.0f, point.y);
+							vegObj->SetPosition(pos);
+							vegObjects.push_back(vegObj);
+							treeCount++;
+							break;
+						}
 					}
+					if (treeCount >= maxTreeCount)
+						return vegObjects;
 				}
-				if (treeCount >= maxTreeCount)
-					return vegObjects;
 			}
 		}
 	}
@@ -685,7 +702,7 @@ std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributio
 	return res;
 }
 
-ScalarField2D VegetationTerrain::VegetationDensityField() const
+ScalarField2D VegetationTerrain::VegetationDensityField(int k) const
 {
-	return vegetationDensityField;
+	return vegetationDensityField[k];
 }
