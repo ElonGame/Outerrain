@@ -480,14 +480,15 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 
 			int i = p.x, j = p.y;
 			float matter = p.value;
-			Point neighbour = Point(0, 0, 0.0f);
+			Point neighbour = Point(-1, -1, 0.0f);
 			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
 				for (int l = -1; l <= 1; l++)
 				{
-					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
+					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false){
 						continue;
+					}
 					float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l) + sand.Get(i, j) - sand.Get(i + k, j + l);
 					if (z > maxZDiff)
 					{
@@ -503,9 +504,10 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 			sand.Set(i, j, sand.Get(i, j) - matter);
 
 			// Add to lowest neighbour
-			bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
-			sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
-
+			if(neighbour.x!=-1 && neighbour.y!=-1){
+				bedrock.Set(neighbour.x, neighbour.y, bedrock.Get(neighbour.x, neighbour.y) + matter);
+				sand.Set(neighbour.x, neighbour.y, sand.Get(neighbour.x, neighbour.y) + matter);
+			}
 			// Add neighbour to stabilize if angle > tanThresholdAngle
 			if (maxZDiff / cellDistX > tanThresholdAngle)
 			{
