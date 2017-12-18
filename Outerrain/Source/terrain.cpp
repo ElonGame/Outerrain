@@ -177,7 +177,7 @@ void Terrain2D::ThermalErosion(int stepCount)
 
 			int i = p.x, j = p.y;
 			float matter = p.value;
-			Point neighbour = Point(0, 0, 0.0f);
+			Point neighbour = Point(-1, -1, 0.0f);
 			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
@@ -199,14 +199,16 @@ void Terrain2D::ThermalErosion(int stepCount)
 			heightField.Set(i, j, heightField.Get(i, j) - matter);
 
 			// Add to lowest neighbour
-			heightField.Set(neighbour.x, neighbour.y, heightField.Get(neighbour.x, neighbour.y) + matter);
+			if(neighbour.x != -1 && neighbour.y != -1){
+				heightField.Set(neighbour.x, neighbour.y, heightField.Get(neighbour.x, neighbour.y) + matter);
 
-			// Add neighbour to stabilize if angle > tanThresholdAngle
-			if (maxZDiff / cellDistX > tanThresholdAngle)
-			{
-				float m = epsilonDisplacement;
-				Point p = Point(neighbour.x, neighbour.y, matter);
-				instables.push(p);
+				// Add neighbour to stabilize if angle > tanThresholdAngle
+				if (maxZDiff / cellDistX > tanThresholdAngle)
+				{
+					float m = epsilonDisplacement;
+					Point p = Point(neighbour.x, neighbour.y, matter);
+					instables.push(p);
+				}
 			}
 		}
 	}
