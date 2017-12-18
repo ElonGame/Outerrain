@@ -32,12 +32,11 @@ static float streamPowerErosionAmplitude = 2.0f;
 static int thermalErosionIteration = 1;
 
 // In Progress :
-//  -Bug fix thermal Erosion (Nathan & Axel)					==> Debug
-//  -InitFromNoise() (Nathan)									==> Debug
-//  -Vegetation plusieurs espèces (Thomas)						==> Todo/Debug
+//  -Joujou avec Shader (Thomas)
+//  -Vegetation plusieurs espèces (Vincent)
 
 // To do :
-//  -Routes : regarder algo article galin/peytavie et adapter
+//  -Routes : Algorithme de plus court chemin pondéré par les propriétés du terrain
 //  -Villages (?)
 
 // Bug fix :
