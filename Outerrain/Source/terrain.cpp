@@ -222,7 +222,8 @@ ScalarField2D Terrain2D::SlopeField() const
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			float s = Magnitude(heightField.Gradient(i, j));
+			float tanSlope = Magnitude(heightField.Gradient(i, j));
+			float s = atan(tanSlope) * 180.0 / 3.14;
 			slopeField.Set(i, j, s);
 		}
 	}
@@ -319,7 +320,9 @@ ScalarField2D Terrain2D::WetnessField() const
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
+		{
 			wetnessField.Set(i, j, log(drainageField.Get(i, j) / (1.0f + slopeField.Get(i, j))));
+		}
 	}
 	return wetnessField;
 }
