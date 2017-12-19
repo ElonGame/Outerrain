@@ -103,7 +103,11 @@ public:
 	explicit Vector3() : x(0.0), y(0.0), z(0.0) { }
 	explicit Vector3(float n) : x(n), y(n), z(n) {}
 	explicit Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
-
+	
+	Vector3 operator*(const Vector3 u) const
+	{
+		return Vector3(x * u.x, y * u.y, z * u.z);
+	}
 	Vector3 operator*(const float& k) const
 	{
 		return Vector3(x * k, y * k, z * k);
@@ -115,6 +119,10 @@ public:
 	bool operator==(const Vector3& u) const
 	{
 		return (x == u.x && y == u.y && z == u.z);
+	}
+	bool operator!=(const Vector3& u) const
+	{
+		return (x != u.x || y != u.y || z != u.z);
 	}
 	Vector3 operator-(const Vector3& u) const
 	{

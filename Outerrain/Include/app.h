@@ -37,7 +37,7 @@ protected:
 	void ThermalErosionCallback(int stepCount);
 	void StreamPowerErosionCallback(int stepCount, float amplitude);
 	void SpawnVegetationCallback();
-	
+	void GenerateRoadCallback();
 
 public:
 	App(const int&, const int&, const int&, const int&);

@@ -1,4 +1,5 @@
 #include "app.h"
+#include "roads.h"
 
 void App::ThermalErosionCallback(int stepCount)
 {
@@ -43,4 +44,15 @@ void App::SpawnVegetationCallback()
 	for (int i = 0; i < trees.size(); i++)
 		scene.AddChild(trees[i]);
 	CalculateAllMaps();
+}
+
+void App::GenerateRoadCallback()
+{
+	std::vector<Vector3> path = ShortestPath::FindShortestPath(vegTerrain, Vector3(30.0f, 0.0f, 30.0f), Vector3(100.0f, 0.0f, 175.0f));
+	for (int i = 0; i < path.size(); i++)
+	{
+		GameObject* o = ShortestPath::GetNodeObject();
+		o->SetPosition(path[i]);
+		scene.AddChild(o);
+	}
 }

@@ -5,6 +5,7 @@
 #include "texture.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
+#include "roads.h"
 #include <chrono>
 #include <sstream>
 
@@ -239,6 +240,11 @@ int App::Update(const float time, const float deltaTime)
 	{
 		SpawnVegetationCallback();
 	}
+	// Roads
+	if (key_state(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	{
+		GenerateRoadCallback();
+	}
 
 	// Update game objects
 	UpdateObjects(time, deltaTime);
@@ -352,7 +358,7 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.WetnessField();
+	/*field = vegTerrain.WetnessField();
 	field.WriteImageGrayscale("Data/Maps/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 
@@ -374,7 +380,7 @@ void App::CalculateAllMaps()
 
 	field = vegTerrain.VegetationDensityField(0);
 	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());*/
 
 	slopeTexture = ReadTexture(0, "Data/Maps/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/Maps/drainageSqrt.png", GL_RGB);
