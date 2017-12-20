@@ -339,7 +339,6 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformVec3("camPos", camPos);
 
-	shader.UniformColor("diffuseColor", material.diffuse);
 	shader.UniformFloat("shininess", material.shininess);
 	shader.UniformInt("renderMode", renderMode);
 

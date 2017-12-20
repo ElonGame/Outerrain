@@ -26,7 +26,6 @@ void main( )
 #ifdef FRAGMENT_SHADER
 uniform int renderMode;
 uniform vec3 camPos;
-uniform vec4 diffuseColor;
 uniform float shininess;
 
 uniform sampler2D texture0;
