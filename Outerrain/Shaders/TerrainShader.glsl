@@ -87,8 +87,7 @@ void main()
 	else 					  // Diffuse
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 		
-	//vec2 uv = 1.0 - vertex_texcoord.xy;
-	//fragment_color = vec4(texture(texture0, uv).rgb, 1);
-	fragment_color = vec4(vertex_texcoord.xy, 0, 1);
+	//fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
+	//fragment_color = vec4(vertex_texcoord.xy, 0, 1);
 }
 #endif

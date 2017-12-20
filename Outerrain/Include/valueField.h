@@ -176,7 +176,7 @@ public:
 			for (int j = 0; j < nx; j++)
 			{
 				float v = (Get(i, j) - min) / (max - min);
-				im(i, j) = Color(v, v, v, 1.0);
+				im(j, i) = Color(v, v, v, 1.0);
 			}
 		}
 		im.WriteImage(path, true);
@@ -185,7 +185,7 @@ public:
 	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude)
 	{
 		Image heightmap;
-		heightmap.ReadImage(file, true);
+		heightmap.ReadImage(file, false);
 		float texelX = 1.0f / (heightmap.Width());
 		float texelY = 1.0f / (heightmap.Height());
 

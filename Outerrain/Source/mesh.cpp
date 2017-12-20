@@ -302,8 +302,8 @@ void Mesh::CalculateFromTerrain2D(const Terrain2D& terrain)
 	{
 		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
 		{
-			AddTriangle(c, c + nx, c + nx + 1);
-			AddTriangle(c + nx + 1, c + 1, c);
+			AddTriangle(c + nx + 1, c + nx, c);
+			AddTriangle(c, c + 1, c + nx + 1);
 		}
 		c++;
 	}

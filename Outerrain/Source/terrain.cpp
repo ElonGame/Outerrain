@@ -88,7 +88,7 @@ void Terrain2D::ComputeNormalField()
 		{
 			Vector3 AB = (Vertex(i + 1, j) - Vertex(i, j));
 			Vector3 AC = (Vertex(i + 1, j + 1) - Vertex(i, j));
-			Vector3 normal = Normalize(Cross(AB, AC));
+			Vector3 normal = Normalize(-Cross(AB, AC));
 
 			normalField.Set(i, j, normalField.Get(i, j) + normal);
 			normalField.Set(i + 1, j, normalField.Get(i + 1, j) + normal);
@@ -96,7 +96,7 @@ void Terrain2D::ComputeNormalField()
 
 			AB = AC;
 			AC = (Vertex(i, j + 1) - Vertex(i, j));
-			normal = Normalize(Cross(AB, AC));
+			normal = Normalize(-Cross(AB, AC));
 
 			normalField.Set(i, j, normalField.Get(i, j) + normal);
 			normalField.Set(i + 1, j + 1, normalField.Get(i + 1, j + 1) + normal);
@@ -584,7 +584,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int treeCount = 0;
 
 	int tileCountX = static_cast<int>(((topRight.x - bottomLeft.x) / tileSize + 1));
-	int tileCountY = static_cast<int>(((topRight.y - bottomLeft.y) / tileSize + 1));
+	int tileCountY = -static_cast<int>(((topRight.y - bottomLeft.y) / tileSize + 1));
 
 	std::vector<GameObject*> vegObjects;
 	for (int i = 0; i < tileCountY; i++)
@@ -596,7 +596,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 			{
 				Vector2 point = bottomLeft
 					+ Vector2(tileSize, 0) * static_cast<float>(j)
-					+ Vector2(0, tileSize) * static_cast<float>(i)
+					+ Vector2(0, -tileSize) * static_cast<float>(i)
 					+ points[tile][x];
 				if (vegetationDensityField.IsInsideField(point) == true)
 				{
