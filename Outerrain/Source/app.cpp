@@ -128,43 +128,43 @@ int App::Render()
 	ImGui::BeginChild("", ImVec2(0, 190), false, ImGuiWindowFlags_HorizontalScrollbar);
 	ImGui::Columns(7);
 	ImGui::Text("Slope");
-	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120), ImVec2(0,1),ImVec2(1, 0));
 	ImGui::Value("Black", minMaxSlope.x);
 	ImGui::Value("White", minMaxSlope.y);
 	ImGui::SetColumnWidth(0, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Drainage");
-	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(draignageTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxDrainage.x);
 	ImGui::Value("White", minMaxDrainage.y);
 	ImGui::SetColumnWidth(1, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Wetness");
-	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(wetnessTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxWetness.x);
 	ImGui::Value("White", minMaxWetness.y);
 	ImGui::SetColumnWidth(2, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Stream Power");
-	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(streampowerTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxStreampower.x);
 	ImGui::Value("White", minMaxStreampower.y);
 	ImGui::SetColumnWidth(3, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Accessibility");
-	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(accessibilityTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxAccessibility.x);
 	ImGui::Value("White", minMaxAccessibility.y);
 	ImGui::SetColumnWidth(4, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Pine Density");
-	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationPineDensityTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationPineDensityTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxVegetationDensity.x);
 	ImGui::Value("White", minMaxVegetationDensity.y);
 	ImGui::SetColumnWidth(5, 135);
 	ImGui::NextColumn();
 	ImGui::Text("Broadleaf Density");
-	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationBroadDensityTexture), ImVec2(120, 120));
+	ImGui::Image(reinterpret_cast<ImTextureID>(vegetationBroadDensityTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxVegetationDensity.x);
 	ImGui::Value("White", minMaxVegetationDensity.y);
 	ImGui::SetColumnWidth(6, 135);
@@ -312,12 +312,12 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
 	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Grey(), 0));
 	GameObject* obj = new GameObject();
@@ -358,7 +358,7 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 
-	/*field = vegTerrain.WetnessField();
+	field = vegTerrain.WetnessField();
 	field.WriteImageGrayscale("Data/Maps/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 
@@ -380,7 +380,7 @@ void App::CalculateAllMaps()
 
 	field = vegTerrain.VegetationDensityField(0);
 	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());*/
+	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
 	slopeTexture = ReadTexture(0, "Data/Maps/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/Maps/drainageSqrt.png", GL_RGB);

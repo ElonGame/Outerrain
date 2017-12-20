@@ -177,16 +177,16 @@ public:
 			for (int j = 0; j < nx; j++)
 			{
 				float v = (Get(i, j) - min) / (max - min);
-				im(i, j) = Color(v, v, v, 1.0);
+				im(j, i) = Color(v, v, v, 1.0);
 			}
 		}
-		im.WriteImage(path, false);
+		im.WriteImage(path, true);
 	}
 
 	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude)
 	{
 		Image heightmap;
-		heightmap.ReadImage(file, true);
+		heightmap.ReadImage(file, false);
 		float texelX = 1.0f / (heightmap.Width());
 		float texelY = 1.0f / (heightmap.Height());
 
@@ -215,10 +215,10 @@ public:
 				float localU = (u - anchorU) / texelX;
 				float localV = (v - anchorV) / texelY;
 
-				float abu = Lerp(a, b, localU);
-				float dcu = Lerp(d, c, localU);
+				float abu = Lerp(a, b, localV);
+				float dcu = Lerp(d, c, localV);
 
-				float value = Lerp(dcu, abu, localV);
+				float value = Lerp(abu, dcu, localU);
 				Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 			}
 		}

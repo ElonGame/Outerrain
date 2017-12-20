@@ -8,6 +8,7 @@
 
 class Terrain2D;
 class CameraOrbiter;
+class ImageData;
 
 enum RenderMode
 {
@@ -32,6 +33,7 @@ protected:
 	GLuint VAO;
 	GLuint fullBuffer;
 	GLuint indexBuffer;
+	GLuint texture0;
 	
 	Shader shader;
 	bool updateBuffersNextDraw;
@@ -53,6 +55,8 @@ protected:
 
 	const void *IndexBufferPtr() const { return &indices.front(); }
 	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
+
+	GLuint MakeTexture(const int unit, const ImageData& im, const GLenum texel_type);
 
 public:
 	Mesh();
@@ -90,4 +94,6 @@ public:
 
 	void Draw();
 	void Draw(const CameraOrbiter&);
+
+	void SetTexture(const char* filename, const GLenum texel_type);
 };

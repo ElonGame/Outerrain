@@ -43,6 +43,7 @@ public:
 	ScalarField2D StreamPowerField() const;
 	ScalarField2D SlopeField() const;
 	ScalarField2D AccessibilityField() const;
+	ScalarField2D HeightField() const;
 };
 
 
