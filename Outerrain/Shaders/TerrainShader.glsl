@@ -65,7 +65,6 @@ vec3 TerrainShading(vec2 uv)
 	float illumination = texture(texture0, uv).r;
 	terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 - illumination, 2) * 3.0, 0, 1));
 	
-
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
 
@@ -91,10 +90,10 @@ void main()
 		fragment_color = vec4(NormalShading(), 1.0);
 	else if (renderMode == 2) // WireFrame
 		fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
-	else 					  // Diffuse
+	else if (renderMode == 0) // Diffuse Splatmap
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
-		
-	//fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
+	else
+		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
 	//fragment_color = vec4(vertex_texcoord.xy, 0, 1);
 }
 #endif

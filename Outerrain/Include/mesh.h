@@ -15,6 +15,7 @@ enum RenderMode
 	DiffuseMode = 0,
 	NormalMode = 1,
 	WireframeMode = 2,
+	Texture = 3,
 };
 
 class Mesh : public Component
@@ -96,4 +97,5 @@ public:
 	void Draw(const CameraOrbiter&);
 
 	void SetTexture(const char* filename, const GLenum texel_type);
+	void SetTexture(const GLuint& t) { texture0 = t; }
 };

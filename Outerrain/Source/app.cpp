@@ -119,7 +119,7 @@ int App::Render()
 	ImGui::End();
 	// Shading
 	ImGui::Begin("Shaders");
-	const char* items[] = { "Diffuse", "Normal", "Wireframe" };
+	const char* items[] = { "Diffuse", "Normal", "Wireframe", "Slope Texture", "Drainage Texture", "Wetness Texture", "Accessibility Texture", "Stream Power Texture" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 	// Debug Image 
@@ -226,29 +226,45 @@ int App::Update(const float time, const float deltaTime)
 
 	// Thermal Erosion
 	if (key_state(SDLK_t))
-	{
 		ThermalErosionCallback(thermalErosionIteration);
-	}
 
 	// Stream Power erosion
 	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
-	{
 		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
-	}
+
 	// Vegetation spawn
 	if (key_state(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
-	{
 		SpawnVegetationCallback();
-	}
+
 	// Roads
 	if (key_state(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
-	{
 		GenerateRoadCallback();
-	}
 
 	// Update game objects
 	UpdateObjects(time, deltaTime);
-	scene.GetChildAt(0)->GetComponent<Mesh>()->SetRenderMode((RenderMode)currentItem);
+	RenderMode r = (currentItem > 3) ? Texture : (RenderMode)currentItem;
+	scene.GetChildAt(0)->GetComponent<Mesh>()->SetRenderMode(r);
+	switch (currentItem)
+	{
+	case 0:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
+		break;
+	case 3:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(slopeTexture);
+		break;
+	case 4:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(draignageTexture);
+		break;
+	case 5:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(wetnessTexture);
+		break;
+	case 6:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
+		break;
+	case 7:
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(streampowerTexture);
+		break;
+	}
 
 	return 1;
 }
@@ -325,7 +341,6 @@ void App::InitSceneVegetationTerrain()
 	scene.AddChild(obj);
 
 	CalculateAllMaps();
-	mesh->SetTexture("Data/Maps/accessibility.png", GL_RGB);
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
