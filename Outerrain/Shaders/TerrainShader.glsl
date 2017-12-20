@@ -51,13 +51,20 @@ vec3 NormalShading()
 vec3 TerrainShading(vec2 uv)
 {
 	// Terrain material placement
+	vec3 grassColor = vec3(0.3, 0.6, 0.15);
+	vec3 snowColor = vec3(1, 1, 1);
+	vec3 rockColor = vec3(0.4, 0.4, 0.4);
+	vec3 dirtColor = vec3(0.4, 0.25, 0.2);
+	
+	// Grass/Rock
+	float slope = 1.0 - worldNormal.y;
+	vec3 terrainColor = mix(grassColor, dirtColor, clamp(pow(slope * 5.0, 2), 0, 1));
+	terrainColor = mix(terrainColor, rockColor, pow(slope, 4));
+	
+	// Snow
 	float illumination = texture(texture0, uv).r;
-	vec3 terrainColor = vec3(0, 0, 0);
-	if(illumination < 0.0)
-		terrainColor = vec3(1, 1, 1);
-	else
-		terrainColor = vec3(0.4, 1.0, 0.2);
-	terrainColor = vec3(1, 1, 1);
+	terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 - illumination, 2) * 3.0, 0, 1));
+	
 
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));

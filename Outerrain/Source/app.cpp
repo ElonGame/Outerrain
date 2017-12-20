@@ -325,6 +325,7 @@ void App::InitSceneVegetationTerrain()
 	scene.AddChild(obj);
 
 	CalculateAllMaps();
+	mesh->SetTexture("Data/Maps/accessibility.png", GL_RGB);
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(WindowWidth());
