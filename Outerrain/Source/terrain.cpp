@@ -574,8 +574,8 @@ void VegetationTerrain::ComputeVegetationDensities()
 				float height = heightField.Get(i, j);
 				float slope = slopeField.Get(i, j);
 				float wetness = wetnessField.Get(i, j);
-				float streampower = accessibilityField.Get(i, j);
-				vegetationDensityField[k].Set(i, j, vegObj.ComputeDensityFactor((Specie)k, height, slope, wetness, streampower));
+				float accessibility = accessibilityField.Get(i, j);
+				vegetationDensityField[k].Set(i, j, vegObj.ComputeDensityFactor((Specie)k, height, slope, wetness, accessibility));
 			}
 		}
 	}
