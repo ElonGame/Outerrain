@@ -588,7 +588,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	float tileSize = veg.GetRadius() * 10.0f;
 	std::vector<std::vector<Vector2>> points = GetRotatedRandomDistributions(veg.GetRadius(), tileSize, 1000);
 
-	int maxTreeCount = 1000;
+	int maxTreeCount = 3000;
 	int treeCount = 0;
 
 	int tileCountX = static_cast<int>(((topRight.x - bottomLeft.x) / tileSize + 1));

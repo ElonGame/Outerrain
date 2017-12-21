@@ -35,9 +35,10 @@ static int thermalErosionIteration = 1;
 
 // In Progress :
 //  -Vegetation plusieurs espèces (Vincent)
+//  -Placement vegetation bug sur les bords du terrain (Thomas, IsInsideField ?)
+//  -Roads : Genérer un graphe avec les vertices du terrains, pondérer les arcs et faire le plus court chemin
 
 // To do :
-//  -Routes : Algorithme de plus court chemin pondéré par les propriétés du terrain
 //  -Villages (?)
 
 
