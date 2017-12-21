@@ -32,16 +32,13 @@ static int streamPowerErosionIteration = 1;
 static float streamPowerErosionAmplitude = 2.0f;
 static int thermalErosionIteration = 1;
 
+
 // In Progress :
-//  -Joujou avec Shader (Thomas)
 //  -Vegetation plusieurs espèces (Vincent)
 
 // To do :
 //  -Routes : Algorithme de plus court chemin pondéré par les propriétés du terrain
 //  -Villages (?)
-
-// Bug fix :
-//  -Intégrer FlyCam de Thomas
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -70,9 +67,9 @@ int App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	InitSceneVegetationTerrain();
+	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	//InitSceneNoiseTerrain();
+	InitSceneNoiseTerrain();
 
 	return 1;
 }
@@ -306,12 +303,12 @@ void App::UpdateObjects(const float time, const float delta)
 /* Init Scenes */
 void App::InitSceneNoiseTerrain()
 {
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
 	vegTerrain.InitFromNoise(0, 150);
 
 	Mesh* mesh = vegTerrain.GetMesh();
 	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
 	mesh->SetShader(shader);
 	mesh->SetMaterial(Material(Color::Grey(), 0));
 	GameObject* obj = new GameObject();
@@ -350,7 +347,7 @@ void App::InitSceneVegetationTerrain()
 
 void App::InitSceneLayerTerrain()
 {
-	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, -256), Vector2(256, 256));
+	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, 256), Vector2(256, -256));
 	layerTerrain2D.InitFromFile("Data/Heightmaps/island.png", 0, 100, 0.8f);
 
 	Mesh* mesh = layerTerrain2D.GetMesh();
