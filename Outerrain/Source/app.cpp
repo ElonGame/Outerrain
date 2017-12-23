@@ -68,9 +68,9 @@ int App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	//InitSceneVegetationTerrain();
+	InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	InitSceneNoiseTerrain();
+	//InitSceneNoiseTerrain();
 
 	return 1;
 }
