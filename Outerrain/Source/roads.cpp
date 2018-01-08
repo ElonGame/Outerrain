@@ -23,6 +23,50 @@ const GraphNode ShortestPath::GetNeighbourInGraph(const std::vector<std::vector<
 		return g[i + 1][j + 1];
 }
 
+void ShortestPath::ComputeNeighbourForNode(std::vector<std::vector<GraphNode>>& nodes, int i, int j)
+{
+	if (i > 0)
+	{
+		nodes[i][j].W[0] = 1.0f;
+		nodes[i - 1][j].W[1] = 1.0f;
+	}
+	if (i < nodes.size() - 1)
+	{
+		nodes[i][j].W[1] = 1.0f;
+		nodes[i + 1][j].W[0] = 1.0f;
+	}
+	if (j > 0)
+	{
+		nodes[i][j].W[2] = 1.0f;
+		nodes[i][j - 1].W[3] = 1.0f;
+	}
+	if (j < nodes[i].size() - 1)
+	{
+		nodes[i][j].W[3] = 1.0f;
+		nodes[i][j + 1].W[2] = 1.0f;
+	}
+	if (i > 0 && j > 0)
+	{
+		nodes[i][j].W[4] = 1.0f;
+		nodes[i - 1][j - 1].W[7] = 1.0f;
+	}
+	if (i > 0 && j < nodes[i].size())
+	{
+		nodes[i][j].W[5] = 1.0f;
+		nodes[i - 1][j + 1].W[6] = 1.0f;
+	}
+	if (i < nodes.size() && j > 0)
+	{
+		nodes[i][j].W[6] = 1.0f;
+		nodes[i + 1][j - 1].W[5] = 1.0f;
+	}
+	if (i < nodes.size() && j < nodes[i].size())
+	{
+		nodes[i][j].W[7] = 1.0f;
+		nodes[i + 1][j + 1].W[4] = 1.0f;
+	}
+}
+
 void ShortestPath::ComputeGraph(const Terrain2D& terrain)
 {
 	// Compute graph from input terrain
@@ -32,48 +76,7 @@ void ShortestPath::ComputeGraph(const Terrain2D& terrain)
 	{
 		nodes[i].resize(terrain.SizeX());
 		for (int j = 0; j < nodes[i].size(); j++)
-		{
-			if (i > 0)
-			{
-				nodes[i][j].W[0] = 1.0f;
-				nodes[i - 1][j].W[1] = 1.0f;
-			}
-			if (i < nodes.size() - 1)
-			{
-				nodes[i][j].W[1] = 1.0f;
-				nodes[i + 1][j].W[0] = 1.0f;
-			}
-			if (j > 0)
-			{
-				nodes[i][j].W[2] = 1.0f;
-				nodes[i][j - 1].W[3] = 1.0f;
-			}
-			if (j < nodes[i].size() - 1) 
-			{
-				nodes[i][j].W[3] = 1.0f;
-				nodes[i][j + 1].W[2] = 1.0f;
-			}
-			if (i > 0 && j > 0)
-			{
-				nodes[i][j].W[4] = 1.0f;
-				nodes[i - 1][j - 1].W[7] = 1.0f;
-			}
-			if (i > 0 && j < nodes[i].size())
-			{
-				nodes[i][j].W[5] = 1.0f;
-				nodes[i - 1][j + 1].W[6] = 1.0f;
-			}
-			if (i < nodes.size() && j > 0)
-			{
-				nodes[i][j].W[6] = 1.0f;
-				nodes[i + 1][j - 1].W[5] = 1.0f;
-			}
-			if (i < nodes.size() && j < nodes[i].size())
-			{
-				nodes[i][j].W[7] = 1.0f;
-				nodes[i + 1][j + 1].W[4] = 1.0f;
-			}
-		}
+			ComputeNeighbourForNode(nodes, i, j);
 	}
 
 	// Compute edge weight for each node
@@ -84,13 +87,13 @@ void ShortestPath::ComputeGraph(const Terrain2D& terrain)
 		{
 			for (int k = 0; k < ADJ_SIZE; k++)
 			{
-				if (nodes[i][j].W[k] != NULL_VALUE)
-				{
-					GraphNode node = nodes[i][j];
-					GraphNode neighbour = GetNeighbourInGraph(nodes, i, j, k);
-					// Todo : compute edge weight between node and neighbour
-					// With slope.
-				}
+				if (nodes[i][j].W[k] == NULL_VALUE)
+					continue;
+
+				GraphNode node = nodes[i][j];
+				GraphNode neighbour = GetNeighbourInGraph(nodes, i, j, k);
+				// Todo : compute W[k] between node and neighbour
+				// With slope.
 			}
 		}
 	}
