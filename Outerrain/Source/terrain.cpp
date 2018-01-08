@@ -10,7 +10,7 @@
 #include "gameobject.h"
 
 
-static bool compareHeight(Point u, Point v)
+static bool CompareHeight(Point u, Point v)
 {
 	return (u.value > v.value);
 }
@@ -276,7 +276,7 @@ ScalarField2D Terrain2D::DrainageField() const
 		for (int j = 0; j < nx; j++)
 			points.push_back(Point(i, j, heightField.Get(i, j)));
 	}
-	std::sort(points.begin(), points.end(), compareHeight);
+	std::sort(points.begin(), points.end(), CompareHeight);
 
 	ScalarField2D drainage = ScalarField2D(nx, ny, bottomLeft, topRight, 1.0);
 	while (!points.empty())
