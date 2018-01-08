@@ -2,25 +2,64 @@
 #include "gameobject.h"
 using namespace std;
 
-
-const GraphNode ShortestPath::GetNeighbourInGraph(const std::vector<std::vector<GraphNode>>& g, int i, int j, int k)
+const GraphNode ShortestPath::GetNeighbourInGraph(const std::vector<std::vector<GraphNode>>& g, int i, int j, int& i2, int& j2, int& k2, int k)
 {
 	if (k == 0)
+	{
+		i2 = i + 1;
+		j2 = j;
+		k2 = 1;
 		return g[i - 1][j];
+	}
 	if (k == 1)
+	{
+		i2 = i - 1;
+		j2 = j;
+		k2 = 0;
 		return g[i + 1][j];
+	}
 	if (k == 2)
+	{
+		i2 = i;
+		j2 = j + 1;
+		k2 = 3;
 		return g[i][j - 1];
+	}
 	if (k == 3)
+	{
+		i2 = i;
+		j2 = j - 1;
+		k2 = 2;
 		return g[i][j + 1];
+	}
 	if (k == 4)
+	{
+		i2 = i + 1;
+		j2 = j + 1;
+		k2 = 7;
 		return g[i - 1][j - 1];
+	}
 	if (k == 5)
+	{
+		i2 = i + 1;
+		j2 = j - 1;
+		k2 = 6;
 		return g[i - 1][j + 1];
+	}
 	if (k == 6)
+	{
+		i2 = i - 1;
+		j2 = j + 1;
+		k2 = 5;
 		return g[i + 1][j - 1];
+	}
 	if (k == 7)
+	{
+		i2 = i - 1;
+		j2 = j - 1;
+		k2 = 4;
 		return g[i + 1][j + 1];
+	}
 }
 
 void ShortestPath::ComputeNeighbourForNode(std::vector<std::vector<GraphNode>>& nodes, int i, int j)
@@ -90,10 +129,14 @@ void ShortestPath::ComputeGraph(const Terrain2D& terrain)
 				if (nodes[i][j].W[k] == NULL_VALUE)
 					continue;
 
+				int i2, j2, k2;
 				GraphNode node = nodes[i][j];
-				GraphNode neighbour = GetNeighbourInGraph(nodes, i, j, k);
-				// Todo : compute W[k] between node and neighbour
-				// With slope.
+				GraphNode neighbour = GetNeighbourInGraph(nodes, i, j, i2, j2, k2, k);
+				Vector3 v1 = terrain.Vertex(i, j);
+				Vector3 v2 = terrain.Vertex(i2, j2);
+				float w = Magnitude(v2 - v1) * (1.0f + (v2.y - v1.y));
+				nodes[i][j].W[k] = w;
+				nodes[i2][j2].W[k2] = w;
 			}
 		}
 	}
