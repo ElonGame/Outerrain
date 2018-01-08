@@ -8,7 +8,7 @@
 
 class Terrain2D;
 class CameraOrbiter;
-class ImageData;
+struct ImageData;
 
 enum RenderMode
 {

@@ -489,9 +489,9 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 			{
 				for (int l = -1; l <= 1; l++)
 				{
-					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false) {
+					if ((k == 0 && l == 0) || bedrock.InsideVertex(i + k, j + l) == false)
 						continue;
-					}
+					
 					float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l) + sand.Get(i, j) - sand.Get(i + k, j + l);
 					if (z > maxZDiff)
 					{

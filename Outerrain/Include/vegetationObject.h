@@ -28,7 +28,7 @@ public:
 
 	Specie(TreeType sp, Vector2 height, Vector2 slope, Vector2 wetness, const char* n, ScalarField2D s) :
 		type(sp), heightData(height), slopeData(slope), wetnessData(wetness), name(n), densityField(s) {}
-};
+} Specie;
 
 class VegetationObject
 {
