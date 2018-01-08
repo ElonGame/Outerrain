@@ -2,6 +2,8 @@
 #include "gameobject.h"
 #include <algorithm>
 #include <math.h>
+#include <sstream>
+#include <string>
 
 
 VegetationObject::VegetationObject()
@@ -12,74 +14,35 @@ VegetationObject::VegetationObject()
 GameObject* VegetationObject::GetGameObject(Specie s)
 {
 	Mesh* m = new Mesh(GL_TRIANGLES);
-	if (s == PineTree)
-		m->ReadMesh("Data/Objs/pineTree.obj");
-	else
-		m->ReadMesh("Data/Objs/broadleaf.obj");
+
+	std::stringstream ss;
+	ss << "Data/Objs/" << s.name << rand() % 3 + 1 << ".obj";
+	m->ReadMesh(ss.str().c_str());
+
 	Shader shader;
 	shader.InitFromFile("Shaders/Diffuse.glsl");
 	m->SetShader(shader);
 	m->SetMaterial(Material(Color::Green(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
+	obj->RotateAround(Vector3(0.0f, 1.0f, 0.0f), rand() % 360);
 	return obj;
 }
-
 
 /* Density functions */
 float VegetationObject::HeightDensityFactor(const Specie s, float height)
 {
-	float baseHeight;
-	float rangeHeight;
-	if (s == PineTree)
-	{
-		baseHeight = 50.0f;
-		float maxHeight = 135.0f;
-		rangeHeight = maxHeight - baseHeight;
-	}
-	else
-	{
-		baseHeight = 0.0f;
-		float maxHeight = 30.0f;
-		rangeHeight = maxHeight - baseHeight;
-	}
-	return 1.0f - (abs(height - baseHeight) / rangeHeight);
+	return 1.0f - (abs(height - s.heightData.x) / s.heightData.y);
 }
 
 float VegetationObject::SlopeDensityFactor(const Specie s, float slope)
 {
-	float baseSlope;
-	float rangeSlope;
-	if (s == PineTree)
-	{
-		baseSlope = 15.0f;
-		float maxSlope = 70.0f;
-		rangeSlope = maxSlope - baseSlope;
-	}
-	else
-	{
-		baseSlope = 0.0f;
-		float maxSlope = 35.0f;
-		rangeSlope = maxSlope - baseSlope;
-	}
-	return 1.0f - (abs((slope * 90.0f) - baseSlope) / rangeSlope);
+	return 1.0f - (abs((slope * 90.0f) - s.slopeData.x) / s.slopeData.y);
 }
 
 float VegetationObject::WetnessDensityFactor(const Specie s, float wetness)
 {
-	return 1.0f;
-	if (s == PineTree)
-		return cos(wetness * 1.6f) * 0.5f + 0.5f;
-	return cos(wetness * 1.6f) * 0.5f + 0.5f;
-}
-
-
-float VegetationObject::AccessibilityDensityFactor(const Specie s, float streamPower)
-{
-	return 1.0f;
-	if (s == PineTree)
-		return cos(streamPower * 1.6f) * 0.5f + 0.5f;
-	return cos(streamPower * 1.6f) * 0.5f + 0.5f;
+	return 1.0f - (abs((wetness * 100.0f) - s.wetnessData.x) / s.wetnessData.y);
 }
 
 void VegetationObject::SetRadius(float r)
@@ -92,9 +55,8 @@ float VegetationObject::GetRadius()
 	return radius;
 }
 
-float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness, float accessibilitys)
+float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness)
 {
 	float min1 = std::min(HeightDensityFactor(s, height), SlopeDensityFactor(s, slope));
-	float min2 = std::min(WetnessDensityFactor(s, wetness), AccessibilityDensityFactor(s, accessibilitys));
-	return std::min(min1, min2);
+	return std::min(min1, WetnessDensityFactor(s, wetness));
 }
