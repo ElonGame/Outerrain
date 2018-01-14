@@ -43,17 +43,16 @@ static int thermalErosionIteration = 1;
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
 {
-	window = CreateWindow(width, height);
-	glContext = create_context(window, major, minor);
+	window = new Window(width, height);
+	window->CreateGLContext(minor, major);
+
 	currentItem = 0;
-	windowWidth = static_cast<float>(width);
-	windowHeight = static_cast<float>(height);;
 }
 
 int App::Init()
 {
 	// Init ImGui
-	ImGui_OpenGL_Init(window);
+	ImGui_OpenGL_Init(window->GetSDLWindow());
 
 	// Default gl state
 	glClearDepthf(1);
@@ -77,10 +76,7 @@ int App::Init()
 void App::Quit()
 {
 	ImGui_OpenGL_Shutdown();
-	if (glContext)
-		release_context(glContext);
-	if (window)
-		ReleaseWindow(window);
+	delete window;
 	glDeleteQueries(1, &m_time_query);
 }
 
@@ -200,7 +196,7 @@ int App::Update(const float time, const float deltaTime)
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	float mxF = static_cast<float>(mx);
 	float myF = static_cast<float>(my);
-	if (key_state(SDLK_LCTRL) && mb & SDL_BUTTON(1))
+	if (window->KeyState(SDLK_LCTRL) && mb & SDL_BUTTON(1))
 		orbiter.Rotation(mxF, myF);
 	if (mb & SDL_BUTTON(3))
 		orbiter.Move(myF);
@@ -208,33 +204,33 @@ int App::Update(const float time, const float deltaTime)
 		orbiter.Translation(mxF / windowWidth, myF / windowHeight);
 
 	// Keyboard
-	if (key_state(SDLK_PAGEUP))
+	if (window->KeyState(SDLK_PAGEUP))
 		orbiter.Move(1.0f);
-	if (key_state(SDLK_PAGEDOWN))
+	if (window->KeyState(SDLK_PAGEDOWN))
 		orbiter.Move(-1.0f);
-	if (key_state(SDLK_UP))
+	if (window->KeyState(SDLK_UP))
 		orbiter.Translation(0.0f, 10.0f / windowHeight);
-	if (key_state(SDLK_DOWN))
+	if (window->KeyState(SDLK_DOWN))
 		orbiter.Translation(0.0f, -10.0f / windowHeight);
-	if (key_state(SDLK_LEFT))
+	if (window->KeyState(SDLK_LEFT))
 		orbiter.Translation(10.0f / windowWidth, 0.0f);
-	if (key_state(SDLK_RIGHT))
+	if (window->KeyState(SDLK_RIGHT))
 		orbiter.Translation(-10.0f / windowWidth, 0.0f);
 
 	// Thermal Erosion
-	if (key_state(SDLK_t))
+	if (window->KeyState(SDLK_t))
 		ThermalErosionCallback(thermalErosionIteration);
 
 	// Stream Power erosion
-	if (key_state(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (window->KeyState(SDLK_p) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
 
 	// Vegetation spawn
-	if (key_state(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (window->KeyState(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 		SpawnVegetationCallback();
 
 	// Roads
-	if (key_state(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (window->KeyState(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
 		GenerateRoadCallback();
 
 	// Update game objects
@@ -270,16 +266,16 @@ void App::Run()
 {
 	if (Init() < 0)
 		return;
-	glViewport(0, 0, WindowWidth(), WindowHeight());
-	while (Events(window))
+	glViewport(0, 0, window->Width(), window->Height());
+	while (window->UpdateEvents())
 	{
-		ImGui_OpenGL_NewFrame(window);
+		ImGui_OpenGL_NewFrame(window->GetSDLWindow());
 		if (Update(Time::GlobalTime(), Time::DeltaTime()) < 0)
 			break;
 		if (Render() < 1)
 			break;
 		ImGui::Render();
-		SDL_GL_SwapWindow(window);
+		SDL_GL_SwapWindow(window->GetSDLWindow());
 	}
 	Quit();
 }
@@ -318,8 +314,8 @@ void App::InitSceneNoiseTerrain()
 	CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(WindowWidth());
-	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
 	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
@@ -340,8 +336,8 @@ void App::InitSceneVegetationTerrain()
 	CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(WindowWidth());
-	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
 	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
@@ -360,8 +356,8 @@ void App::InitSceneLayerTerrain()
 	scene.AddChild(obj);
 
 	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(WindowWidth());
-	orbiter.SetFrameHeight(WindowHeight());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
 	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 

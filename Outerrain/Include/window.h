@@ -1,31 +1,46 @@
 #pragma once
 
+#include <vector>
 #include <SDL2\SDL.h>
 
 #undef main
 
-SDL_Window* CreateWindow(const int width, const int height);
-void ReleaseWindow(SDL_Window* w);
+class Window
+{
+private:
+	SDL_GLContext glContext;
+	SDL_Window* windowSDL;
+	int width;
+	int height;
 
-SDL_GLContext create_context(SDL_Window* window, const int major = 3, const int minor = 2);
-void release_context(SDL_GLContext context);
+	std::vector<unsigned char> key_states;
+	SDL_MouseButtonEvent last_button;
+	SDL_KeyboardEvent last_key;
+	SDL_TextInputEvent last_text;
+	SDL_MouseWheelEvent last_wheel;
+	int stop;
 
-int WindowWidth();
-int WindowHeight();
+public:
+	Window(const int& width, const int& height);
+	~Window();
 
-int key_state(const SDL_Keycode key);
-void ClearKeyState(const SDL_Keycode key);
+	void CreateGLContext(const int&, const int&);
+	void ReleaseGLContext();
 
-SDL_KeyboardEvent key_event();
-void ClearKeyEvent();
+	SDL_Window* GetSDLWindow() const { return windowSDL; }
+	const int& Width() const { return width; }
+	const int& Height() const { return height; }
+	int UpdateEvents();
 
-SDL_MouseButtonEvent button_event();
-void ClearButtonEvent();
+	int KeyState(const SDL_Keycode& key);
+	SDL_KeyboardEvent KeyEvent();
+	SDL_MouseButtonEvent ButtonEvent();
+	SDL_MouseWheelEvent WheelEvent();
+	SDL_TextInputEvent TextEvent();
 
-SDL_MouseWheelEvent wheel_event();
-void ClearWheelEvent();
-
-SDL_TextInputEvent text_event();
-void ClearTextEvent();
-
-int Events(SDL_Window* window);
+	void ClearTextEvent();
+	void ClearKeyState(const SDL_Keycode& key);
+	void ClearWheelEvent();
+	void ClearButtonEvent();
+	void ClearKeyEvent();
+};

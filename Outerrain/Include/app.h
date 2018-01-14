@@ -11,8 +11,7 @@ class App
 protected:
 	bool alreadyInit = false;
 
-	SDL_Window* window;
-	SDL_GLContext glContext;
+	Window* window;
 	CameraOrbiter orbiter;
 
 	// Terrain Data
