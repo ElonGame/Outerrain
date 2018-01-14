@@ -16,7 +16,7 @@ Mesh::Mesh() :
 	primitiveDrawn(GL_TRIANGLES), VAO(0), fullBuffer(0), indexBuffer(0),
 	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
 
-Mesh::Mesh(const GLenum primitives) :
+Mesh::Mesh(const GLenum& primitives) :
 	vertices(), texcoords(), normals(), colors(), indices(),
 	primitiveDrawn(primitives), VAO(0), fullBuffer(0), indexBuffer(0),
 	shader(), material(Color::Green(), 32), renderMode(DiffuseMode) { }
@@ -414,17 +414,14 @@ void Mesh::ReadMesh(const char* filename)
 	bool error = true;
 	for (;;)
 	{
-		// charge une ligne du fichier
 		if (fgets(line_buffer, sizeof(line_buffer), in) == NULL)
 		{
-			error = false;       // fin du fichier, pas d'erreur detectee
+			error = false;
 			break;
 		}
 
-		// force la fin de la ligne, au cas ou
 		line_buffer[sizeof(line_buffer) - 1] = 0;
 
-		// saute les espaces en debut de ligne
 		char *line = line_buffer;
 		while (*line && isspace(*line))
 			line++;
@@ -452,7 +449,7 @@ void Mesh::ReadMesh(const char* filename)
 			}
 		}
 
-		else if (line[0] == 'f')         // triangle a b c, les sommets sont numerotes a partir de 1 ou de la fin du tableau (< 0)
+		else if (line[0] == 'f')
 		{
 			idp.clear();
 			idt.clear();
@@ -463,7 +460,7 @@ void Mesh::ReadMesh(const char* filename)
 			{
 				idp.push_back(0);
 				idt.push_back(0);
-				idn.push_back(0);         // 0: invalid index
+				idn.push_back(0);
 
 				next = 0;
 				if (sscanf_s(line, " %d/%d/%d %n", &idp.back(), &idt.back(), &idn.back(), &next) == 3)
@@ -474,7 +471,7 @@ void Mesh::ReadMesh(const char* filename)
 					continue;
 				else if (sscanf_s(line, " %d %n", &idp.back(), &next) == 1)
 					continue;
-				else if (next == 0)      // fin de ligne
+				else if (next == 0)
 					break;
 			}
 
@@ -488,7 +485,7 @@ void Mesh::ReadMesh(const char* filename)
 					int t = (idt[k] < 0) ? (int)tex.size() + idt[k] : idt[k] - 1;
 					int n = (idn[k] < 0) ? (int)norm.size() + idn[k] : idn[k] - 1;
 
-					if (p < 0) break; // error
+					if (p < 0) break;
 					if (t >= 0) AddTexcoord(tex[t]);
 					if (n >= 0) AddNormal(norm[n]);
 					AddVertex(vert[p]);
@@ -503,14 +500,14 @@ void Mesh::ReadMesh(const char* filename)
 		printf("loading mesh '%s'...\n[error]\n%s\n\n", filename, line_buffer);
 }
 
-void Mesh::SetTexture(const char* filename, const GLenum texel_type)
+void Mesh::SetTexture(const char* filename, const GLenum& texel_type)
 {
 	ImageData temp;
 	temp.ReadImageData(filename);
 	texture0 = MakeTexture(0, temp, texel_type);
 }
 
-GLuint Mesh::MakeTexture(const int unit, const ImageData& im, const GLenum texel_type)
+GLuint Mesh::MakeTexture(const int unit, const ImageData& im, const GLenum& texel_type)
 {
 	if (im.data.empty())
 		return 0;

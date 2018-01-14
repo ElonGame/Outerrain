@@ -57,11 +57,11 @@ protected:
 	const void *IndexBufferPtr() const { return &indices.front(); }
 	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
 
-	GLuint MakeTexture(const int unit, const ImageData& im, const GLenum texel_type);
+	GLuint MakeTexture(const int unit, const ImageData& im, const GLenum& texel_type);
 
 public:
 	Mesh();
-	Mesh(const GLenum primitives);
+	Mesh(const GLenum& primitives);
 	~Mesh() { Destroy(); }
 
 	void Destroy();
@@ -83,7 +83,7 @@ public:
 	void WriteMesh(const char*);
 	void ReadMesh(const char*);
 
-	Shader* GetShader() { return &shader; }
+	Shader& GetShader() { return shader; }
 	Bounds GetBounds() const;
 	Vector3 Vertex(int) const;
 	Vector3 Normal(int) const;
@@ -96,6 +96,6 @@ public:
 	void Draw();
 	void Draw(const CameraOrbiter&);
 
-	void SetTexture(const char* filename, const GLenum texel_type);
+	void SetTexture(const char* filename, const GLenum& texel_type);
 	void SetTexture(const GLuint& t) { texture0 = t; }
 };
