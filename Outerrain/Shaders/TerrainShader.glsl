@@ -1,4 +1,3 @@
-
 #version 330
 
 #ifdef VERTEX_SHADER
@@ -30,16 +29,18 @@ uniform float shininess;
 
 uniform sampler2D texture0;
 
-const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
-const vec3 lightDir = vec3(0.707, -0.707, 0);
-const vec3 lightColor = vec3(1, 1, 1);
-const float lightStrength = 1.0;
-
 in vec2 vertex_texcoord;
 in vec3 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragment_color;
+
+
+// Constants
+const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
+const vec3 lightDir = vec3(0.707, -0.707, 0);
+const vec3 lightColor = vec3(1, 1, 1);
+const float lightStrength = 1.0;
 
 
 vec3 NormalShading()
@@ -93,6 +94,5 @@ void main()
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 	else
 		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
-	//fragment_color = vec4(vertex_texcoord.xy, 0, 1);
 }
 #endif

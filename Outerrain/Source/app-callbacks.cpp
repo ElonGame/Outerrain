@@ -44,3 +44,67 @@ void App::GenerateRoadCallback()
 		scene.AddChild(o);
 	}*/
 }
+
+void App::InitSceneNoiseTerrain()
+{
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
+	vegTerrain.InitFromNoise(0, 150);
+
+	Mesh* mesh = vegTerrain.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 0));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	CalculateAllMaps();
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
+}
+
+void App::InitSceneVegetationTerrain()
+{
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
+	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
+
+	Mesh* mesh = vegTerrain.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 0));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	CalculateAllMaps();
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
+}
+
+void App::InitSceneLayerTerrain()
+{
+	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, 256), Vector2(256, -256));
+	layerTerrain2D.InitFromFile("Data/Heightmaps/island.png", 0, 100, 0.8f);
+
+	Mesh* mesh = layerTerrain2D.GetMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/Diffuse.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 0));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
+}

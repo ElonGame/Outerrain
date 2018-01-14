@@ -1,17 +1,17 @@
 #include "vegetationObject.h"
 #include "gameobject.h"
+
 #include <algorithm>
 #include <math.h>
 #include <sstream>
 #include <string>
-
 
 VegetationObject::VegetationObject()
 {
 
 }
 
-GameObject* VegetationObject::GetGameObject(Specie s)
+GameObject* VegetationObject::GetGameObject(const Specie& s) const
 {
 	Mesh* m = new Mesh(GL_TRIANGLES);
 
@@ -25,37 +25,38 @@ GameObject* VegetationObject::GetGameObject(Specie s)
 	m->SetMaterial(Material(Color::Green(), 0));
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
-	obj->RotateAround(Vector3(0.0f, 1.0f, 0.0f), rand() % 360);
+	obj->RotateAround(Vector3(0.0f, 1.0f, 0.0f), (float)(rand() % 360));
+
 	return obj;
 }
 
 /* Density functions */
-float VegetationObject::HeightDensityFactor(const Specie s, float height)
+float VegetationObject::HeightDensityFactor(const Specie& s, const float& height) const
 {
 	return 1.0f - (abs(height - s.heightData.x) / s.heightData.y);
 }
 
-float VegetationObject::SlopeDensityFactor(const Specie s, float slope)
+float VegetationObject::SlopeDensityFactor(const Specie& s, const float& slope) const
 {
 	return 1.0f - (abs((slope * 90.0f) - s.slopeData.x) / s.slopeData.y);
 }
 
-float VegetationObject::WetnessDensityFactor(const Specie s, float wetness)
+float VegetationObject::WetnessDensityFactor(const Specie& s, const float& wetness) const
 {
 	return 1.0f - (abs((wetness * 100.0f) - s.wetnessData.x) / s.wetnessData.y);
 }
 
-void VegetationObject::SetRadius(float r)
+void VegetationObject::SetRadius(const float& r)
 {
 	radius = r;
 }
 
-float VegetationObject::GetRadius()
+float VegetationObject::GetRadius() const
 {
 	return radius;
 }
 
-float VegetationObject::ComputeDensityFactor(Specie s, float height, float slope, float wetness)
+float VegetationObject::ComputeDensityFactor(const Specie& s, const float& height, const float& slope, const float& wetness) const
 {
 	float min1 = std::min(HeightDensityFactor(s, height), SlopeDensityFactor(s, slope));
 	return std::min(min1, WetnessDensityFactor(s, wetness));

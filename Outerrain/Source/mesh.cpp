@@ -332,7 +332,7 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	glUseProgram(m_program);
 
 	Transform trs = gameObject->GetObjectToWorldMatrix();
-	Transform mvp = orbiter.Projection(orbiter.FrameWidth(), orbiter.FrameHeight(), 45.0f) * (orbiter.View() * trs);
+	Transform mvp = orbiter.Projection((float)orbiter.FrameWidth(), (float)orbiter.FrameHeight(), 45.0f) * (orbiter.View() * trs);
 	Vector3 camPos = orbiter.Position();
 
 	shader.UniformTransform("trsMatrix", trs);

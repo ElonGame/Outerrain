@@ -6,8 +6,6 @@
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
 #include "roads.h"
-#include <chrono>
-#include <sstream>
 
 /* ImGui Textures*/
 static GLuint slopeTexture;
@@ -41,7 +39,7 @@ static int thermalErosionIteration = 1;
 // To do Architecture : 
 //  -Structure widget pour encapsuler imgui
 //  -Structure pour les query GPU
-//  -Structure différente pour le rendu : Deferred, gestion des ressources différentes.
+//  -Structure différente pour le rendu : Deferred Lighting, gestion des ressources différentes.
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -72,30 +70,25 @@ void App::Quit()
 	glDeleteQueries(1, &m_time_query);
 }
 
-int App::Render()
+void App::Render()
 {
-	// Time query
-	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
-	std::chrono::high_resolution_clock::time_point cpu_start = std::chrono::high_resolution_clock::now();
+	StartFrameTimeComputation();
+	RenderScene();
+	ComputeFrameTime();
+}
 
+void App::RenderScene()
+{
 	// Scene Rendering
 	glClearColor(0.3f, 0.55f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (int i = 0; i < objs.size(); i++)
 		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
+}
 
-	// CPU/GPU time computation
-	std::chrono::high_resolution_clock::time_point cpu_stop = std::chrono::high_resolution_clock::now();
-	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-	glEndQuery(GL_TIME_ELAPSED);
-	GLint64 gpu_time = 0;
-	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
-
-	std::stringstream cpuStr, gpuStr;
-	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
-	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
-
+void App::RenderGUI()
+{
 	// ImGui
 	// Help
 	ImGui::Begin("Welcome to Outerrain !");
@@ -113,7 +106,7 @@ int App::Render()
 	ImGui::BeginChild("", ImVec2(0, 190), false, ImGuiWindowFlags_HorizontalScrollbar);
 	ImGui::Columns(7);
 	ImGui::Text("Slope");
-	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120), ImVec2(0,1),ImVec2(1, 0));
+	ImGui::Image(reinterpret_cast<ImTextureID>(slopeTexture), ImVec2(120, 120), ImVec2(0, 1), ImVec2(1, 0));
 	ImGui::Value("Black", minMaxSlope.x);
 	ImGui::Value("White", minMaxSlope.y);
 	ImGui::SetColumnWidth(0, 135);
@@ -179,7 +172,30 @@ int App::Render()
 	ImGui::Text(cpuStr.str().data());
 	ImGui::Text(gpuStr.str().data());
 	ImGui::End();
-	return 1;
+
+	// Call ImGui renderer
+	ImGui::Render();
+}
+
+void App::StartFrameTimeComputation()
+{
+	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
+	cpu_start = std::chrono::high_resolution_clock::now();
+}
+
+void App::ComputeFrameTime()
+{
+	// CPU/GPU time computation
+	cpu_stop = std::chrono::high_resolution_clock::now();
+	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
+	glEndQuery(GL_TIME_ELAPSED);
+	GLint64 gpu_time = 0;
+	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+
+	cpuStr.str("");
+	gpuStr.str("");
+	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
+	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 
 int App::Update(const float time, const float deltaTime)
@@ -263,9 +279,8 @@ void App::Run()
 		ImGui_OpenGL_NewFrame(window->GetSDLWindow());
 		if (Update(Time::GlobalTime(), Time::DeltaTime()) < 0)
 			break;
-		if (Render() < 1)
-			break;
-		ImGui::Render();
+		Render();
+		RenderGUI();
 		SDL_GL_SwapWindow(window->GetSDLWindow());
 	}
 	Quit();
@@ -284,72 +299,6 @@ void App::UpdateObjects(const float time, const float delta)
 			components[j]->Update(delta2);
 	}
 	lastTime = SDL_GetPerformanceCounter();
-}
-
-
-/* Init Scenes */
-void App::InitSceneNoiseTerrain()
-{
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
-	vegTerrain.InitFromNoise(0, 150);
-
-	Mesh* mesh = vegTerrain.GetMesh();
-	Shader shader;
-	shader.InitFromFile("Shaders/TerrainShader.glsl");
-	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 0));
-	GameObject* obj = new GameObject();
-	obj->AddComponent(mesh);
-	scene.AddChild(obj);
-
-	CalculateAllMaps();
-
-	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(window->Width());
-	orbiter.SetFrameHeight(window->Height());
-	orbiter.SetClippingPlanes(1.0f, 3000.0f);
-}
-
-void App::InitSceneVegetationTerrain()
-{
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
-	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
-
-	Mesh* mesh = vegTerrain.GetMesh();
-	Shader shader;
-	shader.InitFromFile("Shaders/TerrainShader.glsl");
-	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 0));
-	GameObject* obj = new GameObject();
-	obj->AddComponent(mesh);
-	scene.AddChild(obj);
-
-	CalculateAllMaps();
-
-	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(window->Width());
-	orbiter.SetFrameHeight(window->Height());
-	orbiter.SetClippingPlanes(1.0f, 3000.0f);
-}
-
-void App::InitSceneLayerTerrain()
-{
-	layerTerrain2D = LayerTerrain2D(256, 256, Vector2(-256, 256), Vector2(256, -256));
-	layerTerrain2D.InitFromFile("Data/Heightmaps/island.png", 0, 100, 0.8f);
-
-	Mesh* mesh = layerTerrain2D.GetMesh();
-	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
-	mesh->SetShader(shader);
-	mesh->SetMaterial(Material(Color::Grey(), 0));
-	GameObject* obj = new GameObject();
-	obj->AddComponent(mesh);
-	scene.AddChild(obj);
-
-	orbiter.LookAt(mesh->GetBounds());
-	orbiter.SetFrameWidth(window->Width());
-	orbiter.SetFrameHeight(window->Height());
-	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 }
 
 void App::CalculateAllMaps()

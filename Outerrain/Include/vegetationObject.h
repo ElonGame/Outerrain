@@ -10,7 +10,7 @@ enum TreeType
 	Broadleaf
 };
 
-typedef struct Specie
+class Specie
 {
 public:
 	TreeType type;
@@ -28,7 +28,7 @@ public:
 
 	Specie(TreeType sp, Vector2 height, Vector2 slope, Vector2 wetness, const char* n, ScalarField2D s) :
 		type(sp), heightData(height), slopeData(slope), wetnessData(wetness), name(n), densityField(s) {}
-} Specie;
+};
 
 class VegetationObject
 {
@@ -38,18 +38,14 @@ protected:
 public:
 	VegetationObject();
 
-	// Chaque arbre ou type d'arbre aura ses propriétés. 
-	// Les fonctions suivantes retournent une 'densité'
-	// Pour ce type en fonction de facteurs (height, slope...)
-	// Les paramètres doivent être normalisés [0, 1].
-	float SlopeDensityFactor(const Specie s, float);
-	float HeightDensityFactor(const Specie s, float);
-	float WetnessDensityFactor(const Specie s, float);
+	// Fonction de transfert des paramtètres de végétation
+	float SlopeDensityFactor(const Specie& s, const float&) const;
+	float HeightDensityFactor(const Specie& s, const float&) const;
+	float WetnessDensityFactor(const Specie& s, const float&) const;
 
-	float ComputeDensityFactor(Specie s, float height, float slope, float wetness);
+	float ComputeDensityFactor(const Specie& s, const float& height, const float& slope, const float& wetness) const;
 
-	GameObject* GetGameObject(Specie s);
-
-	void SetRadius(float r);
-	float GetRadius();
+	GameObject* GetGameObject(const Specie& s) const;
+	void SetRadius(const float& r);
+	float GetRadius() const;
 };
