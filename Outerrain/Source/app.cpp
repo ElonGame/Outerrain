@@ -33,12 +33,15 @@ static float streamPowerErosionAmplitude = 2.0f;
 static int thermalErosionIteration = 1;
 
 
-// In Progress :
-//  -Placement vegetation bug sur les bords du terrain (Thomas, IsInsideField ?)
-//  -Roads : Genérer un graphe avec les vertices du terrains, pondérer les arcs et faire le plus court chemin
+// To do JV :
+//  -BUG : Placement vegetation bords du terrain (Thomas, IsInsideField ?)
+//  -Roads : Finir
+//  -Faire une structure pour encapsuler les données ImGui static de ce fichier
 
-// To do :
-//  -Villages (?)
+// To do Architecture : 
+//  -Structure widget pour encapsuler imgui
+//  -Structure pour les query GPU
+//  -Structure différente pour le rendu : Deferred, gestion des ressources différentes.
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -49,19 +52,10 @@ App::App(const int& width, const int& height, const int& major, const int& minor
 	currentItem = 0;
 }
 
-int App::Init()
+void App::Init()
 {
-	// Init ImGui
 	ImGui_OpenGL_Init(window->GetSDLWindow());
-
-	// Default gl state
-	glClearDepthf(1);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-
-	glDepthFunc(GL_LESS);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
+	window->SetDefaultGLState();
 
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
@@ -69,8 +63,6 @@ int App::Init()
 	InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
 	//InitSceneNoiseTerrain();
-
-	return 1;
 }
 
 void App::Quit()
@@ -264,8 +256,7 @@ int App::Update(const float time, const float deltaTime)
 
 void App::Run()
 {
-	if (Init() < 0)
-		return;
+	Init();
 	glViewport(0, 0, window->Width(), window->Height());
 	while (window->UpdateEvents())
 	{

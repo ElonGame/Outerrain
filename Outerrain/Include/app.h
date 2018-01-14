@@ -42,7 +42,7 @@ protected:
 public:
 	App(const int&, const int&, const int&, const int&);
 
-	virtual int Init();
+	virtual void Init();
 	virtual int Update(const float, const float);
 	virtual int Render();
 	virtual void Run();

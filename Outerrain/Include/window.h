@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <SDL2\SDL.h>
+#include "GL/glew.h"
 
 #undef main
 
@@ -23,13 +24,9 @@ private:
 public:
 	Window(const int& width, const int& height);
 	~Window();
-
 	void CreateGLContext(const int&, const int&);
+	void SetDefaultGLState();
 	void ReleaseGLContext();
-
-	SDL_Window* GetSDLWindow() const { return windowSDL; }
-	const int& Width() const { return width; }
-	const int& Height() const { return height; }
 	int UpdateEvents();
 
 	int KeyState(const SDL_Keycode& key);
@@ -43,4 +40,8 @@ public:
 	void ClearWheelEvent();
 	void ClearButtonEvent();
 	void ClearKeyEvent();
+
+	SDL_Window* GetSDLWindow() const { return windowSDL; }
+	const int& Width() const { return width; }
+	const int& Height() const { return height; }
 };

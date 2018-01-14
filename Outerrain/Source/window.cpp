@@ -1,73 +1,30 @@
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <cassert>
-#include <cstdio>
-
 #include <set>
-#include <string>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
 
 #include "GL/glew.h"
 #include "window.h"
 
-
-int Window::KeyState(const SDL_Keycode& key)
+#ifndef NO_GLEW
+#ifndef GK_RELEASE
+static
+void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length,
+	const char *message, const void *userParam)
 {
-	SDL_Scancode code = SDL_GetScancodeFromKey(key);
-	assert((size_t)code < key_states.size());
-	return (int)key_states[code];
-}
+	static std::set<std::string> log;
+	if (log.insert(message).second == false)
+		// le message a deja ete affiche, pas la peine de recommencer 60 fois par seconde.
+		return;
 
-void Window::ClearKeyState(const SDL_Keycode& key)
-{
-	SDL_Scancode code = SDL_GetScancodeFromKey(key);
-	assert((size_t)code < key_states.size());
-	key_states[code] = 0;
+	if (severity == GL_DEBUG_SEVERITY_HIGH)
+		printf("[openGL error]\n%s\n", message);
+	else if (severity == GL_DEBUG_SEVERITY_MEDIUM)
+		printf("[openGL warning]\n%s\n", message);
+	else
+		printf("[openGL message]\n%s\n", message);
 }
+#endif
+#endif
 
-SDL_KeyboardEvent Window::KeyEvent()
-{
-	return last_key;
-}
-
-void Window::ClearKeyEvent()
-{
-	last_key.type = 0;
-	last_key.keysym.sym = 0;
-}
-
-SDL_TextInputEvent Window::TextEvent()
-{
-	return last_text;
-}
-
-void Window::ClearTextEvent()
-{
-	last_text.text[0] = 0;
-}
-
-SDL_MouseButtonEvent Window::ButtonEvent()
-{
-	return last_button;
-}
-
-void Window::ClearButtonEvent()
-{
-	last_button.state = 0;
-}
-
-SDL_MouseWheelEvent Window::WheelEvent()
-{
-	return last_wheel;
-}
-
-void Window::ClearWheelEvent()
-{
-	last_wheel.x = 0;
-	last_wheel.y = 0;
-}
 
 int Window::UpdateEvents()
 {
@@ -127,28 +84,6 @@ int Window::UpdateEvents()
 
 	return 1 - stop;
 }
-
-
-#ifndef NO_GLEW
-#ifndef GK_RELEASE
-static
-void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length,
-	const char *message, const void *userParam)
-{
-	static std::set<std::string> log;
-	if (log.insert(message).second == false)
-		// le message a deja ete affiche, pas la peine de recommencer 60 fois par seconde.
-		return;
-
-	if (severity == GL_DEBUG_SEVERITY_HIGH)
-		printf("[openGL error]\n%s\n", message);
-	else if (severity == GL_DEBUG_SEVERITY_MEDIUM)
-		printf("[openGL warning]\n%s\n", message);
-	else
-		printf("[openGL message]\n%s\n", message);
-}
-#endif
-#endif
 
 Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
 {
@@ -236,7 +171,76 @@ void Window::CreateGLContext(const int& major, const int& minor)
 #endif
 }
 
+void Window::SetDefaultGLState()
+{
+	glClearDepthf(1);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	glDepthFunc(GL_LESS);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+}
+
 void Window::ReleaseGLContext()
 {
 	SDL_GL_DeleteContext(glContext);
+}
+
+
+int Window::KeyState(const SDL_Keycode& key)
+{
+	SDL_Scancode code = SDL_GetScancodeFromKey(key);
+	assert((size_t)code < key_states.size());
+	return (int)key_states[code];
+}
+
+SDL_KeyboardEvent Window::KeyEvent()
+{
+	return last_key;
+}
+
+SDL_TextInputEvent Window::TextEvent()
+{
+	return last_text;
+}
+
+SDL_MouseButtonEvent Window::ButtonEvent()
+{
+	return last_button;
+}
+
+SDL_MouseWheelEvent Window::WheelEvent()
+{
+	return last_wheel;
+}
+
+
+void Window::ClearWheelEvent()
+{
+	last_wheel.x = 0;
+	last_wheel.y = 0;
+}
+
+void Window::ClearKeyState(const SDL_Keycode& key)
+{
+	SDL_Scancode code = SDL_GetScancodeFromKey(key);
+	assert((size_t)code < key_states.size());
+	key_states[code] = 0;
+}
+
+void Window::ClearButtonEvent()
+{
+	last_button.state = 0;
+}
+
+void Window::ClearTextEvent()
+{
+	last_text.text[0] = 0;
+}
+
+void Window::ClearKeyEvent()
+{
+	last_key.type = 0;
+	last_key.keysym.sym = 0;
 }
