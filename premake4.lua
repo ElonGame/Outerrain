@@ -1,5 +1,5 @@
 -- Only works for linux - Windows is not yet supported.
-solution "gKit2light"
+solution "Outerrain"
 	configurations { "debug", "release" }
 
 	platforms { "x64", "x32" }
