@@ -1,7 +1,7 @@
 #include "app.h"
 #include "gameobject.h"
 #include "GL/glew.h"
-#include "time.h"
+#include "mytime.h"
 #include "texture.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
@@ -34,12 +34,12 @@ static int thermalErosionIteration = 1;
 // To do JV :
 //  -BUG : Placement vegetation bords du terrain (Thomas, IsInsideField ?)
 //  -Roads : Finir
-//  -Faire une structure pour encapsuler les données ImGui static de ce fichier
+//  -Faire une structure pour encapsuler les donnï¿½es ImGui static de ce fichier
 
 // To do Architecture : 
 //  -Structure widget pour encapsuler imgui
 //  -Structure pour les query GPU
-//  -Structure différente pour le rendu : Deferred Lighting, gestion des ressources différentes.
+//  -Structure diffï¿½rente pour le rendu : Deferred Lighting, gestion des ressources diffï¿½rentes.
 
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
@@ -169,7 +169,7 @@ void App::RenderGUI()
 
 	// Time Info
 	ImGui::Begin("Rendering Time");
-	ImGui::Text(cpuStr.str().data());
+	//ImGui::Text(cpuStr.str().data());
 	ImGui::Text(gpuStr.str().data());
 	ImGui::End();
 
@@ -180,21 +180,22 @@ void App::RenderGUI()
 void App::StartFrameTimeComputation()
 {
 	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
-	cpu_start = std::chrono::high_resolution_clock::now();
+	//cpu_start = std::chrono::high_resolution_clock::now();
 }
 
 void App::ComputeFrameTime()
 {
 	// CPU/GPU time computation
-	cpu_stop = std::chrono::high_resolution_clock::now();
+	/*cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
+	*/
 	glEndQuery(GL_TIME_ELAPSED);
 	GLint64 gpu_time = 0;
 	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
 
-	cpuStr.str("");
+	//cpuStr.str("");
 	gpuStr.str("");
-	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
+	//cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
 	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 

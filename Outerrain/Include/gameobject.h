@@ -14,7 +14,7 @@ private:
 	Transform scale = Identity();
 	Transform localTRS = Identity();
 	Transform objectToWorld = Identity();
-	TQuaternion<float, Vector3> rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
+	TQuaternion<float, Vector3> rotationQuat;
 
 	std::vector<Component*> components;
 	GameObject* parent = nullptr;
@@ -22,6 +22,11 @@ private:
 	bool transformNeedsToUpdate = true;
 
 public:
+	GameObject() 
+	{
+		rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
+	}
+
 	~GameObject();
 
 	void CallStartOnComponents();

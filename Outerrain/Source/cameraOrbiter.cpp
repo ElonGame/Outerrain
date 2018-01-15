@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <algorithm>
-#include "CameraOrbiter.h"
+#include "cameraOrbiter.h"
 
 
 CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)

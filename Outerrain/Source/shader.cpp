@@ -12,6 +12,14 @@
 #include "shader.h"
 #include "transform.h"
 
+#ifdef _WIN32
+	#define SSCANF sscanf_s
+	#define SPRINTF sprintf_s
+#else
+	#define SSCANF sscanf
+	#define SPRINTF sprintf
+#endif
+
 
 /* File scope */
 // charge un fichier texte.
@@ -119,10 +127,10 @@ static int print_errors(std::string& errors, const char *log, const char *source
 	{
 		// recupere la ligne assiciee a l'erreur
 		int string_id = 0, line_id = 0, position = 0;
-		if (sscanf_s(&log[i], "%d ( %d ) : %n", &string_id, &line_id, &position) == 2        // nvidia syntax
-			|| sscanf_s(&log[i], "%d : %d (%*d) : %n", &string_id, &line_id, &position) == 2  // mesa syntax
-			|| sscanf_s(&log[i], "ERROR : %d : %d : %n", &string_id, &line_id, &position) == 2  // ati syntax
-			|| sscanf_s(&log[i], "WARNING : %d : %d : %n", &string_id, &line_id, &position) == 2)  // ati syntax
+		if (SSCANF(&log[i], "%d ( %d ) : %n", &string_id, &line_id, &position) == 2        // nvidia syntax
+			|| SSCANF(&log[i], "%d : %d (%*d) : %n", &string_id, &line_id, &position) == 2  // mesa syntax
+			|| SSCANF(&log[i], "ERROR : %d : %d : %n", &string_id, &line_id, &position) == 2  // ati syntax
+			|| SSCANF(&log[i], "WARNING : %d : %d : %n", &string_id, &line_id, &position) == 2)  // ati syntax
 		{
 			if (string_id != last_string || line_id != last_line)
 			{
@@ -384,7 +392,7 @@ int location(const GLuint program, const char *uniform)
 			char label[1024];
 			glGetObjectLabel(GL_PROGRAM, program, sizeof(label), NULL, label);
 
-			sprintf_s(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform);
+			SPRINTF(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform);
 		}
 #else
 		sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
@@ -412,7 +420,7 @@ int location(const GLuint program, const char *uniform)
 			char labelc[1024];
 			glGetObjectLabel(GL_PROGRAM, current, sizeof(labelc), NULL, labelc);
 
-			sprintf_s(error, "uniform( %s %u, '%s' ): invalid shader program %s %u", label, program, uniform, labelc, current);
+			SPRINTF(error, "uniform( %s %u, '%s' ): invalid shader program %s %u", label, program, uniform, labelc, current);
 		}
 #else
 		sprintf(error, "uniform( program %u, '%s'): invalid shader program %u...", program, uniform, current);

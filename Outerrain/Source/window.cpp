@@ -1,5 +1,6 @@
 #include <cassert>
 #include <set>
+#include <string>
 
 #include "GL/glew.h"
 #include "window.h"

@@ -10,6 +10,14 @@
 #include <fstream>
 using namespace std;
 
+#ifdef _WIN32
+	#define SSCANF sscanf_s
+	#define FOPEN fopen_s
+#else
+	#define SSCANF sscanf
+	#define FOPEN fopen
+#endif
+
 
 Mesh::Mesh() :
 	vertices(), texcoords(), normals(), colors(), indices(),
@@ -394,9 +402,8 @@ void Mesh::WriteMesh(const char* filename)
 
 void Mesh::ReadMesh(const char* filename)
 {
-	FILE *in;
-	errno_t err;
-	if ((err = fopen_s(&in, filename, "r")) != 0)
+	FILE* in = FOPEN(filename, "r");
+	if (in == NULL)
 	{
 		std::cout << "Error loading mesh - aborting" << std::endl;
 		return;
@@ -431,19 +438,19 @@ void Mesh::ReadMesh(const char* filename)
 			float x, y, z;
 			if (line[1] == ' ')          // position x y z
 			{
-				if (sscanf_s(line, "v %f %f %f", &x, &y, &z) != 3)
+				if (SSCANF(line, "v %f %f %f", &x, &y, &z) != 3)
 					break;
 				vert.push_back(Vector3(x, y, z));
 			}
 			else if (line[1] == 'n')     // normal x y z
 			{
-				if (sscanf_s(line, "vn %f %f %f", &x, &y, &z) != 3)
+				if (SSCANF(line, "vn %f %f %f", &x, &y, &z) != 3)
 					break;
 				norm.push_back(Vector3(x, y, z));
 			}
 			else if (line[1] == 't')     // texcoord x y
 			{
-				if (sscanf_s(line, "vt %f %f", &x, &y) != 2)
+				if (SSCANF(line, "vt %f %f", &x, &y) != 2)
 					break;
 				tex.push_back(Vector2(x, y));
 			}
@@ -463,13 +470,13 @@ void Mesh::ReadMesh(const char* filename)
 				idn.push_back(0);
 
 				next = 0;
-				if (sscanf_s(line, " %d/%d/%d %n", &idp.back(), &idt.back(), &idn.back(), &next) == 3)
+				if (SSCANF(line, " %d/%d/%d %n", &idp.back(), &idt.back(), &idn.back(), &next) == 3)
 					continue;
-				else if (sscanf_s(line, " %d/%d %n", &idp.back(), &idt.back(), &next) == 2)
+				else if (SSCANF(line, " %d/%d %n", &idp.back(), &idt.back(), &next) == 2)
 					continue;
-				else if (sscanf_s(line, " %d//%d %n", &idp.back(), &idn.back(), &next) == 2)
+				else if (SSCANF(line, " %d//%d %n", &idp.back(), &idn.back(), &next) == 2)
 					continue;
-				else if (sscanf_s(line, " %d %n", &idp.back(), &next) == 1)
+				else if (SSCANF(line, " %d %n", &idp.back(), &next) == 1)
 					continue;
 				else if (next == 0)
 					break;
