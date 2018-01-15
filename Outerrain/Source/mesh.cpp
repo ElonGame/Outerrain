@@ -402,7 +402,12 @@ void Mesh::WriteMesh(const char* filename)
 
 void Mesh::ReadMesh(const char* filename)
 {
-	FILE* in = FOPEN(filename, "r");
+	FILE* in;
+#if _WIN32
+	FOPEN(&in, filename, "r");
+#else
+	in = FOPEN(filename, "r");
+#endif
 	if (in == NULL)
 	{
 		std::cout << "Error loading mesh - aborting" << std::endl;
