@@ -34,6 +34,7 @@ static int thermalErosionIteration = 1;
 // To do JV :
 //  -BUG : Placement vegetation bords du terrain (Thomas, IsInsideField ?)
 //  -Roads : Finir
+//  -Rivers
 //  -Faire une structure pour encapsuler les donn�es ImGui static de ce fichier
 
 // To do Architecture : 
