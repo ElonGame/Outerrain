@@ -598,7 +598,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int treeCount = 0;
 
 	int tileCountX = static_cast<int>(((topRight.x - bottomLeft.x) / tileSize + 1));
-	int tileCountY = -static_cast<int>(((topRight.y - bottomLeft.y) / tileSize + 1));
+	int tileCountY = static_cast<int>((-(topRight.y - bottomLeft.y) / tileSize + 1));
 
 	std::vector<GameObject*> vegObjects;
 
