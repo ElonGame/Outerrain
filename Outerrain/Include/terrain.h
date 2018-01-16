@@ -24,6 +24,7 @@ public:
 
 	Vector3 Normal(int, int) const;
 	Vector3 Vertex(int, int) const;
+	void Index2D(int index, int& i, int& j) const;
 	float Height(const Vector2&) const;
 	float NormalizedHeight(const Vector2&) const;
 	Mesh* GetMesh() const;

@@ -5,7 +5,7 @@
 #include "texture.h"
 #include "imgui/imgui.h"
 #include "imgui_opengl.h"
-#include "roads.h"
+#include "graph.h"
 
 /* ImGui Textures*/
 static GLuint slopeTexture;
@@ -171,7 +171,7 @@ void App::RenderGUI()
 	// Time Info
 	ImGui::Begin("Rendering Time");
 	//ImGui::Text(cpuStr.str().data());
-	ImGui::Text(gpuStr.str().data());
+	//ImGui::Text(gpuStr.str().data());
 	ImGui::End();
 
 	// Call ImGui renderer
@@ -180,7 +180,7 @@ void App::RenderGUI()
 
 void App::StartFrameTimeComputation()
 {
-	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
+	//glBeginQuery(GL_TIME_ELAPSED, m_time_query);
 	//cpu_start = std::chrono::high_resolution_clock::now();
 }
 
@@ -190,14 +190,14 @@ void App::ComputeFrameTime()
 	/*cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
 	*/
-	glEndQuery(GL_TIME_ELAPSED);
+	//glEndQuery(GL_TIME_ELAPSED);
 	GLint64 gpu_time = 0;
-	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+	//glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
 
 	//cpuStr.str("");
 	gpuStr.str("");
 	//cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
-	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
+	//gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 
 int App::Update(const float time, const float deltaTime)

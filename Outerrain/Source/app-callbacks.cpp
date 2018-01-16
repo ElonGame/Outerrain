@@ -1,5 +1,5 @@
 #include "app.h"
-#include "roads.h"
+#include "graph.h"
 
 void App::ThermalErosionCallback(int stepCount)
 {
@@ -36,13 +36,17 @@ void App::SpawnVegetationCallback()
 
 void App::GenerateRoadCallback()
 {
-	/*std::vector<Vector3> path = ShortestPath::FindShortestPath(vegTerrain, Vector3(30.0f, 0.0f, 30.0f), Vector3(100.0f, 0.0f, 175.0f));
-	for (int i = 0; i < path.size(); i++)
+	std::list<vertex_t>::const_iterator iterator;
+	std::list<vertex_t> path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100);
+	for (iterator = path.begin(); iterator != path.end(); ++iterator)
 	{
 		GameObject* o = ShortestPath::GetNodeObject();
-		o->SetPosition(path[i]);
+		int x, y;
+		vegTerrain.Index2D(*iterator, x, y);
+		Vector3 pos = vegTerrain.Vertex(x, y);
+		o->SetPosition(pos);
 		scene.AddChild(o);
-	}*/
+	}
 }
 
 void App::InitSceneNoiseTerrain()
@@ -69,7 +73,7 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
+	vegTerrain = VegetationTerrain(128, 128, Vector2(-256, 256), Vector2(256, -256));
 	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
@@ -81,7 +85,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	CalculateAllMaps();
+	//CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(window->Width());

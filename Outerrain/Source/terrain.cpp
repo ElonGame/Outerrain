@@ -401,6 +401,11 @@ std::vector<Vector3> Terrain2D::GetAllVertices() const
 	return ret;
 }
 
+void Terrain2D::Index2D(int index, int& i, int& j) const
+{
+	heightField.Index2D(index, i, j);
+}
+
 
 /* LayerTerrain2D */
 LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
