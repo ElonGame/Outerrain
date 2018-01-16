@@ -32,16 +32,12 @@ static int thermalErosionIteration = 1;
 
 
 // To do JV :
-//  -BUG : Placement vegetation bords du terrain (Thomas, IsInsideField ?)
-//  -Roads : Finir
-//  -Rivers
-//  -Faire une structure pour encapsuler les donn�es ImGui static de ce fichier
+//  -Roads : Utiliser 8-voisinages et 2+1-voisinage (Axel)
+//  -Roads : basic rendering, terrain adaptation ?
+//  -Rivers : using the same structure as roads ?
 
 // To do Architecture : 
-//  -Structure widget pour encapsuler imgui
-//  -Structure pour les query GPU
-//  -Structure diff�rente pour le rendu : Deferred Lighting, gestion des ressources diff�rentes.
-
+//  -Structure pour encapsuler les donnees imgui
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
 {
