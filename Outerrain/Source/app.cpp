@@ -33,11 +33,6 @@ static int thermalErosionIteration = 1;
 
 // To do JV :
 //  -Roads : Utiliser 8-voisinages et 2+1-voisinage (Axel)
-//  -Roads : basic rendering, terrain adaptation ?
-//  -Rivers : using the same structure as roads ?
-
-// To do Architecture : 
-//  -Structure pour encapsuler les donnees imgui
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
 {

@@ -36,11 +36,38 @@ void App::SpawnVegetationCallback()
 
 void App::GenerateRoadCallback()
 {
+	// Eight
 	std::list<vertex_t>::const_iterator iterator;
-	std::list<vertex_t> path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100);
+	std::list<vertex_t> path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::EIGHT);
 	for (iterator = path.begin(); iterator != path.end(); ++iterator)
 	{
 		GameObject* o = ShortestPath::GetNodeObject();
+		int x, y;
+		vegTerrain.Index2D(*iterator, x, y);
+		Vector3 pos = vegTerrain.Vertex(x, y);
+		o->SetPosition(pos);
+		scene.AddChild(o);
+	}
+
+	// Four
+	path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::FOUR);
+	for (iterator = path.begin(); iterator != path.end(); ++iterator)
+	{
+		GameObject* o = ShortestPath::GetNodeObject();
+		o->GetComponent<Mesh>()->SetMaterial(Material(Color::Blue(), 0));
+		int x, y;
+		vegTerrain.Index2D(*iterator, x, y);
+		Vector3 pos = vegTerrain.Vertex(x, y);
+		o->SetPosition(pos);
+		scene.AddChild(o);
+	}
+
+	// Eight extended
+	path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::EXTENDED);
+	for (iterator = path.begin(); iterator != path.end(); ++iterator)
+	{
+		GameObject* o = ShortestPath::GetNodeObject();
+		o->GetComponent<Mesh>()->SetMaterial(Material(Color::Green(), 0));
 		int x, y;
 		vegTerrain.Index2D(*iterator, x, y);
 		Vector3 pos = vegTerrain.Vertex(x, y);

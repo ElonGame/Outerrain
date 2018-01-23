@@ -17,8 +17,14 @@
 
 typedef int vertex_t;
 typedef double weight_t;
-const weight_t max_weight = std::numeric_limits<double>::infinity();
- 
+
+enum NeighborhoodType
+{
+	FOUR = 1,
+	EIGHT = 2,
+	EXTENDED = 3
+};
+
 struct neighbor 
 {
     vertex_t target;
@@ -29,7 +35,7 @@ struct neighbor
 		{ 
 		}
 };
-typedef std::vector<std::vector<neighbor> > adjacency_list_t;
+typedef std::vector<std::vector<neighbor>> adjacency_list_t;
 
 class ShortestPath
 {
@@ -42,7 +48,9 @@ public:
 	static std::list<vertex_t> DijkstraGetShortestPathTo(vertex_t vertex, 
 														 const std::vector<vertex_t> &previous);
 	
-	static std::list<vertex_t> FindPath(const VegetationTerrain& terrain, int iStart, int jStart, int iEnd, int jEnd);
+	//static void AddNeighbour();
+
+	static std::list<vertex_t> FindPath(const VegetationTerrain& terrain, int iStart, int jStart, int iEnd, int jEnd, NeighborhoodType);
 
 	static GameObject* GetNodeObject();
 };
