@@ -20,9 +20,10 @@ GameObject* VegetationObject::GetGameObject(const Specie& s) const
 	m->ReadMesh(ss.str().c_str());
 
 	Shader shader;
-	shader.InitFromFile("Shaders/Diffuse.glsl");
+	shader.InitFromFile("Shaders/DiffuseTexture.glsl");
 	m->SetShader(shader);
-	m->SetMaterial(Material(Color::Green(), 0));
+	//m->SetMaterial(Material(Color::Green(), 0));
+	m->SetTexture("Data/Heightmaps/island.png", GL_RGBA);
 	GameObject* obj = new GameObject();
 	obj->AddComponent(m);
 	obj->RotateAround(Vector3(0.0f, 1.0f, 0.0f), (float)(rand() % 360));
