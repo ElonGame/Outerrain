@@ -5,6 +5,17 @@
 #include <vector>
 #include "vegetationObject.h"
 
+/* Ray */
+typedef struct Ray
+{
+public:
+	Vector3 origin;
+	Vector3 direction;
+
+	Ray() { origin = Vector3(); direction = Vector3(); }
+	Ray(Vector3 o, Vector3 d) { origin = o; direction = d; }
+} Ray;
+
 /* Terrain2D */
 class Terrain2D
 {
@@ -45,6 +56,9 @@ public:
 	ScalarField2D SlopeField() const;
 	ScalarField2D AccessibilityField() const;
 	ScalarField2D HeightField() const;
+		
+	/* Ray */
+	bool Intersect(Ray &ray, float maxSlope) const;
 };
 
 

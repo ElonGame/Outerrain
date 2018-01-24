@@ -213,6 +213,36 @@ void Terrain2D::ThermalErosion(int stepCount)
 	}
 }
 
+/* Ray */
+bool Terrain2D::Intersect(Ray &ray, float maxSlope) const
+{
+	double step = (ray.origin.y - Height(Vector2(ray.origin.x, ray.origin.z))) / maxSlope;
+	
+	int i = 0;
+	while(true)
+	{
+		if(i > 512)
+			return false;
+	 	Vector3 q = ray.origin + ray.direction * step;
+
+		Vector2 rayPos2D = Vector2(q.x, q.z);
+		if (heightField.IsInsideField(rayPos2D) == false)
+			break;
+		
+		double delta = ray.origin.y - Height(rayPos2D);
+		
+
+		if (delta <= 0.0f)
+		{
+			return true;
+			break;
+		}
+		step = delta / maxSlope; 
+		i++;
+	}
+	return false;
+}
+
 
 /* Useful Fields */
 ScalarField2D Terrain2D::SlopeField() const
@@ -340,6 +370,8 @@ ScalarField2D Terrain2D::AccessibilityField() const
 	//  -Change step += 1.0f to something involving the maximum slope.
 	//   (kind of Lipshitz computation to be sure to hit the terrain)
 	float epsilon = 0.01f;
+	ScalarField2D slopeField = SlopeField();
+	double maxSlope = slopeField.MaxValue();
 	ScalarField2D accessibilityField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
@@ -348,11 +380,21 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
 			float h = heightField.Get(i, j);
 
-			int numbers = 32;
+			int numbers = 16;
 			int intersect = 0;
 
 			for (int k = 0; k < numbers; k++)
 			{
+				// float angleH = (rand() % 360) * 0.0174533f;
+				// float angleV = rand() / static_cast<float>(RAND_MAX);
+				// Vector3 direction = Vector3(cos(angleH), 0.0f, sin(angleH));
+				// direction = Slerp(direction, Vector3(0.0f, 1.0f, 0.0f), angleV);
+
+				// Ray ray = Ray(p, direction);
+
+				// if(Intersect(ray, maxSlope) == true)
+				// 	intersect++;
+
 				float step = 0.0f;
 				Vector3 ray = p;
 				float angleH = (rand() % 360) * 0.0174533f;
@@ -572,7 +614,7 @@ void VegetationTerrain::ComputeVegetationDensities()
 	ScalarField2D accessibilityField = AccessibilityField();
 	VegetationObject vegObj;
 
-	for (int k = 0; k < species.size(); k++)
+	for (size_t k = 0; k < species.size(); k++)
 	{
 		for (int i = 0; i < ny; i++)
 		{
@@ -607,14 +649,14 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 		for (int j = 0; j < tileCountX; j++)
 		{
 			int tile = rand() % 4;
-			for (int x = 0; x < points.size(); x++)
+			for (size_t x = 0; x < points.size(); x++)
 			{
 				Vector2 point = bottomLeft
 					+ Vector2(tileSize, 0) * static_cast<float>(j)
 					+ Vector2(0, -tileSize) * static_cast<float>(i)
 					+ points[tile][x];
 
-				for (int k = 0; k < species.size(); k++)
+				for (size_t k = 0; k < species.size(); k++)
 				{
 					Specie specie = species.at(k);
 					if (specie.densityField.IsInsideField(point) == true)
@@ -654,7 +696,7 @@ std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributio
 
 		// Test point against local neighbours
 		bool canAdd = true;
-		for (int k = 0; k < res[0].size(); k++)
+		for (size_t k = 0; k < res[0].size(); k++)
 		{
 			if (Magnitude(point - res[0][k]) <= objRadius)
 			{
@@ -668,7 +710,7 @@ std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributio
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				for (int k = 0; k < res[j].size(); k++)
+				for (size_t k = 0; k < res[j].size(); k++)
 				{
 					float branch = point.x - objRadius < 0.0f ? -1.0f : 1.0f;
 					Vector2 neighbourPoint = res[j][k] + (Vector2(tileSize, 0.0f) * branch);
@@ -687,7 +729,7 @@ std::vector<std::vector<Vector2>> VegetationTerrain::GetRotatedRandomDistributio
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				for (int k = 0; k < res[j].size(); k++)
+				for (size_t k = 0; k < res[j].size(); k++)
 				{
 					float branch = point.y - objRadius < 0.0f ? -1.0f : 1.0f;
 					Vector2 neighbourPoint = res[j][k] + (Vector2(0.0f, tileSize) * branch);

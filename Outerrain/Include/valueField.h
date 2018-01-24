@@ -281,7 +281,7 @@ public:
 	float AverageValue() const
 	{
 		float ret = 0.0f;
-		for (int i = 0; i < values.size(); i++)
+		for (size_t i = 0; i < values.size(); i++)
 			ret += values[i];
 		return ret / static_cast<float>(values.size());
 	}

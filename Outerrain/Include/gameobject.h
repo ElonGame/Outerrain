@@ -37,7 +37,7 @@ public:
 	void AddComponent(Component* component);
 	template<typename T> void RemoveComponent()
 	{
-		for (int i = 0; i < components.size(); i++)
+		for (size_t i = 0; i < components.size(); i++)
 		{
 			T* castAttempt = dynamic_cast<T*>(components[i]);
 			if (castAttempt != nullptr)
@@ -49,7 +49,7 @@ public:
 	}
 	template<typename T> T* GetComponent()
 	{
-		for (int i = 0; i < components.size(); i++)
+		for (size_t i = 0; i < components.size(); i++)
 		{
 			T* castAttempt = dynamic_cast<T*>(components[i]);
 			if (castAttempt != nullptr)

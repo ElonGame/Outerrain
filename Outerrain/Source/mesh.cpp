@@ -35,7 +35,7 @@ void Mesh::AddVertex(const Vector3& v)
 	updateBuffersNextDraw = true;
 }
 
-void Mesh::AddVertex(const int& i, const Vector3& v)
+void Mesh::AddVertex(const size_t& i, const Vector3& v)
 {
 	assert(i < vertices.size());
 	vertices[i] = v;
@@ -48,7 +48,7 @@ void Mesh::AddNormal(const Vector3& n)
 	updateBuffersNextDraw = true;
 }
 
-void Mesh::AddNormal(const int& i, const Vector3& v)
+void Mesh::AddNormal(const size_t& i, const Vector3& v)
 {
 	assert(i < normals.size());
 	normals[i] = v;
@@ -61,7 +61,7 @@ void Mesh::AddColor(const Vector4& v)
 	updateBuffersNextDraw = true;
 }
 
-void Mesh::AddColor(const int& i, const Vector4& v)
+void Mesh::AddColor(const size_t& i, const Vector4& v)
 {
 	assert(i < colors.size());
 	updateBuffersNextDraw = true;
@@ -85,7 +85,7 @@ void Mesh::AddTexcoord(const Vector2& t)
 	updateBuffersNextDraw = true;
 }
 
-void Mesh::AddTexcoord(const int& i, const Vector2& t)
+void Mesh::AddTexcoord(const size_t& i, const Vector2& t)
 {
 	assert(i < texcoords.size());
 	updateBuffersNextDraw = true;
@@ -111,7 +111,7 @@ void Mesh::SetVertices(const std::vector<Vector3>& verts)
 {
 	vertices.clear();
 	normals.clear();
-	for (int i = 0; i < verts.size(); i++)
+	for (size_t i = 0; i < verts.size(); i++)
 		AddVertex(verts[i]);
 	CalculateNormals();
 	updateBuffersNextDraw = true;
@@ -368,13 +368,13 @@ void Mesh::WriteMesh(const char* filename)
 	ofstream objfile;
 	objfile.open(filename);
 	objfile << "#Test COMMENT.\n";
-	for (int i = 0; i < vertices.size(); i++)
+	for (size_t i = 0; i < vertices.size(); i++)
 		objfile << "v " << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << "\n";
-	for (int j = 0; j < texcoords.size(); j++)
+	for (size_t j = 0; j < texcoords.size(); j++)
 		objfile << "vt " << texcoords[j].x << " " << texcoords[j].y << "\n";
-	for (int k = 0; k < normals.size() ; k++)
+	for (size_t k = 0; k < normals.size() ; k++)
 		objfile << "vn " << normals[k].x << " " << normals[k].y << " " << normals[k].z << "\n";
-	for (int i = 0; i < indices.size(); i += 3)
+	for (size_t i = 0; i < indices.size(); i += 3)
 		objfile << "f " << indices[i] + 1 << "/" << indices[i + 1] + 1 <<"/" << indices[i + 2] + 1 << "\n";
 	
 	bool has_texcoords = (texcoords.size() > 0);

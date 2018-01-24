@@ -29,7 +29,7 @@ void App::SpawnVegetationCallback()
 {
 	vegTerrain.ComputeVegetationDensities();
 	std::vector<GameObject*> trees = vegTerrain.GetTreeObjects();
-	for (int i = 0; i < trees.size(); i++)
+	for (size_t i = 0; i < trees.size(); i++)
 		scene.AddChild(trees[i]);
 	CalculateAllMaps();
 }
@@ -112,7 +112,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	//CalculateAllMaps();
+	CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(window->Width());

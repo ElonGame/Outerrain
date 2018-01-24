@@ -27,9 +27,6 @@ protected:
 	std::vector<Vector4> colors;
 	std::vector<unsigned int> indices;
 
-	Material material;
-	RenderMode renderMode;
-
 	GLenum primitiveDrawn;
 	GLuint VAO;
 	GLuint fullBuffer;
@@ -38,6 +35,9 @@ protected:
 	
 	Shader shader;
 	bool updateBuffersNextDraw;
+
+	Material material;
+	RenderMode renderMode;
 
 	void CreateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
 	void UpdateBuffers(const bool use_texcoord = true, const bool use_normal = true, const bool use_color = true);
@@ -67,14 +67,14 @@ public:
 	void Destroy();
 
 	void AddVertex(const Vector3&);
-	void AddVertex(const int&, const Vector3&);
+	void AddVertex(const size_t&, const Vector3&);
 	void AddNormal(const Vector3&);
-	void AddNormal(const int&, const Vector3&);
+	void AddNormal(const size_t&, const Vector3&);
 	void AddColor(const Vector4&);
-	void AddColor(const int&, const Vector4&);
+	void AddColor(const size_t&, const Vector4&);
 	void AddTriangle(const unsigned int, const unsigned int, const unsigned int);
 	void AddTexcoord(const Vector2&);
-	void AddTexcoord(const int&, const Vector2&);
+	void AddTexcoord(const size_t&, const Vector2&);
 	void SetShader(const Shader&);
 	void SetMaterial(const Material&);
 	void SetRenderMode(const RenderMode&);

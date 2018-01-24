@@ -72,7 +72,7 @@ void App::RenderScene()
 	glClearColor(0.3f, 0.55f, 1.0f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	std::vector<GameObject*> objs = scene.GetAllChildren();
-	for (int i = 0; i < objs.size(); i++)
+	for (size_t i = 0; i < objs.size(); i++)
 		objs[i]->GetComponent<Mesh>()->Draw(orbiter);
 }
 
@@ -281,11 +281,11 @@ void App::UpdateObjects(const float time, const float delta)
 	newTime = SDL_GetPerformanceCounter();
 	float delta2 = static_cast<float>(((newTime - lastTime) * 1000.0f)) / SDL_GetPerformanceFrequency();
 	std::vector<GameObject*> objs = scene.GetAllChildren();
-	for (int i = 0; i < objs.size(); i++)
+	for (size_t i = 0; i < objs.size(); i++)
 	{
 		objs[i]->UpdateTransformIfNeeded();
 		std::vector<Component*> components = objs[i]->GetAllComponents();
-		for (int j = 0; j < components.size(); j++)
+		for (size_t j = 0; j < components.size(); j++)
 			components[j]->Update(delta2);
 	}
 	lastTime = SDL_GetPerformanceCounter();
