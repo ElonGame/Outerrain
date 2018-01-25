@@ -216,33 +216,23 @@ void Terrain2D::ThermalErosion(int stepCount)
 /* Ray */
 bool Terrain2D::Intersect(Ray &ray, float maxSlope) const
 {
-	double step = (ray.origin.y - Height(Vector2(ray.origin.x, ray.origin.z))) / maxSlope;
-	
-	int i = 0;
+	float step = (ray.origin.y - Height(Vector2(ray.origin.x, ray.origin.z))) / maxSlope;
 	while(true)
 	{
-		if(i > 512)
-			return false;
 	 	Vector3 q = ray.origin + ray.direction * step;
 
 		Vector2 rayPos2D = Vector2(q.x, q.z);
 		if (heightField.IsInsideField(rayPos2D) == false)
 			break;
 		
-		double delta = ray.origin.y - Height(rayPos2D);
-		
-
-		if (delta <= 0.0f)
-		{
+		float delta = q.y - Height(rayPos2D);
+		if (delta <= 0.001f)
 			return true;
-			break;
-		}
-		step = delta / maxSlope; 
-		i++;
+
+		step += delta / maxSlope; 
 	}
 	return false;
 }
-
 
 /* Useful Fields */
 ScalarField2D Terrain2D::SlopeField() const
@@ -258,7 +248,7 @@ ScalarField2D Terrain2D::SlopeField() const
 		}
 
 	}
-	slopeField.Normalize();
+	//slopeField.Normalize();
 	return slopeField;
 }
 
@@ -346,7 +336,7 @@ ScalarField2D Terrain2D::WetnessField() const
 			wetnessField.Set(i, j, w);
 		}
 	}
-	wetnessField.Normalize();
+	//wetnessField.Normalize();
 	return wetnessField;
 }
 
@@ -360,7 +350,7 @@ ScalarField2D Terrain2D::StreamPowerField() const
 		for (int j = 0; j < nx; j++)
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
 	}
-	streamPowerField.Normalize();
+	//streamPowerField.Normalize();
 	return streamPowerField;
 }
 
@@ -380,50 +370,26 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			Vector3 p = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
 			float h = heightField.Get(i, j);
 
-			int numbers = 16;
+			int numbers = 32;
 			int intersect = 0;
 
 			for (int k = 0; k < numbers; k++)
 			{
-				// float angleH = (rand() % 360) * 0.0174533f;
-				// float angleV = rand() / static_cast<float>(RAND_MAX);
-				// Vector3 direction = Vector3(cos(angleH), 0.0f, sin(angleH));
-				// direction = Slerp(direction, Vector3(0.0f, 1.0f, 0.0f), angleV);
-
-				// Ray ray = Ray(p, direction);
-
-				// if(Intersect(ray, maxSlope) == true)
-				// 	intersect++;
-
-				float step = 0.0f;
-				Vector3 ray = p;
 				float angleH = (rand() % 360) * 0.0174533f;
 				float angleV = rand() / static_cast<float>(RAND_MAX);
 				Vector3 direction = Vector3(cos(angleH), 0.0f, sin(angleH));
 				direction = Slerp(direction, Vector3(0.0f, 1.0f, 0.0f), angleV);
-				for (int l = 0; l < 32; l++)
-				{
-					ray = p + direction * step;
 
-					Vector2 terrainRay = Vector2(ray.x, ray.z);
-					if (heightField.IsInsideField(terrainRay) == false)
-						break;
+				Ray ray = Ray(p, direction);
 
-					float terrainHeight = Height(terrainRay);
-					float deltaY = ray.y - terrainHeight;
-					if (deltaY < 0.0f)
-					{
-						intersect++;
-						break;
-					}
-					step += 1.0f;
-				}
+				if(Intersect(ray, maxSlope) == true)
+					intersect++;
 			}
 			float illumination = 1.0f - (intersect / static_cast<float>(numbers));
 			accessibilityField.Set(i, j, illumination);
 		}
 	}
-	accessibilityField.Normalize();
+	//accessibilityField.Normalize();
 	return accessibilityField;
 }
 
