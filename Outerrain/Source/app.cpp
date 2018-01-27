@@ -33,6 +33,8 @@ static int thermalErosionIteration = 1;
 
 App::App(const int& width, const int& height, const int& major, const int& minor)
 {
+	windowWidth = static_cast<float>(width);
+	windowHeight = static_cast<float>(height);
 	window = new Window(width, height);
 	window->CreateGLContext(minor, major);
 
@@ -47,9 +49,9 @@ void App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	InitSceneVegetationTerrain();
+	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	//InitSceneNoiseTerrain();
+	InitSceneNoiseTerrain();
 }
 
 void App::Quit()
