@@ -63,7 +63,8 @@ vec3 TerrainShading(vec2 uv)
 	
 	// Snow
 	float illumination = texture(texture0, uv).r;
-	terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 - illumination, 2) * 3.0, 0, 1));
+	float altitude = pow(worldPos.y / 100.0f, 2);
+	terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 - illumination + altitude, 2) * 3.0, 0, 1));
 	
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
