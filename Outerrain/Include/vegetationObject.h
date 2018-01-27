@@ -14,9 +14,9 @@ class Specie
 {
 public:
 	TreeType type;
-	Vector2 heightData; // x: base value; z : range value
-	Vector2 slopeData; // x: base value; z : range value
-	Vector2 wetnessData; // x: base value; z : range value
+	Vector2 heightData;		// x: base value; z : range value
+	Vector2 slopeData;		// x: base value; z : range value
+	Vector2 wetnessData;	// x: base value; z : range value
 
 	const char* name;
 	ScalarField2D densityField;
@@ -38,7 +38,7 @@ protected:
 public:
 	VegetationObject();
 
-	// Fonction de transfert des paramtètres de végétation
+	// Fonction de transfert des paramètres de végétation
 	float SlopeDensityFactor(const Specie& s, const float&) const;
 	float HeightDensityFactor(const Specie& s, const float&) const;
 	float WetnessDensityFactor(const Specie& s, const float&) const;

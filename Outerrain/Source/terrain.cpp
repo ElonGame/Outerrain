@@ -25,6 +25,8 @@ Terrain2D::Terrain2D(int nx, int ny, Vector2 bottomLeft, Vector2 topRight)
 
 void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 {
+	// Init a Noise terrain with fBm algorithm based on Perlin Noise.
+	// All parameters are hardcoded here.
 	float whiteFloat = static_cast<float>(whiteAltitude);
 	float blackFloat = static_cast<float>(blackAltitude);
 	float diff = whiteFloat - blackFloat;
@@ -81,6 +83,7 @@ void Terrain2D::SetHeight(int i, int j, float v)
 
 void Terrain2D::ComputeNormalField()
 {
+	// Used for rendering
 	for (int i = 0; i < ny - 1; i++)
 	{
 		for (int j = 0; j < nx - 1; j++)
@@ -118,7 +121,11 @@ float Terrain2D::NormalizedHeight(const Vector2& p) const
 /* Erosion */
 void Terrain2D::StreamPowerErosion(int stepCount, float maxAmplitude)
 {
+	// Perform 'stepCount' SP erosion based on the formula :
+	// H = H - (SP * A)
+	// Use a Normalized SP field to really control the erosion.
 	ScalarField2D streamPower = StreamPowerField();
+	streamPower.Normalize();
 	for (int k = 0; k < stepCount; k++)
 	{
 		for (int i = 0; i < ny; i++)
@@ -213,14 +220,12 @@ void Terrain2D::ThermalErosion(int stepCount)
 	}
 }
 
-/* Ray */
 bool Terrain2D::Intersect(Ray &ray, float maxSlope) const
 {
 	float step = (ray.origin.y - Height(Vector2(ray.origin.x, ray.origin.z))) / maxSlope;
 	while(true)
 	{
 	 	Vector3 q = ray.origin + ray.direction * step;
-
 		Vector2 rayPos2D = Vector2(q.x, q.z);
 		if (heightField.IsInsideField(rayPos2D) == false)
 			break;
@@ -228,16 +233,15 @@ bool Terrain2D::Intersect(Ray &ray, float maxSlope) const
 		float delta = q.y - Height(rayPos2D);
 		if (delta <= 0.001f)
 			return true;
-
 		step += delta / maxSlope; 
 	}
 	return false;
 }
 
-/* Useful Fields */
+/* Fields */
 ScalarField2D Terrain2D::SlopeField() const
 {
-	// Slope(i, j) : ||Gradient(i, j)||
+	// Slope(i, j) : Norm(Gradient(i, j))
 	ScalarField2D slopeField = ScalarField2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{
@@ -248,13 +252,11 @@ ScalarField2D Terrain2D::SlopeField() const
 		}
 
 	}
-	//slopeField.Normalize();
 	return slopeField;
 }
 
 int Terrain2D::Distribute(Point p, std::array<Point, 8>& neighbours, std::array<float, 8>& height, std::array<float, 8>& slope) const
 {
-	// @TODO Diviser currentSlope et currentHeight par c.x en horizontal et c.y en vertical et norme en diagonale
 	int i = p.x, j = p.y;
 	int counter = 0;
 	float currentSlope = 0.0f;
@@ -336,7 +338,6 @@ ScalarField2D Terrain2D::WetnessField() const
 			wetnessField.Set(i, j, w);
 		}
 	}
-	//wetnessField.Normalize();
 	return wetnessField;
 }
 
@@ -350,15 +351,11 @@ ScalarField2D Terrain2D::StreamPowerField() const
 		for (int j = 0; j < nx; j++)
 			streamPowerField.Set(i, j, sqrt(drainageField.Get(i, j)) * slopeField.Get(i, j));
 	}
-	//streamPowerField.Normalize();
 	return streamPowerField;
 }
 
 ScalarField2D Terrain2D::AccessibilityField() const
 {
-	// Todo :
-	//  -Change step += 1.0f to something involving the maximum slope.
-	//   (kind of Lipshitz computation to be sure to hit the terrain)
 	float epsilon = 0.01f;
 	ScalarField2D slopeField = SlopeField();
 	double maxSlope = slopeField.MaxValue();
@@ -389,7 +386,6 @@ ScalarField2D Terrain2D::AccessibilityField() const
 			accessibilityField.Set(i, j, illumination);
 		}
 	}
-	//accessibilityField.Normalize();
 	return accessibilityField;
 }
 
@@ -413,6 +409,7 @@ void Terrain2D::Index2D(int index, int& i, int& j) const
 {
 	heightField.Index2D(index, i, j);
 }
+
 
 
 /* LayerTerrain2D */
@@ -456,7 +453,9 @@ void LayerTerrain2D::ThermalErosion(int stepCount)
 {
 	// Constants
 	float epsilonDisplacement = 0.05f;
-	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
+
+	// Threshold Angle for stability (30° +- 5)
+	float tanThresholdAngle = 0.6f;
 
 	float cellDistX = (b[0] - a[0]) / (nx - 1);
 	for (int a = 0; a < stepCount; a++)
@@ -575,11 +574,16 @@ VegetationTerrain::VegetationTerrain(int nx, int ny, Vector2 bottomLeft, Vector2
 
 void VegetationTerrain::ComputeVegetationDensities()
 {
+	/* Compute vegetation densities based on various parameters 
+		-Slope
+		-Wetness
+		-Accessibility
+		Via Transfert function for each species.
+	*/
 	ScalarField2D slopeField = SlopeField();
 	ScalarField2D wetnessField = WetnessField();
 	ScalarField2D accessibilityField = AccessibilityField();
 	VegetationObject vegObj;
-
 	for (size_t k = 0; k < species.size(); k++)
 	{
 		for (int i = 0; i < ny; i++)
@@ -589,7 +593,9 @@ void VegetationTerrain::ComputeVegetationDensities()
 				float height = heightField.Get(i, j);
 				float slope = slopeField.Get(i, j);
 				float wetness = wetnessField.Get(i, j);
-				species.at(k).densityField.Set(i, j, vegObj.ComputeDensityFactor(species.at(k), height, slope, wetness));
+				float d = vegObj.ComputeDensityFactor(species.at(k), height, slope, wetness);
+
+				species.at(k).densityField.Set(i, j, d);
 			}
 		}
 	}
@@ -597,6 +603,7 @@ void VegetationTerrain::ComputeVegetationDensities()
 
 std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 {
+	// Instancing via Rotated Poisson tiles
 	VegetationObject veg;
 	veg.SetRadius(3.0f);
 	float tileSize = veg.GetRadius() * 10.0f;
@@ -609,7 +616,6 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 	int tileCountY = static_cast<int>((-(topRight.y - bottomLeft.y) / tileSize + 1));
 
 	std::vector<GameObject*> vegObjects;
-
 	for (int i = 0; i < tileCountY; i++)
 	{
 		for (int j = 0; j < tileCountX; j++)
@@ -631,6 +637,7 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 						float p = rand() / static_cast<float>(RAND_MAX);
 						if (p < density)
 						{
+							// Get the gameobject used for rendering
 							GameObject* vegObj = veg.GetGameObject(species.at(k));
 							Vector3 pos = Vector3(point.x, Height(point) + vegObj->GetScale().y / 2.0f, point.y);
 							vegObj->SetPosition(pos);

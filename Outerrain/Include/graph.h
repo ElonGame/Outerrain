@@ -3,11 +3,8 @@
 #include <vector>
 #include <string>
 #include <list>
- 
-#include <limits> // for numeric_limits
- 
 #include <set>
-#include <utility> // for pair
+#include <utility>
 #include <algorithm>
 #include <iterator>
 
@@ -15,16 +12,16 @@
 #include "gameobject.h"
 #include "mesh.h"
 
+
+/* Minimalist graph structure as an Adjacency List. */
 typedef int vertex_t;
 typedef double weight_t;
-
 enum NeighborhoodType
 {
 	FOUR = 1,
 	EIGHT = 2,
 	EXTENDED = 3
 };
-
 struct neighbor 
 {
     vertex_t target;
@@ -37,6 +34,7 @@ struct neighbor
 };
 typedef std::vector<std::vector<neighbor>> adjacency_list_t;
 
+/* Public Interface for road generation (and possibly rivers later) */
 class ShortestPath
 {
 public:
@@ -47,10 +45,6 @@ public:
 
 	static std::list<vertex_t> DijkstraGetShortestPathTo(vertex_t vertex, 
 														 const std::vector<vertex_t> &previous);
-	
-	//static void AddNeighbour();
-
 	static std::list<vertex_t> FindPath(const VegetationTerrain& terrain, int iStart, int jStart, int iEnd, int jEnd, NeighborhoodType);
-
 	static GameObject* GetNodeObject();
 };

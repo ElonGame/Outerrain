@@ -68,9 +68,6 @@
     <ClInclude Include="Include\cameraOrbiter.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\graphs.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Include\mytime.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

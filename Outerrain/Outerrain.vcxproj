@@ -25,7 +25,6 @@
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\gameobject.h" />
     <ClInclude Include="Include\graph.h" />
-    <ClInclude Include="Include\graphs.h" />
     <ClInclude Include="Include\imgui_opengl.h" />
     <ClInclude Include="Include\material.h" />
     <ClInclude Include="Include\mytime.h" />

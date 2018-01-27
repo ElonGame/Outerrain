@@ -16,6 +16,9 @@ typedef struct Point
 } Point;
 
 
+/* Template class that allows us to create
+   Vector3Field & Scalarfield easily.
+*/
 template<typename T>
 class ValueField
 {
@@ -167,6 +170,7 @@ public:
 	{
 	}
 
+
 	void WriteImageGrayscale(const char* path)
 	{
 		Image im = Image(nx, ny);
@@ -204,6 +208,7 @@ public:
 				if (anchorY == heightmap.Height() - 1)
 					anchorY--;
 
+				// Bilinear interpolation
 				float a = heightmap(anchorX, anchorY).r;
 				float b = heightmap(anchorX, anchorY + 1).r;
 				float c = heightmap(anchorX + 1, anchorY + 1).r;
@@ -249,6 +254,8 @@ public:
 		return ret;
 	}
 
+
+	/* Useful methods */
 	void Fill(float v)
 	{
 		std::fill(values.begin(), values.end(), v);

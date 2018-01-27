@@ -1,13 +1,8 @@
 #include "graph.h"
 
-
 static const weight_t max_weight = std::numeric_limits<double>::infinity();
 
-
-void ShortestPath::DijkstraComputePaths(vertex_t source,
-	const adjacency_list_t &adjacency_list,
-	std::vector<weight_t> &min_distance,
-	std::vector<vertex_t> &previous)
+void ShortestPath::DijkstraComputePaths(vertex_t source, const adjacency_list_t &adjacency_list, std::vector<weight_t> &min_distance, std::vector<vertex_t> &previous)
 {
 	int n = adjacency_list.size();
 	min_distance.clear();
@@ -26,9 +21,7 @@ void ShortestPath::DijkstraComputePaths(vertex_t source,
 
 		// Visit each edge exiting u
 		const std::vector<neighbor> &neighbors = adjacency_list[u];
-		for (std::vector<neighbor>::const_iterator neighbor_iter = neighbors.begin();
-			neighbor_iter != neighbors.end();
-			neighbor_iter++)
+		for (auto neighbor_iter = neighbors.begin(); neighbor_iter != neighbors.end(); neighbor_iter++)
 		{
 			vertex_t v = neighbor_iter->target;
 			weight_t weight = neighbor_iter->weight;
@@ -44,8 +37,7 @@ void ShortestPath::DijkstraComputePaths(vertex_t source,
 	}
 }
 
-std::list<vertex_t> ShortestPath::DijkstraGetShortestPathTo(
-	vertex_t vertex, const std::vector<vertex_t> &previous)
+std::list<vertex_t> ShortestPath::DijkstraGetShortestPathTo(vertex_t vertex, const std::vector<vertex_t> &previous)
 {
 	std::list<vertex_t> path;
 	while (vertex != -1)
@@ -60,7 +52,6 @@ std::list<vertex_t> ShortestPath::DijkstraGetShortestPathTo(
 	}
 	return path;
 }
-
 
 static void AddNeighbour(adjacency_list_t& graph, const VegetationTerrain& terrain, const Vector3& v1, int index1D, int i, int j)
 {
