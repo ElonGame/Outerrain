@@ -16,6 +16,7 @@ enum RenderMode
 	NormalMode = 1,
 	WireframeMode = 2,
 	Texture = 3,
+	TerrainSplatmap = 4,
 };
 
 class Mesh : public Component

@@ -29,14 +29,14 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 	float blackFloat = static_cast<float>(blackAltitude);
 	float diff = whiteFloat - blackFloat;
 	PerlinNoise noise;
-	float multiplier = 307.06571f;
+	float multiplier = 398.0945f;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			float iF = ((float)(i + 1)) * multiplier;
 			float jF = ((float)(j + 1)) * multiplier;
-			float v = blackFloat + noise.Fbm(Vector2(iF, jF), (float)diff, 0.00001f, 8);
+			float v = blackFloat + noise.Fbm(Vector2(iF, jF), (float)diff, 0.00002f, 8);
 			heightField.Set(i, j, v);
 		}
 	}

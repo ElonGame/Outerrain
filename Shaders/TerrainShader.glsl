@@ -40,7 +40,7 @@ out vec4 fragment_color;
 const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
 const vec3 lightDir = vec3(0.707, -0.707, 0);
 const vec3 lightColor = vec3(1, 1, 1);
-const float lightStrength = 1.0;
+const float lightStrength = 0.8;
 
 
 vec3 NormalShading()
@@ -85,13 +85,39 @@ vec3 TerrainShading(vec2 uv)
 			+ specular * (lightColor * lightStrength);
 }
 
+vec3 DiffuseShading()
+{
+	// Terrain material placement
+	vec3 color = vec3(0.8, 0.8, 0.8);
+	
+	// Diffuse term (Lambert)
+	float diffuse = max(0.0, dot(-lightDir, worldNormal));
+
+	// Specular term (Blinn Phong)
+	float specular = 0;
+	if(diffuse > 0 && shininess > 0)
+	{
+		vec3 viewDir = normalize(camPos - worldPos);
+		vec3 halfDir = normalize(-lightDir + viewDir);
+		float specAngle = max(dot(halfDir, worldNormal), 0.0);
+		specular = pow(specAngle, shininess);
+	}
+
+	// Final color
+	return ambientLight 
+			+ diffuse * color.rgb * (lightColor * lightStrength) 
+			+ specular * (lightColor * lightStrength);
+}
+
 void main()
 {
-	if (renderMode == 1) 	  // Normal
+	if (renderMode == 0) 		  // Diffuse gray
+		fragment_color = vec4(DiffuseShading(), 1.0);
+	else if (renderMode == 1) 	  // Normal
 		fragment_color = vec4(NormalShading(), 1.0);
-	else if (renderMode == 2) // WireFrame
+	else if (renderMode == 2) 	  // WireFrame
 		fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
-	else if (renderMode == 0) // Diffuse Splatmap
+	else if (renderMode == 3)     // Diffuse Splatmap
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 	else
 		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);

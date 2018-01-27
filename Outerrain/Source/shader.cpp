@@ -265,6 +265,8 @@ int Shader::Reload(const char *filename, const char *definitions)
 		return -1;
 	}
 
+	PrintCompileErrors();
+
 	// pour etre coherent avec les autres fonctions de creation, active l'objet gl qui vient d'etre cree.
 	glUseProgram(program);
 	return 0;

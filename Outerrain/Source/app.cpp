@@ -49,9 +49,9 @@ void App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	//InitSceneVegetationTerrain();
+	InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
-	InitSceneNoiseTerrain();
+	//InitSceneNoiseTerrain();
 }
 
 void App::Quit()
@@ -88,7 +88,7 @@ void App::RenderGUI()
 	ImGui::End();
 	// Shading
 	ImGui::Begin("Shaders");
-	const char* items[] = { "Diffuse", "Normal", "Wireframe", "Slope Texture", "Drainage Texture", "Wetness Texture", "Accessibility Texture", "Stream Power Texture" };
+	const char* items[] = { "Diffuse", "Normal", "Wireframe", "Splatmap", "Slope Texture", "Drainage Texture", "Wetness Texture", "Accessibility Texture", "Stream Power Texture" };
 	ImGui::Combo("Shading", &currentItem, items, IM_ARRAYSIZE(items));
 	ImGui::End();
 	// Debug Image 
@@ -235,26 +235,26 @@ int App::Update(const float time, const float deltaTime)
 
 	// Update game objects
 	UpdateObjects(time, deltaTime);
-	RenderMode r = (currentItem > 3) ? Texture : (RenderMode)currentItem;
+	RenderMode r = (currentItem > 4) ? Texture : (RenderMode)currentItem;
 	scene.GetChildAt(0)->GetComponent<Mesh>()->SetRenderMode(r);
 	switch (currentItem)
 	{
 	case 0:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
 		break;
-	case 3:
+	case 4:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(slopeTexture);
 		break;
-	case 4:
+	case 5:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(draignageTexture);
 		break;
-	case 5:
+	case 6:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(wetnessTexture);
 		break;
-	case 6:
+	case 7:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
 		break;
-	case 7:
+	case 8:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(streampowerTexture);
 		break;
 	}

@@ -36,9 +36,12 @@ void App::SpawnVegetationCallback()
 
 void App::GenerateRoadCallback()
 {
+	Vector2 begin(200, 20);
+	Vector2 end(20, 200);
+
 	// Eight
 	std::list<vertex_t>::const_iterator iterator;
-	std::list<vertex_t> path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::EIGHT);
+	std::list<vertex_t> path = ShortestPath::FindPath(vegTerrain, begin.x, begin.y, end.x, end.y, NeighborhoodType::EIGHT);
 	for (iterator = path.begin(); iterator != path.end(); ++iterator)
 	{
 		GameObject* o = ShortestPath::GetNodeObject();
@@ -50,7 +53,7 @@ void App::GenerateRoadCallback()
 	}
 
 	// Four
-	path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::FOUR);
+	path = ShortestPath::FindPath(vegTerrain, begin.x, begin.y, end.x, end.y, NeighborhoodType::FOUR);
 	for (iterator = path.begin(); iterator != path.end(); ++iterator)
 	{
 		GameObject* o = ShortestPath::GetNodeObject();
@@ -63,7 +66,7 @@ void App::GenerateRoadCallback()
 	}
 
 	// Eight extended
-	path = ShortestPath::FindPath(vegTerrain, 20, 20, 100, 100, NeighborhoodType::EXTENDED);
+	path = ShortestPath::FindPath(vegTerrain, begin.x, begin.y, end.x, end.y, NeighborhoodType::EXTENDED);
 	for (iterator = path.begin(); iterator != path.end(); ++iterator)
 	{
 		GameObject* o = ShortestPath::GetNodeObject();
@@ -100,7 +103,7 @@ void App::InitSceneNoiseTerrain()
 
 void App::InitSceneVegetationTerrain()
 {
-	vegTerrain = VegetationTerrain(128, 128, Vector2(-256, 256), Vector2(256, -256));
+	vegTerrain = VegetationTerrain(256, 256, Vector2(-256, 256), Vector2(256, -256));
 	vegTerrain.InitFromFile("Data/Heightmaps/island.png", 0, 100);
 
 	Mesh* mesh = vegTerrain.GetMesh();
@@ -112,7 +115,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	CalculateAllMaps();
+	//CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(window->Width());
