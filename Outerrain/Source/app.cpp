@@ -240,7 +240,7 @@ int App::Update(const float time, const float deltaTime)
 	switch (currentItem)
 	{
 	case 0:
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
+		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture();
 		break;
 	case 4:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(slopeTexture);
