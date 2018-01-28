@@ -142,7 +142,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	CalculateAllMaps();
+	//CalculateAllMaps();
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(window->Width());

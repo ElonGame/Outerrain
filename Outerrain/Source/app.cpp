@@ -25,6 +25,8 @@ static Vector2 minMaxVegetationDensity;
 
 static GLuint m_time_query;
 
+static bool vegetationComputed = false;
+
 /* ImGui Erosion */
 static int streamPowerErosionIteration = 1;
 static float streamPowerErosionAmplitude = 2.0f;
@@ -160,8 +162,8 @@ void App::RenderGUI()
 
 	// Time Info
 	ImGui::Begin("Rendering Time");
-	//ImGui::Text(cpuStr.str().data());
-	//ImGui::Text(gpuStr.str().data());
+	ImGui::Text(cpuStr.str().data());
+	ImGui::Text(gpuStr.str().data());
 	ImGui::End();
 
 	// Call ImGui renderer
@@ -170,24 +172,24 @@ void App::RenderGUI()
 
 void App::StartFrameTimeComputation()
 {
-	//glBeginQuery(GL_TIME_ELAPSED, m_time_query);
-	//cpu_start = std::chrono::high_resolution_clock::now();
+	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
+	cpu_start = std::chrono::high_resolution_clock::now();
 }
 
 void App::ComputeFrameTime()
 {
 	// CPU/GPU time computation
-	/*cpu_stop = std::chrono::high_resolution_clock::now();
+	cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-	*/
-	//glEndQuery(GL_TIME_ELAPSED);
+	
+	glEndQuery(GL_TIME_ELAPSED);
 	GLint64 gpu_time = 0;
-	//glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
 
-	//cpuStr.str("");
+	cpuStr.str("");
 	gpuStr.str("");
-	//cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
-	//gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
+	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
+	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 
 int App::Update(const float time, const float deltaTime)
@@ -226,8 +228,12 @@ int App::Update(const float time, const float deltaTime)
 		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
 
 	// Vegetation spawn
-	if (window->KeyState(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (window->KeyState(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0 && !vegetationComputed)
+	{
 		SpawnVegetationCallback();
+		vegetationComputed = true;
+	}
+
 
 	// Roads
 	if (window->KeyState(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
@@ -248,6 +254,8 @@ int App::Update(const float time, const float deltaTime)
 	case 6:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(wetnessTexture);
 		break;
+	// Terrain splatmap also needs accessibility texture
+	case 3:
 	case 7:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
 		break;
