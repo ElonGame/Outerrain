@@ -9,6 +9,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{8b796a70-7acd-4adb-b4bd-24afdb85e651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\include">
+      <UniqueIdentifier>{a37b4760-7286-49e5-bd2e-8d8fa0fd71bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\source">
+      <UniqueIdentifier>{2723c1f1-1891-491a-809b-6fb7ff7076c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\app.h">
@@ -18,9 +27,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\vec.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\mesh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\shader.h">
@@ -33,12 +39,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\color.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\noise.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\terrain.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\imgui_opengl.h">
@@ -59,20 +59,29 @@
     <ClInclude Include="Include\texture.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\vegetationObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\valueField.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Include\cameraOrbiter.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\mytime.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Include\mesh.h">
+      <Filter>Model\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\noise.h">
+      <Filter>Model\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\terrain.h">
+      <Filter>Model\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\valueField.h">
+      <Filter>Model\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\vegetationObject.h">
+      <Filter>Model\include</Filter>
+    </ClInclude>
     <ClInclude Include="Include\graph.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Model\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,13 +109,7 @@
     <ClCompile Include="Source\color.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\noise.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\image.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\terrain.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui.cpp">
@@ -124,9 +127,6 @@
     <ClCompile Include="Source\texture.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\vegetationObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\app-callbacks.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -134,7 +134,16 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\graph.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Model\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\noise.cpp">
+      <Filter>Model\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terrain.cpp">
+      <Filter>Model\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\vegetationObject.cpp">
+      <Filter>Model\source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

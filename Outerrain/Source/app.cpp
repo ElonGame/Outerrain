@@ -80,7 +80,6 @@ void App::RenderScene()
 
 void App::RenderGUI()
 {
-	// ImGui
 	// Help
 	ImGui::Begin("Welcome to Outerrain !");
 	ImGui::Text("MOUSE : \n - Click Left to rotate \n - Click Middle to move\n - Click Right to zoom (in/out)");
@@ -160,8 +159,8 @@ void App::RenderGUI()
 
 	// Time Info
 	ImGui::Begin("Rendering Time");
-	//ImGui::Text(cpuStr.str().data());
-	//ImGui::Text(gpuStr.str().data());
+	ImGui::Text(cpuStr.str().data());
+	ImGui::Text(gpuStr.str().data());
 	ImGui::End();
 
 	// Call ImGui renderer
@@ -170,24 +169,24 @@ void App::RenderGUI()
 
 void App::StartFrameTimeComputation()
 {
-	//glBeginQuery(GL_TIME_ELAPSED, m_time_query);
-	//cpu_start = std::chrono::high_resolution_clock::now();
+	glBeginQuery(GL_TIME_ELAPSED, m_time_query);
+	cpu_start = std::chrono::high_resolution_clock::now();
 }
 
 void App::ComputeFrameTime()
 {
 	// CPU/GPU time computation
-	/*cpu_stop = std::chrono::high_resolution_clock::now();
+	cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-	*/
-	//glEndQuery(GL_TIME_ELAPSED);
+	
+	glEndQuery(GL_TIME_ELAPSED);
 	GLint64 gpu_time = 0;
-	//glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
+	glGetQueryObjecti64v(m_time_query, GL_QUERY_RESULT, &gpu_time);
 
-	//cpuStr.str("");
+	cpuStr.str("");
 	gpuStr.str("");
-	//cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
-	//gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
+	cpuStr << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
+	gpuStr << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 
 int App::Update(const float time, const float deltaTime)
@@ -295,33 +294,60 @@ void App::UpdateObjects(const float time, const float delta)
 
 void App::CalculateAllMaps()
 {
+	std::chrono::high_resolution_clock::time_point start, end;
+	
+	start = std::chrono::high_resolution_clock::now();
 	ScalarField2D field = vegTerrain.SlopeField();
+	field.Normalize();
 	field.WriteImageGrayscale("Data/Maps/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "SlopeField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
+	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.WetnessField();
+	field.Normalize();
 	field.WriteImageGrayscale("Data/Maps/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "WetnessField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
+	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.StreamPowerField();
+	field.Normalize();
 	field.WriteImageGrayscale("Data/Maps/streamPower.png");
 	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "StreamPowerField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
+	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.DrainageField();
+	field.Normalize();
 	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "DrainageField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
+	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.AccessibilityField();
 	field.WriteImageGrayscale("Data/Maps/accessibility.png");
 	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "AccessibilityField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
+	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.VegetationDensityField(0);
 	field.WriteImageGrayscale("Data/Maps/vegetationPineDensity.png");
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "vegetationPineDensity Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
-	field = vegTerrain.VegetationDensityField(0);
+	start = std::chrono::high_resolution_clock::now();
+	field = vegTerrain.VegetationDensityField(1);
 	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	end = std::chrono::high_resolution_clock::now();
+	std::cout << "vegetationBroadDensity Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
 	slopeTexture = ReadTexture(0, "Data/Maps/slope.png", GL_RGB);
 	draignageTexture = ReadTexture(0, "Data/Maps/drainageSqrt.png", GL_RGB);
