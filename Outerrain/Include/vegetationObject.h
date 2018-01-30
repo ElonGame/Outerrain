@@ -1,6 +1,7 @@
 #pragma once
 #include "mesh.h"
 #include "valueField.h"
+#include "scalarfield.h"
 
 class GameObject;
 
@@ -19,14 +20,14 @@ public:
 	Vector2 wetnessData;	// x: base value; z : range value
 
 	const char* name;
-	ScalarField2D densityField;
+	Scalarfield2D densityField;
 
 	Specie() : type(PineTree), heightData(Vector2(0.0)), slopeData(Vector2(0.0)), wetnessData(Vector2(0.0)), name(NULL)
 	{
-		densityField = ScalarField2D(0, 0, 0, 0);
+		densityField = Scalarfield2D(0, 0, 0, 0);
 	}
 
-	Specie(TreeType sp, Vector2 height, Vector2 slope, Vector2 wetness, const char* n, ScalarField2D s) :
+	Specie(TreeType sp, Vector2 height, Vector2 slope, Vector2 wetness, const char* n, Scalarfield2D s) :
 		type(sp), heightData(height), slopeData(slope), wetnessData(wetness), name(n), densityField(s) {}
 };
 

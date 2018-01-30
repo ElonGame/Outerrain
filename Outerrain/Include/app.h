@@ -6,6 +6,8 @@
 #include "terrain.h"
 #include "gameobject.h"
 
+#include "heightfield.h"
+
 #include <chrono>
 #include <sstream>
 
@@ -16,6 +18,8 @@ protected:
 
 	Window* window;
 	CameraOrbiter orbiter;
+
+	Heightfield hf;
 
 	// Terrain Data
 	LayerTerrain2D layerTerrain2D;
@@ -32,6 +36,9 @@ protected:
 	std::stringstream cpuStr, gpuStr;
 	std::chrono::high_resolution_clock::time_point cpu_start;
 	std::chrono::high_resolution_clock::time_point cpu_stop;
+
+
+	void InitHeightfieldNew();
 
 	void InitSceneNoiseTerrain();
 	void InitSceneVegetationTerrain();

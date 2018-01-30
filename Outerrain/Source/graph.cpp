@@ -66,7 +66,7 @@ std::list<vertex_t> ShortestPath::FindPath(const VegetationTerrain& terrain, int
 {
 	int nodeCount = terrain.SizeX() * terrain.SizeY();
 	adjacency_list_t graph(nodeCount);
-	ScalarField2D slopeField = terrain.SlopeField();
+	Scalarfield2D slopeField = terrain.SlopeField();
 	for (int i = 0; i < terrain.SizeY(); i++)
 	{
 		for (int j = 0; j < terrain.SizeX(); j++)

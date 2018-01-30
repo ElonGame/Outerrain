@@ -1,12 +1,26 @@
 #pragma once
+
 #include <math.h>
 #include <iostream>
 
 
 /* Forward Declarations */
+struct Vector2i;
 struct Vector2;
 struct Vector3;
 struct Vector4;
+
+
+/* Vector2i */
+struct Vector2i
+{
+public:
+	int x, y;
+
+	Vector2i() : x(0), y(0) {}
+	Vector2i(int n) : x(n), y(n) {}
+	Vector2i(int x, int y) : x(x), y(y) {}
+};
 
 
 /* Vector2 */
@@ -264,4 +278,13 @@ typedef struct Bounds
 inline float Lerp(float a, float b, float f)
 {
 	return (a * (1.0f - f)) + (b * f);
+}
+
+template<typename T, size_t N>
+inline T Accumulate(std::array<T, N>& arr)
+{
+	T ret(0);
+	for (int i = 0; i < N; i++)
+		ret += arr[i];
+	return ret;
 }

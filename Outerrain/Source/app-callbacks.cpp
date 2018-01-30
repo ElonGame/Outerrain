@@ -100,6 +100,26 @@ void App::GenerateRoadCallback()
 	}
 }
 
+
+void App::InitHeightfieldNew()
+{
+	hf = Heightfield(std::string("Data/Heightmaps/island.png"), 0, 100, 256, 256, Vector2(-256, 256), Vector2(256, -256));
+
+	Mesh* mesh = hf.CreateMesh();
+	Shader shader;
+	shader.InitFromFile("Shaders/TerrainShader.glsl");
+	mesh->SetShader(shader);
+	mesh->SetMaterial(Material(Color::Grey(), 0));
+	GameObject* obj = new GameObject();
+	obj->AddComponent(mesh);
+	scene.AddChild(obj);
+
+	orbiter.LookAt(mesh->GetBounds());
+	orbiter.SetFrameWidth(window->Width());
+	orbiter.SetFrameHeight(window->Height());
+	orbiter.SetClippingPlanes(1.0f, 3000.0f);
+}
+
 void App::InitSceneNoiseTerrain()
 {
 	// Init a basic noise terrain

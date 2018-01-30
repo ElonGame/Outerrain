@@ -51,7 +51,8 @@ void App::Init()
 	// Queries to GPU
 	glGenQueries(1, &m_time_query);
 
-	InitSceneVegetationTerrain();
+	InitHeightfieldNew();
+	//InitSceneVegetationTerrain();
 	//InitSceneLayerTerrain();
 	//InitSceneNoiseTerrain();
 }
@@ -302,8 +303,8 @@ void App::CalculateAllMaps()
 	std::chrono::high_resolution_clock::time_point start, end;
 	
 	start = std::chrono::high_resolution_clock::now();
-	ScalarField2D field = vegTerrain.SlopeField();
-	field.Normalize();
+	Scalarfield2D field = vegTerrain.SlopeField();
+	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/slope.png");
 	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
 	end = std::chrono::high_resolution_clock::now();
@@ -311,7 +312,7 @@ void App::CalculateAllMaps()
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.WetnessField();
-	field.Normalize();
+	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/wetness.png");
 	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
 	end = std::chrono::high_resolution_clock::now();
@@ -319,7 +320,7 @@ void App::CalculateAllMaps()
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.StreamPowerField();
-	field.Normalize();
+	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/streamPower.png");
 	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
 	end = std::chrono::high_resolution_clock::now();
@@ -327,7 +328,7 @@ void App::CalculateAllMaps()
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.DrainageField();
-	field.Normalize();
+	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
 	end = std::chrono::high_resolution_clock::now();

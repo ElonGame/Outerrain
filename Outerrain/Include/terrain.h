@@ -3,18 +3,10 @@
 #include "vec.h"
 #include "mesh.h"
 #include <vector>
+
 #include "vegetationObject.h"
-
-/* Ray */
-typedef struct Ray
-{
-public:
-	Vector3 origin;
-	Vector3 direction;
-
-	Ray() { origin = Vector3(); direction = Vector3(); }
-	Ray(Vector3 o, Vector3 d) { origin = o; direction = d; }
-} Ray;
+#include "scalarfield.h"
+#include "ray.h"
 
 /* Terrain2D */
 class Terrain2D
@@ -22,7 +14,7 @@ class Terrain2D
 protected:
 	int nx, ny;
 	Vector2 bottomLeft, topRight;
-	ScalarField2D heightField;
+	Scalarfield2D heightField;
 	ValueField<Vector3> normalField;
 
 public:
@@ -50,12 +42,12 @@ public:
 
 	/* Useful fields */
 	void ComputeNormalField();
-	ScalarField2D DrainageField() const;
-	ScalarField2D WetnessField() const;
-	ScalarField2D StreamPowerField() const;
-	ScalarField2D SlopeField() const;
-	ScalarField2D AccessibilityField() const;
-	ScalarField2D HeightField() const;
+	Scalarfield2D DrainageField() const;
+	Scalarfield2D WetnessField() const;
+	Scalarfield2D StreamPowerField() const;
+	Scalarfield2D SlopeField() const;
+	Scalarfield2D AccessibilityField() const;
+	Scalarfield2D HeightField() const;
 		
 	/* Ray */
 	bool Intersect(Ray &ray, float maxSlope) const;
@@ -68,8 +60,8 @@ class LayerTerrain2D
 protected:
 	int nx, ny;
 	Vector2 a, b;
-	ScalarField2D bedrock;
-	ScalarField2D sand;
+	Scalarfield2D bedrock;
+	Scalarfield2D sand;
 
 public:
 	LayerTerrain2D() { }
@@ -99,7 +91,7 @@ public:
 	VegetationTerrain() { }
 	VegetationTerrain(int, int, Vector2, Vector2);
 
-	ScalarField2D VegetationDensityField(int k) const;
+	Scalarfield2D VegetationDensityField(int k) const;
 
 	void ComputeVegetationDensities();
 
