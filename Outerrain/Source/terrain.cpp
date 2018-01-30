@@ -224,14 +224,14 @@ bool Terrain2D::Intersect(Ray &ray, float maxSlope) const
 {
 	float step = (ray.origin.y - Height(Vector2(ray.origin.x, ray.origin.z))) / maxSlope;
 	while(true)
-	{
+	{		
 	 	Vector3 q = ray.origin + ray.direction * step;
 		Vector2 rayPos2D = Vector2(q.x, q.z);
 		if (heightField.IsInsideField(rayPos2D) == false)
 			break;
 		
 		float delta = q.y - Height(rayPos2D);
-		if (delta <= 0.001f)
+		if (delta <= 0.01f)
 			return true;
 		step += delta / maxSlope; 
 	}
@@ -581,8 +581,11 @@ void VegetationTerrain::ComputeVegetationDensities()
 		Via Transfert function for each species.
 	*/
 	ScalarField2D slopeField = SlopeField();
+	slopeField.Normalize();
 	ScalarField2D wetnessField = WetnessField();
+	wetnessField.Normalize();
 	ScalarField2D accessibilityField = AccessibilityField();
+	accessibilityField.Normalize();
 	VegetationObject vegObj;
 	for (size_t k = 0; k < species.size(); k++)
 	{

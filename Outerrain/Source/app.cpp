@@ -25,6 +25,8 @@ static Vector2 minMaxVegetationDensity;
 
 static GLuint m_time_query;
 
+static bool vegetationComputed = false;
+
 /* ImGui Erosion */
 static int streamPowerErosionIteration = 1;
 static float streamPowerErosionAmplitude = 2.0f;
@@ -225,8 +227,12 @@ int App::Update(const float time, const float deltaTime)
 		StreamPowerErosionCallback(streamPowerErosionIteration, streamPowerErosionAmplitude);
 
 	// Vegetation spawn
-	if (window->KeyState(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
+	if (window->KeyState(SDLK_v) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0 && !vegetationComputed)
+	{
 		SpawnVegetationCallback();
+		vegetationComputed = true;
+	}
+
 
 	// Roads
 	if (window->KeyState(SDLK_r) && vegTerrain.SizeX() > 0 && vegTerrain.SizeY() > 0)
@@ -238,9 +244,6 @@ int App::Update(const float time, const float deltaTime)
 	scene.GetChildAt(0)->GetComponent<Mesh>()->SetRenderMode(r);
 	switch (currentItem)
 	{
-	case 0:
-		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
-		break;
 	case 4:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(slopeTexture);
 		break;
@@ -250,6 +253,8 @@ int App::Update(const float time, const float deltaTime)
 	case 6:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(wetnessTexture);
 		break;
+	// Terrain splatmap also needs accessibility texture
+	case 3:
 	case 7:
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetTexture(accessibilityTexture);
 		break;
