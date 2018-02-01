@@ -74,10 +74,12 @@ void CameraOrbiter::Frame(const float width, const float height, const float z, 
 	Transform t = viewport * p * v;              // passage monde vers image
 	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde
 
-												 // origine du plan image
+	// origine du plan image
 	dO = tinv(Vector3(0, 0, z));
+
 	// axe x du plan image
 	Vector3 d1 = tinv(Vector3(1, 0, z));
+
 	// axe y du plan image
 	Vector3 d2 = tinv(Vector3(0, 1, z));
 
@@ -94,7 +96,7 @@ Vector3 CameraOrbiter::Position() const
 
 void CameraOrbiter::SetFrameWidth(int w)
 { 
-	frameWidth = w; 
+	frameWidth = w;
 }
 
 void CameraOrbiter::SetFrameHeight(int h)

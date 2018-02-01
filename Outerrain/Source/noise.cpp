@@ -104,7 +104,6 @@ float PerlinNoise::Fbm(const Vector2& point, float a, float f, int octave)
 	// Amp = Amp * 0.5
 	// Freq = Freq * 2.0
 	// To refine and add more subtle height at each iteration.
-
 	float ret = 0.0f;
 	float freq = f;
 	float amp = a;

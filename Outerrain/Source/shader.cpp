@@ -378,8 +378,7 @@ int Shader::PrintCompileErrors()
 }
 
 
-static
-int location(const GLuint program, const char *uniform)
+static int location(const GLuint program, const char *uniform)
 {
 	if (program == 0)
 		return -1;

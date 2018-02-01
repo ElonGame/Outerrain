@@ -33,12 +33,27 @@ void Heightfield::Thermal(const int& stepCount, const float& E)
 
 void Heightfield::StreamPowerErosion(const int& stepCount, const float& E)
 {
-	// @Todo
+	Scalarfield2D SP = StreamPower();
+	SP.NormalizeField();
+	for (int k = 0; k < stepCount; k++)
+	{
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
+			{
+				float newHeight = Get(i, j) - (SP.Get(i, j) * E);
+				Set(i, j, newHeight);
+			}
+		}
+	}
 }
 
 
 Scalarfield2D Heightfield::DrainageArea() const
 {
+	//
+	// Todo : queue ordered by decreasing height
+	//
 	Scalarfield2D DA = Scalarfield2D(nx, ny, bottomLeft, topRight, 1.0);
 	std::array<float, 8> slopes;
 	std::array<Vector2i, 8> coords;
@@ -131,6 +146,7 @@ Scalarfield2D Heightfield::Illumination() const
 			Vector3 rayPos = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
 			float h = Get(i, j);
 			int intersectionCount = 0;
+
 			for (int k = 0; k < rayCount; k++)
 			{
 				float angleH = (rand() % 360) * 0.0174533f;
@@ -140,6 +156,7 @@ Scalarfield2D Heightfield::Illumination() const
 				if (Intersect(Ray(rayPos, rayDir), rayHit, K) == true)
 					intersectionCount++;
 			}
+
 			I.Set(i, j, 1.0f - (intersectionCount / static_cast<float>(rayCount)));
 		}
 	}
@@ -156,6 +173,7 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, const float& K) const
 		Vector2 rayPos2D = Vector2(q.x, q.z);
 		if (Inside(rayPos2D) == false)
 			break;
+			
 		float delta = q.y - GetValueBilinear(rayPos2D);
 		if (delta <= 0.01f)
 		{
