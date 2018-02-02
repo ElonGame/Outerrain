@@ -105,7 +105,7 @@ void App::InitHeightfieldNew()
 {
 	hf = Heightfield(std::string("Data/Heightmaps/island.png"), 0, 100, 256, 256, Vector2(-256, 256), Vector2(256, -256));
 
-	Mesh* mesh = hf.CreateMesh();
+	Mesh* mesh = hf.GetMesh();
 	Shader shader;
 	shader.InitFromFile("Shaders/TerrainShader.glsl");
 	mesh->SetShader(shader);

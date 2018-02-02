@@ -3,6 +3,7 @@
 #include "scalarfield.h"
 #include "ray.h"
 #include "mesh.h"
+#include "meshModel.h"
 
 class Heightfield : public Scalarfield2D
 {
@@ -25,5 +26,6 @@ public:
 	bool Intersect(const Ray& ray, Hit& hit) const;
 	bool Intersect(const Vector3& origin, const Vector3 direction, Vector3& hitPos, Vector3& hitNormal) const;
 
-	Mesh* CreateMesh() const;
+	Mesh* GetMesh() const;
+	MeshModel* GetMeshModel() const;
 };

@@ -1,5 +1,6 @@
 #include "heightfield.h"
 #include "vec.h"
+
 #include <numeric>
 
 
@@ -201,9 +202,70 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3 direction, Vect
 }
 
 
-Mesh* Heightfield::CreateMesh() const
+Mesh* Heightfield::GetMesh() const
 {
 	Mesh* ret = new Mesh();
+	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, bottomLeft, topRight, Vector3(0));
+	for (int i = 0; i < ny - 1; i++)
+	{
+		for (int j = 0; j < nx - 1; j++)
+		{
+			Vector3 AB = (Vertex(i + 1, j) - Vertex(i, j));
+			Vector3 AC = (Vertex(i + 1, j + 1) - Vertex(i, j));
+			Vector3 normal = Normalize(-Cross(AB, AC));
+
+			normals.Set(i, j, normals.Get(i, j) + normal);
+			normals.Set(i + 1, j, normals.Get(i + 1, j) + normal);
+			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
+
+			AB = AC;
+			AC = (Vertex(i, j + 1) - Vertex(i, j));
+			normal = Normalize(-Cross(AB, AC));
+
+			normals.Set(i, j, normals.Get(i, j) + normal);
+			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
+			normals.Set(i, j + 1, normals.Get(i, j + 1) + normal);
+		}
+	}
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			normals.Set(i, j, Normalize(normals.Get(i, j)));
+	}
+
+
+	// Vertices & Texcoords & Normals
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float u = j / ((float)nx - 1);
+			float v = i / ((float)ny - 1);
+			ret->AddVertex(Vertex(i, j));
+			ret->AddTexcoord(Vector2(u, v));
+			ret->AddNormal(normals.Get(i, j));
+		}
+	}
+
+	// Triangles
+	int c = 0;
+	int vertexArrayLength = ny * nx;
+	while (c < vertexArrayLength - nx - 1)
+	{
+		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
+		{
+			ret->AddTriangle(c + nx + 1, c + nx, c);
+			ret->AddTriangle(c, c + 1, c + nx + 1);
+		}
+		c++;
+	}
+
+	return ret;
+}
+
+MeshModel* Heightfield::GetMeshModel() const
+{
+	MeshModel* ret = new MeshModel();
 	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, bottomLeft, topRight, Vector3(0));
 	for (int i = 0; i < ny - 1; i++)
 	{

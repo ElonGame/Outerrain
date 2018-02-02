@@ -181,11 +181,18 @@ void Window::SetDefaultGLState()
 	glDepthFunc(GL_LESS);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
+
+	glViewport(0, 0, Width(), Height());
 }
 
 void Window::ReleaseGLContext()
 {
 	SDL_GL_DeleteContext(glContext);
+}
+
+void Window::SwapWindow()
+{
+	SDL_GL_SwapWindow(windowSDL);
 }
 
 

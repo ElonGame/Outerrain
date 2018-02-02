@@ -28,6 +28,7 @@ public:
 	void SetDefaultGLState();
 	void ReleaseGLContext();
 	int UpdateEvents();
+	void SwapWindow();
 
 	int KeyState(const SDL_Keycode& key);
 	SDL_KeyboardEvent KeyEvent();

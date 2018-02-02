@@ -32,7 +32,7 @@ void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
 
 void CameraOrbiter::LookAt(const Bounds& b)
 {
-	LookAt(b.min, b.max);
+	LookAt(b.a, b.b);
 }
 
 void CameraOrbiter::Rotation(const float x, const float y)

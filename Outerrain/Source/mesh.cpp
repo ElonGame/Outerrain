@@ -142,13 +142,13 @@ Bounds Mesh::GetBounds() const
 	Bounds ret;
 	if (vertices.size() < 1)
 		return ret;
-	ret.min = Vector3(vertices[0]);
-	ret.max = ret.min;
+	ret.a = Vector3(vertices[0]);
+	ret.b = ret.a;
 	for (unsigned int i = 1; i < (unsigned int)vertices.size(); i++)
 	{
 		Vector3 p = vertices[i];
-		ret.min = Vector3(std::min(ret.min.x, p.x), std::min(ret.min.y, p.y), std::min(ret.min.z, p.z));
-		ret.max = Vector3(std::max(ret.max.x, p.x), std::max(ret.max.y, p.y), std::max(ret.max.z, p.z));
+		ret.a = Vector3(std::min(ret.a.x, p.x), std::min(ret.a.y, p.y), std::min(ret.a.z, p.z));
+		ret.b = Vector3(std::max(ret.b.x, p.x), std::max(ret.b.y, p.y), std::max(ret.b.z, p.z));
 	}
 	return ret;
 }

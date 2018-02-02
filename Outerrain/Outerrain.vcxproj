@@ -27,7 +27,10 @@
     <ClInclude Include="Include\graph.h" />
     <ClInclude Include="Include\heightfield.h" />
     <ClInclude Include="Include\imgui_opengl.h" />
+    <ClInclude Include="Include\mainwindow.h" />
     <ClInclude Include="Include\material.h" />
+    <ClInclude Include="Include\meshModel.h" />
+    <ClInclude Include="Include\meshRenderer.h" />
     <ClInclude Include="Include\mytime.h" />
     <ClInclude Include="Include\quaternion.h" />
     <ClInclude Include="Include\ray.h" />
@@ -55,6 +58,10 @@
     <ClCompile Include="Source\imgui.cpp" />
     <ClCompile Include="Source\imgui_draw.cpp" />
     <ClCompile Include="Source\imgui_opengl.cpp" />
+    <ClCompile Include="Source\mainwindow-callbacks.cpp" />
+    <ClCompile Include="Source\mainwindow.cpp" />
+    <ClCompile Include="Source\meshModel.cpp" />
+    <ClCompile Include="Source\meshRenderer.cpp" />
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\scalarfield.cpp" />
     <ClCompile Include="Source\terrain.cpp" />

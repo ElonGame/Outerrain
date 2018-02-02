@@ -12,12 +12,15 @@
     <Filter Include="Model">
       <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
     </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{b2353a36-6217-4872-8bcf-556aa0f4e0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{553aeee7-d818-4849-b4ff-67ec0ebd8103}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\app.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\window.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\vec.h">
@@ -65,9 +68,6 @@
     <ClInclude Include="Include\vegetationObject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\cameraOrbiter.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Include\mytime.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -86,12 +86,24 @@
     <ClInclude Include="Include\ray.h">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="Include\mainwindow.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\window.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\cameraOrbiter.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshModel.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshRenderer.h">
+      <Filter>View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\window.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\app.cpp">
@@ -104,9 +116,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\transform.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\cameraOrbiter.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\color.cpp">
@@ -153,6 +162,24 @@
     </ClCompile>
     <ClCompile Include="Source\scalarfield.cpp">
       <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mainwindow.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\window.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mainwindow-callbacks.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cameraOrbiter.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshModel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshRenderer.cpp">
+      <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -271,8 +271,8 @@ inline Vector4 operator-(const Vector4& v)
 /* Bounds */
 typedef struct Bounds
 {
-	Vector3 min;
-	Vector3 max;
+	Vector3 a;
+	Vector3 b;
 } Bounds;
 
 
