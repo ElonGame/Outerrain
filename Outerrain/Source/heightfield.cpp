@@ -121,7 +121,7 @@ Scalarfield2D Heightfield::Illumination() const
 {
 	const int rayCount = 32;
 	const float epsilon = 0.01f;
-	const float K = Slope().MaxValue();
+	const float K = Slope().Max();
 	Scalarfield2D I = Scalarfield2D(nx, ny, bottomLeft, topRight);
 	Hit rayHit;
 	for (int i = 0; i < ny; i++)

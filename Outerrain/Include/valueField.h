@@ -167,12 +167,12 @@ public:
 	}
 
 
-	T MaxValue() const
+	T Max() const
 	{
 		return *std::max_element(values.begin(), values.end());
 	}
 
-	T MinValue() const
+	T Min() const
 	{
 		return *std::min_element(values.begin(), values.end());
 	}

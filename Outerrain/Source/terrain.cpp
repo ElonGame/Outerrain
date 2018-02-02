@@ -116,7 +116,7 @@ void Terrain2D::ComputeNormalField()
 float Terrain2D::NormalizedHeight(const Vector2& p) const
 {
 	float h = Height(p);
-	return h / heightField.MaxValue();
+	return h / heightField.Max();
 }
 
 /* Erosion */
@@ -358,7 +358,7 @@ Scalarfield2D Terrain2D::AccessibilityField() const
 {
 	float epsilon = 0.01f;
 	Scalarfield2D slopeField = SlopeField();
-	double maxSlope = slopeField.MaxValue();
+	double maxSlope = slopeField.Max();
 	Scalarfield2D accessibilityField = Scalarfield2D(nx, ny, bottomLeft, topRight);
 	for (int i = 0; i < ny; i++)
 	{

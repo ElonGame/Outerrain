@@ -306,7 +306,7 @@ void App::CalculateAllMaps()
 	Scalarfield2D field = vegTerrain.SlopeField();
 	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/slope.png");
-	minMaxSlope = Vector2(field.MinValue(), field.MaxValue());
+	minMaxSlope = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "SlopeField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
@@ -314,7 +314,7 @@ void App::CalculateAllMaps()
 	field = vegTerrain.WetnessField();
 	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/wetness.png");
-	minMaxWetness = Vector2(field.MinValue(), field.MaxValue());
+	minMaxWetness = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "WetnessField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
@@ -322,7 +322,7 @@ void App::CalculateAllMaps()
 	field = vegTerrain.StreamPowerField();
 	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/streamPower.png");
-	minMaxStreampower = Vector2(field.MinValue(), field.MaxValue());
+	minMaxStreampower = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "StreamPowerField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
@@ -330,28 +330,28 @@ void App::CalculateAllMaps()
 	field = vegTerrain.DrainageField();
 	field.NormalizeField();
 	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
-	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
+	minMaxDrainage = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "DrainageField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.AccessibilityField();
 	field.WriteImageGrayscale("Data/Maps/accessibility.png");
-	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
+	minMaxAccessibility = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "AccessibilityField Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.VegetationDensityField(0);
 	field.WriteImageGrayscale("Data/Maps/vegetationPineDensity.png");
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	minMaxVegetationDensity = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "vegetationPineDensity Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 
 	start = std::chrono::high_resolution_clock::now();
 	field = vegTerrain.VegetationDensityField(1);
 	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
-	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
+	minMaxVegetationDensity = Vector2(field.Min(), field.Max());
 	end = std::chrono::high_resolution_clock::now();
 	std::cout << "vegetationBroadDensity Computation Time : " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000 << std::endl;
 

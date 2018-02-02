@@ -15,7 +15,7 @@ public:
 	Vector2 Gradient(const int& i, const int& j) const;
 	void NormalizeField();
 	void NormalizeField(const float& min, const float& max);
-	float AverageValue() const;
+	float Average() const;
 
 	void WriteImageGrayscale(const char* path);
 	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude);

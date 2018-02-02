@@ -42,8 +42,8 @@ Vector2 Scalarfield2D::Gradient(const int& i, const int& j) const
 
 void Scalarfield2D::NormalizeField()
 {
-	float min = MinValue();
-	float max = MaxValue();
+	float min = Min();
+	float max = Max();
 	for (int i = 0; i < ny * nx; i++)
 		values[i] = (values[i] - min) / (max - min);
 }
@@ -54,7 +54,7 @@ void Scalarfield2D::NormalizeField(const float& min, const float& max)
 		values[i] = (values[i] - min) / (max - min);
 }
 
-float Scalarfield2D::AverageValue() const
+float Scalarfield2D::Average() const
 {
 	float ret = 0.0f;
 	for (unsigned int i = 0; i < values.size(); i++)
@@ -81,8 +81,8 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 void Scalarfield2D::WriteImageGrayscale(const char* path)
 {
 	Image im = Image(nx, ny);
-	float min = MinValue();
-	float max = MaxValue();
+	float min = Min();
+	float max = Max();
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
