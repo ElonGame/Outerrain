@@ -608,11 +608,11 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 {
 	// Instancing via Rotated Poisson tiles
 	VegetationObject veg;
-	veg.SetRadius(3.0f);
-	float tileSize = veg.GetRadius() * 10.0f;
-	std::vector<std::vector<Vector2>> points = GetRotatedRandomDistributions(veg.GetRadius(), tileSize, 1000);
+	veg.SetRadius(4.0f);
+	float tileSize = 30.0f;
+	std::vector<std::vector<Vector2>> points = GetRotatedRandomDistributions(veg.GetRadius(), tileSize, 10000);
 
-	int maxTreeCount = 3000;
+	int maxTreeCount = 10000;
 	int treeCount = 0;
 
 	int tileCountX = static_cast<int>(((topRight.x - bottomLeft.x) / tileSize + 1));
@@ -624,17 +624,17 @@ std::vector<GameObject*> VegetationTerrain::GetTreeObjects() const
 		for (int j = 0; j < tileCountX; j++)
 		{
 			int tile = rand() % 4;
-			for (size_t x = 0; x < points.size(); x++)
+			for (size_t x = 0; x < points[tile].size(); x++)
 			{
 				Vector2 point = bottomLeft
 					+ Vector2(tileSize, 0) * static_cast<float>(j)
 					+ Vector2(0, -tileSize) * static_cast<float>(i)
-					+ points[tile][x];
+					+ Vector2(points[tile][x].x, -points[tile][x].y);
 
 				for (size_t k = 0; k < species.size(); k++)
 				{
 					Specie specie = species.at(k);
-					if (specie.densityField.IsInsideField(point) == true)
+					if (heightField.IsInsideField(point) == true)
 					{
 						float density = specie.densityField.GetValueBilinear(point);
 						float p = rand() / static_cast<float>(RAND_MAX);
