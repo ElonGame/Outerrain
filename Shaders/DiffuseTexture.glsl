@@ -27,6 +27,7 @@ void main( )
 uniform vec3 camPos;
 uniform vec4 diffuseColor;
 uniform float shininess;
+uniform int renderMode;
 
 uniform sampler2D texture0;
 
@@ -66,6 +67,9 @@ vec3 DiffuseShading()
 
 void main()
 {
-	fragment_color = vec4(DiffuseShading(), 1.0);
+	if (renderMode == -1) // Hack to avoid warnings
+		fragment_color = diffuseColor;
+	else
+		fragment_color = vec4(DiffuseShading(), 1.0);
 }
 #endif

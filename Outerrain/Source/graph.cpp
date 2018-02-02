@@ -121,15 +121,9 @@ std::list<vertex_t> ShortestPath::FindPath(const VegetationTerrain& terrain, int
 	int index1DStart = iStart * terrain.SizeY() + jStart;
 	int index1DEnd = iEnd * terrain.SizeY() + jEnd;
 
-	std::cout << "Graph computed" << std::endl;
-	std::cout << "Path from " << index1DStart << " to " << index1DEnd << std::endl;
 	DijkstraComputePaths(index1DStart, graph, min_distance, previous);
-	std::cout << "Path computed" << std::endl;
-
 	std::list<vertex_t> path = DijkstraGetShortestPathTo(index1DEnd, previous);
-	std::cout << "Path : ";
-	std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
-	std::cout << std::endl;
+
 	return path;
 }
 

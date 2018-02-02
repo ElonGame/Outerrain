@@ -59,6 +59,6 @@ public:
 	void StartFrameTimeComputation();
 	void ComputeFrameTime();
 	
-	void CalculateAllMaps();
+	void CalculateAllMaps(bool accessibility = false);
 	void UpdateObjects(const float time, const float delta);
 };

@@ -298,7 +298,7 @@ void App::UpdateObjects(const float time, const float delta)
 	lastTime = SDL_GetPerformanceCounter();
 }
 
-void App::CalculateAllMaps()
+void App::CalculateAllMaps(bool accessibility)
 {
 	ScalarField2D field = vegTerrain.SlopeField();
 	field.WriteImageGrayscale("Data/Maps/slope.png");
@@ -316,9 +316,12 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/drainageSqrt.png");
 	minMaxDrainage = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.AccessibilityField();
-	field.WriteImageGrayscale("Data/Maps/accessibility.png");
-	minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
+	if (accessibility)
+	{
+		field = vegTerrain.AccessibilityField();
+		field.WriteImageGrayscale("Data/Maps/accessibility.png");
+		minMaxAccessibility = Vector2(field.MinValue(), field.MaxValue());
+	}
 
 	field = vegTerrain.VegetationDensityField(0);
 	field.WriteImageGrayscale("Data/Maps/vegetationPineDensity.png");

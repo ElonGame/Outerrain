@@ -18,7 +18,7 @@ void App::ThermalErosionCallback(int stepCount)
 	{
 		vegTerrain.ThermalErosion(stepCount);
 		scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
-		CalculateAllMaps();
+		CalculateAllMaps(true);
 	}
 }
 
@@ -26,7 +26,7 @@ void App::StreamPowerErosionCallback(int stepCount, float amplitude)
 {
 	vegTerrain.StreamPowerErosion(stepCount, amplitude);
 	scene.GetChildAt(0)->GetComponent<Mesh>()->SetVertices(vegTerrain.GetAllVertices());
-	CalculateAllMaps();
+	CalculateAllMaps(true);
 }
 
 void App::SpawnVegetationCallback()
@@ -142,7 +142,7 @@ void App::InitSceneVegetationTerrain()
 	obj->AddComponent(mesh);
 	scene.AddChild(obj);
 
-	CalculateAllMaps();
+	CalculateAllMaps(true);
 
 	orbiter.LookAt(mesh->GetBounds());
 	orbiter.SetFrameWidth(window->Width());

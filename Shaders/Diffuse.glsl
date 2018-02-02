@@ -27,6 +27,9 @@ void main( )
 uniform vec3 camPos;
 uniform vec4 diffuseColor;
 uniform float shininess;
+uniform int renderMode;
+
+uniform sampler2D texture0;
 
 const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
 const vec3 lightDir = vec3(0.707, -0.707, 0);
@@ -62,6 +65,9 @@ vec3 DiffuseShading()
 
 void main()
 {
-	fragment_color = vec4(DiffuseShading(), 1.0);
+	if (renderMode == -1) // Hack to avoid warnings
+		fragment_color = texture(texture0, vertex_texcoord.xy);
+	else
+		fragment_color = vec4(DiffuseShading(), 1.0);
 }
 #endif
