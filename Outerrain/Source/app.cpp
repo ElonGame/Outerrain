@@ -324,7 +324,7 @@ void App::CalculateAllMaps()
 	field.WriteImageGrayscale("Data/Maps/vegetationPineDensity.png");
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
-	field = vegTerrain.VegetationDensityField(0);
+	field = vegTerrain.VegetationDensityField(1);
 	field.WriteImageGrayscale("Data/Maps/vegetationBroadDensity.png");
 	minMaxVegetationDensity = Vector2(field.MinValue(), field.MaxValue());
 
