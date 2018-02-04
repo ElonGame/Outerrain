@@ -347,11 +347,11 @@ void Mesh::Draw(const CameraOrbiter& orbiter)
 	shader.UniformTransform("mvpMatrix", mvp);
 	shader.UniformVec3("camPos", camPos);
 
-	shader.UniformColor("diffuseColor", material.diffuse);
+	shader.UniformColor("albedo", material.diffuse);
 	shader.UniformFloat("shininess", material.shininess);
 	shader.UniformInt("renderMode", renderMode);
 
-	shader.UniformTexture("texture0", 0, texture0);
+	//shader.UniformTexture("texture0", 0, texture0);
 
 	if (renderMode == WireframeMode)
 		primitiveDrawn = GL_LINES;

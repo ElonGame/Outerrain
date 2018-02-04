@@ -43,6 +43,7 @@ public:
 		values.resize(nx * ny, value);
 	}
 
+	virtual ~ValueField() { }
 
 	bool Inside(const Vector2& p) const
 	{

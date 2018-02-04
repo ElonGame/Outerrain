@@ -15,7 +15,7 @@ private:
 
 	/* Application Data */
 	Heightfield* hf;
-	MeshRenderer* hfRenderer;
+	GameObject* hfObject;
 
 
 	/* Functions */

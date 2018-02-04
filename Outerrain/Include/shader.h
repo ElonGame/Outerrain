@@ -17,6 +17,9 @@ public:
 	Shader() : program(0) { }
 
 	void InitFromFile(const char *filename, const char *definitions = "");
+
+	void Attach();
+
 	int Release();
 	int Reload(const char *filename, const char *definitions = "");
 	int GetCompileErrors(std::string& errors);

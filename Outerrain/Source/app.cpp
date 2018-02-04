@@ -285,7 +285,7 @@ void App::Run()
 
 void App::UpdateObjects(const float time, const float delta)
 {
-	newTime = SDL_GetPerformanceCounter();
+	/*newTime = SDL_GetPerformanceCounter();
 	float delta2 = static_cast<float>(((newTime - lastTime) * 1000.0f)) / SDL_GetPerformanceFrequency();
 	std::vector<GameObject*> objs = scene.GetAllChildren();
 	for (size_t i = 0; i < objs.size(); i++)
@@ -295,7 +295,7 @@ void App::UpdateObjects(const float time, const float delta)
 		for (size_t j = 0; j < components.size(); j++)
 			components[j]->Update(delta2);
 	}
-	lastTime = SDL_GetPerformanceCounter();
+	lastTime = SDL_GetPerformanceCounter();*/
 }
 
 void App::CalculateAllMaps()

@@ -3,15 +3,19 @@
 
 void MainWindow::InitBasicTerrain()
 {
-	const int res = 1024;
+	const int res = 128;
+	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-128, 128), Vector2(128, -128));
 
-	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 100, res, res, Vector2(0, 0), Vector2(res, res));
-	hfRenderer = new MeshRenderer(hf->GetMeshModel());
-	orbiter.LookAt(hfRenderer->GetMeshModel().GetBounds());
+	hfObject = new GameObject();
+	hfObject->AddComponent(hf->GetMeshModel());
+	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), MaterialModel::DefaultDiffuse()));
+	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 
 void MainWindow::ClearScene() 
 {
 	if (hf)
 		delete hf;
+	if (hfObject)
+		delete hfObject;
 }

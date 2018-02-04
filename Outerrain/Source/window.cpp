@@ -1,27 +1,25 @@
 #include <cassert>
 #include <set>
 #include <string>
+#include <iostream>
 
 #include "GL/glew.h"
 #include "window.h"
 
 #ifndef NO_GLEW
 #ifndef GK_RELEASE
-static
-void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length,
-	const char *message, const void *userParam)
+static void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message, const void *userParam)
 {
 	static std::set<std::string> log;
 	if (log.insert(message).second == false)
-		// le message a deja ete affiche, pas la peine de recommencer 60 fois par seconde.
 		return;
 
 	if (severity == GL_DEBUG_SEVERITY_HIGH)
-		printf("[openGL error]\n%s\n", message);
+		std::cout << "OpenGL Error : " << message << std::endl;
 	else if (severity == GL_DEBUG_SEVERITY_MEDIUM)
-		printf("[openGL warning]\n%s\n", message);
+		std::cout << "OpenGL Warning : " << message << std::endl;
 	else
-		printf("[openGL message]\n%s\n", message);
+		std::cout << "OpenGL Message : " << message << std::endl;
 }
 #endif
 #endif
@@ -90,7 +88,7 @@ Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		printf("[error] SDL_Init() failed:\n%s\n", SDL_GetError());
+		std::cout << "SDL_Init() failed : " << SDL_GetError() << std::endl;
 		return;
 	}
 
@@ -101,7 +99,7 @@ Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (windowSDL == NULL)
 	{
-		printf("[error] SDL_CreateWindow() failed.\n");
+		std::cout << "SDL_CreateWindow() failed : " << SDL_GetError() << std::endl;
 		return;
 	}
 
@@ -140,7 +138,7 @@ void Window::CreateGLContext(const int& major, const int& minor)
 	glContext = SDL_GL_CreateContext(windowSDL);
 	if (glContext == NULL)
 	{
-		printf("[error] creating openGL context.\n");
+		std::cout << "[error] creating openGL context" << std::endl;
 		return;
 	}
 
@@ -152,7 +150,7 @@ void Window::CreateGLContext(const int& major, const int& minor)
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
-		printf("[error] loading extensions\n%s\n", glewGetErrorString(err));
+		std::cout << "Error Loading Extensions" << glewGetErrorString(err) << std::endl;
 		SDL_GL_DeleteContext(glContext);
 		return;
 	}

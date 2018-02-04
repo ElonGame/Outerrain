@@ -12,6 +12,7 @@ public:
 	Heightfield(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight);
 	Heightfield(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight, const float& value);
 	Heightfield(const std::string& filePath, const int& minAltitude, const int& maxAltitude, const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight);
+	~Heightfield() { }
 
 	void Thermal(const int& stepCount, const float& E);
 	void StreamPowerErosion(const int& stepCount, const float& E);

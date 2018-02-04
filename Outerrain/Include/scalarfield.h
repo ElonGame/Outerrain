@@ -8,6 +8,7 @@ public:
 	Scalarfield2D();
 	Scalarfield2D(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight);
 	Scalarfield2D(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight, const float& value);
+	~Scalarfield2D() { }
 
 	Vector3 Vertex(const int& i, const int& j) const;
 	Vector3 Vertex(const Vector2i& v) const;

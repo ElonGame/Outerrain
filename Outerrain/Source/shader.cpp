@@ -216,6 +216,11 @@ static GLuint compile_shader(const GLuint program, const GLenum shader_type, con
 
 
 /* Shader Specifics */
+void Shader::Attach()
+{
+	glUseProgram(program);
+}
+
 int Shader::Reload(const char *filename, const char *definitions)
 {
 	if (program == 0)

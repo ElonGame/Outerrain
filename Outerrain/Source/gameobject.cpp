@@ -1,11 +1,5 @@
 ﻿#include "gameobject.h"
-
-
-void GameObject::CallStartOnComponents()
-{
-	for (int i = 0; i < components.size(); i++)
-		components[i]->Start();
-}
+#include "component.h"
 
 GameObject::~GameObject()
 {

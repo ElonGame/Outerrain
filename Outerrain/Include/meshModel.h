@@ -5,9 +5,10 @@
 #include<cstring>
 #include<sstream>
 
+#include "component.h"
 #include "vec.h"
 
-class MeshModel
+class MeshModel : public Component
 {
 	friend class MeshRenderer;
 

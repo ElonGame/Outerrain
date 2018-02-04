@@ -53,9 +53,6 @@
     <ClInclude Include="Include\component.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\gameobject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Include\quaternion.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -99,13 +96,16 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Include\meshRenderer.h">
-      <Filter>View</Filter>
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\materialModel.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\gameobject.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\app.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -137,9 +137,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_opengl.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\gameobject.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\texture.cpp">
@@ -179,7 +176,14 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\meshRenderer.cpp">
-      <Filter>View</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\materialModel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameobject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
 </Project>

@@ -3,9 +3,14 @@
 #include <memory>
 #include <GL/glew.h>
 
+#include "cameraOrbiter.h"
 #include "meshModel.h"
+#include "gameobject.h"
+#include "shader.h"
+#include "materialModel.h"
+#include "component.h"
 
-class MeshRenderer
+class MeshRenderer : public Component
 {
 private:
 	std::unique_ptr<MeshModel> mesh;
@@ -15,14 +20,24 @@ private:
 	GLuint fullBuffer;
 	GLuint indexBuffer;
 
+	MaterialModel material;
+
+	void UpdateBuffers();
+	void RenderInternal();
+
 public:
 	MeshRenderer();
 	MeshRenderer(MeshModel*);
+	MeshRenderer(MeshModel*, const MaterialModel&);
 	~MeshRenderer();
 
+	void Render(const CameraOrbiter&);
 	void CreateBuffers();
 	void ClearBuffers();
-	void SetPrimitiveMode(const GLuint& p);
 
-	const MeshModel& GetMeshModel() const { return *mesh.get(); }
+	void SetMaterial(const MaterialModel& m);
+	void SetPrimitiveMode(const GLuint& p);
+	void SetShader(const Shader& s);
+
+	const MeshModel& GetMeshModel() const;
 };

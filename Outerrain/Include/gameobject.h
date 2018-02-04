@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include <vector>
-#include "component.h"
 #include "transform.h"
 #include "vec.h"
 #include "quaternion.h"
+
+class Component;
 
 class GameObject
 {
@@ -25,11 +26,11 @@ public:
 	GameObject() 
 	{
 		rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
+		SetPosition(Vector3(0));
 	}
 
 	~GameObject();
 
-	void CallStartOnComponents();
 	void SetName(std::string s);
 	std::string GetName();
 
