@@ -48,7 +48,7 @@ void Terrain2D::InitFromNoise(int blackAltitude, int whiteAltitude)
 
 void Terrain2D::InitFromFile(const char* path, int blackAltitude, int whiteAltitude)
 {
-	heightField.ReadImageGrayscale(path, blackAltitude, whiteAltitude);
+	heightField.ReadFromImage(path, blackAltitude, whiteAltitude);
 	ComputeNormalField();
 }
 
@@ -422,7 +422,7 @@ LayerTerrain2D::LayerTerrain2D(int nx, int ny, Vector2 a, Vector2 b)
 
 void LayerTerrain2D::InitFromFile(const char* file, int blackAltitude, int whiteAltitude, float sandValue)
 {
-	bedrock.ReadImageGrayscale(file, blackAltitude, whiteAltitude);
+	bedrock.ReadFromImage(file, blackAltitude, whiteAltitude);
 	sand.Fill(sandValue);
 }
 

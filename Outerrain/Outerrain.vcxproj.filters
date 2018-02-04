@@ -32,13 +32,7 @@
     <ClInclude Include="Include\shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Include\transform.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Include\image.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\color.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\noise.h">
@@ -104,6 +98,12 @@
     <ClInclude Include="Include\gameobject.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Include\color.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\transform.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\app.cpp">
@@ -113,12 +113,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\transform.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\color.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\noise.cpp">
@@ -185,5 +179,11 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\color.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\transform.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ Heightfield::Heightfield(const int& nx, const int& ny, const Vector2& bottomLeft
 Heightfield::Heightfield(const std::string& filePath, const int& minAltitude, const int& maxAltitude, const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight)
 	: Heightfield(nx, ny, bottomLeft, topRight)
 {
-	ReadImageGrayscale(filePath.c_str(), minAltitude, maxAltitude);
+	ReadFromImage(filePath.c_str(), minAltitude, maxAltitude);
 }
 
 

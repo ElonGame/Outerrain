@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GL\glew.h"
 #include "valueField.h"
 
 class Scalarfield2D : public ValueField<float>
@@ -18,6 +19,8 @@ public:
 	void NormalizeField(const float& min, const float& max);
 	float Average() const;
 
-	void WriteImageGrayscale(const char* path);
-	void ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude);
+	void SaveAsImage(const char* path);
+	void ReadFromImage(const char* file, int blackAltitude, int whiteAltitude);
+
+	GLuint GetGLTexture() const;
 };

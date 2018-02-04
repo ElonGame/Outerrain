@@ -78,7 +78,7 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 	return Vector3(x, y, z);
 }
 
-void Scalarfield2D::WriteImageGrayscale(const char* path)
+void Scalarfield2D::SaveAsImage(const char* path)
 {
 	Image im = Image(nx, ny);
 	float min = Min();
@@ -94,7 +94,7 @@ void Scalarfield2D::WriteImageGrayscale(const char* path)
 	im.WriteImage(path, true);
 }
 
-void Scalarfield2D::ReadImageGrayscale(const char* file, int blackAltitude, int whiteAltitude)
+void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int whiteAltitude)
 {
 	Image heightmap;
 	heightmap.ReadImage(file, false);
@@ -134,4 +134,9 @@ void Scalarfield2D::ReadImageGrayscale(const char* file, int blackAltitude, int 
 			Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 		}
 	}
+}
+
+GLuint Scalarfield2D::GetGLTexture() const
+{
+
 }
