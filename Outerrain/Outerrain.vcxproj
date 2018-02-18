@@ -46,6 +46,7 @@
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
+    <ClInclude Include="Include\vegetationSystem.h" />
     <ClInclude Include="Include\vegetationObject.h" />
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
@@ -78,6 +79,7 @@
     <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\vegetationObject.cpp" />
+    <ClCompile Include="Source\vegetationSystem.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

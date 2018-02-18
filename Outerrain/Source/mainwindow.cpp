@@ -1,6 +1,14 @@
 #include "mainwindow.h"
 #include "mytime.h"
 
+/*
+\todolist
+	-Support texture in terrain shader
+	-Integrate ImGui && make a basic interface
+	-Ridge noise, and refactor to make a base abstract class Noise
+	-Fix memory leak
+	-Continue Vegetation support
+*/
 
 MainWindow::MainWindow(int windowWidth, int windowHeight)
 {

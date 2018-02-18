@@ -294,3 +294,13 @@ inline T Accumulate(std::array<T, N>& arr)
 		ret += arr[i];
 	return ret;
 }
+
+inline float Min(float a, float b)
+{
+	return a < b ? a : b;
+}
+
+inline float Max(float a, float b)
+{
+	return a > b ? a : b;
+}

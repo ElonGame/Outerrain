@@ -103,6 +103,9 @@
     <ClInclude Include="Include\noise.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
+    <ClInclude Include="Include\vegetationSystem.h">
+      <Filter>2 - Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\app.cpp">
@@ -189,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="Source\simplexNoise.cpp">
       <Filter>1 - Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\vegetationSystem.cpp">
+      <Filter>2 - Model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
