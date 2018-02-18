@@ -27,7 +27,7 @@ public:
 
 	bool Intersect(const Ray& ray, Hit& hit, float K) const;
 	bool Intersect(const Ray& ray, Hit& hit) const;
-	bool Intersect(const Vector3& origin, const Vector3 direction, Vector3& hitPos, Vector3& hitNormal) const;
+	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
 	Mesh* GetMesh() const;
 	MeshModel* GetMeshModel() const;

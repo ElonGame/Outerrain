@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 
+
 void MainWindow::InitBasicTerrain()
 {
 	const int res = 128;
-	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-128, 128), Vector2(128, -128));
+	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-res, res), Vector2(res, -res));
 	//PerlinNoise n;
 	//hf = new Heightfield(res, res, Vector2(-128, 128), Vector2(128, -128), 25.0, 0.005, 8);
 	UpdateMeshRenderer();
@@ -22,7 +23,7 @@ void MainWindow::ThermalErosionStep()
 {
 	if (hf == nullptr)
 		return;
-	hf->ThermalWeathering(1, 0.05);
+	hf->ThermalWeathering(1, 0.08);
 	UpdateMeshRenderer();
 }
 

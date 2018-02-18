@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "app.h"
+#include "vld.h"
 
 int main()
 {

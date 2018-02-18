@@ -103,7 +103,7 @@
     <ClInclude Include="Include\noise.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\vegetationSystem.h">
+    <ClInclude Include="Include\ecosystem.h">
       <Filter>2 - Model</Filter>
     </ClInclude>
   </ItemGroup>
@@ -193,7 +193,7 @@
     <ClCompile Include="Source\simplexNoise.cpp">
       <Filter>1 - Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\vegetationSystem.cpp">
+    <ClCompile Include="Source\ecosystem.cpp">
       <Filter>2 - Model</Filter>
     </ClCompile>
   </ItemGroup>

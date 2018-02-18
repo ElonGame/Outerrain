@@ -31,6 +31,11 @@ void MainWindow::Quit()
 		delete hf;
 		hf = nullptr;
 	}
+	if (hfObject)
+	{
+		delete hfObject;
+		hfObject = nullptr;
+	}
 	if (mainWindowHandler)
 	{
 		mainWindowHandler->ReleaseGLContext();

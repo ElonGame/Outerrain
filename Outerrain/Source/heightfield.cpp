@@ -322,7 +322,7 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
 /*
 \brief Compute the intersection between a heightfield and a ray.
 */
-bool Heightfield::Intersect(const Vector3& origin, const Vector3 direction, Vector3& hitPos, Vector3& hitNormal) const
+bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const
 {
 	Hit hit;
 	bool res = Intersect(Ray(origin, direction), hit, 100.0f);

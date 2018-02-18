@@ -1,4 +1,4 @@
-#include "vegetationSystem.h"
+#include "ecosystem.h"
 
 
 float VegetationSystem::DensityFromSlope(const Specie& s, float slope)
