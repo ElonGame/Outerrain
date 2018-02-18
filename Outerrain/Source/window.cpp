@@ -84,7 +84,7 @@ int Window::UpdateEvents()
 	return 1 - stop;
 }
 
-Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
+Window::Window(int w, int h) : width(width), height(h), stop(0)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -119,7 +119,7 @@ Window::~Window()
 	SDL_DestroyWindow(windowSDL);
 }
 
-void Window::CreateGLContext(const int& major, const int& minor)
+void Window::CreateGLContext(int major, int minor)
 {
 	if (windowSDL == NULL)
 		return;

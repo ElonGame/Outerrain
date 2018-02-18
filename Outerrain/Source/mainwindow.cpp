@@ -2,7 +2,7 @@
 #include "mytime.h"
 
 
-MainWindow::MainWindow(const int& windowWidth, const int& windowHeight)
+MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
 	mainWindowHandler = new Window(windowWidth, windowHeight);
 	mainWindowHandler->CreateGLContext(4, 4);
@@ -57,26 +57,32 @@ void MainWindow::MainLoop()
 	Quit();
 }
 
-void MainWindow::Update(const float& time, const float& deltaTime)
+void MainWindow::Update(float time, float deltaTime)
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	float mxF = static_cast<float>(mx);
 	float myF = static_cast<float>(my);
-	if (mainWindowHandler->KeyState(SDLK_LCTRL) && mb & SDL_BUTTON(1))
+	if (mb & SDL_BUTTON(1))
 		orbiter.Rotation(mxF, myF);
-	if (mb & SDL_BUTTON(3))
-		orbiter.Move(myF);
+	if (mainWindowHandler->WheelEvent().y != 0)
+		orbiter.Move(mainWindowHandler->WheelEvent().y * 10);
 	if (mb & SDL_BUTTON(2))
 		orbiter.Translation(mxF / mainWindowHandler->Width(), myF / mainWindowHandler->Height());
 
+	if (mainWindowHandler->KeyState(SDLK_F1))
+		StreamPowerErosionStep();
+	if (mainWindowHandler->KeyState(SDLK_F2))
+		ThermalErosionStep();
+
+	mainWindowHandler->ClearKeyState(SDLK_a);
+	mainWindowHandler->ClearWheelEvent();
 	hfObject->UpdateTransformIfNeeded();
 }
 
 void MainWindow::Render()
 {
-	glClearColor(0.3f, 0.55f, 1.0f, 1);
+	glClearColor(0.11, 0.42, 0.66, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
-	//hfObject->GetComponent<Mesh>()->Draw(orbiter);
 }

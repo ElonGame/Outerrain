@@ -5,17 +5,17 @@ Scalarfield2D::Scalarfield2D() : ValueField()
 {
 }
 
-Scalarfield2D::Scalarfield2D(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight)
+Scalarfield2D::Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight)
 	: ValueField(nx, ny, bottomLeft, topRight)
 {
 }
 
-Scalarfield2D::Scalarfield2D(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight, const float& value)
+Scalarfield2D::Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value)
 	: ValueField(nx, ny, bottomLeft, topRight, value)
 {
 }
 
-Vector2 Scalarfield2D::Gradient(const int& i, const int& j) const
+Vector2 Scalarfield2D::Gradient(int i, int j) const
 {
 	Vector2 ret;
 	float cellSizeX = (topRight.x - bottomLeft.x) / (nx - 1);
@@ -48,7 +48,7 @@ void Scalarfield2D::NormalizeField()
 		values[i] = (values[i] - min) / (max - min);
 }
 
-void Scalarfield2D::NormalizeField(const float& min, const float& max)
+void Scalarfield2D::NormalizeField(float min, float max)
 {
 	for (int i = 0; i < ny * nx; i++)
 		values[i] = (values[i] - min) / (max - min);
@@ -62,7 +62,15 @@ float Scalarfield2D::Average() const
 	return ret / static_cast<float>(values.size());
 }
 
-Vector3 Scalarfield2D::Vertex(const int& i, const int& j) const
+Vector2 Scalarfield2D::CellSize() const
+{
+	Vector2 cellSize;
+	cellSize.x = (topRight[0] - bottomLeft[0]) / (nx - 1);
+	cellSize.y = (topRight[0] - bottomLeft[0]) / (ny - 1);
+	return cellSize;
+}
+
+Vector3 Scalarfield2D::Vertex(int i, int j) const
 {
 	float x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
 	float y = Get(i, j);
@@ -138,5 +146,5 @@ void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int white
 
 GLuint Scalarfield2D::GetGLTexture() const
 {
-
+	return 0;
 }

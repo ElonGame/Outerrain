@@ -53,7 +53,7 @@ protected:
 	void GenerateRoadCallback();
 
 public:
-	App(const int&, const int&, const int&, const int&);
+	App(int, int, int, int);
 
 	virtual void Init();
 	virtual int Update(const float, const float);

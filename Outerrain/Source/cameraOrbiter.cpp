@@ -7,13 +7,11 @@ CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), z
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar)
-	: center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
+CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax)
-	: center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1f), zFar(1000.0f)
 {
 }
 

@@ -33,7 +33,7 @@ static float streamPowerErosionAmplitude = 2.0f;
 static int thermalErosionIteration = 1;
 
 
-App::App(const int& width, const int& height, const int& major, const int& minor)
+App::App(int width, int height, int major, int minor)
 {
 	windowWidth = static_cast<float>(width);
 	windowHeight = static_cast<float>(height);

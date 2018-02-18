@@ -35,22 +35,22 @@ GameObject* VegetationObject::GetGameObject(const Specie& s) const
 }
 
 /* Density functions */
-float VegetationObject::HeightDensityFactor(const Specie& s, const float& height) const
+float VegetationObject::HeightDensityFactor(const Specie& s, float height) const
 {
 	return 1.0f - (abs(height - s.heightData.x) / s.heightData.y);
 }
 
-float VegetationObject::SlopeDensityFactor(const Specie& s, const float& slope) const
+float VegetationObject::SlopeDensityFactor(const Specie& s, float slope) const
 {
 	return 1.0f - (abs((slope * 90.0f) - s.slopeData.x) / s.slopeData.y);
 }
 
-float VegetationObject::WetnessDensityFactor(const Specie& s, const float& wetness) const
+float VegetationObject::WetnessDensityFactor(const Specie& s, float wetness) const
 {
 	return 1.0f - (abs((wetness * 100.0f) - s.wetnessData.x) / s.wetnessData.y);
 }
 
-void VegetationObject::SetRadius(const float& r)
+void VegetationObject::SetRadius(float r)
 {
 	radius = r;
 }
@@ -60,7 +60,7 @@ float VegetationObject::GetRadius() const
 	return radius;
 }
 
-float VegetationObject::ComputeDensityFactor(const Specie& s, const float& height, const float& slope, const float& wetness) const
+float VegetationObject::ComputeDensityFactor(const Specie& s, float height, float slope, float wetness) const
 {
 	float min1 = std::min(HeightDensityFactor(s, height), SlopeDensityFactor(s, slope));
 	return std::min(min1, WetnessDensityFactor(s, wetness));

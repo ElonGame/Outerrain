@@ -445,12 +445,12 @@ void Shader::UniformUInt(const char *uniform, const unsigned int& v)
 	glUniform1ui(location(program, uniform), v);
 }
 
-void Shader::UniformInt(const char *uniform, const int& v)
+void Shader::UniformInt(const char *uniform, int v)
 {
 	glUniform1i(location(program, uniform), v);
 }
 
-void Shader::UniformFloat(const char *uniform, const float& v)
+void Shader::UniformFloat(const char *uniform, float v)
 {
 	glUniform1f(location(program, uniform), v);
 }

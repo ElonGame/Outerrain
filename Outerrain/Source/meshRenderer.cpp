@@ -13,8 +13,7 @@ MeshRenderer::MeshRenderer(MeshModel* m)
 	CreateBuffers();
 }
 
-MeshRenderer::MeshRenderer(MeshModel* m, const MaterialModel& mat)
-	: MeshRenderer(m)
+MeshRenderer::MeshRenderer(MeshModel* m, const MaterialModel& mat) : MeshRenderer(m)
 {
 	material = mat;
 }

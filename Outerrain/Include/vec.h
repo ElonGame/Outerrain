@@ -38,11 +38,11 @@ public:
 	{
 		return Vector2(x * v.x, y * v.y);
 	}
-	Vector2 operator*(const float& k) const
+	Vector2 operator*(float k) const
 	{
 		return Vector2(x * k, y * k);
 	}
-	Vector2 operator/(const float& k) const
+	Vector2 operator/(float k) const
 	{
 		return Vector2(x / k, y / k);
 	}
@@ -58,11 +58,11 @@ public:
 	{
 		return Vector2(x + u.x, y + u.y);
 	}
-	Vector2 operator+(const float& k) const
+	Vector2 operator+(float k) const
 	{
 		return Vector2(x + k, y + k);
 	}
-	Vector2 operator-(const float& k) const
+	Vector2 operator-(float k) const
 	{
 		return Vector2(x - k, y - k);
 	}
@@ -123,11 +123,11 @@ public:
 	{
 		return Vector3(x * u.x, y * u.y, z * u.z);
 	}
-	Vector3 operator*(const float& k) const
+	Vector3 operator*(float k) const
 	{
 		return Vector3(x * k, y * k, z * k);
 	}
-	Vector3 operator/(const float& k) const
+	Vector3 operator/(float k) const
 	{
 		return Vector3(x / k, y / k, z / k);
 	}
@@ -147,7 +147,7 @@ public:
 	{
 		return Vector3(x + u.x, y + u.y, z + u.z);
 	}
-	Vector3 operator+(const float& k) const
+	Vector3 operator+(float k) const
 	{
 		return Vector3(x + k, y + k, z + k);
 	}
@@ -220,7 +220,7 @@ public:
 	Vector4(float n) : x(n), y(n), z(n), w(n) {}
 	Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 
-	Vector4 operator*(const float& k) const
+	Vector4 operator*(float k) const
 	{
 		return Vector4(x * k, y * k, z * k, w * k);
 	}

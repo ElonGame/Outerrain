@@ -2,37 +2,121 @@
 #include "vec.h"
 
 #include <numeric>
+#include <deque>
+#include <queue>
 
 
-Heightfield::Heightfield()
-	: Scalarfield2D()
+Heightfield::Heightfield() : Scalarfield2D()
 {
 }
 
-Heightfield::Heightfield(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight)
-	: Scalarfield2D(nx, ny, bottomLeft, topRight)
+Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : Scalarfield2D(nx, ny, bottomLeft, topRight)
 {
 }
 
-Heightfield::Heightfield(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight, const float& value)
-	: Scalarfield2D(nx, ny, bottomLeft, topRight, value)
+Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value) : Scalarfield2D(nx, ny, bottomLeft, topRight, value)
 {
 
 }
 
-Heightfield::Heightfield(const std::string& filePath, const int& minAltitude, const int& maxAltitude, const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight)
-	: Heightfield(nx, ny, bottomLeft, topRight)
+Heightfield::Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : Heightfield(nx, ny, bottomLeft, topRight)
 {
 	ReadFromImage(filePath.c_str(), minAltitude, maxAltitude);
 }
 
 
-void Heightfield::Thermal(const int& stepCount, const float& E)
+/*
+\brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
+\param stepCount number of step performed
+\param amplitude maximum amount of matter moved from one point to another. Something between [0.05, 0.1] gives plausible results.
+*/
+void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 {
-	// @Todo
+	// Constants
+	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
+	float cellDistX = CellSize().x;
+	for (int a = 0; a < stepCount; a++)
+	{
+		// Create queue of instable points
+		std::queue<Point> instables;
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
+			{
+				float maxZDiff = 0.0f;
+				for (int k = -1; k <= 1; k++)
+				{
+					for (int l = -1; l <= 1; l++)
+					{
+						if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+							continue;
+						float z = Get(i, j) - Get(i + k, j + l);
+						maxZDiff = std::max(maxZDiff, z);
+					}
+				}
+
+				if (maxZDiff / cellDistX > tanThresholdAngle)
+				{
+					float matter = amplitude;
+					Point p = Point(i, j, matter);
+					instables.push(p);
+				}
+			}
+		}
+
+		// Move matters between points and add new points to stabilize
+		while (instables.empty() == false)
+		{
+			Point p = instables.front();
+			instables.pop();
+
+			int i = p.x, j = p.y;
+			float matter = p.value;
+			Point neighbour = Point(-1, -1, 0.0f);
+			float maxZDiff = 0.0f;
+			for (int k = -1; k <= 1; k++)
+			{
+				for (int l = -1; l <= 1; l++)
+				{
+					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+						continue;
+					float z = Get(i, j) - Get(i + k, j + l);
+					if (z > maxZDiff)
+					{
+						maxZDiff = z;
+						neighbour.x = i + k;
+						neighbour.y = j + l;
+					}
+				}
+			}
+
+			// Remove from base point
+			Set(i, j, Get(i, j) - matter);
+
+			// Add to lowest neighbour
+			if (neighbour.x != -1 && neighbour.y != -1) 
+			{
+				Set(neighbour.x, neighbour.y, Get(neighbour.x, neighbour.y) + matter);
+
+				// Add neighbour to stabilize if angle > tanThresholdAngle
+				if (maxZDiff / cellDistX > tanThresholdAngle)
+				{
+					float m = amplitude;
+					Point p = Point(neighbour.x, neighbour.y, matter);
+					instables.push(p);
+				}
+			}
+		}
+	}
 }
 
-void Heightfield::StreamPowerErosion(const int& stepCount, const float& E)
+/*
+\brief Perform a stream power erosion step with maximum amplitude defined by user. Based on https://hal.inria.fr/hal-01262376/document.
+This erosion called 'Fluvial' is based on Drainasge. and Slope.
+\param stepCount number of step performed
+\param amplitude maximum amount of matter eroded in one step. Something between [0.5, 1.0] gives plausible results.
+*/
+void Heightfield::StreamPowerErosion(int stepCount, float amplitude)
 {
 	Scalarfield2D SP = StreamPower();
 	SP.NormalizeField();
@@ -42,7 +126,7 @@ void Heightfield::StreamPowerErosion(const int& stepCount, const float& E)
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				float newHeight = Get(i, j) - (SP.Get(i, j) * E);
+				float newHeight = Get(i, j) - (SP.Get(i, j) * amplitude);
 				Set(i, j, newHeight);
 			}
 		}
@@ -50,52 +134,65 @@ void Heightfield::StreamPowerErosion(const int& stepCount, const float& E)
 }
 
 
+/*
+\brief Compute the Drainage Area field.
+*/
 Scalarfield2D Heightfield::DrainageArea() const
 {
-	//
-	// Todo : queue ordered by decreasing height
-	//
-	Scalarfield2D DA = Scalarfield2D(nx, ny, bottomLeft, topRight, 1.0);
-	std::array<float, 8> slopes;
-	std::array<Vector2i, 8> coords;
+	// Sort all point by decreasing height
+	std::deque<Point> points;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-		{
-			// Compute neighbours information
-			slopes.fill(0.0f);
-			float h = Get(i, j);
-			int neighbourCount = 0;
-			for (int k = -1; k <= 1; k++)
-			{
-				for (int l = -1; l <= 1; l++)
-				{
-					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
-						continue;
-					// If current point as lower neighbour : compute slope to later distribute accordingly.
-					float nH = Get(i + k, j + l);
-					if (h > nH)
-					{
-						float dH = h - nH;
-						if (k + l == -1 || k + l == 1)
-							slopes[neighbourCount] = dH;
-						else
-							slopes[neighbourCount] = dH / sqrt(2.0);
+			points.push_back(Point(i, j, Get(i, j)));
+	}
+	std::sort(points.begin(), points.end(), [](Point p1, Point p2) { return p1.value > p2.value; });
 
-						coords[neighbourCount] = Vector2i(i + k, j + l);
-						neighbourCount++;
-					}
+	std::array<float, 8> slopes;
+	std::array<Vector2i, 8> coords;
+	Scalarfield2D DA = Scalarfield2D(nx, ny, bottomLeft, topRight, 1.0);
+	while (!points.empty())
+	{
+		Point p = points.front();
+		points.pop_front();
+
+		slopes.fill(0.0f);
+		int i = p.x, j = p.y;
+		float h = Get(i, j);
+		int neighbourCount = 0;
+		for (int k = -1; k <= 1; k++)
+		{
+			for (int l = -1; l <= 1; l++)
+			{
+				if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+					continue;
+				// If current point as lower neighbour : compute slope to later distribute accordingly.
+				float nH = Get(i + k, j + l);
+				if (h > nH)
+				{
+					float dH = h - nH;
+					if (k + l == -1 || k + l == 1)
+						slopes[neighbourCount] = dH;
+					else
+						slopes[neighbourCount] = dH / sqrt(2.0);
+
+					coords[neighbourCount] = Vector2i(i + k, j + l);
+					neighbourCount++;
 				}
 			}
-			// Distribute to those lower neighbours
-			float sum = Accumulate<float, 8>(slopes);
-			for (int k = 0; k < neighbourCount; k++)
-				DA.Set(coords[k], DA.Get(coords[k]) + DA.Get(i, j) * (slopes[k] / sum));
 		}
+
+		// Distribute to those lower neighbours
+		float sum = Accumulate<float, 8>(slopes);
+		for (int k = 0; k < neighbourCount; k++)
+			DA.Set(coords[k], DA.Get(coords[k]) + DA.Get(i, j) * (slopes[k] / sum));
 	}
 	return DA;
 }
 
+/*
+\brief Compute the slope field, ie Norm(Gradient(i, j)).
+*/
 Scalarfield2D Heightfield::Slope() const
 {
 	Scalarfield2D S = Scalarfield2D(nx, ny, bottomLeft, topRight);
@@ -107,6 +204,9 @@ Scalarfield2D Heightfield::Slope() const
 	return S;
 }
 
+/*
+\brief Compute the Wetness Index Field.
+*/
 Scalarfield2D Heightfield::Wetness() const
 {
 	Scalarfield2D DA = DrainageArea();
@@ -120,6 +220,9 @@ Scalarfield2D Heightfield::Wetness() const
 	return W;
 }
 
+/*
+\brief Compute the StreamPower field, as described by http://geosci.uchicago.edu/~kite/doc/Whipple_and_Tucker_1999.pdf.
+*/
 Scalarfield2D Heightfield::StreamPower() const
 {
 	Scalarfield2D DA = DrainageArea();
@@ -133,6 +236,9 @@ Scalarfield2D Heightfield::StreamPower() const
 	return SP;
 }
 
+/*
+\brief Compute the 'Illumination' field, which is basically an approximation of Ambient Occlusion.
+*/
 Scalarfield2D Heightfield::Illumination() const
 {
 	const int rayCount = 32;
@@ -165,7 +271,7 @@ Scalarfield2D Heightfield::Illumination() const
 }
 
 
-bool Heightfield::Intersect(const Ray& ray, Hit& hit, const float& K) const
+bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
 	float step = (ray.origin.y - GetValueBilinear(Vector2(ray.origin.x, ray.origin.z))) / K;
 	while (true)
@@ -174,7 +280,6 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, const float& K) const
 		Vector2 rayPos2D = Vector2(q.x, q.z);
 		if (Inside(rayPos2D) == false)
 			break;
-			
 		float delta = q.y - GetValueBilinear(rayPos2D);
 		if (delta <= 0.01f)
 		{
@@ -232,7 +337,6 @@ Mesh* Heightfield::GetMesh() const
 		for (int j = 0; j < nx; j++)
 			normals.Set(i, j, Normalize(normals.Get(i, j)));
 	}
-
 
 	// Vertices & Texcoords & Normals
 	for (int i = 0; i < ny; i++)
@@ -293,7 +397,6 @@ MeshModel* Heightfield::GetMeshModel() const
 		for (int j = 0; j < nx; j++)
 			normals.Set(i, j, Normalize(normals.Get(i, j)));
 	}
-
 
 	// Vertices & Texcoords & Normals
 	for (int i = 0; i < ny; i++)

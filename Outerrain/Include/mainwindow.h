@@ -17,18 +17,20 @@ private:
 	Heightfield* hf;
 	GameObject* hfObject;
 
-
 	/* Functions */
 	void InitBasicTerrain();
+	void StreamPowerErosionStep();
+	void ThermalErosionStep();
+	void UpdateMeshRenderer();
 	void ClearScene();
 
 	void Init();
 	void MainLoop();
-	void Update(const float& time, const float& deltaTime);
+	void Update(float time, float deltaTime);
 	void Render();
 
 public:
-	MainWindow(const int& windowWidth, const int& windowHeight);
+	MainWindow(int windowWidth, int windowHeight);
 	~MainWindow();
 
 	void Show();

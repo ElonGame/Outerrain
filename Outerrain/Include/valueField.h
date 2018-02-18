@@ -26,19 +26,16 @@ protected:
 	std::vector<T> values;
 
 public:
-	ValueField()
-		: nx(0), ny(0), bottomLeft(Vector2(0)), topRight(Vector2(0))
+	ValueField() : nx(0), ny(0), bottomLeft(Vector2(0)), topRight(Vector2(0))
 	{
 	}
 
-	ValueField(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight)
-		: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+	ValueField(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 	{
 		values.resize(nx * ny, T(0));
 	}
 
-	ValueField(const int& nx, const int& ny, const Vector2& bottomLeft, const Vector2& topRight, const T& value)
-		: nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+	ValueField(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, const T& value) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
 	{
 		values.resize(nx * ny, value);
 	}
@@ -61,7 +58,7 @@ public:
 		return true;
 	}
 
-	bool Inside(const int& i, const int& j) const
+	bool Inside(int i, int j) const
 	{
 		if (i < 0 || i >= nx || j < 0 || j >= ny)
 			return false;
@@ -76,13 +73,13 @@ public:
 	}
 
 
-	void ToIndex2D(const int& index, int& i, int& j) const
+	void ToIndex2D(int index, int& i, int& j) const
 	{
 		i = index / nx;
 		j = index % nx;
 	}
 
-	Vector2i ToIndex2D(const int& index) const
+	Vector2i ToIndex2D(int index) const
 	{
 		return Vector2i(index / nx, index % nx);
 	}
@@ -92,7 +89,7 @@ public:
 		return v.x * nx + v.y;
 	}
 
-	int ToIndex1D(const int& i, const int& j) const
+	int ToIndex1D(int i, int j) const
 	{
 		return i * nx + j;
 	}
@@ -152,7 +149,7 @@ public:
 		std::fill(values.begin(), values.end(), v);
 	}
 
-	void Set(const int& row, const int& column, T v)
+	void Set(int row, int column, T v)
 	{
 		values[ToIndex1D(row, column)] = v;
 	}
@@ -162,7 +159,7 @@ public:
 		values[ToIndex1D(coord)] = v;
 	}
 
-	void Set(const int& index, T v)
+	void Set(int index, T v)
 	{
 		values[index] = v;
 	}

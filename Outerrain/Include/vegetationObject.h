@@ -40,13 +40,13 @@ public:
 	VegetationObject();
 
 	// Fonction de transfert des paramètres de végétation
-	float SlopeDensityFactor(const Specie& s, const float&) const;
-	float HeightDensityFactor(const Specie& s, const float&) const;
-	float WetnessDensityFactor(const Specie& s, const float&) const;
+	float SlopeDensityFactor(const Specie& s, float) const;
+	float HeightDensityFactor(const Specie& s, float) const;
+	float WetnessDensityFactor(const Specie& s, float) const;
 
-	float ComputeDensityFactor(const Specie& s, const float& height, const float& slope, const float& wetness) const;
+	float ComputeDensityFactor(const Specie& s, float height, float slope, float wetness) const;
 
 	GameObject* GetGameObject(const Specie& s) const;
-	void SetRadius(const float& r);
+	void SetRadius(float r);
 	float GetRadius() const;
 };

@@ -22,9 +22,9 @@ private:
 	int stop;
 
 public:
-	Window(const int& width, const int& height);
+	Window(int width, int height);
 	~Window();
-	void CreateGLContext(const int&, const int&);
+	void CreateGLContext(int, int);
 	void SetDefaultGLState();
 	void ReleaseGLContext();
 	int UpdateEvents();
@@ -43,6 +43,6 @@ public:
 	void ClearKeyEvent();
 
 	SDL_Window* GetSDLWindow() const { return windowSDL; }
-	const int& Width() const { return width; }
-	const int& Height() const { return height; }
+	int Width() const { return width; }
+	int Height() const { return height; }
 };
