@@ -4,6 +4,8 @@ void MainWindow::InitBasicTerrain()
 {
 	const int res = 128;
 	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-128, 128), Vector2(128, -128));
+	//PerlinNoise n;
+	//hf = new Heightfield(res, res, Vector2(-128, 128), Vector2(128, -128), 25.0, 0.005, 8);
 	UpdateMeshRenderer();
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
@@ -26,7 +28,8 @@ void MainWindow::ThermalErosionStep()
 
 void MainWindow::UpdateMeshRenderer()
 {
-	delete hfObject;
+	if (hfObject != nullptr)
+		delete hfObject;
 
 	hfObject = new GameObject();
 	hfObject->AddComponent(hf->GetMeshModel());
@@ -35,8 +38,8 @@ void MainWindow::UpdateMeshRenderer()
 
 void MainWindow::ClearScene() 
 {
-	if (hf)
+	if (hf != nullptr)
 		delete hf;
-	if (hfObject)
+	if (hfObject != nullptr)
 		delete hfObject;
 }

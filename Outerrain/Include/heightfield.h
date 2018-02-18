@@ -4,6 +4,7 @@
 #include "ray.h"
 #include "mesh.h"
 #include "meshModel.h"
+#include "noise.h"
 
 class Heightfield : public Scalarfield2D
 {
@@ -12,6 +13,7 @@ public:
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value);
 	Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
+	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float amplitude, float freq, int oct);
 	~Heightfield() { }
 
 	void ThermalWeathering(int stepCount, float amplitude);

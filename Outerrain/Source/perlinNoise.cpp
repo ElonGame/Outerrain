@@ -117,7 +117,7 @@ float PerlinNoise::GetValue(const Vector3& point) const
 \param f frequency
 \param octave octave count
 */
-float PerlinNoise::Fbm(const Vector3& point, float a, float f, int octave)
+float PerlinNoise::Fbm(const Vector3& point, float a, float f, int octave) const
 {
 	float ret = 0.0f;
 	float freq = f;
@@ -138,7 +138,7 @@ float PerlinNoise::Fbm(const Vector3& point, float a, float f, int octave)
 \param f frequency
 \param octave octave count
 */
-float PerlinNoise::Fbm(const Vector2& point, float a, float f, int octave)
+float PerlinNoise::Fbm(const Vector2& point, float a, float f, int octave) const
 {
 	float ret = 0.0f;
 	float freq = f;

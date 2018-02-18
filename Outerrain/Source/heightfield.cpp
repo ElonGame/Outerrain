@@ -30,6 +30,16 @@ Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx
 	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }
 
+Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float amplitude, float freq, int oct) : Scalarfield2D(nx, ny, bottomLeft, topRight)
+{
+	PerlinNoise n;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+			Set(i, j, n.Fbm(Vertex(i, j), amplitude, freq, oct));
+	}
+}
+
 /*
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
 \param stepCount number of step performed

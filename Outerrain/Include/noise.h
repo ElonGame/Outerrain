@@ -18,8 +18,8 @@ public:
 
 	float GetValue(const Vector2&) const;
 	float GetValue(const Vector3&) const;
-	float Fbm(const Vector3& p, float, float, int);
-	float Fbm(const Vector2& p, float, float, int);
+	float Fbm(const Vector3& p, float, float, int) const;
+	float Fbm(const Vector2& p, float, float, int) const;
 };
 
 /* Value Noise */
