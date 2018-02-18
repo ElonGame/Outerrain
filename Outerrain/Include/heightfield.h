@@ -14,7 +14,7 @@ public:
 	Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
 	~Heightfield() { }
 
-	void Thermal(int stepCount, float amplitude);
+	void ThermalWeathering(int stepCount, float amplitude);
 	void StreamPowerErosion(int stepCount, float amplitude);
 
 	Scalarfield2D DrainageArea() const;

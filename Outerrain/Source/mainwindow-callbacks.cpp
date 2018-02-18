@@ -20,7 +20,7 @@ void MainWindow::ThermalErosionStep()
 {
 	if (hf == nullptr)
 		return;
-	hf->Thermal(1, 2.0);
+	hf->ThermalWeathering(1, 0.05);
 	UpdateMeshRenderer();
 }
 

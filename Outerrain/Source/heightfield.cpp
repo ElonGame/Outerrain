@@ -5,6 +5,12 @@
 #include <deque>
 #include <queue>
 
+/*
+\brief Main Class for representing 2D HeightField.
+Various functions and erosion processes are available (Wetness, Slope.. ; Thermal, Stream Power...)
+
+Can be rendered using GetMesh, GetMeshModel().
+*/
 
 Heightfield::Heightfield() : Scalarfield2D()
 {
@@ -19,11 +25,10 @@ Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector
 
 }
 
-Heightfield::Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : Heightfield(nx, ny, bottomLeft, topRight)
+Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Vector2& bleft, const Vector2& tright) : Heightfield(nx, ny, bleft, tright)
 {
-	ReadFromImage(filePath.c_str(), minAltitude, maxAltitude);
+	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }
-
 
 /*
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
@@ -112,7 +117,9 @@ void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 
 /*
 \brief Perform a stream power erosion step with maximum amplitude defined by user. Based on https://hal.inria.fr/hal-01262376/document.
-This erosion called 'Fluvial' is based on Drainasge. and Slope.
+This erosion called 'Fluvial' is based on Drainasge and Slope. One of the weakness of the stream power erosion is that it can create peaks
+and generally unrealistic height sometimes. Therefore it can be improved by checking for slopes higher than 30° and not performing erosion.
+
 \param stepCount number of step performed
 \param amplitude maximum amount of matter eroded in one step. Something between [0.5, 1.0] gives plausible results.
 */
@@ -126,13 +133,13 @@ void Heightfield::StreamPowerErosion(int stepCount, float amplitude)
 		{
 			for (int j = 0; j < nx; j++)
 			{
-				float newHeight = Get(i, j) - (SP.Get(i, j) * amplitude);
-				Set(i, j, newHeight);
+				float oldH = Get(i, j);
+				float newH = oldH - (SP.Get(i, j) * amplitude);
+				Set(i, j, newH);
 			}
 		}
 	}
 }
-
 
 /*
 \brief Compute the Drainage Area field.
@@ -270,7 +277,9 @@ Scalarfield2D Heightfield::Illumination() const
 	return I;
 }
 
-
+/*
+\brief Compute the intersection between a heightfield and a ray, using a custom Lipschitz constant.
+*/
 bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
 	float step = (ray.origin.y - GetValueBilinear(Vector2(ray.origin.x, ray.origin.z))) / K;
@@ -292,11 +301,17 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 	return false;
 }
 
+/*
+\brief Compute the intersection between a heightfield and a ray.
+*/
 bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
 {
 	return Intersect(ray, hit, 100.0f);
 }
 
+/*
+\brief Compute the intersection between a heightfield and a ray.
+*/
 bool Heightfield::Intersect(const Vector3& origin, const Vector3 direction, Vector3& hitPos, Vector3& hitNormal) const
 {
 	Hit hit;
@@ -306,7 +321,9 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3 direction, Vect
 	return res;
 }
 
-
+/*
+\brief GetMesh for rendering, old API.
+*/
 Mesh* Heightfield::GetMesh() const
 {
 	Mesh* ret = new Mesh();
@@ -367,6 +384,9 @@ Mesh* Heightfield::GetMesh() const
 	return ret;
 }
 
+/*
+\brief Compute the heightfield mesh for rendering.
+*/
 MeshModel* Heightfield::GetMeshModel() const
 {
 	MeshModel* ret = new MeshModel();
