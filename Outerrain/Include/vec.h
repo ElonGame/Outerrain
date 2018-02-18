@@ -72,6 +72,12 @@ public:
 			return x;
 		return y;
 	}
+	float& operator[](int i)
+	{
+		if (i == 0)
+			return x;
+		return y;
+	}
 	friend std::ostream& operator<< (std::ostream& stream, const Vector2& u);
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
@@ -199,7 +205,6 @@ inline Vector3 Slerp(Vector3 start, Vector3 end, float percent)
 	RelativeVec = Normalize(RelativeVec);
 	return ((start * cos(theta)) + (RelativeVec * sin(theta)));
 }
-
 inline Vector3 Center(const Vector3& a, const Vector3& b)
 {
 	return Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);

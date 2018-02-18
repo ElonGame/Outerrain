@@ -76,9 +76,6 @@
     <ClInclude Include="Include\mytime.h">
       <Filter>Old</Filter>
     </ClInclude>
-    <ClInclude Include="Include\noise.h">
-      <Filter>Old</Filter>
-    </ClInclude>
     <ClInclude Include="Include\quaternion.h">
       <Filter>Old</Filter>
     </ClInclude>
@@ -100,15 +97,18 @@
     <ClInclude Include="Include\vec.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
+    <ClInclude Include="Include\poissonTile.h">
+      <Filter>1 - Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\noise.h">
+      <Filter>1 - Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\app.cpp">
       <Filter>Old</Filter>
     </ClCompile>
     <ClCompile Include="Source\mesh.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\noise.cpp">
       <Filter>Old</Filter>
     </ClCompile>
     <ClCompile Include="Source\image.cpp">
@@ -179,6 +179,15 @@
       <Filter>1 - Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\shader.cpp">
+      <Filter>1 - Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\poissonTile.cpp">
+      <Filter>1 - Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\perlinNoise.cpp">
+      <Filter>1 - Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\simplexNoise.cpp">
       <Filter>1 - Core</Filter>
     </ClCompile>
   </ItemGroup>

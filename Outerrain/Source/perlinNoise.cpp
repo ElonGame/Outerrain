@@ -38,11 +38,11 @@ PerlinNoise::~PerlinNoise()
 	delete Gz;
 }
 
-float PerlinNoise::GetValue(const Vector2& point)
+float PerlinNoise::At(const Vector3& point) const
 {
 	float sample_x = point.x;
 	float sample_y = point.y;
-	float sample_z = 1.0f;
+	float sample_z = point.z;
 
 	// Unit cube vertex coordinates surrounding the sample point
 	int x0 = int(floorf(sample_x));
@@ -97,13 +97,49 @@ float PerlinNoise::GetValue(const Vector2& point)
 	return value;
 }
 
+float PerlinNoise::GetValue(const Vector2& point) const
+{
+	float sample_x = point.x;
+	float sample_y = point.y;
+	float sample_z = 1.0f;
+	return At(Vector3(sample_x, sample_y, sample_z));
+}
+
+float PerlinNoise::GetValue(const Vector3& point) const
+{
+	return At(point);
+}
+
+/*
+\brief 3D Fractional Brownian motion, as described in https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf
+\param point p in 3D
+\param a amplitude
+\param f frequency
+\param octave octave count
+*/
+float PerlinNoise::Fbm(const Vector3& point, float a, float f, int octave)
+{
+	float ret = 0.0f;
+	float freq = f;
+	float amp = a;
+	for (int i = 0; i < octave; i++)
+	{
+		ret += GetValue(point * freq) * amp;
+		amp *= 0.5f;
+		freq *= 2.0f;
+	}
+	return ret;
+}
+
+/*
+\brief 2D Fractional Brownian motion, as described in https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf
+\param point p in 2D
+\param a amplitude
+\param f frequency
+\param octave octave count
+*/
 float PerlinNoise::Fbm(const Vector2& point, float a, float f, int octave)
 {
-	// Base function for fBm algorithm. Each iteration goes like this :
-	// Compute height
-	// Amp = Amp * 0.5
-	// Freq = Freq * 2.0
-	// To refine and add more subtle height at each iteration.
 	float ret = 0.0f;
 	float freq = f;
 	float amp = a;
