@@ -1,8 +1,18 @@
 #pragma once
 #include "vec.h"
 
+/* Abstract */
+class Noise
+{
+public:
+	Noise() { }
+	virtual ~Noise() { }
+	virtual float GetValue(const Vector2&) const = 0;
+	virtual float GetValue(const Vector3&) const = 0;
+};
+
 /* Perlin Noise */
-class PerlinNoise
+class PerlinNoise : public Noise
 {
 private:
 	int* p;

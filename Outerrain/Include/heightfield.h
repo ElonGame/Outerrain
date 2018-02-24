@@ -12,7 +12,7 @@ public:
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value);
 	Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
-	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, const PerlinNoise& n, float amplitude, float freq, int oct, FractalType type);
+	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, const Noise& n, float amplitude, float freq, int oct, FractalType type);
 	~Heightfield() { }
 
 	void ThermalWeathering(int stepCount, float amplitude);

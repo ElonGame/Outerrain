@@ -11,7 +11,7 @@ enum FractalType
 class Fractal
 {
 public:
-	static float fBm(const PerlinNoise& n, const Vector3& point, float a, float f, int octaves);
-	static float fBm(const PerlinNoise& n, const Vector2& point, float a, float f, int octaves);
-	static float RidgeNoise(const PerlinNoise& n, const Vector3& point, float a, float f, int octaves);
+	static float fBm(const Noise& n, const Vector3& point, float a, float f, int octaves);
+	static float fBm(const Noise& n, const Vector2& point, float a, float f, int octaves);
+	static float RidgeNoise(const Noise& n, const Vector3& point, float a, float f, int octaves);
 };

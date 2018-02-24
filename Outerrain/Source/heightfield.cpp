@@ -67,7 +67,7 @@ Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx
 \param freq noise frequency
 \param oct noise octave count
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const PerlinNoise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
 {
 	for (int i = 0; i < ny; i++)
 	{

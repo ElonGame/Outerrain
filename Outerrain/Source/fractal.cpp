@@ -9,7 +9,7 @@ If you want to translate the noise, translate the point parameters before callin
 \param f frequency
 \param octave octave count
 */
-float Fractal::fBm(const PerlinNoise& n, const Vector3& point, float a, float f, int octaves)
+float Fractal::fBm(const Noise& n, const Vector3& point, float a, float f, int octaves)
 {
 	float ret = 0.0f;
 	float freq = f;
@@ -32,7 +32,7 @@ If you want to translate the noise, translate the point parameters before callin
 \param f noise frequency
 \param octave octave count
 */
-float Fractal::fBm(const PerlinNoise& n, const Vector2& point, float a, float f, int octaves)
+float Fractal::fBm(const Noise& n, const Vector2& point, float a, float f, int octaves)
 {
 	float ret = 0.0f;
 	float freq = f;
@@ -56,7 +56,7 @@ If you want to translate the noise, translate the point parameters before callin
 \param f noise frequency
 \param octaves octave count
 */
-float Fractal::RidgeNoise(const PerlinNoise& n, const Vector3& point, float a, float f, int octaves)
+float Fractal::RidgeNoise(const Noise& n, const Vector3& point, float a, float f, int octaves)
 {
 	float ret = 0.0f;
 	float freq = f;
