@@ -15,6 +15,51 @@ Image::Image(int w, int h, const Color& color) : data(w*h, color), width(w), hei
 {
 }
 
+Image::Image(const char* filename)
+{
+	ReadImage(filename, false);
+}
+
+GLuint Image::GetGLTexture(int unit, GLenum texel_type)
+{
+	if (data.empty())
+		return 0;
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	GLenum format;
+	switch (channels)
+	{
+	case 1: format = GL_RED; break;
+	case 2: format = GL_RG; break;
+	case 3: format = GL_RGB; break;
+	case 4: format = GL_RGBA; break;
+	default: format = GL_RGBA;
+	}
+
+	GLenum type;
+	int size = 1; // Todo : find what exactly is size.
+	switch (size)
+	{
+	case 1: type = GL_UNSIGNED_BYTE; break;
+	case 4: type = GL_FLOAT; break;
+	default: type = GL_UNSIGNED_BYTE;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, texel_type, width, height, 0, format, type, Buffer());
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return texture;
+}
+
 void Image::ReadImage(const char *filename, bool flipY)
 {
 	SDL_Surface *surface = IMG_Load(filename);
@@ -34,6 +79,7 @@ void Image::ReadImage(const char *filename, bool flipY)
 
 	width = surface->w;
 	height = surface->h;
+	channels = (format.BitsPerPixel == 32) ? 4 : 3;
 	data.resize(width * height, Color::Black());
 
 	if (format.BitsPerPixel == 32)

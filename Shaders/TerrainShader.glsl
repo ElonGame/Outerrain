@@ -31,6 +31,15 @@ uniform vec4 albedo;
 uniform int useTexture0;
 uniform sampler2D texture0;
 
+uniform int useTexture1;
+uniform sampler2D texture1;
+
+uniform int useTexture2;
+uniform sampler2D texture2;
+
+uniform int useTexture3;
+uniform sampler2D texture3;
+
 in vec2 vertex_texcoord;
 in vec3 worldPos;
 in vec3 worldNormal;
@@ -110,10 +119,10 @@ vec3 DiffuseShading()
 
 void main()
 {
-	if (useTexture0 == 0)
-		fragment_color = vec4(DiffuseShading(), 1.0);
-	else
-		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
+	//if (useTexture0 == 0)
+		//fragment_color = vec4(DiffuseShading(), 1.0);
+	//else
+		fragment_color = vec4(texture(texture3, vertex_texcoord.xy).rgb, 1);
 	
 	// if (renderMode == 0) 		  // Diffuse gray
 		// fragment_color = vec4(DiffuseShading(), 1.0);

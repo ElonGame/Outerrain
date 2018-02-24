@@ -35,7 +35,7 @@ void MainWindow::UpdateMeshRenderer()
 
 	hfObject = new GameObject();
 	hfObject->AddComponent(hf->GetMeshModel());
-	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), MaterialModel::DefaultDiffuse()));
+	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), MaterialModel::TerrainTextured()));
 }
 
 void MainWindow::ClearScene() 
