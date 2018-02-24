@@ -7,7 +7,7 @@ CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), z
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
+CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
 {
 }
 
@@ -15,7 +15,7 @@ CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(
 {
 }
 
-void CameraOrbiter::LookAt(const Vector3& c, const float s)
+void CameraOrbiter::LookAt(const Vector3& c, float s)
 {
 	center = c;
 	position = Vector2(0, 0);
@@ -33,19 +33,19 @@ void CameraOrbiter::LookAt(const Bounds& b)
 	LookAt(b.a, b.b);
 }
 
-void CameraOrbiter::Rotation(const float x, const float y)
+void CameraOrbiter::Rotation(float x, float y)
 {
 	rotation.x = rotation.x + y;
 	rotation.y = rotation.y + x;
 }
 
-void CameraOrbiter::Translation(const float x, const float y)
+void CameraOrbiter::Translation(float x, float y)
 {
 	position.x = position.x - size * x;
 	position.y = position.y + size * y;
 }
 
-void CameraOrbiter::Move(const float z)
+void CameraOrbiter::Move(float z)
 {
 	size = size - size * 0.01f * z;
 	if (size < 0.01f)
@@ -59,12 +59,12 @@ Transform CameraOrbiter::View() const
 		* TranslationTransform(-Vector3(center));
 }
 
-Transform CameraOrbiter::Projection(const float width, const float height, const float fov) const
+Transform CameraOrbiter::Projection(float width, float height, float fov) const
 {
 	return Perspective(fov, width / height, zNear, zFar);
 }
 
-void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
 	Transform v = View();
 	Transform p = Projection(width, height, fov);

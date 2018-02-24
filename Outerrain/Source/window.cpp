@@ -250,3 +250,18 @@ void Window::ClearKeyEvent()
 	last_key.type = 0;
 	last_key.keysym.sym = 0;
 }
+
+SDL_Window* Window::GetSDLWindow() const 
+{ 
+	return windowSDL; 
+}
+
+int Window::Width() const 
+{ 
+	return width;
+}
+
+int Window::Height() const 
+{ 
+	return height;
+}

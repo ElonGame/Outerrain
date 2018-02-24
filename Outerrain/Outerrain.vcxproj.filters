@@ -72,20 +72,17 @@
     <ClInclude Include="Include\quaternion.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\texture.h">
-      <Filter>Todo</Filter>
-    </ClInclude>
     <ClInclude Include="Include\imgui_opengl.h">
       <Filter>Todo</Filter>
     </ClInclude>
-    <ClInclude Include="Include\mytime.h">
-      <Filter>Todo</Filter>
+    <ClInclude Include="Include\component.h">
+      <Filter>1 - Core</Filter>
     </ClInclude>
     <ClInclude Include="Include\image.h">
-      <Filter>Todo</Filter>
+      <Filter>1 - Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\component.h">
-      <Filter>Todo</Filter>
+    <ClInclude Include="Include\mytime.h">
+      <Filter>1 - Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +138,6 @@
     <ClCompile Include="Source\ecosystem.cpp">
       <Filter>2 - Model</Filter>
     </ClCompile>
-    <ClCompile Include="Source\texture.cpp">
-      <Filter>Todo</Filter>
-    </ClCompile>
     <ClCompile Include="Source\imgui.cpp">
       <Filter>Todo</Filter>
     </ClCompile>
@@ -153,11 +147,11 @@
     <ClCompile Include="Source\imgui_opengl.cpp">
       <Filter>Todo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\mytime.cpp">
-      <Filter>Todo</Filter>
-    </ClCompile>
     <ClCompile Include="Source\image.cpp">
-      <Filter>Todo</Filter>
+      <Filter>1 - Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mytime.cpp">
+      <Filter>1 - Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

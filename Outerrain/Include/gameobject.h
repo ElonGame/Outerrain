@@ -23,12 +23,7 @@ private:
 	bool transformNeedsToUpdate = true;
 
 public:
-	GameObject() 
-	{
-		rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
-		SetPosition(Vector3(0));
-	}
-
+	GameObject();
 	~GameObject();
 
 	void SetName(std::string s);

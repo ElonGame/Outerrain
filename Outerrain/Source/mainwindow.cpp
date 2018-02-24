@@ -81,7 +81,7 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mb & SDL_BUTTON(1))
 		orbiter.Rotation(mxF, myF);
 	if (mainWindowHandler->WheelEvent().y != 0)
-		orbiter.Move(mainWindowHandler->WheelEvent().y * 10);
+		orbiter.Move(mainWindowHandler->WheelEvent().y * 10.0f);
 	if (mb & SDL_BUTTON(2))
 		orbiter.Translation(mxF / mainWindowHandler->Width(), myF / mainWindowHandler->Height());
 
@@ -97,7 +97,7 @@ void MainWindow::Update(float time, float deltaTime)
 
 void MainWindow::Render()
 {
-	glClearColor(0.11, 0.42, 0.66, 1);
+	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
 }

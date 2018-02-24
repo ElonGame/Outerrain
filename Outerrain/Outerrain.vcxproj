@@ -37,7 +37,6 @@
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\shader.h" />
-    <ClInclude Include="Include\texture.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
@@ -65,7 +64,6 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
     <ClCompile Include="Source\window.cpp" />

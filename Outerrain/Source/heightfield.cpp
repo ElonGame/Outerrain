@@ -227,7 +227,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 					if (k + l == -1 || k + l == 1)
 						slopes[neighbourCount] = dH;
 					else
-						slopes[neighbourCount] = dH / sqrt(2.0);
+						slopes[neighbourCount] = dH / sqrt(2.0f);
 
 					coords[neighbourCount] = Vector2i(i + k, j + l);
 					neighbourCount++;

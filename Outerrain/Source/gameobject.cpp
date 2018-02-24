@@ -1,6 +1,13 @@
 ﻿#include "gameobject.h"
 #include "component.h"
 
+
+GameObject::GameObject()
+{
+	rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
+	SetPosition(Vector3(0));
+}
+
 GameObject::~GameObject()
 {
 	for (int i = 0; i < children.size(); i++)

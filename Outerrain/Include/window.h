@@ -24,7 +24,7 @@ private:
 public:
 	Window(int width, int height);
 	~Window();
-	void CreateGLContext(int, int);
+	void CreateGLContext(int major, int minor);
 	void SetDefaultGLState();
 	void ReleaseGLContext();
 	int UpdateEvents();
@@ -42,7 +42,7 @@ public:
 	void ClearButtonEvent();
 	void ClearKeyEvent();
 
-	SDL_Window* GetSDLWindow() const { return windowSDL; }
-	int Width() const { return width; }
-	int Height() const { return height; }
+	SDL_Window* GetSDLWindow() const;
+	int Width() const;
+	int Height() const;
 };
