@@ -294,9 +294,9 @@ Scalarfield2D Heightfield::StreamPower() const
 */
 Scalarfield2D Heightfield::Illumination() const
 {
-	const int rayCount = 32;
-	const float epsilon = 0.01f;
-	const float K = Slope().Max();
+	const int rayCount = 32;		// Ray count for each world point
+	const float epsilon = 0.01f;	// Ray start up offset
+	const float K = Slope().Max();	// Lipschitz constant
 	Scalarfield2D I = Scalarfield2D(nx, ny, bottomLeft, topRight);
 	Hit rayHit;
 	for (int i = 0; i < ny; i++)
@@ -324,7 +324,11 @@ Scalarfield2D Heightfield::Illumination() const
 }
 
 /*
-\brief Compute the intersection between a heightfield and a ray, using a custom Lipschitz constant.
+\brief Compute the intersection between a heightfield and a ray, using Sphere Tracing and a custom Lipschitz constant.
+\param ray
+\param hit returned hit
+\param K Lipschitz Constant.
+\return true of intersection occured, false otherwise.
 */
 bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
@@ -348,7 +352,11 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 }
 
 /*
-\brief Compute the intersection between a heightfield and a ray.
+\brief Compute the intersection between a heightfield and a ray, using Sphere Tracing.
+Lipschitz constant is overestimed in this case.
+\param ray
+\param hit returned hit
+\return true of intersection occured, false otherwise.
 */
 bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
 {
@@ -356,7 +364,13 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
 }
 
 /*
-\brief Compute the intersection between a heightfield and a ray.
+\brief Compute the intersection between a heightfield and a ray, using Sphere Tracing.
+Lipschitz constant is overestimed in this case.
+\param origin ray origin
+\param direction ray direction
+\param hitPos returned hit position
+\param hitNormal returned hit normal
+\return true of intersection occured, false otherwise.
 */
 bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const
 {
