@@ -19,16 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\app.h" />
     <ClInclude Include="Include\cameraOrbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\gameobject.h" />
-    <ClInclude Include="Include\graph.h" />
     <ClInclude Include="Include\heightfield.h" />
     <ClInclude Include="Include\imgui_opengl.h" />
     <ClInclude Include="Include\mainwindow.h" />
-    <ClInclude Include="Include\material.h" />
     <ClInclude Include="Include\materialModel.h" />
     <ClInclude Include="Include\meshModel.h" />
     <ClInclude Include="Include\meshRenderer.h" />
@@ -37,9 +34,7 @@
     <ClInclude Include="Include\quaternion.h" />
     <ClInclude Include="Include\ray.h" />
     <ClInclude Include="Include\scalarfield.h" />
-    <ClInclude Include="Include\terrain.h" />
     <ClInclude Include="Include\image.h" />
-    <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\texture.h" />
@@ -47,16 +42,12 @@
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\ecosystem.h" />
-    <ClInclude Include="Include\vegetationObject.h" />
     <ClInclude Include="Include\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\app-callbacks.cpp" />
-    <ClCompile Include="Source\app.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\gameobject.cpp" />
-    <ClCompile Include="Source\graph.cpp" />
     <ClCompile Include="Source\heightfield.cpp" />
     <ClCompile Include="Source\imgui.cpp" />
     <ClCompile Include="Source\imgui_draw.cpp" />
@@ -70,15 +61,12 @@
     <ClCompile Include="Source\poissonTile.cpp" />
     <ClCompile Include="Source\scalarfield.cpp" />
     <ClCompile Include="Source\simplexNoise.cpp" />
-    <ClCompile Include="Source\terrain.cpp" />
     <ClCompile Include="Source\image.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\transform.cpp" />
-    <ClCompile Include="Source\vegetationObject.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>

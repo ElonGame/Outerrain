@@ -1,6 +1,5 @@
 #include "mainwindow.h"
-#include "app.h"
-#include "vld.h"
+//#include "vld.h"
 
 int main()
 {
@@ -9,9 +8,6 @@ int main()
 	std::cout << "Welcome to Outerrain !" << std::endl;
 	MainWindow mw = MainWindow(1280, 720);
 	mw.Show();
-
-	//App app(1280, 720, 4, 4);
-	//app.Run();
 
 	return 0;
 }

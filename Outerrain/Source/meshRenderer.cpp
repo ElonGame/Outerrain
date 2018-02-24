@@ -70,7 +70,7 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 	Transform mvp = cam.Projection((float)cam.FrameWidth(), (float)cam.FrameHeight(), 45.0f) * (cam.View() * trs);
 	Vector3 camPos = cam.Position();
 
-	material.SetUniforms(trs, mvp, camPos);
+	material.SetFrameUniforms(trs, mvp, camPos);
 
 	RenderInternal();
 }

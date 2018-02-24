@@ -16,7 +16,6 @@ typedef struct Point
 	Point(int a, int b, float h) : x(a), y(b), value(h) { }
 } Point;
 
-
 template<typename T>
 class ValueField
 {

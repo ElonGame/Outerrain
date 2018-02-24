@@ -5,7 +5,6 @@ void MainWindow::InitBasicTerrain()
 {
 	const int res = 128;
 	hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-res, res), Vector2(res, -res));
-	//PerlinNoise n;
 	//hf = new Heightfield(res, res, Vector2(-128, 128), Vector2(128, -128), 25.0, 0.005, 8);
 	UpdateMeshRenderer();
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());

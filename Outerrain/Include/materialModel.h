@@ -16,7 +16,7 @@ private:
 public:
 	MaterialModel();
 
-	void SetUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
+	void SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
 	void SetShader(const Shader& s);
 
 	/* Get Materials easily */

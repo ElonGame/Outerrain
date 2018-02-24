@@ -7,30 +7,66 @@
 
 /*
 \brief Main Class for representing 2D HeightField.
-Various functions and erosion processes are available (Wetness, Slope.. ; Thermal, Stream Power...)
+Various functions and erosion processes are available (Wetness, Slope.. ; Thermal, Stream Power erosion...)
 
-Can be rendered using GetMesh, GetMeshModel().
+Can be rendered using GetMeshModel().
 */
 
+/*
+\brief Default constructor. Call Scalarfield2D default constructor.
+*/
 Heightfield::Heightfield() : Scalarfield2D()
 {
 }
 
-Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : Scalarfield2D(nx, ny, bottomLeft, topRight)
+/*
+\brief Constructor
+\param nx width size of field
+\param ny height size of field
+\param bottomLeft bottom left vertex world coordinates
+\param topRight top right vertex world coordinates
+*/
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight) : Scalarfield2D(nx, ny, bLeft, tRight)
 {
 }
 
-Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value) : Scalarfield2D(nx, ny, bottomLeft, topRight, value)
+/*
+\brief Constructor
+\param nx width size of field
+\param ny height size of field
+\param bottomLeft bottom left vertex world coordinates
+\param topRight top right vertex world coordinates
+\param value default value for the field
+*/
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, float value) : Scalarfield2D(nx, ny, bLeft, tRight, value)
 {
 
 }
 
-Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Vector2& bleft, const Vector2& tright) : Heightfield(nx, ny, bleft, tright)
+/*
+\brief Constructor from a file
+\param file file path
+\param nx width size of field
+\param ny height size of field
+\param bottomLeft bottom left vertex world coordinates
+\param topRight top right vertex world coordinates
+*/
+Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Vector2& bLeft, const Vector2& tRight) : Heightfield(nx, ny, bLeft, tRight)
 {
 	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }
 
-Heightfield::Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float amplitude, float freq, int oct) : Scalarfield2D(nx, ny, bottomLeft, topRight)
+/*
+\brief Constructor from a noise
+\param nx width size of field
+\param ny height size of field
+\param bottomLeft bottom left vertex world coordinates
+\param topRight top right vertex world coordinates
+\param amplitude noise amplitude
+\param freq noise frequency
+\param oct noise octave count
+*/
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, float amplitude, float freq, int oct) : Scalarfield2D(nx, ny, bLeft, tRight)
 {
 	PerlinNoise n;
 	for (int i = 0; i < ny; i++)
@@ -329,69 +365,6 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vec
 	hitPos = hit.position;
 	hitNormal = hit.normal;
 	return res;
-}
-
-/*
-\brief GetMesh for rendering, old API.
-*/
-Mesh* Heightfield::GetMesh() const
-{
-	Mesh* ret = new Mesh();
-	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, bottomLeft, topRight, Vector3(0));
-	for (int i = 0; i < ny - 1; i++)
-	{
-		for (int j = 0; j < nx - 1; j++)
-		{
-			Vector3 AB = (Vertex(i + 1, j) - Vertex(i, j));
-			Vector3 AC = (Vertex(i + 1, j + 1) - Vertex(i, j));
-			Vector3 normal = Normalize(-Cross(AB, AC));
-
-			normals.Set(i, j, normals.Get(i, j) + normal);
-			normals.Set(i + 1, j, normals.Get(i + 1, j) + normal);
-			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
-
-			AB = AC;
-			AC = (Vertex(i, j + 1) - Vertex(i, j));
-			normal = Normalize(-Cross(AB, AC));
-
-			normals.Set(i, j, normals.Get(i, j) + normal);
-			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
-			normals.Set(i, j + 1, normals.Get(i, j + 1) + normal);
-		}
-	}
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-			normals.Set(i, j, Normalize(normals.Get(i, j)));
-	}
-
-	// Vertices & Texcoords & Normals
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / ((float)nx - 1);
-			float v = i / ((float)ny - 1);
-			ret->AddVertex(Vertex(i, j));
-			ret->AddTexcoord(Vector2(u, v));
-			ret->AddNormal(normals.Get(i, j));
-		}
-	}
-
-	// Triangles
-	int c = 0;
-	int vertexArrayLength = ny * nx;
-	while (c < vertexArrayLength - nx - 1)
-	{
-		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
-		{
-			ret->AddTriangle(c + nx + 1, c + nx, c);
-			ret->AddTriangle(c, c + 1, c + nx + 1);
-		}
-		c++;
-	}
-
-	return ret;
 }
 
 /*

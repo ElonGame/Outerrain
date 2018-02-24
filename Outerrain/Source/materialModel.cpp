@@ -8,7 +8,7 @@ MaterialModel::MaterialModel()
 	shininess = 0.0f;
 }
 
-void MaterialModel::SetUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
+void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
 {
 	shader.Attach();
 

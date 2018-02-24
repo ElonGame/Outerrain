@@ -10,9 +10,8 @@
     <Filter Include="3 - View">
       <UniqueIdentifier>{b2353a36-6217-4872-8bcf-556aa0f4e0af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Old">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Todo">
+      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,42 +51,6 @@
     <ClInclude Include="Include\transform.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\app.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\component.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\graph.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\image.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\imgui_opengl.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\material.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\mesh.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\mytime.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\quaternion.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\terrain.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\texture.h">
-      <Filter>Old</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\vegetationObject.h">
-      <Filter>Old</Filter>
-    </ClInclude>
     <ClInclude Include="Include\shader.h">
       <Filter>1 - Core</Filter>
     </ClInclude>
@@ -106,44 +69,26 @@
     <ClInclude Include="Include\ecosystem.h">
       <Filter>2 - Model</Filter>
     </ClInclude>
+    <ClInclude Include="Include\quaternion.h">
+      <Filter>1 - Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\texture.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\imgui_opengl.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\mytime.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\image.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\component.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\app.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\mesh.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\image.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\terrain.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_opengl.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\texture.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\vegetationObject.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\app-callbacks.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\mytime.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\graph.cpp">
-      <Filter>Old</Filter>
-    </ClCompile>
     <ClCompile Include="Source\heightfield.cpp">
       <Filter>2 - Model</Filter>
     </ClCompile>
@@ -195,6 +140,24 @@
     </ClCompile>
     <ClCompile Include="Source\ecosystem.cpp">
       <Filter>2 - Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui_draw.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui_opengl.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mytime.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\image.cpp">
+      <Filter>Todo</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
