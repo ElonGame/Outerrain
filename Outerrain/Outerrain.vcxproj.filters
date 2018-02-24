@@ -1,142 +1,124 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="1 - Core">
-      <UniqueIdentifier>{553aeee7-d818-4849-b4ff-67ec0ebd8103}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2 - Model">
-      <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3 - View">
-      <UniqueIdentifier>{b2353a36-6217-4872-8bcf-556aa0f4e0af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Todo">
       <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{553aeee7-d818-4849-b4ff-67ec0ebd8103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{b2353a36-6217-4872-8bcf-556aa0f4e0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Include">
+      <UniqueIdentifier>{c8a19545-a37a-4262-9a94-4853c302cb0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source">
+      <UniqueIdentifier>{dfa536d9-dfba-44c6-8010-d95429d4369a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source\noise">
+      <UniqueIdentifier>{747a37e1-7cef-45a1-8639-155c2caa7c15}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\heightfield.h">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Include\valueField.h">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Include\scalarfield.h">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Include\mainwindow.h">
-      <Filter>3 - View</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\window.h">
-      <Filter>3 - View</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\cameraOrbiter.h">
-      <Filter>3 - View</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshModel.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshRenderer.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\materialModel.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\gameobject.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\color.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\transform.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\shader.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\ray.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\vec.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\poissonTile.h">
-      <Filter>1 - Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\noise.h">
-      <Filter>1 - Core</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\ecosystem.h">
-      <Filter>2 - Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\quaternion.h">
-      <Filter>1 - Core</Filter>
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Include\imgui_opengl.h">
       <Filter>Todo</Filter>
     </ClInclude>
+    <ClInclude Include="Include\color.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
     <ClInclude Include="Include\component.h">
-      <Filter>1 - Core</Filter>
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\gameobject.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\image.h">
-      <Filter>1 - Core</Filter>
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshModel.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\materialModel.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\mytime.h">
-      <Filter>1 - Core</Filter>
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshRenderer.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\noise.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\poissonTile.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\quaternion.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ray.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\vec.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\transform.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\shader.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fractal.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\heightfield.cpp">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\scalarfield.cpp">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\mainwindow.cpp">
-      <Filter>3 - View</Filter>
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\window.cpp">
-      <Filter>3 - View</Filter>
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\mainwindow-callbacks.cpp">
-      <Filter>3 - View</Filter>
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\cameraOrbiter.cpp">
-      <Filter>3 - View</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshModel.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshRenderer.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\materialModel.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\gameobject.cpp">
-      <Filter>1 - Core</Filter>
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\color.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\transform.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\shader.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\poissonTile.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\perlinNoise.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\simplexNoise.cpp">
-      <Filter>1 - Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ecosystem.cpp">
-      <Filter>2 - Model</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui.cpp">
       <Filter>Todo</Filter>
@@ -147,11 +129,41 @@
     <ClCompile Include="Source\imgui_opengl.cpp">
       <Filter>Todo</Filter>
     </ClCompile>
+    <ClCompile Include="Source\transform.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\color.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gameobject.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\image.cpp">
-      <Filter>1 - Core</Filter>
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\materialModel.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshModel.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshRenderer.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\mytime.cpp">
-      <Filter>1 - Core</Filter>
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\poissonTile.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\perlinNoise.cpp">
+      <Filter>Core\Source\noise</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fractal.cpp">
+      <Filter>Core\Source\noise</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

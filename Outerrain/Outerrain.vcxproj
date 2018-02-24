@@ -22,6 +22,7 @@
     <ClInclude Include="Include\cameraOrbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
+    <ClInclude Include="Include\fractal.h" />
     <ClInclude Include="Include\gameobject.h" />
     <ClInclude Include="Include\heightfield.h" />
     <ClInclude Include="Include\imgui_opengl.h" />
@@ -46,6 +47,7 @@
   <ItemGroup>
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
+    <ClCompile Include="Source\fractal.cpp" />
     <ClCompile Include="Source\gameobject.cpp" />
     <ClCompile Include="Source\heightfield.cpp" />
     <ClCompile Include="Source\imgui.cpp" />
@@ -59,7 +61,6 @@
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\poissonTile.cpp" />
     <ClCompile Include="Source\scalarfield.cpp" />
-    <ClCompile Include="Source\simplexNoise.cpp" />
     <ClCompile Include="Source\image.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />

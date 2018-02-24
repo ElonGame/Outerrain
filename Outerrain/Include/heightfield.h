@@ -3,7 +3,7 @@
 #include "scalarfield.h"
 #include "ray.h"
 #include "meshModel.h"
-#include "noise.h"
+#include "fractal.h"
 
 class Heightfield : public Scalarfield2D
 {
@@ -12,7 +12,7 @@ public:
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
 	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value);
 	Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
-	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float amplitude, float freq, int oct);
+	Heightfield(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, const PerlinNoise& n, float amplitude, float freq, int oct, FractalType type);
 	~Heightfield() { }
 
 	void ThermalWeathering(int stepCount, float amplitude);

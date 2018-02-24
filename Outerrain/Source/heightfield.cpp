@@ -1,5 +1,6 @@
 #include "heightfield.h"
 #include "vec.h"
+#include "fractal.h"
 
 #include <numeric>
 #include <deque>
@@ -66,13 +67,20 @@ Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx
 \param freq noise frequency
 \param oct noise octave count
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, float amplitude, float freq, int oct) : Scalarfield2D(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const PerlinNoise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
 {
-	PerlinNoise n;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			Set(i, j, n.Fbm(Vertex(i, j), amplitude, freq, oct));
+		{
+			Vector3 p = Vertex(i, j);
+			float h = 0.0f;
+			if (type == FractalType::fBm)
+				h = Fractal::fBm(n, p, amplitude, freq, oct);
+			else if (type == FractalType::Ridge)
+				h = Fractal::RidgeNoise(n, p, amplitude, freq, oct);
+			Set(i, j, h);
+		}
 	}
 }
 
