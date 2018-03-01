@@ -45,6 +45,15 @@ void MaterialModel::SetShader(const Shader& s)
 }
 
 /* Static Materials */
+MaterialModel MaterialModel::DefaultDiffuseMat;
+MaterialModel MaterialModel::TerrainTexturedMat;
+
+void MaterialModel::InitStaticMaterials()
+{
+	DefaultDiffuseMat = DefaultDiffuse();
+	TerrainTexturedMat = TerrainTextured();
+}
+
 MaterialModel MaterialModel::DefaultDiffuse()
 {
 	MaterialModel ret;

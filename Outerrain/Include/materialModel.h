@@ -17,6 +17,9 @@ private:
 	GLuint texture2;
 	GLuint texture3;
 
+	static MaterialModel DefaultDiffuse();
+	static MaterialModel TerrainTextured();
+
 public:
 	MaterialModel();
 
@@ -24,6 +27,7 @@ public:
 	void SetShader(const Shader& s);
 
 	/* Static Materials */
-	static MaterialModel DefaultDiffuse();
-	static MaterialModel TerrainTextured();
+	static void InitStaticMaterials();
+	static MaterialModel DefaultDiffuseMat;
+	static MaterialModel TerrainTexturedMat;
 };

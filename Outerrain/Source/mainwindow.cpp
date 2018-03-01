@@ -43,6 +43,7 @@ void MainWindow::Show()
 void MainWindow::Init()
 {
 	mainWindowHandler->SetDefaultGLState();
+	MaterialModel::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
@@ -75,10 +76,23 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mb & SDL_BUTTON(2))
 		orbiter.Translation(mxF / mainWindowHandler->Width(), myF / mainWindowHandler->Height());
 
+	/* Erosion Callbacks */
 	if (mainWindowHandler->KeyState(SDLK_F1))
 		StreamPowerErosionStep();
 	if (mainWindowHandler->KeyState(SDLK_F2))
 		ThermalErosionStep();
+
+
+	/* Noise Callbacks */
+	if (mainWindowHandler->KeyState(SDLK_KP_8))
+		TranslateNoise(1, 0);
+	if (mainWindowHandler->KeyState(SDLK_KP_5))
+		TranslateNoise(-1, 0);
+	if (mainWindowHandler->KeyState(SDLK_KP_4))
+		TranslateNoise(0, 1);
+	if (mainWindowHandler->KeyState(SDLK_KP_6))
+		TranslateNoise(0, -1);
+
 
 	mainWindowHandler->ClearKeyState(SDLK_a);
 	mainWindowHandler->ClearWheelEvent();

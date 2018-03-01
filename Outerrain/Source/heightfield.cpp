@@ -85,6 +85,33 @@ Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tR
 }
 
 /*
+
+*/
+Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
+{
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			Vector3 p = Vertex(i, j);
+			float h = 0.0f;
+			if (type == FractalType::fBm)
+				h = Fractal::fBm(n, p + offset, amplitude, freq, oct);
+			else if (type == FractalType::Ridge)
+				h = Fractal::RidgeNoise(n, p + offset, amplitude, freq, oct);
+			Set(i, j, h);
+		}
+	}
+}
+
+/*
+\brief Destructor
+*/
+Heightfield::~Heightfield()
+{
+}
+
+/*
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
 \param stepCount number of step performed
 \param amplitude maximum amount of matter moved from one point to another. Something between [0.05, 0.1] gives plausible results.

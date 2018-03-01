@@ -16,11 +16,15 @@ private:
 	/* Application Data */
 	Heightfield* hf;
 	GameObject* hfObject;
+	bool isNoiseField;
+	Vector3 noiseOffsetVector;
 
 	/* Functions */
 	void InitBasicTerrain();
 	void StreamPowerErosionStep();
 	void ThermalErosionStep();
+	void TranslateNoise(int, int);
+
 	void UpdateMeshRenderer();
 	void ClearScene();
 
