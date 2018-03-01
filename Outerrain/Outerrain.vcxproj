@@ -43,6 +43,7 @@
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\ecosystem.h" />
     <ClInclude Include="Include\window.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\cameraOrbiter.cpp" />
@@ -68,6 +69,7 @@
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
     <ClCompile Include="Source\window.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

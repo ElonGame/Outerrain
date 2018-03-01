@@ -1,5 +1,7 @@
 #include "materialModel.h"
 #include "image.h"
+#include "texture.h"
+
 
 MaterialModel::MaterialModel()
 {
@@ -21,35 +23,20 @@ void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp,
 
 	if (texture0 != 0)
 	{
-		shader.UniformInt("useTexture0", 1);
-		shader.UniformTexture("texture0", 0, texture0);
+		shader.UniformInt("useTexture", 1);
+		shader.UniformTexture("texture", 0, texture0);
 	}
 	else
-		shader.UniformInt("useTexture0", 0);
+		shader.UniformInt("useTexture", 0);
 
 	if (texture1 != 0)
-	{
-		shader.UniformInt("useTexture1", 1);
-		shader.UniformTexture("texture1", 0, texture1);
-	}
-	else
-		shader.UniformInt("useTexture1", 0);
+		shader.UniformTexture("texture1", 1, texture1);
 
 	if (texture2 != 0)
-	{
-		shader.UniformInt("useTexture2", 1);
-		shader.UniformTexture("texture2", 0, texture2);
-	}
-	else
-		shader.UniformInt("useTexture2", 0);
+		shader.UniformTexture("texture2", 2, texture2);
 
 	if (texture3 != 0)
-	{
-		shader.UniformInt("useTexture3", 1);
-		shader.UniformTexture("texture3", 0, texture3);
-	}
-	else
-		shader.UniformInt("useTexture3", 0);
+		shader.UniformTexture("texture3", 3, texture3);
 }
 
 void MaterialModel::SetShader(const Shader& s)
@@ -75,11 +62,10 @@ MaterialModel MaterialModel::TerrainTextured()
 	ret.shininess = 0.0f;
 	ret.shader.InitFromFile("Shaders/TerrainShader.glsl");
 	
-	// Terrain textures
-	ret.texture0 = Image("Data/Textures/grass.png").GetGLTexture(0, GL_RGBA);
-	ret.texture1 = Image("Data/Textures/sand.png").GetGLTexture(1, GL_RGBA);
-	ret.texture2 = Image("Data/Textures/rock.png").GetGLTexture(2, GL_RGBA);
-	ret.texture3 = Image("Data/Textures/snow.png").GetGLTexture(3, GL_RGBA);
+	ret.texture0 = read_texture(0, "Data/Textures/grass.png", GL_RGBA);
+	ret.texture1 = read_texture(1, "Data/Textures/sand.png", GL_RGBA);
+	ret.texture2 = read_texture(2, "Data/Textures/rock.png", GL_RGBA);
+	ret.texture3 = read_texture(3, "Data/Textures/snow.png", GL_RGBA);
 
 	return ret;
 }

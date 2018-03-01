@@ -6,7 +6,7 @@ void MainWindow::InitBasicTerrain()
 	int res = 128;
 	PerlinNoise n;
 	//hf = new Heightfield(std::string("Data/Heightmaps/island.png"), 0, 50, res, res, Vector2(-res, res), Vector2(res, -res));
-	hf = new Heightfield(res, res, Vector2(-128, 128), Vector2(128, -128), n, 25.0, 0.005, 8, FractalType::Ridge);
+	hf = new Heightfield(res, res, Vector2(-128, 128), Vector2(128, -128), n, 100, 0.005, 8, FractalType::Ridge);
 	
 	UpdateMeshRenderer();
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
