@@ -5,7 +5,7 @@
 #include "heightfield.h"
 #include "cameraOrbiter.h"
 #include "meshRenderer.h"
-#include "terrain-generation.h"
+#include "terrainSettings.h"
 
 class MainWindow
 {
