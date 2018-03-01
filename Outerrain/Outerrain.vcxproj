@@ -38,6 +38,7 @@
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\shader.h" />
+    <ClInclude Include="Include\terrain-generation.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />

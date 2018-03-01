@@ -5,6 +5,7 @@
 #include "heightfield.h"
 #include "cameraOrbiter.h"
 #include "meshRenderer.h"
+#include "terrain-generation.h"
 
 class MainWindow
 {
@@ -16,8 +17,7 @@ private:
 	/* Application Data */
 	Heightfield* hf;
 	GameObject* hfObject;
-	bool isNoiseField;
-	Vector3 noiseOffsetVector;
+	TerrainSettings settings;
 
 	/* Functions */
 	void InitBasicTerrain();
@@ -25,6 +25,7 @@ private:
 	void ThermalErosionStep();
 	void TranslateNoise(int, int);
 
+	void GenerateTerrainFromSettings();
 	void UpdateMeshRenderer();
 	void ClearScene();
 
