@@ -138,7 +138,7 @@ void Window::CreateGLContext(int major, int minor)
 	glContext = SDL_GL_CreateContext(windowSDL);
 	if (glContext == NULL)
 	{
-		std::cout << "[error] creating openGL context" << std::endl;
+		std::cout << "[error] creating openGL context" << SDL_GetError() << std::endl;
 		return;
 	}
 

@@ -108,28 +108,30 @@ ifeq ($(config),release32)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/noise.o \
+	$(OBJDIR)/meshModel.o \
 	$(OBJDIR)/mytime.o \
-	$(OBJDIR)/app.o \
+	$(OBJDIR)/ecosystem.o \
+	$(OBJDIR)/meshRenderer.o \
 	$(OBJDIR)/transform.o \
 	$(OBJDIR)/main.o \
 	$(OBJDIR)/gameobject.o \
+	$(OBJDIR)/mainwindow-callbacks.o \
 	$(OBJDIR)/image.o \
 	$(OBJDIR)/scalarfield.o \
-	$(OBJDIR)/graph.o \
+	$(OBJDIR)/perlinNoise.o \
 	$(OBJDIR)/texture.o \
+	$(OBJDIR)/materialModel.o \
 	$(OBJDIR)/color.o \
 	$(OBJDIR)/imgui_draw.o \
+	$(OBJDIR)/mainwindow.o \
 	$(OBJDIR)/imgui.o \
 	$(OBJDIR)/heightfield.o \
 	$(OBJDIR)/cameraOrbiter.o \
-	$(OBJDIR)/app-callbacks.o \
 	$(OBJDIR)/window.o \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/imgui_opengl.o \
-	$(OBJDIR)/terrain.o \
-	$(OBJDIR)/vegetationObject.o \
-	$(OBJDIR)/mesh.o \
+	$(OBJDIR)/fractal.o \
+	$(OBJDIR)/poissonTile.o \
 
 RESOURCES := \
 
@@ -190,13 +192,16 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 endif
 
-$(OBJDIR)/noise.o: Outerrain/Source/noise.cpp
+$(OBJDIR)/meshModel.o: Outerrain/Source/meshModel.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/mytime.o: Outerrain/Source/mytime.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/app.o: Outerrain/Source/app.cpp
+$(OBJDIR)/ecosystem.o: Outerrain/Source/ecosystem.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/meshRenderer.o: Outerrain/Source/meshRenderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/transform.o: Outerrain/Source/transform.cpp
@@ -208,22 +213,31 @@ $(OBJDIR)/main.o: Outerrain/Source/main.cpp
 $(OBJDIR)/gameobject.o: Outerrain/Source/gameobject.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mainwindow-callbacks.o: Outerrain/Source/mainwindow-callbacks.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/image.o: Outerrain/Source/image.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/scalarfield.o: Outerrain/Source/scalarfield.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/graph.o: Outerrain/Source/graph.cpp
+$(OBJDIR)/perlinNoise.o: Outerrain/Source/perlinNoise.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/texture.o: Outerrain/Source/texture.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/materialModel.o: Outerrain/Source/materialModel.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/color.o: Outerrain/Source/color.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/imgui_draw.o: Outerrain/Source/imgui_draw.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mainwindow.o: Outerrain/Source/mainwindow.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/imgui.o: Outerrain/Source/imgui.cpp
@@ -235,9 +249,6 @@ $(OBJDIR)/heightfield.o: Outerrain/Source/heightfield.cpp
 $(OBJDIR)/cameraOrbiter.o: Outerrain/Source/cameraOrbiter.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/app-callbacks.o: Outerrain/Source/app-callbacks.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/window.o: Outerrain/Source/window.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
@@ -247,13 +258,10 @@ $(OBJDIR)/shader.o: Outerrain/Source/shader.cpp
 $(OBJDIR)/imgui_opengl.o: Outerrain/Source/imgui_opengl.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/terrain.o: Outerrain/Source/terrain.cpp
+$(OBJDIR)/fractal.o: Outerrain/Source/fractal.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/vegetationObject.o: Outerrain/Source/vegetationObject.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/mesh.o: Outerrain/Source/mesh.cpp
+$(OBJDIR)/poissonTile.o: Outerrain/Source/poissonTile.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 

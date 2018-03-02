@@ -24,7 +24,7 @@ void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp,
 	if (texture0 != 0)
 	{
 		shader.UniformInt("useTexture", 1);
-		shader.UniformTexture("texture", 0, texture0);
+		shader.UniformTexture("texture0", 0, texture0);
 	}
 	else
 		shader.UniformInt("useTexture", 0);
@@ -71,10 +71,10 @@ MaterialModel MaterialModel::TerrainTextured()
 	ret.shininess = 0.0f;
 	ret.shader.InitFromFile("Shaders/TerrainShader.glsl");
 	
-	ret.texture0 = read_texture(0, "Data/Textures/grass.png", GL_RGBA);
-	ret.texture1 = read_texture(1, "Data/Textures/sand.png", GL_RGBA);
-	ret.texture2 = read_texture(2, "Data/Textures/rock.png", GL_RGBA);
-	ret.texture3 = read_texture(3, "Data/Textures/snow.png", GL_RGBA);
+	ret.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);
+	ret.texture1 = ReadTexture(1, "Data/Textures/sand.png", GL_RGBA);
+	ret.texture2 = ReadTexture(2, "Data/Textures/rock.png", GL_RGBA);
+	ret.texture3 = ReadTexture(3, "Data/Textures/snow.png", GL_RGBA);
 
 	return ret;
 }

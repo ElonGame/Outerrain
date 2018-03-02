@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GL\glew.h"
+#include "GL/glew.h"
 #include "valueField.h"
 
 class Scalarfield2D : public ValueField<float>

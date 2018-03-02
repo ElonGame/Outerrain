@@ -6,7 +6,7 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 	hfObject = nullptr;
 	hf = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
-	mainWindowHandler->CreateGLContext(4, 4);
+	mainWindowHandler->CreateGLContext(3, 3);
 	Init();
 }
 

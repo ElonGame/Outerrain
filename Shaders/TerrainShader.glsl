@@ -127,6 +127,6 @@ void main()
 	// else if (renderMode == 3)     // Diffuse Splatmap
 		// fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 	// else
-		// fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
+	//fragment_color = vec4(texture(texture3, vertex_texcoord.xy).rgb, 1);
 }
 #endif
