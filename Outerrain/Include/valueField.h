@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "vec.h"
+#include "box.h"
 #include "image.h"
 
 /* Utility struct */
@@ -21,20 +22,20 @@ class ValueField
 {
 protected:
 	int nx, ny;
-	Vector2 bottomLeft, topRight;
+	Box2D box;
 	std::vector<T> values;
 
 public:
-	ValueField() : nx(0), ny(0), bottomLeft(Vector2(0)), topRight(Vector2(0))
+	ValueField() : nx(0), ny(0), box(Vector2(0), Vector2(0))
 	{
 	}
 
-	ValueField(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+	ValueField(int nx, int ny, const Box2D& bbox) : nx(nx), ny(ny), box(bbox)
 	{
 		values.resize(nx * ny, T(0));
 	}
 
-	ValueField(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, const T& value) : nx(nx), ny(ny), bottomLeft(bottomLeft), topRight(topRight)
+	ValueField(int nx, int ny, const Box2D& bbox, const T& value) : nx(nx), ny(ny), box(bbox)
 	{
 		values.resize(nx * ny, value);
 	}
@@ -43,8 +44,8 @@ public:
 
 	bool Inside(const Vector2& p) const
 	{
-		Vector2 q = p - bottomLeft;
-		Vector2 d = topRight - bottomLeft;
+		Vector2 q = p - box.Vertex(0);
+		Vector2 d = box.Vertex(1) - box.Vertex(0);
 
 		float u = q[0] / d[0];
 		float v = q[1] / d[1];
@@ -113,8 +114,8 @@ public:
 
 	T GetValueBilinear(const Vector2& p) const
 	{
-		Vector2 q = p - bottomLeft;
-		Vector2 d = topRight - bottomLeft;
+		Vector2 q = p - box.Vertex(0);
+		Vector2 d = box.Vertex(1) - box.Vertex(0);
 
 		float texelX = 1.0f / (static_cast<float>(nx - 1));
 		float texelY = 1.0f / (static_cast<float>(ny - 1));
@@ -192,11 +193,11 @@ public:
 
 	Vector2 BottomLeft() const
 	{
-		return bottomLeft;
+		return box.Vertex(0);
 	}
 
 	Vector2 TopRight() const
 	{
-		return topRight;
+		return box.Vertex(1);
 	}
 };

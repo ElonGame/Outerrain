@@ -7,8 +7,8 @@ class Scalarfield2D : public ValueField<float>
 {
 public:
 	Scalarfield2D();
-	Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight);
-	Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value);
+	Scalarfield2D(int nx, int ny, const Box2D& bbox);
+	Scalarfield2D(int nx, int ny, const Box2D& bbox, float value);
 	~Scalarfield2D() { }
 
 	Vector3 Vertex(int i, int j) const;

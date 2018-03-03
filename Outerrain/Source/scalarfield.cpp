@@ -5,21 +5,19 @@ Scalarfield2D::Scalarfield2D() : ValueField()
 {
 }
 
-Scalarfield2D::Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight)
-	: ValueField(nx, ny, bottomLeft, topRight)
+Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
 {
 }
 
-Scalarfield2D::Scalarfield2D(int nx, int ny, const Vector2& bottomLeft, const Vector2& topRight, float value)
-	: ValueField(nx, ny, bottomLeft, topRight, value)
+Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox, float value) : ValueField(nx, ny, bbox, value)
 {
 }
 
 Vector2 Scalarfield2D::Gradient(int i, int j) const
 {
 	Vector2 ret;
-	float cellSizeX = (topRight.x - bottomLeft.x) / (nx - 1);
-	float cellSizeY = (topRight.y - bottomLeft.y) / (ny - 1);
+	float cellSizeX = (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
+	float cellSizeY = (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 
 	// X Gradient
 	if (i == 0)
@@ -65,24 +63,24 @@ float Scalarfield2D::Average() const
 Vector2 Scalarfield2D::CellSize() const
 {
 	Vector2 cellSize;
-	cellSize.x = (topRight[0] - bottomLeft[0]) / (nx - 1);
-	cellSize.y = (topRight[0] - bottomLeft[0]) / (ny - 1);
+	cellSize.x = (box.Vertex(1)[0] - box.Vertex(0)[0]) / (nx - 1);
+	cellSize.y = (box.Vertex(1)[1] - box.Vertex(0)[1]) / (ny - 1);
 	return cellSize;
 }
 
 Vector3 Scalarfield2D::Vertex(int i, int j) const
 {
-	float x = bottomLeft.x + j * (topRight.x - bottomLeft.x) / (nx - 1);
+	float x = box.Vertex(0).x + j * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(i, j);
-	float z = bottomLeft.y + i * (topRight.y - bottomLeft.y) / (ny - 1);
+	float z = box.Vertex(0).y + i * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
 Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 {
-	float x = bottomLeft.x + v.y * (topRight.x - bottomLeft.x) / (nx - 1);
+	float x = box.Vertex(0).x + v.y * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(v);
-	float z = bottomLeft.y + v.x * (topRight.y - bottomLeft.y) / (ny - 1);
+	float z = box.Vertex(0).y + v.x * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
@@ -146,5 +144,6 @@ void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int white
 
 GLuint Scalarfield2D::GetGLTexture() const
 {
+	// TODO
 	return 0;
 }

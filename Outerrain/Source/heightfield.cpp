@@ -28,7 +28,7 @@ Heightfield::Heightfield() : Scalarfield2D()
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight) : Scalarfield2D(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(int nx, int ny, const Box2D& bbox) : Scalarfield2D(nx, ny, bbox)
 {
 }
 
@@ -40,7 +40,7 @@ Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tR
 \param topRight top right vertex world coordinates
 \param value default value for the field
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, float value) : Scalarfield2D(nx, ny, bLeft, tRight, value)
+Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, float value) : Scalarfield2D(nx, ny, bbox, value)
 {
 
 }
@@ -53,7 +53,7 @@ Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tR
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Vector2& bLeft, const Vector2& tRight) : Heightfield(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox)
 {
 	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }
@@ -68,7 +68,7 @@ Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx
 \param freq noise frequency
 \param oct noise octave count
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bbox)
 {
 	for (int i = 0; i < ny; i++)
 	{
@@ -88,7 +88,7 @@ Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tR
 /*
 
 */
-Heightfield::Heightfield(int nx, int ny, const Vector2& bLeft, const Vector2& tRight, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bLeft, tRight)
+Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bbox)
 {
 	for (int i = 0; i < ny; i++)
 	{
@@ -239,7 +239,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 
 	std::array<float, 8> slopes;
 	std::array<Vector2i, 8> coords;
-	Scalarfield2D DA = Scalarfield2D(nx, ny, bottomLeft, topRight, 1.0);
+	Scalarfield2D DA = Scalarfield2D(nx, ny, box, 1.0);
 	while (!points.empty())
 	{
 		Point p = points.front();
@@ -284,7 +284,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 */
 Scalarfield2D Heightfield::Slope() const
 {
-	Scalarfield2D S = Scalarfield2D(nx, ny, bottomLeft, topRight);
+	Scalarfield2D S = Scalarfield2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -300,7 +300,7 @@ Scalarfield2D Heightfield::Wetness() const
 {
 	Scalarfield2D DA = DrainageArea();
 	Scalarfield2D S = Slope();
-	Scalarfield2D W = Scalarfield2D(nx, ny, bottomLeft, topRight);
+	Scalarfield2D W = Scalarfield2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -316,7 +316,7 @@ Scalarfield2D Heightfield::StreamPower() const
 {
 	Scalarfield2D DA = DrainageArea();
 	Scalarfield2D S = Slope();
-	Scalarfield2D SP = Scalarfield2D(nx, ny, bottomLeft, topRight);
+	Scalarfield2D SP = Scalarfield2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -333,7 +333,7 @@ Scalarfield2D Heightfield::Illumination() const
 	const int rayCount = 32;		// Ray count for each world point
 	const float epsilon = 0.01f;	// Ray start up offset
 	const float K = Slope().Max();	// Lipschitz constant
-	Scalarfield2D I = Scalarfield2D(nx, ny, bottomLeft, topRight);
+	Scalarfield2D I = Scalarfield2D(nx, ny, box);
 	Hit rayHit;
 	for (int i = 0; i < ny; i++)
 	{
@@ -423,7 +423,7 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vec
 MeshModel* Heightfield::GetMeshModel() const
 {
 	MeshModel* ret = new MeshModel();
-	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, bottomLeft, topRight, Vector3(0));
+	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, box, Vector3(0));
 	for (int i = 0; i < ny - 1; i++)
 	{
 		for (int j = 0; j < nx - 1; j++)

@@ -58,9 +58,9 @@ void MainWindow::TranslateNoise(int y, int x)
 void MainWindow::GenerateTerrainFromSettings()
 {
 	if (settings.terrainType == TerrainType::NoiseFieldTerrain)
-		hf = new Heightfield(settings.nx, settings.ny, settings.bottomLeft, settings.topRight, *settings.noise, settings.maxAltitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
+		hf = new Heightfield(settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight), *settings.noise, settings.maxAltitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
 	else
-		hf = new Heightfield(settings.filePath, settings.minAltitude, settings.maxAltitude, settings.nx, settings.ny, settings.bottomLeft, settings.topRight);
+		hf = new Heightfield(settings.filePath, settings.minAltitude, settings.maxAltitude, settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight));
 }
 
 void MainWindow::UpdateMeshRenderer()
