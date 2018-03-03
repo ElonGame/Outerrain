@@ -1,17 +1,22 @@
 #include <cstdio>
 #include <algorithm>
 #include "cameraOrbiter.h"
+#include "mathUtils.h"
 
 
-CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter() 
+	: center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) : center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
+CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) 
+	: center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) 
+	: center(Math::Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), 
+		zNear(0.1f), zFar(1000.0f)
 {
 }
 
@@ -25,7 +30,7 @@ void CameraOrbiter::LookAt(const Vector3& c, float s)
 
 void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
 {
-	LookAt(Center(pmin, pmax), Magnitude(pmin - pmax));
+	LookAt(Math::Center(pmin, pmax), Magnitude(pmin - pmax));
 }
 
 void CameraOrbiter::LookAt(const Bounds& b)

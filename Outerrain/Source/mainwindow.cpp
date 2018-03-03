@@ -84,13 +84,13 @@ void MainWindow::Update(float time, float deltaTime)
 
 
 	/* Noise Callbacks */
-	if (mainWindowHandler->KeyState(SDLK_KP_8))
+	if (mainWindowHandler->KeyState(SDLK_UP))
 		TranslateNoise(1, 0);
-	if (mainWindowHandler->KeyState(SDLK_KP_5))
+	if (mainWindowHandler->KeyState(SDLK_DOWN))
 		TranslateNoise(-1, 0);
-	if (mainWindowHandler->KeyState(SDLK_KP_4))
+	if (mainWindowHandler->KeyState(SDLK_LEFT))
 		TranslateNoise(0, 1);
-	if (mainWindowHandler->KeyState(SDLK_KP_6))
+	if (mainWindowHandler->KeyState(SDLK_RIGHT))
 		TranslateNoise(0, -1);
 
 

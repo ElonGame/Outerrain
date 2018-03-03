@@ -3,7 +3,7 @@
 
 void MainWindow::InitBasicTerrain()
 {
-	/*settings.type = TerrainType::NoiseFieldTerrain;
+	settings.terrainType = TerrainType::NoiseFieldTerrain;
 	settings.nx = 128;
 	settings.ny = 128;
 	settings.bottomLeft = Vector2(-128, 128);
@@ -13,17 +13,17 @@ void MainWindow::InitBasicTerrain()
 	settings.maxAltitude = 100;
 	settings.frequency = 0.005;
 	settings.octaves = 8;
-	settings.fractalType = FractalType::Ridge;*/
+	settings.fractalType = FractalType::Ridge;
 
-	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 128;
-	settings.ny = 128;
-	settings.bottomLeft = Vector2(-128, 128);
-	settings.topRight = Vector2(128, -128);
-	settings.offsetVector = Vector3(0);
-	settings.filePath = std::string("Data/Heightmaps/island.png");
-	settings.minAltitude = 0;
-	settings.maxAltitude = 50;
+	// settings.terrainType = TerrainType::HeightFieldTerrain;
+	// settings.nx = 128;
+	// settings.ny = 128;
+	// settings.bottomLeft = Vector2(-128, 128);
+	// settings.topRight = Vector2(128, -128);
+	// settings.offsetVector = Vector3(0);
+	// settings.filePath = std::string("Data/Heightmaps/island.png");
+	// settings.minAltitude = 0;
+	// settings.maxAltitude = 50;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();

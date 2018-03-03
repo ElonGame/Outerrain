@@ -113,7 +113,9 @@ OBJECTS := \
 	$(OBJDIR)/ecosystem.o \
 	$(OBJDIR)/meshRenderer.o \
 	$(OBJDIR)/transform.o \
+	$(OBJDIR)/fractalMusgrave.o \
 	$(OBJDIR)/main.o \
+	$(OBJDIR)/box.o \
 	$(OBJDIR)/gameobject.o \
 	$(OBJDIR)/mainwindow-callbacks.o \
 	$(OBJDIR)/image.o \
@@ -131,6 +133,7 @@ OBJECTS := \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/imgui_opengl.o \
 	$(OBJDIR)/fractal.o \
+	$(OBJDIR)/box2D.o \
 	$(OBJDIR)/poissonTile.o \
 
 RESOURCES := \
@@ -207,7 +210,13 @@ $(OBJDIR)/meshRenderer.o: Outerrain/Source/meshRenderer.cpp
 $(OBJDIR)/transform.o: Outerrain/Source/transform.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/fractalMusgrave.o: Outerrain/Source/fractalMusgrave.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/main.o: Outerrain/Source/main.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/box.o: Outerrain/Source/box.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/gameobject.o: Outerrain/Source/gameobject.cpp
@@ -259,6 +268,9 @@ $(OBJDIR)/imgui_opengl.o: Outerrain/Source/imgui_opengl.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/fractal.o: Outerrain/Source/fractal.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/box2D.o: Outerrain/Source/box2D.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/poissonTile.o: Outerrain/Source/poissonTile.cpp

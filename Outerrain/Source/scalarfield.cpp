@@ -1,5 +1,5 @@
 #include "scalarfield.h"
-
+#include "mathUtils.h"
 
 Scalarfield2D::Scalarfield2D() : ValueField()
 {
@@ -135,10 +135,10 @@ void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int white
 			float localU = (u - anchorU) / texelX;
 			float localV = (v - anchorV) / texelY;
 
-			float abu = Lerp(a, b, localV);
-			float dcu = Lerp(d, c, localV);
+			float abu = Math::Lerp(a, b, localV);
+			float dcu = Math::Lerp(d, c, localV);
 
-			float value = Lerp(abu, dcu, localU);
+			float value = Math::Lerp(abu, dcu, localU);
 			Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
 		}
 	}

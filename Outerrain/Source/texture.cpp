@@ -37,9 +37,7 @@ GLuint MakeTexture(const int unit, const ImageData& im, const GLenum texel_type)
 	default: type = GL_UNSIGNED_BYTE;
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0,
-		texel_type, im.width, im.height, 0,
-		format, type, im.buffer());
+	glTexImage2D(GL_TEXTURE_2D, 0, texel_type, im.width, im.height, 0, format, type, im.buffer());
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 	return texture;

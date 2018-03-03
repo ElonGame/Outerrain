@@ -1,5 +1,5 @@
 #include "ecosystem.h"
-
+#include "mathUtils.h"
 
 float VegetationSystem::DensityFromSlope(const Specie& s, float slope)
 {
@@ -18,7 +18,8 @@ float VegetationSystem::DensityFromWetness(const Specie& s, float wetness)
 
 float VegetationSystem::ComputeDensity(const Specie& s, float altitude, float slope, float wetness)
 {
-	return Min(DensityFromWetness(s, wetness), Min(DensityFromSlope(s, slope), DensityFromAltitude(s, altitude)));
+	return Math::Min(DensityFromWetness(s, wetness), 
+			Math::Min(DensityFromSlope(s, slope), DensityFromAltitude(s, altitude)));
 }
 
 Specie VegetationSystem::PineTreeSpecie()

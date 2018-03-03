@@ -1,6 +1,7 @@
 #include "heightfield.h"
 #include "vec.h"
 #include "fractal.h"
+#include "mathUtils.h"
 
 #include <numeric>
 #include <deque>
@@ -119,7 +120,7 @@ Heightfield::~Heightfield()
 void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 {
 	// Constants
-	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30° +- 5)
+	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30ï¿½ +- 5)
 	float cellDistX = CellSize().x;
 	for (int a = 0; a < stepCount; a++)
 	{
@@ -199,7 +200,7 @@ void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 /*
 \brief Perform a stream power erosion step with maximum amplitude defined by user. Based on https://hal.inria.fr/hal-01262376/document.
 This erosion called 'Fluvial' is based on Drainasge and Slope. One of the weakness of the stream power erosion is that it can create peaks
-and generally unrealistic height sometimes. Therefore it can be improved by checking for slopes higher than 30° and not performing erosion.
+and generally unrealistic height sometimes. Therefore it can be improved by checking for slopes higher than 30ï¿½ and not performing erosion.
 
 \param stepCount number of step performed
 \param amplitude maximum amount of matter eroded in one step. Something between [0.5, 1.0] gives plausible results.
@@ -271,7 +272,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 		}
 
 		// Distribute to those lower neighbours
-		float sum = Accumulate<float, 8>(slopes);
+		float sum = Math::Accumulate<float, 8>(slopes);
 		for (int k = 0; k < neighbourCount; k++)
 			DA.Set(coords[k], DA.Get(coords[k]) + DA.Get(i, j) * (slopes[k] / sum));
 	}
