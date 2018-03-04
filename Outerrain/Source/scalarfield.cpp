@@ -3,24 +3,53 @@
 #include "image.h"
 #include "texture.h"
 
+/*!
+\class Scalarfield2D scalarfield.h
+\brief A 2 dimensional scalar field, implementing several useful functions
+such as GetGLTexture(), Gradient(), Min/Max/Normalize()...
+*/
+
+/*
+\brief Default Constructor
+*/
 Scalarfield2D::Scalarfield2D() : ValueField()
 {
 }
 
+/*
+\brief Constructor
+\param nx size in x axis
+\param ny size in z axis
+\param bbox bounding box of the domain in world coordinates
+*/
 Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
 {
 }
 
+/*
+\brief Constructor
+\param nx size in x axis
+\param ny size in y axis
+\param bbox bounding box of the domain
+\param value default value of the field
+*/
 Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox, float value) : ValueField(nx, ny, bbox, value)
 {
 }
 
+/*
+\brief copy constructor
+\param field Scalarfield2D to copy
+*/
 Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, field.ny, field.box)
 {
 	for (unsigned int i = 0; i < values.size(); i++)
 		values[i] = field.values[i];
 }
 
+/*
+\brief Compute the gradient for the vertex (i, j)
+*/
 Vector2 Scalarfield2D::Gradient(int i, int j) const
 {
 	Vector2 ret;
@@ -46,6 +75,9 @@ Vector2 Scalarfield2D::Gradient(int i, int j) const
 	return ret;
 }
 
+/*
+\brief Normalize this field 
+*/
 void Scalarfield2D::NormalizeField()
 {
 	float min = Min();
@@ -54,12 +86,20 @@ void Scalarfield2D::NormalizeField()
 		values[i] = (values[i] - min) / (max - min);
 }
 
+/*
+\brief Normalize this field between [min, max] values.
+\param min min value
+\param max max value
+*/
 void Scalarfield2D::NormalizeField(float min, float max)
 {
 	for (int i = 0; i < ny * nx; i++)
 		values[i] = (values[i] - min) / (max - min);
 }
 
+/*
+\brief Return the normalized version of this field
+*/
 Scalarfield2D Scalarfield2D::Normalized() const
 {
 	Scalarfield2D ret(*this);
@@ -70,6 +110,9 @@ Scalarfield2D Scalarfield2D::Normalized() const
 	return ret;
 }
 
+/*
+\brief Compute the average value of this field.
+*/
 float Scalarfield2D::Average() const
 {
 	float ret = 0.0f;
@@ -78,6 +121,9 @@ float Scalarfield2D::Average() const
 	return ret / static_cast<float>(values.size());
 }
 
+/*
+\brief Compute the cell size of X/Y in world coordinates.
+*/
 Vector2 Scalarfield2D::CellSize() const
 {
 	Vector2 cellSize;
@@ -86,6 +132,9 @@ Vector2 Scalarfield2D::CellSize() const
 	return cellSize;
 }
 
+/*
+\brief Compute a vertex world position including his height.
+*/
 Vector3 Scalarfield2D::Vertex(int i, int j) const
 {
 	float x = box.Vertex(0).x + i * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
@@ -94,6 +143,9 @@ Vector3 Scalarfield2D::Vertex(int i, int j) const
 	return Vector3(x, y, z);
 }
 
+/*
+\brief Compute a vertex world position including his height.
+*/
 Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 {
 	float x = box.Vertex(0).x + v.x * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
@@ -102,6 +154,10 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 	return Vector3(x, y, z);
 }
 
+/*
+\brief Utility method to save the scalarfield as image.
+\param path relative path
+*/
 void Scalarfield2D::SaveAsImage(const char* path)
 {
 	Image im = Image(nx, ny);
@@ -118,6 +174,12 @@ void Scalarfield2D::SaveAsImage(const char* path)
 	im.WriteImage(path, true);
 }
 
+/*
+\brief Utility method to initialize a scalarfield from an grey scale image
+\param file relative path
+\param blackAltitude min value
+\param whiteAltitude max value
+*/
 void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int whiteAltitude)
 {
 	Image heightmap;
@@ -160,6 +222,10 @@ void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int white
 	}
 }
 
+/*
+\brief Utility method to render a scalarfield as a GL texture.
+\param unit gl texture unit.
+*/
 GLuint Scalarfield2D::GetGLTexture(int unit) const
 {
 	Image im = Image(nx, ny);
