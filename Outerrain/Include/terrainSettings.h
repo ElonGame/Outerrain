@@ -1,5 +1,6 @@
 #include "vec.h"
 #include "fractal.h"
+#include "materialModel.h"
 
 enum TerrainType
 {
@@ -11,6 +12,7 @@ class TerrainSettings
 {
 public:
 	TerrainType terrainType;
+	ShaderType shaderType;
 
 	int nx;
 	int ny;

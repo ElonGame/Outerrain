@@ -1,5 +1,7 @@
 #include "scalarfield.h"
 #include "mathUtils.h"
+#include "image.h"
+#include "texture.h"
 
 Scalarfield2D::Scalarfield2D() : ValueField()
 {
@@ -11,6 +13,12 @@ Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox) : ValueField(nx,
 
 Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox, float value) : ValueField(nx, ny, bbox, value)
 {
+}
+
+Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, field.ny, field.box)
+{
+	for (unsigned int i = 0; i < values.size(); i++)
+		values[i] = field.values[i];
 }
 
 Vector2 Scalarfield2D::Gradient(int i, int j) const
@@ -50,6 +58,16 @@ void Scalarfield2D::NormalizeField(float min, float max)
 {
 	for (int i = 0; i < ny * nx; i++)
 		values[i] = (values[i] - min) / (max - min);
+}
+
+Scalarfield2D Scalarfield2D::Normalized() const
+{
+	Scalarfield2D ret(*this);
+	float min = Min();
+	float max = Max();
+	for (int i = 0; i < ny * nx; i++)
+		ret.values[i] = (ret.values[i] - min) / (max - min);
+	return ret;
 }
 
 float Scalarfield2D::Average() const
@@ -142,8 +160,18 @@ void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int white
 	}
 }
 
-GLuint Scalarfield2D::GetGLTexture() const
+GLuint Scalarfield2D::GetGLTexture(int unit) const
 {
-	// TODO
-	return 0;
+	Image im = Image(nx, ny);
+	float min = Min();
+	float max = Max();
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float v = (Get(i, j) - min) / (max - min);
+			im(j, i) = Color(v, v, v, 1.0);
+		}
+	}
+	return MakeTexture(unit, im, GL_RGBA);
 }

@@ -5,7 +5,7 @@
 
 MaterialModel::MaterialModel()
 {
-	texture0 = 0;
+	texture0 = texture1 = texture2 = texture3 = 0;
 	albedo = Color(0.0f);
 	shininess = 0.0f;
 }
@@ -20,6 +20,7 @@ void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp,
 
 	shader.UniformColor("albedo", albedo);
 	shader.UniformFloat("shininess", shininess);
+	shader.UniformInt("shaderType", shaderType);
 
 	if (texture0 != 0)
 	{
@@ -39,6 +40,14 @@ void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp,
 		shader.UniformTexture("texture3", 3, texture3);
 }
 
+void MaterialModel::Release()
+{
+	glDeleteTextures(1, &texture0);
+	glDeleteTextures(1, &texture1);
+	glDeleteTextures(1, &texture2);
+	glDeleteTextures(1, &texture3);
+}
+
 void MaterialModel::SetShader(const Shader& s)
 {
 	shader = s;
@@ -47,34 +56,32 @@ void MaterialModel::SetShader(const Shader& s)
 /* Static Materials */
 MaterialModel MaterialModel::DefaultDiffuseMat;
 MaterialModel MaterialModel::TerrainTexturedMat;
+MaterialModel MaterialModel::DefaultTexturedMat;
 
 void MaterialModel::InitStaticMaterials()
 {
-	DefaultDiffuseMat = DefaultDiffuse();
-	TerrainTexturedMat = TerrainTextured();
-}
+	// Diffuse Grey
+	DefaultDiffuseMat.albedo = Color::Grey();
+	DefaultDiffuseMat.shaderType = ShaderType::DiffuseGrey;
+	DefaultDiffuseMat.shininess = 0.0f;
+	DefaultDiffuseMat.shader.InitFromFile("Shaders/TerrainShader.glsl");
+	DefaultDiffuseMat.texture0 = DefaultDiffuseMat.texture1 = DefaultDiffuseMat.texture2 = DefaultDiffuseMat.texture3 = 0;
 
-MaterialModel MaterialModel::DefaultDiffuse()
-{
-	MaterialModel ret;
-	ret.albedo = Color::Grey();
-	ret.shininess = 0.0f;
-	ret.shader.InitFromFile("Shaders/TerrainShader.glsl");
-	ret.texture0 = ret.texture1 = ret.texture2 = ret.texture3 = 0;
-	return ret;
-}
+	// Terrain splatmap
+	TerrainTexturedMat.albedo = Color::White();
+	TerrainTexturedMat.shininess = 0.0f;
+	TerrainTexturedMat.shaderType = ShaderType::TerrainSplatmap;
+	TerrainTexturedMat.shader.InitFromFile("Shaders/TerrainShader.glsl");
+	TerrainTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);
+	TerrainTexturedMat.texture1 = ReadTexture(1, "Data/Textures/sand.png", GL_RGBA);
+	TerrainTexturedMat.texture2 = ReadTexture(2, "Data/Textures/rock.png", GL_RGBA);
+	TerrainTexturedMat.texture3 = ReadTexture(3, "Data/Textures/snow.png", GL_RGBA);
 
-MaterialModel MaterialModel::TerrainTextured()
-{
-	MaterialModel ret;
-	ret.albedo = Color::White();
-	ret.shininess = 0.0f;
-	ret.shader.InitFromFile("Shaders/TerrainShader.glsl");
-	
-	ret.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);
-	ret.texture1 = ReadTexture(1, "Data/Textures/sand.png", GL_RGBA);
-	ret.texture2 = ReadTexture(2, "Data/Textures/rock.png", GL_RGBA);
-	ret.texture3 = ReadTexture(3, "Data/Textures/snow.png", GL_RGBA);
-
-	return ret;
+	// Simple Textured
+	DefaultTexturedMat.albedo = Color::Grey();
+	DefaultTexturedMat.shininess = 0.0f;
+	DefaultTexturedMat.shaderType = ShaderType::SimpleTextured;
+	DefaultTexturedMat.shader.InitFromFile("Shaders/TerrainShader.glsl");
+	DefaultTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);;
+	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
 }

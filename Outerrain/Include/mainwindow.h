@@ -26,6 +26,7 @@ private:
 	void TranslateNoise(int, int);
 
 	void GenerateTerrainFromSettings();
+	void UpdateMeshMaterial();
 	void UpdateMeshRenderer();
 	void ClearScene();
 

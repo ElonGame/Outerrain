@@ -14,6 +14,7 @@ void MainWindow::InitBasicTerrain()
 	settings.frequency = 0.005;
 	settings.octaves = 8;
 	settings.fractalType = FractalType::Ridge;
+	settings.shaderType = TerrainSplatmap;
 
 	// settings.terrainType = TerrainType::HeightFieldTerrain;
 	// settings.nx = 128;
@@ -24,6 +25,7 @@ void MainWindow::InitBasicTerrain()
 	// settings.filePath = std::string("Data/Heightmaps/island.png");
 	// settings.minAltitude = 0;
 	// settings.maxAltitude = 50;
+	// settings.shaderType = TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -67,9 +69,34 @@ void MainWindow::UpdateMeshRenderer()
 {
 	if (hfObject != nullptr)
 		delete hfObject;
+	
+	MaterialModel mat;
+	if (settings.shaderType == TerrainSplatmap)
+		mat = MaterialModel::TerrainTexturedMat;
+	if (settings.shaderType == DiffuseGrey)
+		mat = MaterialModel::DefaultDiffuseMat;
+	if (settings.shaderType == SimpleTextured)
+	{
+		mat = MaterialModel::DefaultTexturedMat;
+		glDeleteTextures(1, &mat.texture0);
+		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
+	}
+
 	hfObject = new GameObject();
 	hfObject->AddComponent(hf->GetMeshModel());
-	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), MaterialModel::TerrainTexturedMat));
+	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), mat));
+}
+
+void MainWindow::UpdateMeshMaterial()
+{
+	MaterialModel mat;
+	if (settings.shaderType == TerrainSplatmap)
+		mat = MaterialModel::TerrainTexturedMat;
+	if (settings.shaderType == DiffuseGrey)
+		mat = MaterialModel::DefaultDiffuseMat;
+	if (settings.shaderType == SimpleTextured)
+		mat = MaterialModel::DefaultTexturedMat;
+	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::ClearScene() 

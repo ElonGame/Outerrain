@@ -28,12 +28,11 @@ struct ImageData
 
 class Image
 {
-protected:
+public:
 	std::vector<Color> data;
 	int width;
 	int height;
 
-public:
 	Image() : data(), width(0), height(0) {}
 	Image(const int w, const int h, const Color& color = Color::Black()) : data(w*h, color), width(w), height(h) {}
 

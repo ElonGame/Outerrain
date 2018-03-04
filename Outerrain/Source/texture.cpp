@@ -43,6 +43,27 @@ GLuint MakeTexture(const int unit, const ImageData& im, const GLenum texel_type)
 	return texture;
 }
 
+GLuint MakeTexture(const int unit, const Image& im, const GLenum texel_type)
+{
+	if (im.data.empty())
+		return 0;
+		
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, texel_type, im.Width(), im.Height(), 0, GL_RGBA, GL_FLOAT, im.Buffer());
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return texture;
+}
+
 GLuint ReadTexture(const int unit, const char *filename, const GLenum texel_type)
 {
 	ImageData image;

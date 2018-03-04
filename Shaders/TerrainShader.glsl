@@ -23,7 +23,7 @@ void main( )
 
 
 #ifdef FRAGMENT_SHADER
-uniform int renderMode;
+uniform int shaderType;
 uniform vec3 camPos;
 uniform float shininess;
 uniform vec4 albedo;
@@ -113,10 +113,12 @@ vec3 DiffuseShading()
 
 void main()
 {
-	if (useTexture == 0)
+	if (shaderType == 0)
+		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
+	else if (shaderType == 1)
 		fragment_color = vec4(DiffuseShading(), 1.0);
 	else
-		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
+		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
 	
 	// if (renderMode == 0) 		  // Diffuse gray
 		// fragment_color = vec4(DiffuseShading(), 1.0);

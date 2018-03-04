@@ -141,9 +141,9 @@ void MeshRenderer::ClearBuffers()
 	glDeleteBuffers(1, &indexBuffer);
 }
 
-
 void MeshRenderer::SetMaterial(const MaterialModel& m)
 {
+	material.Release();
 	material = m;
 }
 

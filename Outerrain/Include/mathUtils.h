@@ -11,7 +11,7 @@ namespace Math
     inline T Accumulate(std::array<T, N>& arr)
     {
         T ret(0);
-        for (int i = 0; i < N; i++)
+        for (unsigned int i = 0; i < N; i++)
             ret += arr[i];
         return ret;
     }

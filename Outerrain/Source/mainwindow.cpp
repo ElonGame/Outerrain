@@ -93,6 +93,22 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mainWindowHandler->KeyState(SDLK_RIGHT))
 		TranslateNoise(0, -1);
 
+	// Changing shader
+	if (mainWindowHandler->KeyState(SDLK_k))
+	{
+		settings.shaderType = ShaderType::TerrainSplatmap;
+		UpdateMeshRenderer();
+	}
+	else if (mainWindowHandler->KeyState(SDLK_l))
+	{
+		settings.shaderType = ShaderType::DiffuseGrey;
+		UpdateMeshRenderer();
+	}
+	else if (mainWindowHandler->KeyState(SDLK_m))
+	{
+		settings.shaderType = ShaderType::SimpleTextured;
+		UpdateMeshRenderer();
+	}
 
 	mainWindowHandler->ClearKeyState(SDLK_a);
 	mainWindowHandler->ClearWheelEvent();
