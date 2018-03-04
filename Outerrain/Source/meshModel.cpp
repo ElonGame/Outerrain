@@ -33,6 +33,19 @@ void MeshModel::AddTexcoord(const Vector2& t)
 	isDirty = true;
 }
 
+void MeshModel::ReplaceVertices(const std::vector<Vector3>& newVertices)
+{
+	for (unsigned int i = 0; i < vertices.size(); i++)
+		vertices[i] = newVertices[i];
+	isDirty = true;
+}
+
+void MeshModel::ReplaceNormals(const std::vector<Vector3>& newNormals)
+{
+	for (unsigned int i = 0; i < normals.size(); i++)
+		normals[i] = newNormals[i];
+	isDirty = true;
+}
 
 Bounds MeshModel::GetBounds() const
 {

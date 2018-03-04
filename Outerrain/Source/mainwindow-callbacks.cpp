@@ -67,9 +67,6 @@ void MainWindow::GenerateTerrainFromSettings()
 
 void MainWindow::UpdateMeshRenderer()
 {
-	if (hfObject != nullptr)
-		delete hfObject;
-	
 	MaterialModel mat;
 	if (settings.shaderType == TerrainSplatmap)
 		mat = MaterialModel::TerrainTexturedMat;
@@ -82,9 +79,21 @@ void MainWindow::UpdateMeshRenderer()
 		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
 	}
 
-	hfObject = new GameObject();
-	hfObject->AddComponent(hf->GetMeshModel());
-	hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), mat));
+	if (hfObject == nullptr)
+	{
+		hfObject = new GameObject();
+		hfObject->AddComponent(hf->GetMeshModel());
+		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), mat));
+		return;
+	}
+
+	MeshModel* newMesh = hf->GetMeshModel();
+	MeshModel* mesh = hfObject->GetComponent<MeshModel>();
+	mesh->ReplaceVertices(newMesh->Vertices());
+	mesh->ReplaceNormals(newMesh->Normals());
+
+	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
+	delete newMesh;
 }
 
 void MainWindow::UpdateMeshMaterial()

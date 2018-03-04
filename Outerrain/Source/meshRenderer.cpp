@@ -143,7 +143,6 @@ void MeshRenderer::ClearBuffers()
 
 void MeshRenderer::SetMaterial(const MaterialModel& m)
 {
-	material.Release();
 	material = m;
 }
 

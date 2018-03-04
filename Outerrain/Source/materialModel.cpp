@@ -48,6 +48,25 @@ void MaterialModel::Release()
 	glDeleteTextures(1, &texture3);
 }
 
+bool MaterialModel::operator==(const MaterialModel& m)
+{
+	if (albedo.r != m.albedo.r || albedo.g != m.albedo.g || albedo.b != m.albedo.b || albedo.a != m.albedo.a)
+		return false;
+	if (shininess != m.shininess)
+		return false;
+	if (texture0 != m.texture0)
+		return false;
+	if (texture1 != m.texture1)
+		return false;
+	if (texture2 != m.texture2)
+		return false;
+	if (texture3 != m.texture3)
+		return false;
+	if (shaderType != m.shaderType)
+		return false;
+	return true;
+}
+
 void MaterialModel::SetShader(const Shader& s)
 {
 	shader = s;
@@ -84,4 +103,11 @@ void MaterialModel::InitStaticMaterials()
 	DefaultTexturedMat.shader.InitFromFile("Shaders/TerrainShader.glsl");
 	DefaultTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);;
 	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
+}
+
+void MaterialModel::ReleaseStaticMaterials()
+{
+	DefaultDiffuseMat.Release();
+	DefaultTexturedMat.Release();
+	TerrainTexturedMat.Release();
 }

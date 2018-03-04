@@ -27,12 +27,14 @@ public:
 
 	MaterialModel();
 
+	bool operator==(const MaterialModel& m);
 	void SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
 	void SetShader(const Shader& s);
 	void Release();
 
 	/* Static Materials */
 	static void InitStaticMaterials();
+	static void ReleaseStaticMaterials();
 	static MaterialModel DefaultTexturedMat;
 	static MaterialModel DefaultDiffuseMat;
 	static MaterialModel TerrainTexturedMat;

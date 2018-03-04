@@ -1,9 +1,9 @@
 #pragma once
 
-#include<vector>
-#include<fstream>
-#include<cstring>
-#include<sstream>
+#include <vector>
+#include <fstream>
+#include <cstring>
+#include <sstream>
 
 #include "component.h"
 #include "vec.h"
@@ -25,14 +25,19 @@ public:
 
 	void AddVertex(const Vector3&);
 	void AddNormal(const Vector3&);
-	void AddTriangle(const unsigned int, const unsigned int, const unsigned int);
+	void AddTriangle(unsigned int, unsigned int, unsigned int);
 	void AddTexcoord(const Vector2&);
+
+	void ReplaceVertices(const std::vector<Vector3>&);
+	void ReplaceNormals(const std::vector<Vector3>&);
 
 	Bounds GetBounds() const;
 	bool LoadObj(const std::string& path);
 	void ClearBuffers();
 	void PrintInfos();
 
+	std::vector<Vector3> Normals() const { return normals; }
+	std::vector<Vector3> Vertices() const { return vertices; }
 
 	/* Getter */
 	size_t VerticeCount() const { return vertices.size(); }

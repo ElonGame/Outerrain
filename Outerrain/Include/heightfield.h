@@ -29,5 +29,6 @@ public:
 	bool Intersect(const Ray& ray, Hit& hit) const;
 	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
+	std::vector<Vector3> GetAllNormals() const;
 	MeshModel* GetMeshModel() const;
 };

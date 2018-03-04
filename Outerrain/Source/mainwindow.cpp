@@ -17,6 +17,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::Quit()
 {
+	MaterialModel::ReleaseStaticMaterials();
 	if (hf)
 	{
 		delete hf;
