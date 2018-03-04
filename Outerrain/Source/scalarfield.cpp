@@ -88,17 +88,17 @@ Vector2 Scalarfield2D::CellSize() const
 
 Vector3 Scalarfield2D::Vertex(int i, int j) const
 {
-	float x = box.Vertex(0).x + j * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
+	float x = box.Vertex(0).x + i * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(i, j);
-	float z = box.Vertex(0).y + i * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
+	float z = box.Vertex(0).y + j * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 
 Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 {
-	float x = box.Vertex(0).x + v.y * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
+	float x = box.Vertex(0).x + v.x * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(v);
-	float z = box.Vertex(0).y + v.x * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
+	float z = box.Vertex(0).y + v.y * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 	return Vector3(x, y, z);
 }
 

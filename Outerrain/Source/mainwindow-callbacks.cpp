@@ -6,8 +6,8 @@ void MainWindow::InitBasicTerrain()
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
 	settings.nx = 128;
 	settings.ny = 128;
-	settings.bottomLeft = Vector2(-128, 128);
-	settings.topRight = Vector2(128, -128);
+	settings.bottomLeft = Vector2(-128, -128);
+	settings.topRight = Vector2(128, 128);
 	settings.offsetVector = Vector3(0);
 	settings.noise = new PerlinNoise();
 	settings.maxAltitude = 100;
