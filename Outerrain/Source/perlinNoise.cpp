@@ -2,6 +2,13 @@
 #include <cstdlib>
 #include <cmath>
 
+/*
+\brief Basic perlin nosie class. Returns value between [-1, 1] in 2D or 3D.
+*/
+
+/*
+\brief Constructor. Initialize gradient arrays.
+*/
 PerlinNoise::PerlinNoise()
 {
 	srand(19);
@@ -30,6 +37,9 @@ PerlinNoise::PerlinNoise()
 	}
 }
 
+/*
+\brief Destructor
+*/
 PerlinNoise::~PerlinNoise()
 {
 	delete p;
@@ -38,6 +48,10 @@ PerlinNoise::~PerlinNoise()
 	delete Gz;
 }
 
+/*
+\brief Compute Perlin noise in 3D. This is an internal function.
+\param point position 
+*/
 float PerlinNoise::At(const Vector3& point) const
 {
 	float sample_x = point.x;
@@ -97,6 +111,10 @@ float PerlinNoise::At(const Vector3& point) const
 	return value;
 }
 
+/*
+\brief Compute Perlin noise in 2D. Last coordinates is set to 1.0f by default.
+\param point position
+*/
 float PerlinNoise::GetValue(const Vector2& point) const
 {
 	float sample_x = point.x;
@@ -105,6 +123,10 @@ float PerlinNoise::GetValue(const Vector2& point) const
 	return At(Vector3(sample_x, sample_y, sample_z));
 }
 
+/*
+\brief Compute Perlin noise in 3D.
+\param point position
+*/
 float PerlinNoise::GetValue(const Vector3& point) const
 {
 	return At(point);

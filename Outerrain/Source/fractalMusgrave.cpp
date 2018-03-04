@@ -1,7 +1,11 @@
 #include <fractal.h>
 
 /*
-    https://www.classes.cs.uchicago.edu/archive/2015/fall/23700-1/final-project/MusgraveTerrain00.pdf 
+\brief All these functions are copied/pasted from Musgrave article :
+https://www.classes.cs.uchicago.edu/archive/2015/fall/23700-1/final-project/MusgraveTerrain00.pdf 
+
+Some work would be needed in order to make more of a C++ version, and factorize initialization of
+all the exponent_array into a static function. Comments are from the original implementation.
 */
 
 /*

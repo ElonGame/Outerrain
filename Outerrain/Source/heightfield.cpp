@@ -66,6 +66,7 @@ Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx
 \param amplitude noise amplitude
 \param freq noise frequency
 \param oct noise octave count
+\param type fractal type. See enum.
 */
 Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bbox)
 {
@@ -85,7 +86,16 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, floa
 }
 
 /*
-
+\brief Constructor from a noise
+\param nx width size of field
+\param ny height size of field
+\param bottomLeft bottom left vertex world coordinates
+\param topRight top right vertex world coordinates
+\param amplitude noise amplitude
+\param freq noise frequency
+\param oct noise octave count
+\param offset noise offset vector
+\param type fractal type. See enum.
 */
 Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bbox)
 {
@@ -351,7 +361,6 @@ Scalarfield2D Heightfield::Illumination() const
 				if (Intersect(Ray(rayPos, rayDir), rayHit, K) == true)
 					intersectionCount++;
 			}
-
 			I.Set(i, j, 1.0f - (intersectionCount / static_cast<float>(rayCount)));
 		}
 	}
@@ -359,11 +368,11 @@ Scalarfield2D Heightfield::Illumination() const
 }
 
 /*
-\brief Compute the intersection between a heightfield and a ray, using Sphere Tracing and a custom Lipschitz constant.
+\brief Compute the intersection between a heightfield and a ray, using Sphere Tracing and a user defined Lipschitz constant.
 \param ray
 \param hit returned hit
-\param K Lipschitz Constant.
-\return true of intersection occured, false otherwise.
+\param K Lipschitz Constant
+\return true of intersection occured, false otherwise
 */
 bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
@@ -388,36 +397,36 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 
 /*
 \brief Compute the intersection between a heightfield and a ray, using Sphere Tracing.
-Lipschitz constant is overestimed in this case.
+Lipschitz constant is defined as the maximum slope
 \param ray
 \param hit returned hit
-\return true of intersection occured, false otherwise.
+\return true of intersection occured, false otherwise
 */
 bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
 {
-	return Intersect(ray, hit, 100.0f);
+	return Intersect(ray, hit, Slope().Max();
 }
 
 /*
 \brief Compute the intersection between a heightfield and a ray, using Sphere Tracing.
-Lipschitz constant is overestimed in this case.
+Lipschitz constant is defined as the maximum slope
 \param origin ray origin
 \param direction ray direction
 \param hitPos returned hit position
 \param hitNormal returned hit normal
-\return true of intersection occured, false otherwise.
+\return true of intersection occured, false otherwise
 */
 bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const
 {
 	Hit hit;
-	bool res = Intersect(Ray(origin, direction), hit, 100.0f);
+	bool res = Intersect(Ray(origin, direction), hit, Slope().Max());
 	hitPos = hit.position;
 	hitNormal = hit.normal;
 	return res;
 }
 
 /*
-\brief Compute the heightfield mesh for rendering.
+\brief Compute the heightfield mesh for rendering
 */
 MeshModel* Heightfield::GetMeshModel() const
 {

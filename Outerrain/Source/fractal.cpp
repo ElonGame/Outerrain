@@ -1,6 +1,10 @@
 #include "fractal.h"
 
 /*
+\brief Various custom fractal are implemented in this file.
+*/
+
+/*
 \brief 3D Fractional Brownian motion, as described in https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf
 If you want to translate the noise, translate the point parameters before calling the function.
 \param n noise used for the fractal
