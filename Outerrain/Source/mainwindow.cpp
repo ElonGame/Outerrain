@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "mytime.h"
+#include <iostream>
+using namespace std;
 
 MainWindow::MainWindow(int windowWidth, int windowHeight)
 {

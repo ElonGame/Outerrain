@@ -79,14 +79,18 @@ void MainWindow::UpdateMeshRenderer()
 		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
 	}
 
+	// Only done once the first time
 	if (hfObject == nullptr)
 	{
 		hfObject = new GameObject();
+		hfObject->SetPosition(Vector3(0));
 		hfObject->AddComponent(hf->GetMeshModel());
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), mat));
 		return;
 	}
 
+	// Just change the vertices values & normals
+	// And update render buffers
 	MeshModel* newMesh = hf->GetMeshModel();
 	MeshModel* mesh = hfObject->GetComponent<MeshModel>();
 	mesh->ReplaceVertices(newMesh->Vertices());

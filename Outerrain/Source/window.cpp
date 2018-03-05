@@ -110,6 +110,11 @@ Window::Window(int w, int h) : width(width), height(h), stop(0)
 	SDL_SetWindowDisplayMode(windowSDL, NULL);
 	SDL_StartTextInput();
 	SDL_GetWindowSize(windowSDL, &width, &height);
+
+	last_button = SDL_MouseButtonEvent();
+	last_key = SDL_KeyboardEvent();
+	last_text = SDL_TextInputEvent();
+	last_wheel = SDL_MouseWheelEvent();
 }
 
 Window::~Window()
