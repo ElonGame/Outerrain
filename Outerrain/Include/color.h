@@ -1,16 +1,19 @@
-#ifndef _COLOR_H
-#define _COLOR_H
+#pragma once
 
 struct Color
 {
-	Color(const float _r = 0.f, const float _g = 0.f, const float _b = 0.f, const float _a = 1.f)
-		: r(_r), g(_g), b(_b), a(_a) {}
-	Color(const Color& color, const float alpha) 
-		: r(color.r), g(color.g), b(color.b), a(alpha) {}
-
-	float power() const;
-
+public:
 	float r, g, b, a;
+
+	Color(float _r = 0.f, float _g = 0.f, float _b = 0.f, float _a = 1.f) : r(_r), g(_g), b(_b), a(_a) {}
+	Color(const Color& color, float alpha) : r(color.r), g(color.g), b(color.b), a(alpha) {}
+
+	Color operator+(const Color& b);
+	Color operator-(const Color& c);
+	Color operator*(float k);
+	Color operator*(const Color& c);
+	Color operator/(float kc);
+	Color operator/(const Color& c);
 
 	static Color Black();
 	static Color White();
@@ -19,15 +22,3 @@ struct Color
 	static Color Blue();
 	static Color Grey();
 };
-
-Color operator+ (const Color& a, const Color& b);
-Color operator- (const Color& a, const Color& b);
-Color operator- (const Color& c);
-Color operator* (const Color& a, const Color& b);
-Color operator* (const Color& c, const float k);
-Color operator* (const float k, const Color& c);
-Color operator/ (const Color& a, const Color& b);
-Color operator/ (const float k, const Color& c);
-Color operator/ (const Color& c, const float k);
-
-#endif

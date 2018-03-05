@@ -1,10 +1,5 @@
 #include "color.h"
 
-float Color::power() const
-{
-	return r + g + b;
-}
-
 Color Color::Black()
 {
 	return Color(0, 0, 0);
@@ -35,48 +30,32 @@ Color Color::Grey()
 	return Color(0.7f, 0.7f, 0.7f);
 }
 
-Color operator+ (const Color& a, const Color& b)
+Color Color::operator+(const Color& c)
 {
-	return Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
+	return Color(r + c.r, g + c.g, b + c.b, a + c.a);
 }
 
-Color operator- (const Color& c)
+Color Color::operator-(const Color& c)
 {
-	return Color(-c.r, -c.g, -c.b, -c.a);
+	return Color(r - c.r, g - c.g, b - c.b, a - c.a);
 }
 
-Color operator- (const Color& a, const Color& b)
+Color Color::operator*(const Color& c)
 {
-	return a + (-b);
+	return Color(r * c.r, g * c.g, b * c.b, a * c.a);
 }
 
-Color operator* (const Color& a, const Color& b)
+Color Color::operator*(float k)
 {
-	return Color(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
+	return Color(r * k, g * k, b * k, a * k);
 }
 
-Color operator* (const float k, const Color& c)
+Color Color::operator/(const Color& c)
 {
-	return Color(c.r * k, c.g * k, c.b * k, c.a * k);
+	return Color(r / c.r, g / c.g, b / c.b, a / c.a);
 }
 
-Color operator* (const Color& c, const float k)
+Color Color::operator/(float k)
 {
-	return k * c;
-}
-
-Color operator/ (const Color& a, const Color& b)
-{
-	return Color(a.r / b.r, a.g / b.g, a.b / b.b, a.a / b.a);
-}
-
-Color operator/ (const float k, const Color& c)
-{
-	return Color(k / c.r, k / c.g, k / c.b, k / c.a);
-}
-
-Color operator/ (const Color& c, const float k)
-{
-	float kk = 1 / k;
-	return kk * c;
+	return Color(r / k, g / k, b / k, a / k);
 }
