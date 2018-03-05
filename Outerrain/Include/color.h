@@ -14,6 +14,8 @@ public:
 	Color operator*(const Color& c);
 	Color operator/(float kc);
 	Color operator/(const Color& c);
+	bool operator==(const Color& c);
+	bool operator!=(const Color& c);
 
 	static Color Black();
 	static Color White();

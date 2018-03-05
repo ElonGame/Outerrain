@@ -59,3 +59,13 @@ Color Color::operator/(float k)
 {
 	return Color(r / k, g / k, b / k, a / k);
 }
+
+bool Color::operator==(const Color& c)
+{
+	return (r == c.r && g == c.g && b == c.b && a == c.a);
+}
+
+bool Color::operator!=(const Color& c)
+{
+	return (r != c.r || g != c.g || b != c.b || a != c.a);
+}
