@@ -19,7 +19,7 @@ Box2D::Box2D(const Vector2& A, const Vector2& B) : a(A), b(B)
 \param C box center
 \param R radius
 */
-Box2D::Box2D(const Vector2& C, double R)
+Box2D::Box2D(const Vector2& C, float R)
 {
     Vector2 RR = Vector2(R);
     a = C - RR;
@@ -57,7 +57,7 @@ Box2D Box2D::Extended(const Vector2& r) const
 \brief Scale the box fy f
 \param f scaling factor
 */
-void Box2D::Scale(double f)
+void Box2D::Scale(float f)
 {
     a *= f;
     b *= f;
@@ -67,7 +67,7 @@ void Box2D::Scale(double f)
 \brief Returns the scaled version of this box, without changing the instance.
 \param f scaling factor
 */
-Box2D Box2D::Scaled(double f) const
+Box2D Box2D::Scaled(float f) const
 {
     return Box2D(a * f, b * f);
 }

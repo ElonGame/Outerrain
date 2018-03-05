@@ -11,7 +11,7 @@ public:
 	Heightfield();
 	Heightfield(int nx, int ny, const Box2D& bbox);
 	Heightfield(int nx, int ny, const Box2D& bbox, float value);
-	Heightfield(const std::string& filePath, int minAltitude, int maxAltitude, int nx, int ny, const Box2D& bbox);
+	Heightfield(const std::string& filePath, float minAltitude, float maxAltitude, int nx, int ny, const Box2D& bbox);
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type);
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 	~Heightfield();

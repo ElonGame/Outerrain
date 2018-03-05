@@ -180,7 +180,8 @@ void Scalarfield2D::SaveAsImage(const char* path)
 \param blackAltitude min value
 \param whiteAltitude max value
 */
-void Scalarfield2D::ReadFromImage(const char* file, int blackAltitude, int whiteAltitude)
+// @Todo : replace with std::string
+void Scalarfield2D::ReadFromImage(const char* file, float blackAltitude, float whiteAltitude)
 {
 	Image heightmap;
 	heightmap.ReadImage(file, false);

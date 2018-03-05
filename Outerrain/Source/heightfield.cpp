@@ -52,7 +52,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, float value) : Scala
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(const std::string& file, int minAlt, int maxAlt, int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox)
+Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox)
 {
 	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }

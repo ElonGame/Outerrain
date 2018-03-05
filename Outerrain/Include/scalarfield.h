@@ -23,7 +23,7 @@ public:
 	float Average() const;
 
 	void SaveAsImage(const char* path);
-	void ReadFromImage(const char* file, int blackAltitude, int whiteAltitude);
+	void ReadFromImage(const char* file, float blackAltitude, float whiteAltitude);
 
 	GLuint GetGLTexture(int unit) const;
 };

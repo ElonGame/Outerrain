@@ -18,18 +18,18 @@ all the exponent_array into a static function. Comments are from the original im
  *    ``lacunarity''  is the gap between successive frequencies
  *    ``octaves''  is the number of frequencies in the fBm
  */
-double Fractal::MusgravefBm(const Noise& n, Vector3 point, double H, double lacunarity, double octaves)
+float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunarity, float octaves)
 {
-    double value, frequency, remainder, Noise3();
+    float value, frequency, remainder, Noise3();
     int i;
     static bool first = true;
-    static double *exponent_array;
+    static float *exponent_array;
 
     /* precompute and store spectral weights */
     if (first) 
     {
         /* seize required memory for exponent_array */
-        exponent_array = (double*)malloc((octaves+1) * sizeof(double));
+        exponent_array = (float*)malloc((octaves+1) * sizeof(float));
         frequency = 1.0;
         for (i=0; i<=octaves; i++) 
         {
@@ -71,18 +71,18 @@ double Fractal::MusgravefBm(const Noise& n, Vector3 point, double H, double lacu
  *    ``octaves''  is the number of frequencies in the fBm
  *    ``offset''  is the zero offset, which determines multifractality
  */
-double Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset)
+float Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset)
 {
-    double value, frequency, remainder;
+    float value, frequency, remainder;
     int i;
     static bool first = true;
-    static double *exponent_array;
+    static float *exponent_array;
 
     /* precompute and store spectral weights */
     if (first) 
     {
         /* seize required memory for exponent_array */
-        exponent_array = (double *)malloc( (octaves+1) * sizeof(double) );
+        exponent_array = (float *)malloc( (octaves+1) * sizeof(float) );
         frequency = 1.0;
         for (i=0; i<=octaves; i++)
         {
@@ -118,7 +118,7 @@ double Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, double H, do
 // *
 // * Copyright 1994 F. Kenton Musgrave 
 // */
-// double Fractal::VLNoise3(const Noise& n, const Vector3 point, double distortion )
+// float Fractal::VLNoise3(const Noise& n, const Vector3 point, float distortion )
 // {
 //     Vector offset, VecNoise3(), AddVectors();
 
@@ -150,17 +150,17 @@ double Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, double H, do
  *       ``octaves''  is the number of frequencies in the fBm
  *       ``offset''  raises the terrain from `sea level'
  */
-double Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset)
+float Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset)
 {
-    double value, increment, frequency, remainder;
+    float value, increment, frequency, remainder;
     int i;
-    static double first = true;
-    static double *exponent_array;
+    static float first = true;
+    static float *exponent_array;
 
     /* precompute and store spectral weights, for efficiency */
     if ( first ) {
         /* seize required memory for exponent_array */
-        exponent_array = (double *)malloc( (octaves+1) * sizeof(double) );
+        exponent_array = (float *)malloc( (octaves+1) * sizeof(float) );
         frequency = 1.0;
         for (i=0; i<=octaves; i++) 
         {
@@ -213,17 +213,17 @@ double Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, double H, d
  *      H:           0.25
  *      offset:      0.7
  */
-double Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset )
+float Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset )
 {
-    double frequency, result, signal, weight, remainder; 
+    float frequency, result, signal, weight, remainder; 
     int i;
     static bool first = true;
-    static double *exponent_array;
+    static float *exponent_array;
 
     /* precompute and store spectral weights */
     if ( first ) {
         /* seize required memory for exponent_array */
-        exponent_array = (double *)malloc( (octaves+1) * sizeof(double) );
+        exponent_array = (float *)malloc( (octaves+1) * sizeof(float) );
         frequency = 1.0;
         for (i=0; i<=octaves; i++) 
         {
@@ -279,18 +279,18 @@ double Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, double
  *      offset:      1.0
  *      gain:        2.0
  */
-double Fractal::MusgraveRidgedMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset, double gain)
+float Fractal::MusgraveRidgedMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset, float gain)
 {
-    double result, frequency, signal, weight;
+    float result, frequency, signal, weight;
     int i;
     static bool first = true;
-    static double *exponent_array;
+    static float *exponent_array;
 
     /* precompute and store spectral weights */
     if (first) 
     {
         /* seize required memory for exponent_array */
-        exponent_array = (double *)malloc( (octaves+1) * sizeof(double) );
+        exponent_array = (float *)malloc( (octaves+1) * sizeof(float) );
         frequency = 1.0;
         for (i=0; i<=octaves; i++) 
         {

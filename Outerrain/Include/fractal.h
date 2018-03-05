@@ -15,9 +15,9 @@ public:
 	static float fBm(const Noise& n, const Vector2& point, float a, float f, int octaves);
 	static float RidgeNoise(const Noise& n, const Vector3& point, float a, float f, int octaves);
 
-	static double MusgravefBm(const Noise& n, Vector3 point, double H, double lacunarity, double octaves);
-	static double MusgraveMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset);
-	static double MusgraveHeteroTerrain(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset);
-	static double MusgraveHybridMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset );
-	static double MusgraveRidgedMultifractal(const Noise& n, Vector3 point, double H, double lacunarity, double octaves, double offset, double gain);
+	static float MusgravefBm(const Noise& n, Vector3 point, float H, float lacunarity, float octaves);
+	static float MusgraveMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset);
+	static float MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset);
+	static float MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset );
+	static float MusgraveRidgedMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset, float gain);
 };

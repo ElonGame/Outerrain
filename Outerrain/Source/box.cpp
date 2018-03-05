@@ -19,7 +19,7 @@ Box::Box(const Vector3& A, const Vector3& B) : a(A), b(B)
 \param C box center
 \param R radius
 */
-Box::Box(const Vector3& C, double R)
+Box::Box(const Vector3& C, float R)
 {
     Vector3 RR = Vector3(R);
     a = C - RR;
@@ -57,7 +57,7 @@ Box Box::Extended(const Vector3& r) const
 \brief Scale the box fy f
 \param f scaling factor
 */
-void Box::Scale(double f)
+void Box::Scale(float f)
 {
     a *= f;
     b *= f;
@@ -67,7 +67,7 @@ void Box::Scale(double f)
 \brief Returns the scaled version of this box, without changing the instance.
 \param f scaling factor
 */
-Box Box::Scaled(double f) const
+Box Box::Scaled(float f) const
 {
     return Box(a * f, b * f);
 }

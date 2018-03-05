@@ -8,13 +8,13 @@ protected:
 
 public:
     Box2D(const Vector2& A, const Vector2& B);
-    Box2D(const Vector2& C, double R);
+    Box2D(const Vector2& C, float R);
 
     bool Inside(const Vector2&) const;
     void Extend(const Vector2&);
     Box2D Extended(const Vector2&) const;
-    void Scale(double);
-    Box2D Scaled(double) const;
+    void Scale(float);
+    Box2D Scaled(float) const;
 
     Vector2 Vertex(int) const;
     Vector2 Center() const;
@@ -30,13 +30,13 @@ protected:
 
 public:
     Box(const Vector3& A, const Vector3& B);
-    Box(const Vector3& C, double R);
+    Box(const Vector3& C, float R);
 
     bool Inside(const Vector3&) const;
     void Extend(const Vector3&);
     Box Extended(const Vector3&) const;
-    void Scale(double);
-    Box Scaled(double) const;
+    void Scale(float);
+    Box Scaled(float) const;
 
     Vector3 Vertex(int) const;
     Vector3 Center() const;

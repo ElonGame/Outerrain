@@ -11,7 +11,7 @@ void MainWindow::InitBasicTerrain()
 	settings.offsetVector = Vector3(0);
 	settings.noise = new PerlinNoise();
 	settings.maxAltitude = 100;
-	settings.frequency = 0.005;
+	settings.frequency = 0.005f;
 	settings.octaves = 8;
 	settings.fractalType = FractalType::Ridge;
 	settings.shaderType = TerrainSplatmap;
@@ -52,7 +52,7 @@ void MainWindow::TranslateNoise(int y, int x)
 {
 	if (settings.terrainType != TerrainType::NoiseFieldTerrain)
 		return;
-	settings.offsetVector = settings.offsetVector + Vector3(x, 0, y);
+	settings.offsetVector = settings.offsetVector + Vector3(x, 0.0f, y);
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
 }
