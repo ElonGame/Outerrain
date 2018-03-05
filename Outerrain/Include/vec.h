@@ -47,11 +47,11 @@ public:
 	{
 		return Vector2(x - v.x, y - v.y);
 	}
-	Vector2 operator*= (const double& f)
+	Vector2 operator*= (float f)
 	{
 		return Vector2(x * f, y * f);
 	}
-	Vector2 operator/= (const double& f)
+	Vector2 operator/= (float f)
 	{
 		return Vector2(x / f, y / f);
 	}
@@ -171,11 +171,11 @@ public:
 	{
 		return Vector3(x - v.x, y - v.y, z - v.z);
 	}
-	Vector3 operator*= (const double& f)
+	Vector3 operator*= (float f)
 	{
 		return Vector3(x * f, y * f, z * f);
 	}
-	Vector3 operator/= (const double& f)
+	Vector3 operator/= (float f)
 	{
 		return Vector3(x / f, y / f, z / f);
 	}

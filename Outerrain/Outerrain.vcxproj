@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\cameraOrbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="Include\imgui_opengl.h" />
     <ClInclude Include="Include\mainwindow.h" />
     <ClInclude Include="Include\materialModel.h" />
+    <ClInclude Include="Include\mathUtils.h" />
     <ClInclude Include="Include\meshModel.h" />
     <ClInclude Include="Include\meshRenderer.h" />
     <ClInclude Include="Include\mytime.h" />
@@ -38,18 +40,21 @@
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\shader.h" />
-    <ClInclude Include="Include\terrain-generation.h" />
+    <ClInclude Include="Include\terrainSettings.h" />
+    <ClInclude Include="Include\texture.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\ecosystem.h" />
     <ClInclude Include="Include\window.h" />
-    <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\box.cpp" />
+    <ClCompile Include="Source\box2D.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\fractal.cpp" />
+    <ClCompile Include="Source\fractalMusgrave.cpp" />
     <ClCompile Include="Source\gameobject.cpp" />
     <ClCompile Include="Source\heightfield.cpp" />
     <ClCompile Include="Source\imgui.cpp" />
@@ -67,10 +72,10 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
     <ClCompile Include="Source\window.cpp" />
-    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

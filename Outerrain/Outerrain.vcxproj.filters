@@ -93,14 +93,20 @@
     <ClInclude Include="Include\fractal.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Todo</Filter>
-    </ClInclude>
     <ClInclude Include="Include\image.h">
       <Filter>Todo</Filter>
     </ClInclude>
-    <ClInclude Include="Include\terrain-generation.h">
+    <ClInclude Include="Include\terrainSettings.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\texture.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\box.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\mathUtils.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,11 +174,20 @@
     <ClCompile Include="Source\fractal.cpp">
       <Filter>Core\Source\noise</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>Todo</Filter>
-    </ClCompile>
     <ClCompile Include="Source\image.cpp">
       <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\box.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\box2D.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fractalMusgrave.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
