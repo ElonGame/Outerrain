@@ -301,6 +301,8 @@ void Heightfield::HydraulicErosion()
 					}
 					
 					// Bug here for sure
+					// Remake implementation based on http://hpcg.purdue.edu/bbenes/papers/Benes02WSCG.pdf
+					// Instead of Musgrave, which is not very precise and misses some details.
 					waterTransport[index] = waterTransport[index] * neighbourHeightDiff[index] / lowerVertexCount;
 					waterTransport[index] = Math::Clamp(waterTransport[index], 0.0f, 1.0f);
 					//cout << waterTransport[index] << endl;
