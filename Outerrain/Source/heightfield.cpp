@@ -70,19 +70,7 @@ Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, in
 */
 Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bbox)
 {
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			Vector3 p = Vertex(i, j);
-			float h = 0.0f;
-			if (type == FractalType::fBm)
-				h = Fractal::fBm(n, p, amplitude, freq, oct);
-			else if (type == FractalType::Ridge)
-				h = Fractal::RidgeNoise(n, p, amplitude, freq, oct);
-			Set(i, j, h);
-		}
-	}
+	InitFromNoise(n, amplitude, freq, oct, Vector3(0), type);
 }
 
 /*
@@ -98,6 +86,32 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, floa
 \param type fractal type. See enum.
 */
 Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bbox)
+{
+	InitFromNoise(n, amplitude, freq, oct, offset, type);
+}
+
+/*
+\brief Constructor from TerrainSettings class for convenience and consistancy.
+\param settings TerrainSettings for the heightfield.
+*/
+Heightfield::Heightfield(const TerrainSettings& settings) : Scalarfield2D(settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight))
+{
+	if (settings.terrainType == TerrainType::HeightFieldTerrain)
+		ReadFromImage(settings.filePath.c_str(), settings.minAltitude, settings.maxAltitude);
+	else if (settings.terrainType == TerrainType::NoiseFieldTerrain)
+		InitFromNoise(*settings.noise, settings.amplitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
+}
+
+/*
+\brief Internal method to init a heightfield with noise. Only called from the constructor.
+\param n used noise
+\param amplitude noise amplitude
+\param freq noise frequency
+\param oct noise octave count
+\param offset noise offset translation
+\param type noise fractal type.
+*/
+void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type)
 {
 	for (int i = 0; i < ny; i++)
 	{

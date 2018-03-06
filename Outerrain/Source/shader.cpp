@@ -23,12 +23,12 @@
 
 /* File scope */
 // charge un fichier texte.
-static std::string read(const char *filename)
+static std::string read(const std::string& filename)
 {
 	std::stringbuf source;
 	std::ifstream in(filename);
 	if (in.good() == false)
-		printf("[error] loading program '%s'...\n", filename);
+		printf("[error] loading program '%s'...\n", filename.c_str());
 	in.get(source, 0);        // lire tout le fichier, le caractere '\0' ne peut pas se trouver dans le source de shader
 	return source.str();
 }
@@ -82,7 +82,7 @@ static std::string prepare_source(std::string file, const std::string& definitio
 	return source;
 }
 
-static void print_line(std::string& errors, const char *source, const int begin_id, const int line_id)
+static void print_line(std::string& errors, const std::string&source, const int begin_id, const int line_id)
 {
 	int line = 0;
 	char last = '\n';
@@ -116,9 +116,9 @@ static void print_line(std::string& errors, const char *source, const int begin_
 	}
 }
 
-static int print_errors(std::string& errors, const char *log, const char *source)
+static int print_errors(std::string& errors, const std::string&log, const std::string&source)
 {
-	printf("[error log]\n%s\n", log);
+	printf("[error log]\n%s\n", log.c_str());
 
 	int first_error = INT_MAX;
 	int last_string = -1;
@@ -161,7 +161,7 @@ static int print_errors(std::string& errors, const char *log, const char *source
 	return first_error;
 }
 
-static const char *shader_string(const GLenum type)
+static char* shader_string(const GLenum type)
 {
 	switch (type)
 	{
@@ -221,7 +221,7 @@ void Shader::Attach()
 	glUseProgram(program);
 }
 
-int Shader::Reload(const char *filename, const char *definitions)
+int Shader::Reload(const std::string&filename, const std::string&definitions)
 {
 	if (program == 0)
 		return -1;
@@ -241,7 +241,7 @@ int Shader::Reload(const char *filename, const char *definitions)
 	}
 
 #ifdef GL_VERSION_4_3
-	glObjectLabel(GL_PROGRAM, program, -1, filename);
+	glObjectLabel(GL_PROGRAM, program, -1, filename.c_str());
 #endif
 
 	// prepare les sources
@@ -254,7 +254,7 @@ int Shader::Reload(const char *filename, const char *definitions)
 			std::string source = prepare_source(common_source, std::string(definitions).append("#define ").append(shader_keys[i]).append("\n"));
 			GLuint shader = compile_shader(program, shader_types[i], source);
 			if (shader == 0)
-				printf("[error] compiling %s...\n%s\n", shader_string(shader_types[i]), definitions);
+				printf("[error] compiling %s...\n%s\n", shader_string(shader_types[i]), definitions.c_str());
 		}
 	}
 
@@ -266,7 +266,7 @@ int Shader::Reload(const char *filename, const char *definitions)
 	glGetProgramiv(program, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{
-		printf("[error] linking program %u '%s'...\n", program, filename);
+		printf("[error] linking program %u '%s'...\n", program, filename.c_str());
 		return -1;
 	}
 
@@ -277,7 +277,7 @@ int Shader::Reload(const char *filename, const char *definitions)
 	return 0;
 }
 
-void Shader::InitFromFile(const char *filename, const char *definitions)
+void Shader::InitFromFile(const std::string&filename, const std::string&definitions)
 {
 	program = glCreateProgram();
 	Reload(filename, definitions);
@@ -383,13 +383,13 @@ int Shader::PrintCompileErrors()
 }
 
 
-static int location(const GLuint program, const char *uniform)
+static int location(const GLuint program, const std::string&uniform)
 {
 	if (program == 0)
 		return -1;
 
 	// recuperer l'identifiant de l'uniform dans le program
-	GLint location = glGetUniformLocation(program, uniform);
+	GLint location = glGetUniformLocation(program, uniform.c_str());
 	if (location < 0)
 	{
 		char error[1024] = { 0 };
@@ -398,7 +398,7 @@ static int location(const GLuint program, const char *uniform)
 			char label[1024];
 			glGetObjectLabel(GL_PROGRAM, program, sizeof(label), NULL, label);
 
-			SPRINTF(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform);
+			SPRINTF(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform.c_str());
 		}
 #else
 		sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
@@ -426,7 +426,7 @@ static int location(const GLuint program, const char *uniform)
 			char labelc[1024];
 			glGetObjectLabel(GL_PROGRAM, current, sizeof(labelc), NULL, labelc);
 
-			SPRINTF(error, "uniform( %s %u, '%s' ): invalid shader program %s %u", label, program, uniform, labelc, current);
+			SPRINTF(error, "uniform( %s %u, '%s' ): invalid shader program %s %u", label, program, uniform.c_str(), labelc, current);
 		}
 #else
 		sprintf(error, "uniform( program %u, '%s'): invalid shader program %u...", program, uniform, current);
@@ -440,32 +440,32 @@ static int location(const GLuint program, const char *uniform)
 	return location;
 }
 
-void Shader::UniformUInt(const char *uniform, const unsigned int& v)
+void Shader::UniformUInt(const std::string&uniform, const unsigned int& v)
 {
 	glUniform1ui(location(program, uniform), v);
 }
 
-void Shader::UniformInt(const char *uniform, int v)
+void Shader::UniformInt(const std::string&uniform, int v)
 {
 	glUniform1i(location(program, uniform), v);
 }
 
-void Shader::UniformFloat(const char *uniform, float v)
+void Shader::UniformFloat(const std::string&uniform, float v)
 {
 	glUniform1f(location(program, uniform), v);
 }
 
-void Shader::UniformVec2(const char *uniform, const Vector2& v)
+void Shader::UniformVec2(const std::string&uniform, const Vector2& v)
 {
 	glUniform2fv(location(program, uniform), 1, (float*)&v.x);
 }
 
-void Shader::UniformVec3(const char *uniform, const Vector3& a)
+void Shader::UniformVec3(const std::string&uniform, const Vector3& a)
 {
 	glUniform3fv(location(program, uniform), 1, (float*)&a.x);
 }
 
-void Shader::UniformVec4(const char *uniform, const Vector4& v)
+void Shader::UniformVec4(const std::string&uniform, const Vector4& v)
 {
 	glUniform4fv(location(program, uniform), 1, (float*)&v.x);
 }
@@ -475,12 +475,12 @@ void Shader::UniformColor(const char* uniform, const Color& c)
 	glUniform4fv(location(program, uniform), 1, (float*)&c.r);
 }
 
-void Shader::UniformTransform(const char *uniform, const Transform& v)
+void Shader::UniformTransform(const std::string&uniform, const Transform& v)
 {
 	glUniformMatrix4fv(location(program, uniform), 1, GL_TRUE, (const float*)v.Buffer());
 }
 
-void Shader::UniformTexture(const char *uniform, const int unit, const GLuint texture, const GLuint sampler)
+void Shader::UniformTexture(const std::string&uniform, const int unit, const GLuint texture, const GLuint sampler)
 {
 	// verifie que l'uniform existe
 	int id = location(program, uniform);

@@ -15,8 +15,8 @@ struct ImageData
 	const void *buffer() const { return &data.front(); }
 	void *buffer() { return &data.front(); }
 
-	void ReadImageData(const char *filename);
-	int WriteImageData(const char *filename);
+	void ReadImageData(const std::string& filename);
+	int WriteImageData(const std::string& filename);
 
 	std::vector<unsigned char> data;
 
@@ -56,8 +56,8 @@ public:
 		return &data.front();
 	}
 
-	void ReadImage(const char *filename, bool flipY);
-	int WriteImage(const char *filename, bool flipY);
+	void ReadImage(const std::string& filename, bool flipY);
+	int WriteImage(const std::string& filename, bool flipY);
 
 	int Width() const { return width; }
 	int Height() const { return height; }

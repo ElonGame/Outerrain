@@ -1,3 +1,5 @@
+#pragma once
+
 #include "vec.h"
 #include "fractal.h"
 #include "materialModel.h"

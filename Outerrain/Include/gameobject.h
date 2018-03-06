@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
+
 #include "transform.h"
 #include "vec.h"
 #include "quaternion.h"
@@ -18,19 +19,21 @@ private:
 	Transform objectToWorld = Identity();
 	TQuaternion<float, Vector3> rotationQuat;
 
-	std::vector<Component*> components;
 	GameObject* parent = nullptr;
+	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	bool transformNeedsToUpdate = true;
 
 public:
+	// Constructor & Destructor
 	GameObject();
 	~GameObject();
 
-	void SetName(std::string s);
-	std::string GetName();
+	// Names
+	void SetName(const std::string& s);
+	std::string GetName() const;
 
-	/*-------------Components-------------*/
+	// Components
 	void AddComponent(Component* component);
 	template<typename T> void RemoveComponent()
 	{
@@ -44,7 +47,7 @@ public:
 			}
 		}
 	}
-	template<typename T> T* GetComponent()
+	template<typename T> T* GetComponent() const
 	{
 		for (size_t i = 0; i < components.size(); i++)
 		{
@@ -54,34 +57,31 @@ public:
 		}
 		return nullptr;
 	}
-	std::vector<Component*> GetAllComponents();
+	std::vector<Component*> GetAllComponents() const;
 
-	/*-------------Children-------------*/
+	// Children
 	void AddChild(GameObject* child);
 	void RemoveChildAt(int i);
-	GameObject* GetChildAt(int i);
-	std::vector<GameObject*> GetAllChildren();
+	GameObject* GetChildAt(int i) const;
 	void SetParent(GameObject* parent);
-	GameObject* GetParent();
+	GameObject* GetParent() const;
 
-	/*-------------Position Functions-------------*/
-	Vector3 GetPosition();
-	void SetPosition(Vector3 vector);
+	// Position, Scale, Rotation
+	Vector3 GetPosition() const;
+	void SetPosition(const Vector3& vector);
 	void SetPosition(float x, float y, float z);
 
-	/*-------------Scale Functions-------------*/
-	Vector3 GetScale();
-	void SetScale(Vector3 vector);
+	Vector3 GetScale() const;
+	void SetScale(const Vector3& vector);
 	void SetScale(float x, float y, float z);
 
-	/*-------------Rotation Functions-------------*/
 	void SetRotation(TQuaternion<float, Vector3> quat);
-	void RotateAround(Vector3 axis, float degrees);
-	void RotateAroundRadian(Vector3 axis, float radian);
-	void LookAt(Vector3 destPoint);
-	void LookAtUpVector(Vector3 destPoint);
+	void RotateAround(const Vector3& axis, float degrees);
+	void RotateAroundRadian(const Vector3& axis, float radian);
+	void LookAt(const Vector3& destPoint);
+	void LookAtUpVector(const Vector3& destPoint);
 
-	/*-------------Transform Management-------------*/
+	// Transform
 	Vector3 GetRightVector();
 	Vector3 GetUpVector();
 	Vector3 GetForwardVector();

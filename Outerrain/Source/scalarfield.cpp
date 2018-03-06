@@ -158,7 +158,7 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 \brief Utility method to save the scalarfield as image.
 \param path relative path
 */
-void Scalarfield2D::SaveAsImage(const char* path)
+void Scalarfield2D::SaveAsImage(const std::string& path)
 {
 	Image im = Image(nx, ny);
 	float min = Min();
@@ -180,11 +180,10 @@ void Scalarfield2D::SaveAsImage(const char* path)
 \param blackAltitude min value
 \param whiteAltitude max value
 */
-// @Todo : replace with std::string
-void Scalarfield2D::ReadFromImage(const char* file, float blackAltitude, float whiteAltitude)
+void Scalarfield2D::ReadFromImage(const std::string filePath, float blackAltitude, float whiteAltitude)
 {
 	Image heightmap;
-	heightmap.ReadImage(file, false);
+	heightmap.ReadImage(filePath, false);
 	float texelX = 1.0f / (heightmap.Width());
 	float texelY = 1.0f / (heightmap.Height());
 

@@ -22,7 +22,7 @@ GLuint MakeTexture( const int unit, const ImageData& im, const GLenum texel_type
 
 //! cree une texture a partir d'un fichier filename. a detruire avec glDeleteTextures( ).
 //! \param texel_type permet de choisir la representation interne des valeurs de la texture.
-GLuint ReadTexture( const int unit, const char *filename, const GLenum texel_type= GL_RGBA );
+GLuint ReadTexture( const int unit, const std::string&filename, const GLenum texel_type= GL_RGBA );
 
 //! renvoie le nombre de mipmap d'une image width x height.
 int miplevels( const int width, const int height );

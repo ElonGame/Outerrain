@@ -10,22 +10,22 @@ void MainWindow::InitBasicTerrain()
 	settings.topRight = Vector2(128, 128);
 	settings.offsetVector = Vector3(0);
 	settings.noise = new PerlinNoise();
-	settings.maxAltitude = 100;
 	settings.frequency = 0.005f;
 	settings.octaves = 8;
+	settings.amplitude = 50.0f;
 	settings.fractalType = FractalType::Ridge;
 	settings.shaderType = TerrainSplatmap;
 
-	// settings.terrainType = TerrainType::HeightFieldTerrain;
-	// settings.nx = 128;
-	// settings.ny = 128;
-	// settings.bottomLeft = Vector2(-128, 128);
-	// settings.topRight = Vector2(128, -128);
-	// settings.offsetVector = Vector3(0);
-	// settings.filePath = std::string("Data/Heightmaps/island.png");
-	// settings.minAltitude = 0;
-	// settings.maxAltitude = 50;
-	// settings.shaderType = TerrainSplatmap;
+	 settings.terrainType = TerrainType::HeightFieldTerrain;
+	 settings.nx = 128;
+	 settings.ny = 128;
+	 settings.bottomLeft = Vector2(-128, -128);
+	 settings.topRight = Vector2(128, 128);
+	 settings.offsetVector = Vector3(0);
+	 settings.filePath = std::string("Data/Heightmaps/island.png");
+	 settings.minAltitude = 0;
+	 settings.maxAltitude = 50;
+	 settings.shaderType = TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -59,10 +59,9 @@ void MainWindow::TranslateNoise(int y, int x)
 
 void MainWindow::GenerateTerrainFromSettings()
 {
-	if (settings.terrainType == TerrainType::NoiseFieldTerrain)
-		hf = new Heightfield(settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight), *settings.noise, settings.maxAltitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
-	else
-		hf = new Heightfield(settings.filePath, settings.minAltitude, settings.maxAltitude, settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight));
+	if (hf != nullptr)
+		delete hf;
+	hf = new Heightfield(settings);
 }
 
 void MainWindow::UpdateMeshRenderer()

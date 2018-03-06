@@ -64,7 +64,7 @@ GLuint MakeTexture(const int unit, const Image& im, const GLenum texel_type)
 	return texture;
 }
 
-GLuint ReadTexture(const int unit, const char *filename, const GLenum texel_type)
+GLuint ReadTexture(const int unit, const std::string&filename, const GLenum texel_type)
 {
 	ImageData image;
 	image.ReadImageData(filename);

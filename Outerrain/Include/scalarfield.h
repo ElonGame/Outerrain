@@ -22,8 +22,8 @@ public:
 	void NormalizeField(float min, float max);
 	float Average() const;
 
-	void SaveAsImage(const char* path);
-	void ReadFromImage(const char* file, float blackAltitude, float whiteAltitude);
+	void SaveAsImage(const std::string& filePath);
+	void ReadFromImage(const std::string filePath, float blackAltitude, float whiteAltitude);
 
 	GLuint GetGLTexture(int unit) const;
 };
