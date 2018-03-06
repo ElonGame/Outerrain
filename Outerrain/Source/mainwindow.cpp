@@ -51,6 +51,7 @@ void MainWindow::Init()
 	orbiter.SetClippingPlanes(1.0f, 3000.0f);
 
 	InitBasicTerrain();
+	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 
 void MainWindow::MainLoop()
@@ -82,6 +83,12 @@ void MainWindow::Update(float time, float deltaTime)
 		StreamPowerErosionStep();
 	if (mainWindowHandler->KeyState(SDLK_F2))
 		ThermalErosionStep();
+
+	/* Example Scenes */
+	if (mainWindowHandler->KeyState(SDLK_F8))
+		InitBasicTerrain();
+	if (mainWindowHandler->KeyState(SDLK_F9))
+		InitNoiseTerrain();
 
 
 	/* Noise Callbacks */

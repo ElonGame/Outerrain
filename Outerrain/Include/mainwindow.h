@@ -21,6 +21,8 @@ private:
 
 	/* Functions */
 	void InitBasicTerrain();
+	void InitNoiseTerrain();
+
 	void StreamPowerErosionStep();
 	void ThermalErosionStep();
 	void TranslateNoise(int, int);

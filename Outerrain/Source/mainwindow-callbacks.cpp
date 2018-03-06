@@ -3,6 +3,29 @@
 
 void MainWindow::InitBasicTerrain()
 {
+	delete hfObject;
+	hfObject = nullptr;
+
+	settings.terrainType = TerrainType::HeightFieldTerrain;
+	settings.nx = 512;
+	settings.ny = 512;
+	settings.bottomLeft = Vector2(-256.0f);
+	settings.topRight = Vector2(256.0f);
+	settings.offsetVector = Vector3(0.0f);
+	settings.filePath = std::string("Data/Heightmaps/island.png");
+	settings.minAltitude = 0.0f;
+	settings.maxAltitude = 150.0f;
+	settings.shaderType = TerrainSplatmap;
+
+	GenerateTerrainFromSettings();
+	UpdateMeshRenderer();
+}
+
+void MainWindow::InitNoiseTerrain()
+{
+	delete hfObject;
+	hfObject = nullptr;
+
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
 	settings.nx = 128;
 	settings.ny = 128;
@@ -16,20 +39,8 @@ void MainWindow::InitBasicTerrain()
 	settings.fractalType = FractalType::Ridge;
 	settings.shaderType = TerrainSplatmap;
 
-	 settings.terrainType = TerrainType::HeightFieldTerrain;
-	 settings.nx = 128;
-	 settings.ny = 128;
-	 settings.bottomLeft = Vector2(-128, -128);
-	 settings.topRight = Vector2(128, 128);
-	 settings.offsetVector = Vector3(0);
-	 settings.filePath = std::string("Data/Heightmaps/island.png");
-	 settings.minAltitude = 0;
-	 settings.maxAltitude = 50;
-	 settings.shaderType = TerrainSplatmap;
-
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
-	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 
 void MainWindow::StreamPowerErosionStep()
