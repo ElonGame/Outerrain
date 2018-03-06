@@ -7,6 +7,11 @@ namespace Math
         return (a * (1.0f - f)) + (b * f);
     }
 
+	inline float Clamp(float x, float a = 0.0f, float b = 1.0f)
+	{
+		return x < a ? a : x > b ? b : x;
+	}
+
     template<typename T, size_t N>
     inline T Accumulate(std::array<T, N>& arr)
     {

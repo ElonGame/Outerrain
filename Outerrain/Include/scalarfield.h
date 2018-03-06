@@ -12,6 +12,9 @@ public:
 	Scalarfield2D(int nx, int ny, const Box2D& bbox, float value);
 	~Scalarfield2D() { }
 
+	void Add(int i, int j, float v);
+	void Remove(int i, int j, float v);
+
 	Vector3 Vertex(int i, int j) const;
 	Vector3 Vertex(const Vector2i& v) const;
 

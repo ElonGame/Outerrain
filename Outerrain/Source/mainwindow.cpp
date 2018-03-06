@@ -83,6 +83,8 @@ void MainWindow::Update(float time, float deltaTime)
 		StreamPowerErosionStep();
 	if (mainWindowHandler->KeyState(SDLK_F2))
 		ThermalErosionStep();
+	if (mainWindowHandler->KeyState(SDLK_F3))
+		HydraulicErosionStep();
 
 	/* Example Scenes */
 	if (mainWindowHandler->KeyState(SDLK_F8))

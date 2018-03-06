@@ -7,10 +7,10 @@ void MainWindow::InitBasicTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 512;
-	settings.ny = 512;
-	settings.bottomLeft = Vector2(-256.0f);
-	settings.topRight = Vector2(256.0f);
+	settings.nx = 128;
+	settings.ny = 128;
+	settings.bottomLeft = Vector2(-128);
+	settings.topRight = Vector2(128);
 	settings.offsetVector = Vector3(0.0f);
 	settings.filePath = std::string("Data/Heightmaps/island.png");
 	settings.minAltitude = 0.0f;
@@ -47,7 +47,7 @@ void MainWindow::StreamPowerErosionStep()
 {
 	if (hf == nullptr)
 		return;
-	hf->StreamPowerErosion(1, 2.0);
+	hf->StreamPowerErosion(2.0);
 	UpdateMeshRenderer();
 }
 
@@ -55,7 +55,15 @@ void MainWindow::ThermalErosionStep()
 {
 	if (hf == nullptr)
 		return;
-	hf->ThermalWeathering(1, 0.08f);
+	hf->ThermalWeathering(0.08f);
+	UpdateMeshRenderer();
+}
+
+void MainWindow::HydraulicErosionStep()
+{
+	if (hf == nullptr)
+		return;
+	hf->HydraulicErosion();
 	UpdateMeshRenderer();
 }
 

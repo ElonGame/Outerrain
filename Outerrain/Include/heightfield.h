@@ -21,8 +21,9 @@ public:
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 	~Heightfield();
 
-	void ThermalWeathering(int stepCount, float amplitude);
-	void StreamPowerErosion(int stepCount, float amplitude);
+	void ThermalWeathering(float amplitude);
+	void StreamPowerErosion(float amplitude);
+	void HydraulicErosion();
 
 	Scalarfield2D DrainageArea() const;
 	Scalarfield2D Wetness() const;

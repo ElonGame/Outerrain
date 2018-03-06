@@ -76,6 +76,22 @@ Vector2 Scalarfield2D::Gradient(int i, int j) const
 }
 
 /*
+\brief
+*/
+void Scalarfield2D::Add(int i, int j, float v)
+{
+	values[ToIndex1D(i, j)] += v;
+}
+
+/*
+\brief
+*/
+void Scalarfield2D::Remove(int i, int j, float v)
+{
+	values[ToIndex1D(i, j)] -= v;
+}
+
+/*
 \brief Normalize this field 
 */
 void Scalarfield2D::NormalizeField()

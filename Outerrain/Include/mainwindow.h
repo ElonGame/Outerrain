@@ -24,6 +24,7 @@ private:
 	void InitNoiseTerrain();
 
 	void StreamPowerErosionStep();
+	void HydraulicErosionStep();
 	void ThermalErosionStep();
 	void TranslateNoise(int, int);
 

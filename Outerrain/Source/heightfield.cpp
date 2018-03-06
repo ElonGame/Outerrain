@@ -6,6 +6,7 @@
 #include <numeric>
 #include <deque>
 #include <queue>
+#include <array>
 
 /*
 \brief Main Class for representing 2D HeightField.
@@ -137,52 +138,20 @@ Heightfield::~Heightfield()
 
 /*
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
-\param stepCount number of step performed
 \param amplitude maximum amount of matter moved from one point to another. Something between [0.05, 0.1] gives plausible results.
 */
-void Heightfield::ThermalWeathering(int stepCount, float amplitude)
+void Heightfield::ThermalWeathering(float amplitude)
 {
 	// Constants
 	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30� +- 5)
 	float cellDistX = CellSize().x;
-	for (int a = 0; a < stepCount; a++)
+
+	// Create queue of instable points
+	std::queue<Point> instables;
+	for (int i = 0; i < ny; i++)
 	{
-		// Create queue of instable points
-		std::queue<Point> instables;
-		for (int i = 0; i < ny; i++)
+		for (int j = 0; j < nx; j++)
 		{
-			for (int j = 0; j < nx; j++)
-			{
-				float maxZDiff = 0.0f;
-				for (int k = -1; k <= 1; k++)
-				{
-					for (int l = -1; l <= 1; l++)
-					{
-						if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
-							continue;
-						float z = Get(i, j) - Get(i + k, j + l);
-						maxZDiff = std::max(maxZDiff, z);
-					}
-				}
-
-				if (maxZDiff / cellDistX > tanThresholdAngle)
-				{
-					float matter = amplitude;
-					Point p = Point(i, j, matter);
-					instables.push(p);
-				}
-			}
-		}
-
-		// Move matters between points and add new points to stabilize
-		while (instables.empty() == false)
-		{
-			Point p = instables.front();
-			instables.pop();
-
-			int i = p.x, j = p.y;
-			float matter = p.value;
-			Point neighbour = Point(-1, -1, 0.0f);
 			float maxZDiff = 0.0f;
 			for (int k = -1; k <= 1; k++)
 			{
@@ -191,30 +160,59 @@ void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
 						continue;
 					float z = Get(i, j) - Get(i + k, j + l);
-					if (z > maxZDiff)
-					{
-						maxZDiff = z;
-						neighbour.x = i + k;
-						neighbour.y = j + l;
-					}
+					maxZDiff = std::max(maxZDiff, z);
 				}
 			}
 
-			// Remove from base point
-			Set(i, j, Get(i, j) - matter);
-
-			// Add to lowest neighbour
-			if (neighbour.x != -1 && neighbour.y != -1) 
+			if (maxZDiff / cellDistX > tanThresholdAngle)
 			{
-				Set(neighbour.x, neighbour.y, Get(neighbour.x, neighbour.y) + matter);
+				float matter = amplitude;
+				Point p = Point(i, j, matter);
+				instables.push(p);
+			}
+		}
+	}
 
-				// Add neighbour to stabilize if angle > tanThresholdAngle
-				if (maxZDiff / cellDistX > tanThresholdAngle)
+	// Move matters between points and add new points to stabilize
+	while (instables.empty() == false)
+	{
+		Point p = instables.front();
+		instables.pop();
+
+		int i = p.x, j = p.y;
+		float matter = p.value;
+		Point neighbour = Point(-1, -1, 0.0f);
+		float maxZDiff = 0.0f;
+		for (int k = -1; k <= 1; k++)
+		{
+			for (int l = -1; l <= 1; l++)
+			{
+				if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+					continue;
+				float z = Get(i, j) - Get(i + k, j + l);
+				if (z > maxZDiff)
 				{
-					float m = amplitude;
-					Point p = Point(neighbour.x, neighbour.y, matter);
-					instables.push(p);
+					maxZDiff = z;
+					neighbour.x = i + k;
+					neighbour.y = j + l;
 				}
+			}
+		}
+
+		// Remove from base point
+		Set(i, j, Get(i, j) - matter);
+
+		// Add to lowest neighbour
+		if (neighbour.x != -1 && neighbour.y != -1) 
+		{
+			Set(neighbour.x, neighbour.y, Get(neighbour.x, neighbour.y) + matter);
+
+			// Add neighbour to stabilize if angle > tanThresholdAngle
+			if (maxZDiff / cellDistX > tanThresholdAngle)
+			{
+				float m = amplitude;
+				Point p = Point(neighbour.x, neighbour.y, matter);
+				instables.push(p);
 			}
 		}
 	}
@@ -225,22 +223,116 @@ void Heightfield::ThermalWeathering(int stepCount, float amplitude)
 This erosion called 'Fluvial' is based on Drainasge and Slope. One of the weakness of the stream power erosion is that it can create peaks
 and generally unrealistic height sometimes. Therefore it can be improved by checking for slopes higher than 30� and not performing erosion.
 
-\param stepCount number of step performed
 \param amplitude maximum amount of matter eroded in one step. Something between [0.5, 1.0] gives plausible results.
 */
-void Heightfield::StreamPowerErosion(int stepCount, float amplitude)
+void Heightfield::StreamPowerErosion(float amplitude)
 {
 	Scalarfield2D SP = StreamPower();
 	SP.NormalizeField();
-	for (int k = 0; k < stepCount; k++)
+	for (int i = 0; i < ny; i++)
 	{
-		for (int i = 0; i < ny; i++)
+		for (int j = 0; j < nx; j++)
 		{
-			for (int j = 0; j < nx; j++)
+			float oldH = Get(i, j);
+			float newH = oldH - (SP.Get(i, j) * amplitude);
+			Set(i, j, newH);
+		}
+	}
+}
+
+#include <iostream>
+using namespace std;
+
+/*
+\brief
+*/
+void Heightfield::HydraulicErosion()
+{
+	Scalarfield2D droplets(nx, ny, box, 1.0f);
+	Scalarfield2D sediments(nx, ny, box, 1.0f);
+
+	const float Kd = 0.1f;
+	const float Kc = 5.0f;
+	const float Ks = 0.3f;
+
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			std::array<float, 8> waterTransport, neighbourHeightDiff;
+			waterTransport.fill(0);
+			neighbourHeightDiff.fill(0.0f);
+			int lowerVertexCount = 0;
+			int index = 0;
+			for (int k = -1; k <= 1; k++)
 			{
-				float oldH = Get(i, j);
-				float newH = oldH - (SP.Get(i, j) * amplitude);
-				Set(i, j, newH);
+				for (int l = -1; l <= 1; l++)
+				{
+					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+						continue;
+
+					neighbourHeightDiff[index] = Get(i, j) - Get(i + k, j + l);
+					if (neighbourHeightDiff[index] <= 0.0f)
+					{
+						index++;
+						continue;
+					}
+
+					float a0 = droplets.Get(i, j);
+					float a1 = droplets.Get(i + k, j + l) + Get(i + k, j + l);
+					float a2 = a0 + Get(i, j);
+					waterTransport[index] = Math::Min(a0, a2 - a1);
+					lowerVertexCount++;
+					index++;
+				}
+			}
+
+			index = 0;
+			for (int k = -1; k <= 1; k++)
+			{
+				for (int l = -1; l <= 1; l++)
+				{
+					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
+						continue;
+					if (neighbourHeightDiff[index] <= 0.0f)
+					{
+						index++;
+						continue;
+					}
+					
+					// Bug here for sure
+					waterTransport[index] = waterTransport[index] * neighbourHeightDiff[index] / lowerVertexCount;
+					waterTransport[index] = Math::Clamp(waterTransport[index], 0.0f, 1.0f);
+					//cout << waterTransport[index] << endl;
+					
+					if (waterTransport[index] <= 0.0f)
+					{
+						Add(i, j, Kd * sediments.Get(i, j));
+						sediments.Set(i, j, (1.0f - Kd) * sediments.Get(i, j));
+					}
+					else
+					{
+						droplets.Remove(i, j, waterTransport[index]);
+						droplets.Add(i + k, j + l, waterTransport[index]);
+						float Cs = Kc * waterTransport[index];
+						float sedA = sediments.Get(i, j);
+
+						if (sedA > Cs)
+						{
+							sediments.Add(i + k, j + l, Cs);
+							Add(i, j, Kd * (sedA - Cs));
+							sediments.Set(i, j, (1 - Kd) * (sedA - Cs));
+						}
+						else
+						{
+							sediments.Add(i + k, j + l, sedA + Ks * (Cs - sedA));
+							Remove(i, j, Kd * (Cs - sedA));
+							sediments.Set(i, j, 0.0f);
+						}
+					}
+
+					index++;
+				}
 			}
 		}
 	}
