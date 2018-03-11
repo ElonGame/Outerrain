@@ -8,11 +8,13 @@
 #include "component.h"
 #include "vec.h"
 
+class Heightfield;
+
 class MeshModel : public Component
 {
 	friend class MeshRenderer;
 
-private:
+protected:
 	std::vector<Vector3> vertices;
 	std::vector<Vector3> normals;
 	std::vector<Vector2> texcoords;
@@ -56,4 +58,16 @@ public:
 
 	const void *IndexBufferPtr() const { return &indices.front(); }
 	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
+};
+
+
+class HeightfieldMeshModel : public MeshModel
+{
+protected:
+	Heightfield* hf;
+
+public:
+	HeightfieldMeshModel(Heightfield* h);
+
+	void UpdateMeshBuffers();
 };

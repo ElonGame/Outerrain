@@ -9,8 +9,8 @@ void MainWindow::InitBasicTerrain()
 	settings.terrainType = TerrainType::HeightFieldTerrain;
 	settings.nx = 128;
 	settings.ny = 128;
-	settings.bottomLeft = Vector2(-128);
-	settings.topRight = Vector2(128);
+	settings.bottomLeft = Vector2(-256);
+	settings.topRight = Vector2(256);
 	settings.offsetVector = Vector3(0.0f);
 	settings.filePath = std::string("Data/Heightmaps/island.png");
 	settings.minAltitude = 0.0f;
@@ -27,8 +27,8 @@ void MainWindow::InitNoiseTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 128;
-	settings.ny = 128;
+	settings.nx = 256;
+	settings.ny = 256;
 	settings.bottomLeft = Vector2(-128, -128);
 	settings.topRight = Vector2(128, 128);
 	settings.offsetVector = Vector3(0);
@@ -102,20 +102,13 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		hfObject->AddComponent(hf->GetMeshModel());
-		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<MeshModel>(), mat));
+		hfObject->AddComponent(new HeightfieldMeshModel(hf));
+		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMeshModel>(), mat));
 		return;
 	}
 
-	// Just change the vertices values & normals
-	// And update render buffers
-	MeshModel* newMesh = hf->GetMeshModel();
-	MeshModel* mesh = hfObject->GetComponent<MeshModel>();
-	mesh->ReplaceVertices(newMesh->Vertices());
-	mesh->ReplaceNormals(newMesh->Normals());
-
+	hfObject->GetComponent<HeightfieldMeshModel>()->UpdateMeshBuffers();
 	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
-	delete newMesh;
 }
 
 void MainWindow::UpdateMeshMaterial()

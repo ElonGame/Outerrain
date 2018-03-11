@@ -200,4 +200,9 @@ public:
 	{
 		return box.Vertex(1);
 	}
+
+	Box2D GetBox() const
+	{
+		return box;
+	}
 };

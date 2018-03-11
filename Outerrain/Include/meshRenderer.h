@@ -10,9 +10,10 @@
 #include "materialModel.h"
 #include "component.h"
 
+
 class MeshRenderer : public Component
 {
-private:
+protected:
 	std::unique_ptr<MeshModel> mesh;
 
 	GLenum primitiveMode;
