@@ -217,7 +217,7 @@ void Heightfield::ThermalWeathering(float amplitude)
 		}
 	}
 }
-
+	
 /*
 \brief Perform a stream power erosion step with maximum amplitude defined by user. Based on https://hal.inria.fr/hal-01262376/document.
 This erosion called 'Fluvial' is based on Drainasge and Slope. One of the weakness of the stream power erosion is that it can create peaks

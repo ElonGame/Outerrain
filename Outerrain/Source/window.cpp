@@ -84,7 +84,7 @@ int Window::UpdateEvents()
 	return 1 - stop;
 }
 
-Window::Window(int w, int h) : width(width), height(h), stop(0)
+Window::Window(int w, int h) : width(w), height(h), stop(0)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{

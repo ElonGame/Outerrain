@@ -52,7 +52,6 @@ static std::string prepare_source(std::string file, const std::string& definitio
 		{
 			version = file.substr(0, e + 1);
 			file.erase(0, e + 1);
-
 			if (file.find("#version") != std::string::npos)
 			{
 				printf("[error] found several #version directives. failed.\n");
