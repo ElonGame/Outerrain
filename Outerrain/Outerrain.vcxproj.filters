@@ -189,5 +189,8 @@
     <ClCompile Include="Source\fractalMusgrave.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\gpuheightfield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

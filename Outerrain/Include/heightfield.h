@@ -6,9 +6,10 @@
 #include "fractal.h"
 #include "terrainSettings.h"
 
+
 class Heightfield : public Scalarfield2D
 {
-private:
+protected:
 	void InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 
 public:
@@ -21,7 +22,7 @@ public:
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 	~Heightfield();
 
-	void ThermalWeathering(float amplitude);
+	virtual void ThermalWeathering(float amplitude);
 	void StreamPowerErosion(float amplitude);
 	void HydraulicErosion();
 
@@ -37,4 +38,23 @@ public:
 
 	std::vector<Vector3> GetAllNormals() const;
 	MeshModel* GetMeshModel() const;
+};
+
+
+class GPUHeightfield : public Heightfield
+{
+protected:
+	std::vector<float> outputHeights;
+
+	Shader computeShader;
+	GLuint inputData;
+	GLuint outputData;
+	int threadGroupCount;
+
+public:
+	GPUHeightfield();
+	~GPUHeightfield();
+	
+	void GenerateBuffers();
+	virtual void ThermalWeathering(float amplitude);
 };

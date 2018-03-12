@@ -7,12 +7,12 @@ void MainWindow::InitBasicTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 128;
-	settings.ny = 128;
-	settings.bottomLeft = Vector2(-256);
-	settings.topRight = Vector2(256);
+	settings.nx = 1024;
+	settings.ny = 1024;
+	settings.bottomLeft = Vector2(-1024);
+	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/island.png");
+	settings.filePath = std::string(	);
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 150.0f;
 	settings.shaderType = TerrainSplatmap;
@@ -45,25 +45,25 @@ void MainWindow::InitNoiseTerrain()
 
 void MainWindow::StreamPowerErosionStep()
 {
-	if (hf == nullptr)
+	if (gpuHeightfield == nullptr)
 		return;
-	hf->StreamPowerErosion(2.0);
+	gpuHeightfield->StreamPowerErosion(2.0);
 	UpdateMeshRenderer();
 }
 
 void MainWindow::ThermalErosionStep()
 {
-	if (hf == nullptr)
+	if (gpuHeightfield == nullptr)
 		return;
-	hf->ThermalWeathering(0.08f);
+	gpuHeightfield->ThermalWeathering(0.08f);
 	UpdateMeshRenderer();
 }
 
 void MainWindow::HydraulicErosionStep()
 {
-	if (hf == nullptr)
+	if (gpuHeightfield == nullptr)
 		return;
-	hf->HydraulicErosion();
+	gpuHeightfield->HydraulicErosion();
 	UpdateMeshRenderer();
 }
 
@@ -80,7 +80,7 @@ void MainWindow::GenerateTerrainFromSettings()
 {
 	if (hf != nullptr)
 		delete hf;
-	hf = new Heightfield(settings);
+	gpuHeightfield = new GPUHeightfield();
 }
 
 void MainWindow::UpdateMeshRenderer()
@@ -102,7 +102,7 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		hfObject->AddComponent(new HeightfieldMeshModel(hf));
+		hfObject->AddComponent(new HeightfieldMeshModel(gpuHeightfield));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMeshModel>(), mat));
 		return;
 	}
@@ -127,6 +127,8 @@ void MainWindow::ClearScene()
 {
 	if (hf != nullptr)
 		delete hf;
+	if (gpuHeightfield != nullptr)
+		delete gpuHeightfield;
 	if (hfObject != nullptr)
 		delete hfObject;
 }

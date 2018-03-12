@@ -220,7 +220,7 @@ void Shader::Attach()
 	glUseProgram(program);
 }
 
-int Shader::Reload(const std::string&filename, const std::string&definitions)
+int Shader::Reload(const std::string&filename, const std::string& definitions)
 {
 	if (program == 0)
 		return -1;

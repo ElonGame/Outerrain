@@ -16,6 +16,7 @@ private:
 
 	/* Application Data */
 	Heightfield* hf;
+	GPUHeightfield* gpuHeightfield;
 	GameObject* hfObject;
 	TerrainSettings settings;
 
