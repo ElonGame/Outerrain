@@ -55,7 +55,7 @@ void MainWindow::ThermalErosionStep()
 {
 	if (gpuHeightfield == nullptr)
 		return;
-	gpuHeightfield->ThermalWeathering(0.08f);
+	gpuHeightfield->ThermalWeathering(0.6f);
 	UpdateMeshRenderer();
 }
 

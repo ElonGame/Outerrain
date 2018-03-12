@@ -4,12 +4,12 @@
 
 layout(binding = 0, std430) readonly buffer InputData
 {
-    float inputData[];
+    int inputData[];
 };
 
 layout(binding = 1, std430) writeonly buffer OutputData
 {
-    float outputData[];
+    int outputData[];
 };
 
 
@@ -26,21 +26,28 @@ int ToIndex1D(int i, int j, int nx)
 	return i * nx + j;
 }
 
+float ChangeBase(float min, float max, float newMin, float newMax, float val)
+{
+	return (newMax - newMin) * (val - min) / (max - min);
+}
+
+const int minRange = 0;
+const int maxRange = 100000;
 
 /* Main program */
 layout(local_size_x = 1024) in;
 void main()
 {
 	uint id = gl_GlobalInvocationID.x;
-	int nx = 1024;
-	float amplitude = 0.6f;
-	float tanThresholdAngle = 0.6f;
-	float cellDistX = 1.0;
-	float newHeight = inputData[id];
+	int nx = 256;
+	int amplitude = 1000;
+	float tanThresholdAngle = 1200;
+	float cellDistX = 2.0;
+	int newHeight = inputData[id];
     if(id >= inputData.length())
         return;
 	
-	float maxZDiff = 0.0f;
+	int maxZDiff = 0;
 	int neiIndex = -1;
 	int i = int(id) / nx;
 	int j = int(id) % nx;
@@ -50,7 +57,7 @@ void main()
 		{
 			if ((k == 0 && l == 0) || Inside(i + k, j + l, nx) == false)
 				continue;
-			float z = inputData[id] - inputData[ToIndex1D(i + k, j + l, nx)];
+			int z = inputData[id] - inputData[ToIndex1D(i + k, j + l, nx)];
 			if (z > maxZDiff)
 			{
 				maxZDiff = z;
@@ -58,17 +65,11 @@ void main()
 			}
 		}
 	}
-
-	// Point is unstable : decrease matter
-	if (maxZDiff / cellDistX > tanThresholdAngle)
+	
+	if (float(maxZDiff) / cellDistX > tanThresholdAngle)
 	{
-		float matter = amplitude;
-		newHeight -= matter;
-		
-		// Add matter to lowest neighbour
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//!!!!!!! No atomicAdd for floats in glsl!!!!!!
-		//outputData[neiIndex] = inputData[neiIndex] + matter;
+		newHeight -= amplitude;
+		atomicAdd(outputData[neiIndex], amplitude);
 	}
 	
 	outputData[id] = newHeight;

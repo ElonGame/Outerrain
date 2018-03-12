@@ -31,6 +31,12 @@ namespace Math
         return a > b ? a : b;
     }
 
+	template<typename T>
+	inline T ChangeBase(T min, T max, T newMin, T newMax, T val)
+	{
+		return (newMax - newMin) * (val - min) / (max - min);
+	}
+
     inline Vector3 Center(const Vector3& a, const Vector3& b)
     {
         return (a + b) / 2;

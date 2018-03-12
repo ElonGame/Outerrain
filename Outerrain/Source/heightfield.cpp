@@ -143,16 +143,14 @@ Heightfield::~Heightfield()
 void Heightfield::ThermalWeathering(float amplitude)
 {
 	// Constants
-	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30� +- 5)
+	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30 degree +- 5)
 	float cellDistX = CellSize().x;
-
-	// Create queue of instable points
-	std::queue<Point> instables;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			float maxZDiff = 0.0f;
+			int neiI, neiJ;
 			for (int k = -1; k <= 1; k++)
 			{
 				for (int l = -1; l <= 1; l++)
@@ -160,59 +158,19 @@ void Heightfield::ThermalWeathering(float amplitude)
 					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
 						continue;
 					float z = Get(i, j) - Get(i + k, j + l);
-					maxZDiff = std::max(maxZDiff, z);
+					if (z > maxZDiff)
+					{
+						maxZDiff = z;
+						neiI = i + k;
+						neiJ = j + l;
+					}
 				}
 			}
 
 			if (maxZDiff / cellDistX > tanThresholdAngle)
 			{
-				float matter = amplitude;
-				Point p = Point(i, j, matter);
-				instables.push(p);
-			}
-		}
-	}
-
-	// Move matters between points and add new points to stabilize
-	while (instables.empty() == false)
-	{
-		Point p = instables.front();
-		instables.pop();
-
-		int i = p.x, j = p.y;
-		float matter = p.value;
-		Point neighbour = Point(-1, -1, 0.0f);
-		float maxZDiff = 0.0f;
-		for (int k = -1; k <= 1; k++)
-		{
-			for (int l = -1; l <= 1; l++)
-			{
-				if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
-					continue;
-				float z = Get(i, j) - Get(i + k, j + l);
-				if (z > maxZDiff)
-				{
-					maxZDiff = z;
-					neighbour.x = i + k;
-					neighbour.y = j + l;
-				}
-			}
-		}
-
-		// Remove from base point
-		Set(i, j, Get(i, j) - matter);
-
-		// Add to lowest neighbour
-		if (neighbour.x != -1 && neighbour.y != -1) 
-		{
-			Set(neighbour.x, neighbour.y, Get(neighbour.x, neighbour.y) + matter);
-
-			// Add neighbour to stabilize if angle > tanThresholdAngle
-			if (maxZDiff / cellDistX > tanThresholdAngle)
-			{
-				float m = amplitude;
-				Point p = Point(neighbour.x, neighbour.y, matter);
-				instables.push(p);
+				Remove(i, j, amplitude);
+				Add(neiI, neiJ, amplitude);
 			}
 		}
 	}
