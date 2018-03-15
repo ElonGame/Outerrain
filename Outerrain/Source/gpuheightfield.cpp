@@ -1,6 +1,5 @@
-#include "heightfield.h"
+#include "gpuHeightfield.h"
 #include "mathUtils.h"
-#include <chrono>
 
 GPUHeightfield::GPUHeightfield() : Heightfield("Data/Heightmaps/dome-2048.png", 0, 500, 1024, 1024, Box2D(Vector2(-1024, -1024), Vector2(1024, 1024)))
 {
@@ -26,7 +25,7 @@ GPUHeightfield::~GPUHeightfield()
 void GPUHeightfield::GenerateBuffers()
 {
 	for (int i = 0; i < heightIntegerData.size(); i++)
-		heightIntegerData[i] = (int)values[i]; //Math::ChangeBase(minHeightValue, maxHeightValue, 0.0f, 1000000.0f, values[i]);
+		heightIntegerData[i] = (int)values[i];
 	computeShader.Attach();
 	glGenBuffers(1, &dataBuffer);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, dataBuffer);
@@ -35,34 +34,20 @@ void GPUHeightfield::GenerateBuffers()
 
 void GPUHeightfield::ThermalWeathering(float amplitude)
 {
-	if (false)
-	{
-		auto cpu_start = std::chrono::high_resolution_clock::now();
-		Heightfield::ThermalWeathering(2.0f);
-		auto cpu_stop = std::chrono::high_resolution_clock::now();
-		long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-		//std::cout << "CPU : " << static_cast<int>((cpu_time / 1000000)) << "ms" << std::endl;
-	}
-	else
-	{
-		//auto cpu_start = std::chrono::high_resolution_clock::now();
+	// Prepare buffers
+	GenerateBuffers();
 
-		GenerateBuffers();
-		// Dispatch
-		computeShader.Attach();
-		glDispatchCompute(threadGroupCount, 1, 1);
-		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-		// Update data
-		glGetNamedBufferSubData(dataBuffer, 0, sizeof(int) * heightIntegerData.size(), heightIntegerData.data());
-		for (int i = 0; i < values.size(); i++)
-		{
-			float newVal = (float)heightIntegerData[i];
-			values[i] = newVal; //Math::ChangeBase<float>(0.0f, 1000000.0f, minHeightValue, maxHeightValue, newVal);
-		}
-		glDeleteBuffers(1, &dataBuffer);
-
-		//auto cpu_stop = std::chrono::high_resolution_clock::now();
-		//long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-		//std::cout << "CPU : " << static_cast<int>((cpu_time / 1000000)) << "ms" << std::endl;
+	// Dispatch
+	computeShader.Attach();
+	glDispatchCompute(threadGroupCount, 1, 1);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+	
+	// Update CPU data
+	glGetNamedBufferSubData(dataBuffer, 0, sizeof(int) * heightIntegerData.size(), heightIntegerData.data());
+	for (int i = 0; i < values.size(); i++)
+	{
+		float newVal = (float)heightIntegerData[i];
+		values[i] = newVal;
 	}
+	glDeleteBuffers(1, &dataBuffer);
 }

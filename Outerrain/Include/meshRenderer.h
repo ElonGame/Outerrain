@@ -10,7 +10,6 @@
 #include "materialModel.h"
 #include "component.h"
 
-
 class MeshRenderer : public Component
 {
 protected:

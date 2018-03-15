@@ -25,6 +25,7 @@
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\fractal.h" />
     <ClInclude Include="Include\gameobject.h" />
+    <ClInclude Include="Include\gpuHeightfield.h" />
     <ClInclude Include="Include\heightfield.h" />
     <ClInclude Include="Include\heightfieldMeshModel.h" />
     <ClInclude Include="Include\imgui_opengl.h" />

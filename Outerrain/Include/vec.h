@@ -6,6 +6,7 @@
 
 #include "mathUtils.h"
 
+
 /* Forward Declarations */
 struct Vector2i;
 struct Vector2;
@@ -106,7 +107,6 @@ public:
 	{
 		return Math::Max(x, y);
 	}
-
 	inline float Min() const
 	{
 		return Math::Min(x, y);
@@ -236,7 +236,6 @@ public:
 	{
 		return Math::Max(Math::Max(x, y), z);
 	}
-
 	inline float Min() const
 	{
 		return Math::Min(Math::Min(x, y), z);
@@ -341,7 +340,6 @@ public:
 	{
 		return Math::Max(Math::Max(Math::Max(x, y), z), w);
 	}
-
 	inline float Min() const
 	{
 		return Math::Min(Math::Min(Math::Min(x, y), z), w);

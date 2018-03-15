@@ -25,12 +25,12 @@ public:
 	GLuint texture2;
 	GLuint texture3;
 
-	MaterialModel();
 
-	bool operator==(const MaterialModel& m);
-	void SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
-	void SetShader(const Shader& s);
-	void Release();
+	MaterialModel();
+	virtual bool operator==(const MaterialModel& m);
+	virtual void SetShader(const Shader& s);
+	virtual void SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
+	virtual void Release();
 
 	/* Static Materials */
 	static void InitStaticMaterials();

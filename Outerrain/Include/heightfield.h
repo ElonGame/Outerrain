@@ -6,7 +6,6 @@
 #include "fractal.h"
 #include "terrainSettings.h"
 
-
 class Heightfield : public Scalarfield2D
 {
 protected:
@@ -23,8 +22,8 @@ public:
 	~Heightfield();
 
 	virtual void ThermalWeathering(float amplitude);
-	void StreamPowerErosion(float amplitude);
-	void HydraulicErosion();
+	virtual void StreamPowerErosion(float amplitude);
+	virtual void HydraulicErosion();
 
 	Scalarfield2D DrainageArea() const;
 	Scalarfield2D Wetness() const;
@@ -36,24 +35,5 @@ public:
 	bool Intersect(const Ray& ray, Hit& hit) const;
 	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
-	std::vector<Vector3> GetAllNormals() const;
 	MeshModel* GetMeshModel() const;
-};
-
-
-class GPUHeightfield : public Heightfield
-{
-protected:
-	std::vector<int> heightIntegerData;
-
-	Shader computeShader;
-	GLuint dataBuffer;
-	int threadGroupCount;
-
-public:
-	GPUHeightfield();
-	~GPUHeightfield();
-	
-	void GenerateBuffers();
-	virtual void ThermalWeathering(float amplitude);
 };

@@ -9,8 +9,6 @@
 #include "vec.h"
 #include "box.h"
 
-class Heightfield;
-
 class MeshModel : public Component
 {
 	friend class MeshRenderer;
@@ -31,9 +29,6 @@ public:
 	void AddTriangle(unsigned int, unsigned int, unsigned int);
 	void AddTexcoord(const Vector2&);
 
-	void ReplaceVertices(const std::vector<Vector3>&);
-	void ReplaceNormals(const std::vector<Vector3>&);
-
 	Box GetBounds() const;
 	bool LoadObj(const std::string& path);
 	void ClearBuffers();
@@ -42,7 +37,6 @@ public:
 	std::vector<Vector3> Normals() const { return normals; }
 	std::vector<Vector3> Vertices() const { return vertices; }
 
-	/* Getter */
 	size_t VerticeCount() const { return vertices.size(); }
 	size_t NormalCount() const { return normals.size(); }
 	size_t TexcoordCount() const { return texcoords.size(); }
@@ -51,12 +45,12 @@ public:
 	const float* VertexBufferPtr() const { return &vertices.front().x; }
 	size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }
 
-	const float *NormalBufferPtr() const { return &normals.front().x; }
+	const float* NormalBufferPtr() const { return &normals.front().x; }
 	size_t NormalBufferSize() const { return normals.size() * sizeof(Vector3); }
 
-	const float *TexcoordBufferPtr() const { return &texcoords.front().x; }
+	const float* TexcoordBufferPtr() const { return &texcoords.front().x; }
 	size_t TexcoordBufferSize() const { return texcoords.size() * sizeof(Vector2); }
 
-	const void *IndexBufferPtr() const { return &indices.front(); }
+	const void* IndexBufferPtr() const { return &indices.front(); }
 	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
 };

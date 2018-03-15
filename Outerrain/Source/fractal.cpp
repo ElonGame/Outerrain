@@ -1,11 +1,11 @@
 #include "fractal.h"
 
 /*
-\brief Various custom fractal are implemented in this file.
+\brief Various custom fractal are implemented in this file, mostly from https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf.
 */
 
 /*
-\brief 3D Fractional Brownian motion, as described in https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf
+\brief 3D Fractional Brownian motion
 If you want to translate the noise, translate the point parameters before calling the function.
 \param n noise used for the fractal
 \param point point in 3D
@@ -28,7 +28,7 @@ float Fractal::fBm(const Noise& n, const Vector3& point, float a, float f, int o
 }
 
 /*
-\brief 2D Fractional Brownian motion, as described in https://ordinatous.com/pdf/The_Fractal_Geometry_of_Nature.pdf
+\brief 2D Fractional Brownian motion
 If you want to translate the noise, translate the point parameters before calling the function.
 \param n noise used for the fractal
 \param point point in 2D
@@ -52,7 +52,6 @@ float Fractal::fBm(const Noise& n, const Vector2& point, float a, float f, int o
 
 /*
 \brief Simple implementation of Ridge noise, which is defined as abs(noise(p)) * -1.0f.
-This page explains it quite well : https://stackoverflow.com/questions/36796829/procedural-terrain-with-ridged-fractal-noise
 If you want to translate the noise, translate the point parameters before calling the function.
 \param n noise used for the fractal
 \param point point in 3D
