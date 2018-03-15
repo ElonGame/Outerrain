@@ -2,6 +2,13 @@
 #include <cstdlib>
 #include <cmath>
 
+/*
+\brief Basic perlin nosie class. Returns value between [-1, 1] in 2D or 3D.
+*/
+
+/*
+\brief Constructor. Initialize gradient arrays.
+*/
 PerlinNoise::PerlinNoise()
 {
 	srand(19);
@@ -30,6 +37,9 @@ PerlinNoise::PerlinNoise()
 	}
 }
 
+/*
+\brief Destructor
+*/
 PerlinNoise::~PerlinNoise()
 {
 	delete p;
@@ -38,11 +48,15 @@ PerlinNoise::~PerlinNoise()
 	delete Gz;
 }
 
-float PerlinNoise::GetValue(const Vector2& point)
+/*
+\brief Compute Perlin noise in 3D. This is an internal function.
+\param point position 
+*/
+float PerlinNoise::At(const Vector3& point) const
 {
 	float sample_x = point.x;
 	float sample_y = point.y;
-	float sample_z = 1.0f;
+	float sample_z = point.z;
 
 	// Unit cube vertex coordinates surrounding the sample point
 	int x0 = int(floorf(sample_x));
@@ -97,22 +111,23 @@ float PerlinNoise::GetValue(const Vector2& point)
 	return value;
 }
 
-float PerlinNoise::Fbm(const Vector2& point, float a, float f, int octave)
+/*
+\brief Compute Perlin noise in 2D. Last coordinates is set to 1.0f by default.
+\param point position
+*/
+float PerlinNoise::GetValue(const Vector2& point) const
 {
-	// Base function for fBm algorithm. Each iteration goes like this :
-	// Compute height
-	// Amp = Amp * 0.5
-	// Freq = Freq * 2.0
-	// To refine and add more subtle height at each iteration.
+	float sample_x = point.x;
+	float sample_y = point.y;
+	float sample_z = 1.0f;
+	return At(Vector3(sample_x, sample_y, sample_z));
+}
 
-	float ret = 0.0f;
-	float freq = f;
-	float amp = a;
-	for (int i = 0; i < octave; i++)
-	{
-		ret += GetValue(point * freq) * amp;
-		amp *= 0.5f;
-		freq *= 2.0f;
-	}
-	return ret;
+/*
+\brief Compute Perlin noise in 3D.
+\param point position
+*/
+float PerlinNoise::GetValue(const Vector3& point) const
+{
+	return At(point);
 }

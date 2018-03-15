@@ -1,23 +1,26 @@
 #include <cstdio>
 #include <algorithm>
 #include "cameraOrbiter.h"
+#include "mathUtils.h"
 
 
-CameraOrbiter::CameraOrbiter() : center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter() 
+	: center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(5000.0f)
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, const float size, const float zNear, const float zFar)
+CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) 
 	: center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
 {
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax)
-	: center(Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) 
+	: center(Math::Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), 
+		zNear(0.1f), zFar(1000.0f)
 {
 }
 
-void CameraOrbiter::LookAt(const Vector3& c, const float s)
+void CameraOrbiter::LookAt(const Vector3& c, float s)
 {
 	center = c;
 	position = Vector2(0, 0);
@@ -27,27 +30,27 @@ void CameraOrbiter::LookAt(const Vector3& c, const float s)
 
 void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
 {
-	LookAt(Center(pmin, pmax), Magnitude(pmin - pmax));
+	LookAt(Math::Center(pmin, pmax), Magnitude(pmin - pmax));
 }
 
-void CameraOrbiter::LookAt(const Bounds& b)
+void CameraOrbiter::LookAt(const Box& b)
 {
-	LookAt(b.min, b.max);
+	LookAt(b.BottomLeft(), b.TopRight());
 }
 
-void CameraOrbiter::Rotation(const float x, const float y)
+void CameraOrbiter::Rotation(float x, float y)
 {
 	rotation.x = rotation.x + y;
 	rotation.y = rotation.y + x;
 }
 
-void CameraOrbiter::Translation(const float x, const float y)
+void CameraOrbiter::Translation(float x, float y)
 {
 	position.x = position.x - size * x;
 	position.y = position.y + size * y;
 }
 
-void CameraOrbiter::Move(const float z)
+void CameraOrbiter::Move(float z)
 {
 	size = size - size * 0.01f * z;
 	if (size < 0.01f)
@@ -61,12 +64,12 @@ Transform CameraOrbiter::View() const
 		* TranslationTransform(-Vector3(center));
 }
 
-Transform CameraOrbiter::Projection(const float width, const float height, const float fov) const
+Transform CameraOrbiter::Projection(float width, float height, float fov) const
 {
 	return Perspective(fov, width / height, zNear, zFar);
 }
 
-void CameraOrbiter::Frame(const float width, const float height, const float z, const float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
 	Transform v = View();
 	Transform p = Projection(width, height, fov);
@@ -74,10 +77,12 @@ void CameraOrbiter::Frame(const float width, const float height, const float z, 
 	Transform t = viewport * p * v;              // passage monde vers image
 	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde
 
-												 // origine du plan image
+	// origine du plan image
 	dO = tinv(Vector3(0, 0, z));
+
 	// axe x du plan image
 	Vector3 d1 = tinv(Vector3(1, 0, z));
+
 	// axe y du plan image
 	Vector3 d2 = tinv(Vector3(0, 1, z));
 
@@ -94,7 +99,7 @@ Vector3 CameraOrbiter::Position() const
 
 void CameraOrbiter::SetFrameWidth(int w)
 { 
-	frameWidth = w; 
+	frameWidth = w;
 }
 
 void CameraOrbiter::SetFrameHeight(int h)

@@ -1,12 +1,11 @@
-#include "app.h"
-#include "vec.h"
+#include "mainwindow.h"
 
 int main()
 {
 	srand(1589);
 
-	std::cout << "Welcome to Outerrain !" << std::endl;
-	App app = App(1280, 720, 3, 3);
-	app.Run();
+	MainWindow mw = MainWindow(1280, 720);
+	mw.Show();
+
 	return 0;
 }

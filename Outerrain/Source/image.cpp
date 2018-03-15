@@ -1,23 +1,25 @@
-#include <cstdio>
+#include <iostream>
 #include <string>
 #include <algorithm>
 #include <cmath>
 #include <SDL2/SDL_image.h>
-#include "image.h"
 
-void Image::ReadImage(const char *filename, bool flipY)
+#include "image.h"
+using namespace std;
+
+void Image::ReadImage(const std::string& filename, bool flipY)
 {
-	SDL_Surface *surface = IMG_Load(filename);
+	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if (surface == NULL)
 	{
-		printf("[error] loading image '%s'... sdl_image failed.\n", filename);
+		cout << "Error loading image " << filename << " - SDL_Image failed" << endl;
 		return;
 	}
 
 	const SDL_PixelFormat format = *surface->format;
 	if (format.BitsPerPixel != 24 && format.BitsPerPixel != 32)
 	{
-		printf("[error] loading image '%s'... format failed. (bpp %d)\n", filename, format.BitsPerPixel);
+		cout << "Error loading image " << filename << " - format failed : " << format.BitsPerPixel << endl;
 		SDL_FreeSurface(surface);
 		return;
 	}
@@ -69,11 +71,11 @@ void Image::ReadImage(const char *filename, bool flipY)
 	SDL_FreeSurface(surface);
 }
 
-int Image::WriteImage(const char *filename, bool flipY)
+int Image::WriteImage(const std::string& filename, bool flipY)
 {
-	if (std::string(filename).rfind(".png") == std::string::npos && std::string(filename).rfind(".bmp") == std::string::npos)
+	if (filename.rfind(".png") == std::string::npos && filename.rfind(".bmp") == std::string::npos)
 	{
-		printf("[error] writing color image '%s'... not a .png / .bmp image.\n", filename);
+		cout << "Error writing image : " << filename << " is not a .png/bmp image" << endl;
 		return -1;
 	}
 
@@ -114,29 +116,28 @@ int Image::WriteImage(const char *filename, bool flipY)
 
 	int code = -1;
 	if (std::string(filename).rfind(".png") != std::string::npos)
-		code = IMG_SavePNG(surface, filename);
+		code = IMG_SavePNG(surface, filename.c_str());
 	else if (std::string(filename).rfind(".bmp") != std::string::npos)
-		code = SDL_SaveBMP(surface, filename);
+		code = SDL_SaveBMP(surface, filename.c_str());
 
 	SDL_FreeSurface(surface);
 	if (code < 0)
-		printf("[error] writing color image '%s'...\n%s\n", filename, SDL_GetError());
+		cout << "Error writing image : " << filename << " " << SDL_GetError() << endl;
 	return code;
 }
 
-void ImageData::ReadImageData(const char *filename)
+void ImageData::ReadImageData(const std::string& filename)
 {
-	SDL_Surface *surface = IMG_Load(filename);
+	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if (surface == NULL)
 	{
-		printf("[error] loading image '%s'... sdl_image failed.\n%s\n", filename, SDL_GetError());
+		cout << "Error loading image " << filename << " - SDL_Image failed" << endl;
 		return;
 	}
-
 	const SDL_PixelFormat format = *surface->format;
 	if (format.BitsPerPixel != 24 && format.BitsPerPixel != 32)
 	{
-		printf("[error] loading image '%s'... format failed. (bpp %d)\n", filename, format.BitsPerPixel);
+		cout << "Error loading image " << filename << " - format failed : " << format.BitsPerPixel << endl;
 		SDL_FreeSurface(surface);
 		return;
 	}
@@ -197,17 +198,17 @@ void ImageData::ReadImageData(const char *filename)
 	SDL_FreeSurface(surface);
 }
 
-int ImageData::WriteImageData(const char *filename)
+int ImageData::WriteImageData(const std::string& filename)
 {
-	if (std::string(filename).rfind(".png") == std::string::npos && std::string(filename).rfind(".bmp") == std::string::npos)
+	if (filename.rfind(".png") == std::string::npos && filename.rfind(".bmp") == std::string::npos)
 	{
-		printf("[error] writing color image '%s'... not a .png / .bmp image.\n", filename);
+		cout << "Error writing image : " << filename << " is not a .png/bmp image" << endl;
 		return -1;
 	}
 
 	if (size != 1)
 	{
-		printf("[error] writing color image '%s'... not an 8 bits image.\n", filename);
+		cout << "Error writing image : " << filename << " is not a 8 bits image" << endl;
 		return -1;
 	}
 
@@ -252,12 +253,12 @@ int ImageData::WriteImageData(const char *filename)
 	// enregistre le fichier
 	int code = -1;
 	if (std::string(filename).rfind(".png") != std::string::npos)
-		code = IMG_SavePNG(surface, filename);
+		code = IMG_SavePNG(surface, filename.c_str());
 	else if (std::string(filename).rfind(".bmp") != std::string::npos)
-		code = SDL_SaveBMP(surface, filename);
+		code = SDL_SaveBMP(surface, filename.c_str());
 
 	SDL_FreeSurface(surface);
 	if (code < 0)
-		printf("[error] writing color image '%s'...\n%s\n", filename, SDL_GetError());
+		cout << "Error writing image : " << filename << " " << SDL_GetError() << endl;
 	return code;
 }

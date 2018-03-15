@@ -1,140 +1,202 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Todo">
+      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Model">
+      <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{553aeee7-d818-4849-b4ff-67ec0ebd8103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{b2353a36-6217-4872-8bcf-556aa0f4e0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Include">
+      <UniqueIdentifier>{c8a19545-a37a-4262-9a94-4853c302cb0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source">
+      <UniqueIdentifier>{dfa536d9-dfba-44c6-8010-d95429d4369a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source\noise">
+      <UniqueIdentifier>{747a37e1-7cef-45a1-8639-155c2caa7c15}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\app.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\window.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\vec.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\mesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\shader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\transform.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\image.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\color.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\noise.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\terrain.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\imgui_opengl.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\component.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\gameobject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\quaternion.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\material.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\texture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\vegetationObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="Include\heightfield.h">
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Include\valueField.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\scalarfield.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\mainwindow.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\window.h">
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\cameraOrbiter.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ecosystem.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\imgui_opengl.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\color.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\component.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\gameobject.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshModel.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\materialModel.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\mytime.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\graph.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="Include\meshRenderer.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\noise.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\poissonTile.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\quaternion.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ray.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\vec.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\transform.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\shader.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fractal.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\image.h">
+      <Filter>Todo</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\terrainSettings.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\texture.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\box.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\mathUtils.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\heightfieldMeshModel.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\heightfield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scalarfield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mainwindow.cpp">
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\window.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="Source\app.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\mesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\transform.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\mainwindow-callbacks.cpp">
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\cameraOrbiter.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="Source\color.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\noise.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\image.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\terrain.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\ecosystem.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Todo</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Todo</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_opengl.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\transform.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\color.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\gameobject.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\texture.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\materialModel.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\vegetationObject.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\meshModel.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\app-callbacks.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\meshRenderer.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\mytime.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\graph.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="Source\poissonTile.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\perlinNoise.cpp">
+      <Filter>Core\Source\noise</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fractal.cpp">
+      <Filter>Core\Source\noise</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\image.cpp">
+      <Filter>Todo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\box.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\box2D.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fractalMusgrave.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gpuheightfield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\heightfieldMeshModel.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,18 +23,21 @@ void main( )
 
 
 #ifdef FRAGMENT_SHADER
-uniform int renderMode;
+uniform int shaderType;
 uniform vec3 camPos;
 uniform float shininess;
-uniform vec4 diffuseColor;
+uniform vec4 albedo;
+
 uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
 
 in vec2 vertex_texcoord;
 in vec3 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragment_color;
-
 
 // Constants
 const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
@@ -51,10 +54,12 @@ vec3 NormalShading()
 vec3 TerrainShading(vec2 uv)
 {
 	// Terrain material placement
-	vec3 grassColor = vec3(0.3, 0.6, 0.15);
-	vec3 snowColor = vec3(1, 1, 1);
-	vec3 rockColor = vec3(0.4, 0.4, 0.4);
-	vec3 dirtColor = vec3(0.4, 0.25, 0.2);
+	float Stretching = 100;
+	
+	vec3 grassColor = texture(texture0, vertex_texcoord.xy * Stretching).rgb;
+	vec3 dirtColor 	= texture(texture1, vertex_texcoord.xy * Stretching).rgb;
+	vec3 rockColor 	= texture(texture2, vertex_texcoord.xy * Stretching).rgb;
+	vec3 snowColor 	= texture(texture3, vertex_texcoord.xy * Stretching).rgb;
 	
 	// Grass/Rock
 	float slope = 1.0 - worldNormal.y;
@@ -62,9 +67,8 @@ vec3 TerrainShading(vec2 uv)
 	terrainColor = mix(terrainColor, rockColor, pow(slope, 4));
 	
 	// Snow
-	float illumination = texture(texture0, uv).r;
 	float altitude = pow(worldPos.y / 100.0f, 2);
-	terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 - illumination + altitude, 2) * 3.0, 0, 1));
+	//terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 + (altitude / 2.0), 2) * 3.0, 0, 1));
 	
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
@@ -86,10 +90,7 @@ vec3 TerrainShading(vec2 uv)
 }
 
 vec3 DiffuseShading()
-{
-	// Terrain material placement
-	vec3 color = vec3(0.8, 0.8, 0.8);
-	
+{	
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
 
@@ -105,23 +106,28 @@ vec3 DiffuseShading()
 
 	// Final color
 	return ambientLight 
-			+ diffuse * color.rgb * (lightColor * lightStrength) 
+			+ diffuse * albedo.rgb * (lightColor * lightStrength) 
 			+ specular * (lightColor * lightStrength);
 }
 
 void main()
 {
-	if (renderMode == -1) 		  // Hack to avoid warnings
-		fragment_color = diffuseColor;
-	else if (renderMode == 0) 		  // Diffuse gray
-		fragment_color = vec4(DiffuseShading(), 1.0);
-	else if (renderMode == 1) 	  // Normal
-		fragment_color = vec4(NormalShading(), 1.0);
-	else if (renderMode == 2) 	  // WireFrame
-		fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
-	else if (renderMode == 3)     // Diffuse Splatmap
+	if (shaderType == 0)
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
+	else if (shaderType == 1)
+		fragment_color = vec4(DiffuseShading(), 1.0);
 	else
 		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
+	
+	// if (renderMode == 0) 		  // Diffuse gray
+		// fragment_color = vec4(DiffuseShading(), 1.0);
+	// else if (renderMode == 1) 	  // Normal
+		// fragment_color = vec4(NormalShading(), 1.0);
+	// else if (renderMode == 2) 	  // WireFrame
+		// fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
+	// else if (renderMode == 3)     // Diffuse Splatmap
+		// fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
+	// else
+	//fragment_color = vec4(texture(texture3, vertex_texcoord.xy).rgb, 1);
 }
 #endif

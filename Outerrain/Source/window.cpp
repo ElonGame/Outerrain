@@ -1,25 +1,25 @@
 #include <cassert>
 #include <set>
 #include <string>
+#include <iostream>
 
 #include "GL/glew.h"
 #include "window.h"
 
 #ifndef NO_GLEW
 #ifndef GK_RELEASE
-static
-void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length,
-	const char *message, const void *userParam)
+static void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message, const void *userParam)
 {
 	static std::set<std::string> log;
 	if (log.insert(message).second == false)
-		// le message a deja ete affiche, pas la peine de recommencer 60 fois par seconde.
 		return;
 
 	if (severity == GL_DEBUG_SEVERITY_HIGH)
-		printf("[openGL error]\n%s\n", message);
+		std::cout << "OpenGL Error : " << message << std::endl;
 	else if (severity == GL_DEBUG_SEVERITY_MEDIUM)
-		printf("[openGL warning]\n%s\n", message);
+		std::cout << "OpenGL Warning : " << message << std::endl;
+	else
+		std::cout << "OpenGL Message : " << message << std::endl;
 }
 #endif
 #endif
@@ -84,11 +84,11 @@ int Window::UpdateEvents()
 	return 1 - stop;
 }
 
-Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
+Window::Window(int w, int h) : width(w), height(h), stop(0)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		printf("[error] SDL_Init() failed:\n%s\n", SDL_GetError());
+		std::cout << "SDL_Init() failed : " << SDL_GetError() << std::endl;
 		return;
 	}
 
@@ -99,7 +99,7 @@ Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (windowSDL == NULL)
 	{
-		printf("[error] SDL_CreateWindow() failed.\n");
+		std::cout << "SDL_CreateWindow() failed : " << SDL_GetError() << std::endl;
 		return;
 	}
 
@@ -110,6 +110,11 @@ Window::Window(const int& w, const int& h) : width(width), height(h), stop(0)
 	SDL_SetWindowDisplayMode(windowSDL, NULL);
 	SDL_StartTextInput();
 	SDL_GetWindowSize(windowSDL, &width, &height);
+
+	last_button = SDL_MouseButtonEvent();
+	last_key = SDL_KeyboardEvent();
+	last_text = SDL_TextInputEvent();
+	last_wheel = SDL_MouseWheelEvent();
 }
 
 Window::~Window()
@@ -119,7 +124,7 @@ Window::~Window()
 	SDL_DestroyWindow(windowSDL);
 }
 
-void Window::CreateGLContext(const int& major, const int& minor)
+void Window::CreateGLContext(int major, int minor)
 {
 	if (windowSDL == NULL)
 		return;
@@ -138,7 +143,7 @@ void Window::CreateGLContext(const int& major, const int& minor)
 	glContext = SDL_GL_CreateContext(windowSDL);
 	if (glContext == NULL)
 	{
-		printf("[error] creating openGL context.\n");
+		std::cout << "Error creating openGL context" << SDL_GetError() << std::endl;
 		return;
 	}
 
@@ -150,7 +155,7 @@ void Window::CreateGLContext(const int& major, const int& minor)
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
-		printf("[error] loading extensions\n%s\n", glewGetErrorString(err));
+		std::cout << "Error Loading Extensions" << glewGetErrorString(err) << std::endl;
 		SDL_GL_DeleteContext(glContext);
 		return;
 	}
@@ -179,11 +184,18 @@ void Window::SetDefaultGLState()
 	glDepthFunc(GL_LESS);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
+
+	glViewport(0, 0, Width(), Height());
 }
 
 void Window::ReleaseGLContext()
 {
 	SDL_GL_DeleteContext(glContext);
+}
+
+void Window::SwapWindow()
+{
+	SDL_GL_SwapWindow(windowSDL);
 }
 
 
@@ -242,4 +254,19 @@ void Window::ClearKeyEvent()
 {
 	last_key.type = 0;
 	last_key.keysym.sym = 0;
+}
+
+SDL_Window* Window::GetSDLWindow() const 
+{ 
+	return windowSDL; 
+}
+
+int Window::Width() const 
+{ 
+	return width;
+}
+
+int Window::Height() const 
+{ 
+	return height;
 }

@@ -1,10 +1,12 @@
 ﻿#include "gameobject.h"
+#include "component.h"
 
 
-void GameObject::CallStartOnComponents()
+/* Constructor & Destructor */
+GameObject::GameObject()
 {
-	for (int i = 0; i < components.size(); i++)
-		components[i]->Start();
+	rotationQuat = TQuaternion<float, Vector3>(0, 0, 0, 1);
+	SetPosition(Vector3(0));
 }
 
 GameObject::~GameObject()
@@ -18,36 +20,37 @@ GameObject::~GameObject()
 	components.clear();
 }
 
-void GameObject::SetName(std::string s)
+
+/* Name */
+void GameObject::SetName(const std::string& s)
 {
 	name = s;
 }
 
-std::string GameObject::GetName()
+std::string GameObject::GetName() const
 {
 	return name;
 }
 
 
-/*-------------Components-------------*/
+/* Components */
 void GameObject::AddComponent(Component* component)
 {
 	component->SetGameObject(this);
-	this->components.push_back(component);
+	components.push_back(component);
 }
 
-std::vector<Component*> GameObject::GetAllComponents()
+std::vector<Component*> GameObject::GetAllComponents() const
 {
 	return components;
 }
-/*-------------Components-------------*/
 
 
-/*-------------Children-------------*/
+/* Children*/
 void GameObject::AddChild(GameObject* child)
 {
 	child->SetParent(this);
-	this->children.push_back(child);
+	children.push_back(child);
 }
 
 void GameObject::RemoveChildAt(int i)
@@ -55,35 +58,29 @@ void GameObject::RemoveChildAt(int i)
 	children.erase(children.begin() + i);
 }
 
-GameObject* GameObject::GetChildAt(int i)
+GameObject* GameObject::GetChildAt(int i) const
 {
 	return children[i];
 }
 
-std::vector<GameObject*> GameObject::GetAllChildren()
-{
-	return children;
-}
-
 void GameObject::SetParent(GameObject* parent)
 {
-	this->parent = parent;
+	parent = parent;
 }
 
-GameObject* GameObject::GetParent()
+GameObject* GameObject::GetParent() const
 {
-	return this->parent;
+	return parent;
 }
-/*-------------Components-------------*/
 
 
-/*-------------Position Functions-------------*/
-Vector3 GameObject::GetPosition()
+/* Position, Scale, Rotation */
+Vector3 GameObject::GetPosition() const
 {
 	return Vector3(translation.m[0][3], translation.m[1][3], translation.m[2][3]);
 }
 
-void GameObject::SetPosition(Vector3 vector)
+void GameObject::SetPosition(const Vector3& vector)
 {
 	translation.m[0][3] = vector.x;
 	translation.m[1][3] = vector.y;
@@ -98,16 +95,13 @@ void GameObject::SetPosition(float x, float y, float z)
 	translation.m[2][3] = z;
 	MarkTransformAsChanged();
 }
-/*-------------Position Functions-------------*/
 
-
-/*-------------Scale Functions-------------*/
-Vector3 GameObject::GetScale()
+Vector3 GameObject::GetScale() const
 {
 	return Vector3(scale.m[0][0], translation.m[1][1], translation.m[2][2]);
 }
 
-void GameObject::SetScale(Vector3 vector)
+void GameObject::SetScale(const Vector3& vector)
 {
 	scale.m[0][0] = vector.x;
 	scale.m[1][1] = vector.y;
@@ -122,10 +116,7 @@ void GameObject::SetScale(float x, float y, float z)
 	scale.m[2][2] = z;
 	MarkTransformAsChanged();
 }
-/*-------------Scale Functions-------------*/
 
-
-/*-------------Rotation Functions-------------*/
 void GameObject::SetRotation(TQuaternion<float, Vector3> quat)
 {
 	rotationQuat = quat;
@@ -143,20 +134,20 @@ void GameObject::SetRotation(TQuaternion<float, Vector3> quat)
 	MarkTransformAsChanged();
 }
 
-void GameObject::RotateAround(Vector3 axis, float degrees)
+void GameObject::RotateAround(const Vector3& axis, float degrees)
 {
 	degrees *= 0.0174533f;
 	TQuaternion<float, Vector3> quat = TQuaternion<float, Vector3>(axis, degrees);
 	SetRotation(rotationQuat * quat);
 }
 
-void GameObject::RotateAroundRadian(Vector3 axis, float radian)
+void GameObject::RotateAroundRadian(const Vector3& axis, float radian)
 {
 	TQuaternion<float, Vector3> quat = TQuaternion<float, Vector3>(axis, radian);
 	SetRotation(rotationQuat * quat);
 }
 
-void GameObject::LookAt(Vector3 destPoint)
+void GameObject::LookAt(const Vector3& destPoint)
 {
 	Vector3 newForward = Normalize(GetPosition() - destPoint);
 
@@ -181,7 +172,7 @@ void GameObject::LookAt(Vector3 destPoint)
 	RotateAroundRadian(rotAxis, -rotAngle);
 }
 
-void GameObject::LookAtUpVector(Vector3 destPoint)
+void GameObject::LookAtUpVector(const Vector3& destPoint)
 {
 	Vector3 newForward = Normalize(GetPosition() - destPoint);
 
@@ -205,10 +196,9 @@ void GameObject::LookAtUpVector(Vector3 destPoint)
 	rotAxis = Normalize(rotAxis);
 	RotateAroundRadian(rotAxis, -rotAngle);
 }
-/*-------------Rotation Functions-------------*/
 
 
-/*-------------Transform Management-------------*/
+/* Transform */
 Vector3 GameObject::GetRightVector()
 {
 	return rotation[0];
@@ -257,11 +247,10 @@ void GameObject::UpdateTransformIfNeeded()
 			temp = temp->GetParent();
 		}
 
-		if (this->parent != nullptr)
-			objectToWorld = localTRS * this->parent->GetObjectToWorldMatrix();
+		if (parent != nullptr)
+			objectToWorld = localTRS * parent->GetObjectToWorldMatrix();
 		else
 			objectToWorld = localTRS;
 		transformNeedsToUpdate = false;
 	}
 }
-/*-------------Transform Management-------------*/

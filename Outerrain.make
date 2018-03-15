@@ -108,26 +108,33 @@ ifeq ($(config),release32)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/graph.o \
-	$(OBJDIR)/shader.o \
-	$(OBJDIR)/imgui.o \
-	$(OBJDIR)/texture.o \
-	$(OBJDIR)/cameraOrbiter.o \
-	$(OBJDIR)/app.o \
+	$(OBJDIR)/meshModel.o \
 	$(OBJDIR)/mytime.o \
-	$(OBJDIR)/window.o \
-	$(OBJDIR)/app-callbacks.o \
-	$(OBJDIR)/imgui_draw.o \
-	$(OBJDIR)/vegetationObject.o \
-	$(OBJDIR)/imgui_opengl.o \
+	$(OBJDIR)/ecosystem.o \
+	$(OBJDIR)/meshRenderer.o \
 	$(OBJDIR)/transform.o \
-	$(OBJDIR)/mesh.o \
-	$(OBJDIR)/image.o \
-	$(OBJDIR)/gameobject.o \
+	$(OBJDIR)/fractalMusgrave.o \
 	$(OBJDIR)/main.o \
-	$(OBJDIR)/terrain.o \
+	$(OBJDIR)/box.o \
+	$(OBJDIR)/gameobject.o \
+	$(OBJDIR)/mainwindow-callbacks.o \
+	$(OBJDIR)/image.o \
+	$(OBJDIR)/scalarfield.o \
+	$(OBJDIR)/perlinNoise.o \
+	$(OBJDIR)/texture.o \
+	$(OBJDIR)/materialModel.o \
 	$(OBJDIR)/color.o \
-	$(OBJDIR)/noise.o \
+	$(OBJDIR)/imgui_draw.o \
+	$(OBJDIR)/mainwindow.o \
+	$(OBJDIR)/imgui.o \
+	$(OBJDIR)/heightfield.o \
+	$(OBJDIR)/cameraOrbiter.o \
+	$(OBJDIR)/window.o \
+	$(OBJDIR)/shader.o \
+	$(OBJDIR)/imgui_opengl.o \
+	$(OBJDIR)/fractal.o \
+	$(OBJDIR)/box2D.o \
+	$(OBJDIR)/poissonTile.o \
 
 RESOURCES := \
 
@@ -188,64 +195,85 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 endif
 
-$(OBJDIR)/graph.o: Outerrain/Source/graph.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/shader.o: Outerrain/Source/shader.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/imgui.o: Outerrain/Source/imgui.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/texture.o: Outerrain/Source/texture.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/cameraOrbiter.o: Outerrain/Source/cameraOrbiter.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/app.o: Outerrain/Source/app.cpp
+$(OBJDIR)/meshModel.o: Outerrain/Source/meshModel.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/mytime.o: Outerrain/Source/mytime.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/window.o: Outerrain/Source/window.cpp
+$(OBJDIR)/ecosystem.o: Outerrain/Source/ecosystem.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/app-callbacks.o: Outerrain/Source/app-callbacks.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/imgui_draw.o: Outerrain/Source/imgui_draw.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/vegetationObject.o: Outerrain/Source/vegetationObject.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/imgui_opengl.o: Outerrain/Source/imgui_opengl.cpp
+$(OBJDIR)/meshRenderer.o: Outerrain/Source/meshRenderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/transform.o: Outerrain/Source/transform.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/mesh.o: Outerrain/Source/mesh.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/image.o: Outerrain/Source/image.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/gameobject.o: Outerrain/Source/gameobject.cpp
+$(OBJDIR)/fractalMusgrave.o: Outerrain/Source/fractalMusgrave.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/main.o: Outerrain/Source/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/terrain.o: Outerrain/Source/terrain.cpp
+$(OBJDIR)/box.o: Outerrain/Source/box.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/gameobject.o: Outerrain/Source/gameobject.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mainwindow-callbacks.o: Outerrain/Source/mainwindow-callbacks.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/image.o: Outerrain/Source/image.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/scalarfield.o: Outerrain/Source/scalarfield.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/perlinNoise.o: Outerrain/Source/perlinNoise.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/texture.o: Outerrain/Source/texture.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/materialModel.o: Outerrain/Source/materialModel.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/color.o: Outerrain/Source/color.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/noise.o: Outerrain/Source/noise.cpp
+$(OBJDIR)/imgui_draw.o: Outerrain/Source/imgui_draw.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mainwindow.o: Outerrain/Source/mainwindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/imgui.o: Outerrain/Source/imgui.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/heightfield.o: Outerrain/Source/heightfield.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/cameraOrbiter.o: Outerrain/Source/cameraOrbiter.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/window.o: Outerrain/Source/window.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/shader.o: Outerrain/Source/shader.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/imgui_opengl.o: Outerrain/Source/imgui_opengl.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/fractal.o: Outerrain/Source/fractal.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/box2D.o: Outerrain/Source/box2D.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/poissonTile.o: Outerrain/Source/poissonTile.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 

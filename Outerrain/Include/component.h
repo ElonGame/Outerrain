@@ -1,26 +1,31 @@
 ﻿#pragma once
 
-class GameObject;
+#include <memory>
+#include "gameobject.h"
 
 class Component
 {
 protected:
-	GameObject* gameObject = nullptr;
+	std::unique_ptr<GameObject> gameObject;
 
 public:
-	virtual void Start() { }
-
-	virtual void OnDestroy() { }
-
-	virtual void Update(float dt) { }
-
-	void SetGameObject(GameObject* gameobject)
+	Component()
 	{
-		this->gameObject = gameobject;
+
+	}
+
+	virtual ~Component()
+	{
+		gameObject.release();
 	}
 	
+	void SetGameObject(GameObject* o)
+	{
+		gameObject = std::unique_ptr<GameObject>(o);
+	}
+
 	GameObject* GetGameObject()
 	{
-		return this->gameObject;
+		return gameObject.get();
 	}
 };

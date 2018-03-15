@@ -22,12 +22,13 @@ private:
 	int stop;
 
 public:
-	Window(const int& width, const int& height);
+	Window(int width, int height);
 	~Window();
-	void CreateGLContext(const int&, const int&);
+	void CreateGLContext(int major, int minor);
 	void SetDefaultGLState();
 	void ReleaseGLContext();
 	int UpdateEvents();
+	void SwapWindow();
 
 	int KeyState(const SDL_Keycode& key);
 	SDL_KeyboardEvent KeyEvent();
@@ -41,7 +42,7 @@ public:
 	void ClearButtonEvent();
 	void ClearKeyEvent();
 
-	SDL_Window* GetSDLWindow() const { return windowSDL; }
-	const int& Width() const { return width; }
-	const int& Height() const { return height; }
+	SDL_Window* GetSDLWindow() const;
+	int Width() const;
+	int Height() const;
 };
