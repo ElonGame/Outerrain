@@ -1,5 +1,13 @@
 #include "color.h"
 
+Color::Color(float R, float G, float B, float A) : r(R), g(G), b(B), a(A)
+{
+}
+
+Color::Color(const Color& color, float alpha) : r(color.r), g(color.g), b(color.b), a(alpha)
+{
+}
+
 Color Color::Black()
 {
 	return Color(0, 0, 0);

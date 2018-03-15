@@ -5,7 +5,7 @@
 
 
 CameraOrbiter::CameraOrbiter() 
-	: center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(1000.0f)
+	: center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(5000.0f)
 {
 }
 
@@ -33,9 +33,9 @@ void CameraOrbiter::LookAt(const Vector3& pmin, const Vector3& pmax)
 	LookAt(Math::Center(pmin, pmax), Magnitude(pmin - pmax));
 }
 
-void CameraOrbiter::LookAt(const Bounds& b)
+void CameraOrbiter::LookAt(const Box& b)
 {
-	LookAt(b.a, b.b);
+	LookAt(b.BottomLeft(), b.TopRight());
 }
 
 void CameraOrbiter::Rotation(float x, float y)

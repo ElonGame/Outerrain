@@ -2,6 +2,7 @@
 
 #include "vec.h"
 #include "transform.h"
+#include "box.h"
 
 class CameraOrbiter
 {
@@ -22,7 +23,7 @@ public:
 
 	void LookAt(const Vector3& center, const float size);
 	void LookAt(const Vector3& pmin, const Vector3& pmax);
-	void LookAt(const Bounds&);
+	void LookAt(const Box&);
 
 	float GetSize() const { return size; }
 	void Rotation(float x, float y);

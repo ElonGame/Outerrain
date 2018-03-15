@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include "heightfieldMeshModel.h"
 
 void MainWindow::InitBasicTerrain()
 {
@@ -55,7 +55,10 @@ void MainWindow::ThermalErosionStep()
 {
 	if (gpuHeightfield == nullptr)
 		return;
-	gpuHeightfield->ThermalWeathering(0.6f);
+	for (int i = 0; i < 1000; i++)
+		gpuHeightfield->ThermalWeathering(0.6f);
+
+	std::cout << "1000 iterations of thermal erosion" << std::endl;
 	UpdateMeshRenderer();
 }
 
@@ -71,7 +74,7 @@ void MainWindow::TranslateNoise(int y, int x)
 {
 	if (settings.terrainType != TerrainType::NoiseFieldTerrain)
 		return;
-	settings.offsetVector = settings.offsetVector + Vector3(x, 0.0f, y);
+	settings.offsetVector = settings.offsetVector + Vector3((float)x, 0.0f, (float)y);
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
 }

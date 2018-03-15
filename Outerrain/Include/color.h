@@ -5,8 +5,8 @@ struct Color
 public:
 	float r, g, b, a;
 
-	Color(float _r = 0.f, float _g = 0.f, float _b = 0.f, float _a = 1.f) : r(_r), g(_g), b(_b), a(_a) {}
-	Color(const Color& color, float alpha) : r(color.r), g(color.g), b(color.b), a(alpha) {}
+	explicit Color(float R = 0.f, float G = 0.f, float B = 0.f, float A = 1.f);
+	explicit Color(const Color& color, float alpha);
 
 	Color operator+(const Color& b);
 	Color operator-(const Color& c);

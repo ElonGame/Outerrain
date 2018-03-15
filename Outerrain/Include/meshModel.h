@@ -7,6 +7,7 @@
 
 #include "component.h"
 #include "vec.h"
+#include "box.h"
 
 class Heightfield;
 
@@ -33,7 +34,7 @@ public:
 	void ReplaceVertices(const std::vector<Vector3>&);
 	void ReplaceNormals(const std::vector<Vector3>&);
 
-	Bounds GetBounds() const;
+	Box GetBounds() const;
 	bool LoadObj(const std::string& path);
 	void ClearBuffers();
 	void PrintInfos();
@@ -58,16 +59,4 @@ public:
 
 	const void *IndexBufferPtr() const { return &indices.front(); }
 	size_t IndexBufferSize() const { return indices.size() * sizeof(unsigned int); }
-};
-
-
-class HeightfieldMeshModel : public MeshModel
-{
-protected:
-	Heightfield* hf;
-
-public:
-	HeightfieldMeshModel(Heightfield* h);
-
-	void UpdateMeshBuffers();
 };

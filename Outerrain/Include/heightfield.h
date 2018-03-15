@@ -44,15 +44,10 @@ public:
 class GPUHeightfield : public Heightfield
 {
 protected:
-	std::vector<int> inputHeights;
-	std::vector<int> outputHeights;
-
-	float minHeightValue;
-	float maxHeightValue;
+	std::vector<int> heightIntegerData;
 
 	Shader computeShader;
-	GLuint inputDataBuffer;
-	GLuint outputDataBuffer;
+	GLuint dataBuffer;
 	int threadGroupCount;
 
 public:

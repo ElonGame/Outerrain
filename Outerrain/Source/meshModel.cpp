@@ -47,18 +47,17 @@ void MeshModel::ReplaceNormals(const std::vector<Vector3>& newNormals)
 	isDirty = true;
 }
 
-Bounds MeshModel::GetBounds() const
+Box MeshModel::GetBounds() const
 {
-	Bounds ret;
+	Box ret = Box(Vector3(0), 1.0);
 	if (vertices.size() < 1)
 		return ret;
-	ret.a = Vector3(vertices[0]);
-	ret.b = ret.a;
-	for (unsigned int i = 1; i < (unsigned int)vertices.size(); i++)
+	ret = Box(vertices[0], vertices[0]);
+	for (unsigned int i = 1; i < vertices.size(); i++)
 	{
 		Vector3 p = vertices[i];
-		ret.a = Vector3(std::min(ret.a.x, p.x), std::min(ret.a.y, p.y), std::min(ret.a.z, p.z));
-		ret.b = Vector3(std::max(ret.b.x, p.x), std::max(ret.b.y, p.y), std::max(ret.b.z, p.z));
+		ret[0] = Vector3(Math::Min(ret[0].x, p.x), Math::Min(ret[0].y, p.y), Math::Min(ret[0].z, p.z));
+		ret[1] = Vector3(Math::Max(ret[1].x, p.x), Math::Max(ret[1].y, p.y), Math::Max(ret[1].z, p.z));
 	}
 	return ret;
 }
@@ -131,88 +130,4 @@ void MeshModel::PrintInfos()
 	std::cout << "Normal count : " << NormalCount() << std::endl;
 	std::cout << "Texcoord count : " << TexcoordCount() << std::endl;
 	std::cout << "Indices count : " << IndicesCount() << std::endl;
-}
-
-
-// Heightfield Mesh Model
-#include "heightfield.h"
-
-HeightfieldMeshModel::HeightfieldMeshModel(Heightfield* h) : hf(h)
-{
-	// Vertices
-	int nx = hf->SizeX();
-	int ny = hf->SizeY();
-	float nxMinusOne = (float)hf->SizeX() - 1;
-	float nyMinusOne = (float)hf->SizeY() - 1;
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / nxMinusOne;
-			float v = i / nyMinusOne;
-			AddVertex(hf->Vertex(i, j));
-			AddTexcoord(Vector2(u, v));
-		}
-	}
-
-	// Triangles
-	int c = 0;
-	int vertexArrayLength = ny * nx;
-	while (c < vertexArrayLength - nx - 1)
-	{
-		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
-		{
-			AddTriangle(c + nx + 1, c + nx, c);
-			AddTriangle(c, c + 1, c + nx + 1);
-		}
-		c++;
-	}
-
-	UpdateMeshBuffers();
-}
-
-void HeightfieldMeshModel::UpdateMeshBuffers()
-{
-	int nx = hf->SizeX();
-	int ny = hf->SizeY();
-
-	// Update vertex height
-	for (int i = 0; i< ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			int index = hf->ToIndex1D(i, j);
-			vertices[index].y = hf->Get(index);
-		}
-	}
-
-	// Update normals
-	normals.clear();
-	ValueField<Vector3> normalsfield = ValueField<Vector3>(nx, ny, hf->GetBox(), Vector3(0));
-	for (int i = 0; i < ny - 1; i++)
-	{
-		for (int j = 0; j < nx - 1; j++)
-		{
-			Vector3 AB = (hf->Vertex(i + 1, j) - hf->Vertex(i, j));
-			Vector3 AC = (hf->Vertex(i + 1, j + 1) - hf->Vertex(i, j));
-			Vector3 normal = Normalize(-Cross(AB, AC));
-
-			normalsfield.Set(i, j, normalsfield.Get(i, j) + normal);
-			normalsfield.Set(i + 1, j, normalsfield.Get(i + 1, j) + normal);
-			normalsfield.Set(i + 1, j + 1, normalsfield.Get(i + 1, j + 1) + normal);
-
-			AB = AC;
-			AC = (hf->Vertex(i, j + 1) - hf->Vertex(i, j));
-			normal = Normalize(-Cross(AB, AC));
-
-			normalsfield.Set(i, j, normalsfield.Get(i, j) + normal);
-			normalsfield.Set(i + 1, j + 1, normalsfield.Get(i + 1, j + 1) + normal);
-			normalsfield.Set(i, j + 1, normalsfield.Get(i, j + 1) + normal);
-		}
-	}
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-			AddNormal(Normalize(normalsfield.Get(i, j)));
-	}
 }

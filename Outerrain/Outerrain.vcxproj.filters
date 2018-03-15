@@ -108,6 +108,9 @@
     <ClInclude Include="Include\mathUtils.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\heightfieldMeshModel.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\heightfield.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="Source\gpuheightfield.cpp">
       <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\heightfieldMeshModel.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

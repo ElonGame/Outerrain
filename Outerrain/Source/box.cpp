@@ -29,7 +29,7 @@ Box::Box(const Vector3& C, float R)
 /*
 \brief Returns true if p is inside the box, false otherwise.
 */
-bool Box::Inside(const Vector3& p) const
+bool Box::Contains(const Vector3& p) const
 {
     return (p > a && p < b);
 }
@@ -104,4 +104,23 @@ Vector3 Box::BottomLeft() const
 Vector3 Box::TopRight() const
 {
     return b;
+}
+
+/*
+\brief Access box vertex by reference
+*/
+Vector3& Box::operator[](int i)
+{
+	if (i == 0)
+		return a;
+	return b;
+}
+
+/*
+\brief ostream operator
+*/
+std::ostream& operator<<(std::ostream& stream, const Box& b)
+{
+	stream << b.a << " ; " << b.b;
+	return stream;
 }

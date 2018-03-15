@@ -29,7 +29,7 @@ Box2D::Box2D(const Vector2& C, float R)
 /*
 \brief Returns true if p is inside the box, false otherwise.
 */
-bool Box2D::Inside(const Vector2& p) const
+bool Box2D::Contains(const Vector2& p) const
 {
     return (p > a && p < b);
 }
@@ -104,4 +104,23 @@ Vector2 Box2D::BottomLeft() const
 Vector2 Box2D::TopRight() const
 {
     return b;
+}
+
+/*
+\brief Access box vertex by reference
+*/
+Vector2& Box2D::operator[](int i)
+{
+	if (i == 0)
+		return a;
+	return b;
+}
+
+/*
+\brief ostream operator
+*/
+std::ostream& operator<<(std::ostream& stream, const Box2D& b)
+{
+	stream << b.a << " ; " << b.b;
+	return stream;
 }

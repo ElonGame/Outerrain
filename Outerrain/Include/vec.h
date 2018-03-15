@@ -4,6 +4,7 @@
 #include <iostream>
 #include <array>
 
+#include "mathUtils.h"
 
 /* Forward Declarations */
 struct Vector2i;
@@ -18,9 +19,9 @@ struct Vector2i
 public:
 	int x, y;
 
-	Vector2i() : x(0), y(0) {}
-	Vector2i(int n) : x(n), y(n) {}
-	Vector2i(int x, int y) : x(x), y(y) {}
+	explicit Vector2i() : x(0), y(0) {}
+	explicit Vector2i(int n) : x(n), y(n) {}
+	explicit Vector2i(int x, int y) : x(x), y(y) {}
 };
 
 
@@ -30,9 +31,9 @@ struct Vector2
 public:
 	float x, y;
 
-	Vector2() : x(0.0), y(0.0) { }
-	Vector2(float n) : x(n), y(n) { }
-	Vector2(float x, float y) : x(x), y(y) { }
+	explicit Vector2() : x(0.0), y(0.0) { }
+	explicit Vector2(float n) : x(n), y(n) { }
+	explicit Vector2(float x, float y) : x(x), y(y) { }
 
 	friend bool operator> (const Vector2&, const Vector2&);
   	friend bool operator< (const Vector2&, const Vector2&);
@@ -100,6 +101,16 @@ public:
 		return y;
 	}
 	friend std::ostream& operator<< (std::ostream& stream, const Vector2& u);
+
+	inline float Max() const
+	{
+		return Math::Max(x, y);
+	}
+
+	inline float Min() const
+	{
+		return Math::Min(x, y);
+	}
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector2& u)
 {
@@ -220,6 +231,16 @@ public:
 		return z;
 	}
 	friend std::ostream& operator<<(std::ostream& stream, const Vector3& u);
+
+	inline float Max() const
+	{
+		return Math::Max(Math::Max(x, y), z);
+	}
+
+	inline float Min() const
+	{
+		return Math::Min(Math::Min(x, y), z);
+	}
 };
 inline std::ostream& operator<<(std::ostream& stream, const Vector3& u)
 {
@@ -284,9 +305,9 @@ struct Vector4
 public:
 	float x, y, z, w;
 
-	Vector4() : x(0.0), y(0.0), z(0.0), w(0.0) {}
-	Vector4(float n) : x(n), y(n), z(n), w(n) {}
-	Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+	explicit Vector4() : x(0.0), y(0.0), z(0.0), w(0.0) {}
+	explicit Vector4(float n) : x(n), y(n), z(n), w(n) {}
+	explicit Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 
 	Vector4 operator*(float k) const
 	{
@@ -315,6 +336,16 @@ public:
 		return w;
 	}
 	friend std::ostream& operator<<(std::ostream& stream, const Vector4& u);
+
+	inline float Max() const
+	{
+		return Math::Max(Math::Max(Math::Max(x, y), z), w);
+	}
+
+	inline float Min() const
+	{
+		return Math::Min(Math::Min(Math::Min(x, y), z), w);
+	}
 };
 inline float Magnitude(const Vector4& u)
 {
@@ -334,10 +365,3 @@ inline Vector4 operator-(const Vector4& v)
 {
 	return Vector4(-v.x, -v.y, -v.z, -v.w);
 }
-
-/* Bounds */
-typedef struct Bounds
-{
-	Vector3 a;
-	Vector3 b;
-} Bounds;

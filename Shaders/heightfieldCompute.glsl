@@ -2,77 +2,62 @@
 
 #ifdef COMPUTE_SHADER
 
-layout(binding = 0, std430) readonly buffer InputData
+layout(binding = 0, std430) coherent buffer HeightfieldData
 {
-    int inputData[];
+    int data[];
 };
 
-layout(binding = 1, std430) writeonly buffer OutputData
-{
-    int outputData[];
-};
+const int nx = 1024;
 
-
-/* Useful functions */
-bool Inside(int i, int j, int nx)
+bool Inside(int i, int j)
 {
 	if (i < 0 || i >= nx || j < 0 || j >= nx)
 		return false;
 	return true;
 }
 
-int ToIndex1D(int i, int j, int nx)
+int ToIndex1D(int i, int j)
 {
 	return i * nx + j;
 }
 
-float ChangeBase(float min, float max, float newMin, float newMax, float val)
-{
-	return (newMax - newMin) * (val - min) / (max - min);
-}
-
-const int minRange = 0;
-const int maxRange = 100000;
-
-/* Main program */
 layout(local_size_x = 1024) in;
 void main()
 {
 	uint id = gl_GlobalInvocationID.x;
-	int nx = 256;
-	int amplitude = 1000;
-	float tanThresholdAngle = 1200;
-	float cellDistX = 2.0;
-	int newHeight = inputData[id];
-    if(id >= inputData.length())
+	if(id >= data.length())
         return;
 	
-	int maxZDiff = 0;
+	int amplitude = 1;
+	float tanThresholdAngle = 0.6f;
+	float cellDistX = 2.0f;
+
+	float maxZDiff = 0;
 	int neiIndex = -1;
 	int i = int(id) / nx;
 	int j = int(id) % nx;
-	for (int k = -1; k <= 1; k++)
+	for (int k = -1; k <= 1; k += 2)
 	{
-		for (int l = -1; l <= 1; l++)
+		for (int l = -1; l <= 1; l += 2)
 		{
-			if ((k == 0 && l == 0) || Inside(i + k, j + l, nx) == false)
+			if (Inside(i + k, j + l) == false)
 				continue;
-			int z = inputData[id] - inputData[ToIndex1D(i + k, j + l, nx)];
+			int index = ToIndex1D(i + k, j + l);
+			float h = data[index]; 
+			float z = data[id] - h;
 			if (z > maxZDiff)
 			{
 				maxZDiff = z;
-				neiIndex = ToIndex1D(i + k, j + l, nx);
+				neiIndex = index;
 			}
 		}
 	}
 	
-	if (float(maxZDiff) / cellDistX > tanThresholdAngle)
+	if (maxZDiff / cellDistX > tanThresholdAngle)
 	{
-		newHeight -= amplitude;
-		atomicAdd(outputData[neiIndex], amplitude);
+		atomicAdd(data[id], -amplitude);
+		atomicAdd(data[neiIndex], amplitude);
 	}
-	
-	outputData[id] = newHeight;
 }
 
 #endif
