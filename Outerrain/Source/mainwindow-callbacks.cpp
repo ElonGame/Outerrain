@@ -12,9 +12,9 @@ void MainWindow::InitBasicTerrain()
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string(	);
+	settings.filePath = std::string("Data/Heightmaps/dome-2048.png");
 	settings.minAltitude = 0.0f;
-	settings.maxAltitude = 150.0f;
+	settings.maxAltitude = 250.0f;
 	settings.shaderType = TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
@@ -45,18 +45,18 @@ void MainWindow::InitNoiseTerrain()
 
 void MainWindow::StreamPowerErosionStep()
 {
-	if (gpuHeightfield == nullptr)
+	if (hf == nullptr)
 		return;
-	gpuHeightfield->StreamPowerErosion(2.0);
+	hf->StreamPowerErosion(2.0);
 	UpdateMeshRenderer();
 }
 
 void MainWindow::ThermalErosionStep()
 {
-	if (gpuHeightfield == nullptr)
+	if (hf == nullptr)
 		return;
 	for (int i = 0; i < 1000; i++)
-		gpuHeightfield->ThermalWeathering(0.6f);
+		hf->ThermalWeathering(0.6f);
 
 	std::cout << "1000 iterations of thermal erosion" << std::endl;
 	UpdateMeshRenderer();
@@ -64,9 +64,9 @@ void MainWindow::ThermalErosionStep()
 
 void MainWindow::HydraulicErosionStep()
 {
-	if (gpuHeightfield == nullptr)
+	if (hf == nullptr)
 		return;
-	gpuHeightfield->HydraulicErosion();
+	hf->HydraulicErosion();
 	UpdateMeshRenderer();
 }
 
@@ -83,7 +83,7 @@ void MainWindow::GenerateTerrainFromSettings()
 {
 	if (hf != nullptr)
 		delete hf;
-	gpuHeightfield = new GPUHeightfield();
+	hf = new Heightfield(settings);
 }
 
 void MainWindow::UpdateMeshRenderer()
@@ -105,7 +105,7 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		hfObject->AddComponent(new HeightfieldMeshModel(gpuHeightfield));
+		hfObject->AddComponent(new HeightfieldMeshModel(hf));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMeshModel>(), mat));
 		return;
 	}

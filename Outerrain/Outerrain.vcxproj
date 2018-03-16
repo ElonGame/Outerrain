@@ -51,6 +51,7 @@
     <ClInclude Include="Include\vec.h" />
     <ClInclude Include="Include\ecosystem.h" />
     <ClInclude Include="Include\window.h" />
+    <ClInclude Include="Source\random.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\box.cpp" />

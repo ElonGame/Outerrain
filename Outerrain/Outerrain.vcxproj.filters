@@ -84,9 +84,6 @@
     <ClInclude Include="Include\terrainSettings.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="Include\texture.h">
-      <Filter>Core\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\box.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
@@ -121,6 +118,12 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Include\poissonTile2D.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\texture.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\random.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -174,9 +177,6 @@
     <ClCompile Include="Source\image.cpp">
       <Filter>Todo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\texture.cpp">
-      <Filter>Core\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\box.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
@@ -212,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="Source\poissonTile2D.cpp">
       <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

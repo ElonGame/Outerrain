@@ -5,6 +5,7 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
 	hfObject = nullptr;
 	hf = nullptr;
+	gpuHeightfield = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
 	mainWindowHandler->CreateGLContext(4, 3);
 	Init();
