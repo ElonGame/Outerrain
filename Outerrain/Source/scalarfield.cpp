@@ -17,6 +17,17 @@ Scalarfield2D::Scalarfield2D() : ValueField()
 }
 
 /*
+\brief Constructor from an image specified by filePath
+\param filePath image file path
+\param blackAltitude min value
+\param whiteAltitude max value
+*/
+Scalarfield2D::Scalarfield2D(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
+{
+	ReadFromImage(filePath, blackAltitude, whiteAltitude);
+}
+
+/*
 \brief Constructor
 \param nx size in x axis
 \param ny size in z axis
@@ -171,32 +182,9 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 }
 
 /*
-\brief Utility method to save the scalarfield as image.
-\param path relative path
+\brief todo
 */
-void Scalarfield2D::SaveAsImage(const std::string& path)
-{
-	Image im = Image(nx, ny);
-	float min = Min();
-	float max = Max();
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float v = (Get(i, j) - min) / (max - min);
-			im(j, i) = Color(v, v, v, 1.0);
-		}
-	}
-	im.WriteImage(path, true);
-}
-
-/*
-\brief Utility method to initialize a scalarfield from an grey scale image
-\param file relative path
-\param blackAltitude min value
-\param whiteAltitude max value
-*/
-void Scalarfield2D::ReadFromImage(const std::string filePath, float blackAltitude, float whiteAltitude)
+void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue, float whiteValue)
 {
 	Image heightmap;
 	heightmap.ReadImage(filePath, false);
@@ -233,9 +221,29 @@ void Scalarfield2D::ReadFromImage(const std::string filePath, float blackAltitud
 			float dcu = Math::Lerp(d, c, localV);
 
 			float value = Math::Lerp(abu, dcu, localU);
-			Set(i, j, blackAltitude + value * (whiteAltitude - blackAltitude));
+			Set(i, j, blackValue + value * (whiteValue - blackValue));
 		}
 	}
+}
+
+/*
+\brief Utility method to save the scalarfield as image.
+\param path relative path
+*/
+void Scalarfield2D::SaveAsImage(const std::string& path)
+{
+	Image im = Image(nx, ny);
+	float min = Min();
+	float max = Max();
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float v = (Get(i, j) - min) / (max - min);
+			im(j, i) = Color(v, v, v, 1.0);
+		}
+	}
+	im.WriteImage(path, true);
 }
 
 /*

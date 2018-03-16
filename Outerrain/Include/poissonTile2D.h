@@ -2,7 +2,7 @@
 #include <vector>
 #include "vec.h"
 
-class PoissonTile
+class PoissonTile2D
 {
 protected:
 	int r;
@@ -13,8 +13,9 @@ protected:
 	void Generate();
 
 public:
-	PoissonTile();
-	PoissonTile(int r, float tileSize, int maxTries);
+	PoissonTile2D();
+	PoissonTile2D(int r, float tileSize, int maxTries);
 
 	void Randomize();
+	std::vector<Vector2> GetPoints() const;
 };

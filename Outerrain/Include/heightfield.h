@@ -5,6 +5,7 @@
 #include "meshModel.h"
 #include "fractal.h"
 #include "terrainSettings.h"
+#include "box2D.h"
 
 class Heightfield : public Scalarfield2D
 {
@@ -21,7 +22,7 @@ public:
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 	~Heightfield();
 
-	virtual void ThermalWeathering(float amplitude);
+	virtual void ThermalWeathering(float amplitude, float tanThresholdAngle = 0.6f);
 	virtual void StreamPowerErosion(float amplitude);
 	virtual void HydraulicErosion();
 

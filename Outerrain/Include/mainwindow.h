@@ -7,6 +7,7 @@
 #include "cameraOrbiter.h"
 #include "meshRenderer.h"
 #include "terrainSettings.h"
+#include "box2D.h"
 
 class MainWindow
 {

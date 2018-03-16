@@ -7,6 +7,7 @@ class Scalarfield2D : public ValueField<float>
 {
 public:
 	Scalarfield2D();
+	Scalarfield2D(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox);
 	Scalarfield2D(const Scalarfield2D& field);
 	Scalarfield2D(int nx, int ny, const Box2D& bbox);
 	Scalarfield2D(int nx, int ny, const Box2D& bbox, float value);
@@ -26,7 +27,6 @@ public:
 	float Average() const;
 
 	void SaveAsImage(const std::string& filePath);
-	void ReadFromImage(const std::string filePath, float blackAltitude, float whiteAltitude);
-
+	void ReadFromImage(const std::string& filePath, float, float);
 	GLuint GetGLTexture(int unit) const;
 };

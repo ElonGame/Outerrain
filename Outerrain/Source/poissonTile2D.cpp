@@ -1,17 +1,17 @@
-#include "poissonTile.h"
+#include "poissonTile2D.h"
 
 
-PoissonTile::PoissonTile() : r(0), tileSize(0), maxTries(0)
+PoissonTile2D::PoissonTile2D() : r(0), tileSize(0), maxTries(0)
 {
 
 }
 
-PoissonTile::PoissonTile(int r, float tileSize, int maxTries) : r(r), tileSize(tileSize), maxTries(maxTries)
+PoissonTile2D::PoissonTile2D(int r, float tileSize, int maxTries) : r(r), tileSize(tileSize), maxTries(maxTries)
 {
 	Generate();
 }
 
-void PoissonTile::Generate()
+void PoissonTile2D::Generate()
 {
 	Vector2 tileCenter = Vector2(tileSize / 2.0f, tileSize / 2.0f);
 	int i = 0;
@@ -81,7 +81,12 @@ void PoissonTile::Generate()
 	}
 }
 
-void PoissonTile::Randomize()
+void PoissonTile2D::Randomize()
 {
 	Generate();
+}
+
+std::vector<Vector2> PoissonTile2D::GetPoints() const
+{
+	return poissonPoints;
 }

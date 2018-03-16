@@ -2,9 +2,8 @@
 #define _MAT_H
 
 #include "vec.h"
+#include "mathUtils.h"
 
-float Radians(const float deg);
-float Degrees(const float rad);
 
 struct Transform
 {

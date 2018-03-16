@@ -53,9 +53,8 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, float value) : Scala
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox)
+Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : Scalarfield2D(file, minAlt, maxAlt, nx, ny, bbox)
 {
-	ReadFromImage(file.c_str(), minAlt, maxAlt);
 }
 
 /*
@@ -140,10 +139,8 @@ Heightfield::~Heightfield()
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
 \param amplitude maximum amount of matter moved from one point to another. Something between [0.05, 0.1] gives plausible results.
 */
-void Heightfield::ThermalWeathering(float amplitude)
+void Heightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 {
-	// Constants
-	float tanThresholdAngle = 0.6f;	 // Threshold Angle for stability (30 degree +- 5)
 	float cellDistX = CellSize().x;
 	for (int i = 0; i < ny; i++)
 	{
@@ -200,7 +197,6 @@ void Heightfield::StreamPowerErosion(float amplitude)
 
 #include <iostream>
 using namespace std;
-
 /*
 \brief
 */
@@ -408,7 +404,7 @@ Scalarfield2D Heightfield::Illumination() const
 	const int rayCount = 32;		// Ray count for each world point
 	const float epsilon = 0.01f;	// Ray start up offset
 	const float K = Slope().Max();	// Lipschitz constant
-	Scalarfield2D I = Scalarfield2D(nx, ny, box);
+	Scalarfield2D Illu = Scalarfield2D(nx, ny, box);
 	Hit rayHit;
 	for (int i = 0; i < ny; i++)
 	{
@@ -427,10 +423,10 @@ Scalarfield2D Heightfield::Illumination() const
 				if (Intersect(Ray(rayPos, rayDir), rayHit, K) == true)
 					intersectionCount++;
 			}
-			I.Set(i, j, 1.0f - (intersectionCount / static_cast<float>(rayCount)));
+			Illu.Set(i, j, 1.0f - (intersectionCount / static_cast<float>(rayCount)));
 		}
 	}
-	return I;
+	return Illu;
 }
 
 /*

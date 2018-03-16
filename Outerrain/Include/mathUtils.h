@@ -3,6 +3,16 @@
 
 namespace Math
 {
+	inline float Radians(float deg)
+	{
+		return ((float)3.14 / 180.f) * deg;
+	}
+
+	inline float Degrees(float rad)
+	{
+		return (180.f / (float)3.14) * rad;
+	}
+
 	inline float Clamp(float x, float a = 0.0f, float b = 1.0f)
 	{
 		return x < a ? a : x > b ? b : x;

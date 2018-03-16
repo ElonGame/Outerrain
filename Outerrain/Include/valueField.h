@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #include "vec.h"
-#include "box.h"
+#include "box2D.h"
 #include "image.h"
 
 /* Utility struct */

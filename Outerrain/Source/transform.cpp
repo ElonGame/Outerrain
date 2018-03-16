@@ -4,15 +4,6 @@
 
 #include "transform.h"
 
-float Radians(const float deg)
-{
-	return ((float)3.14 / 180.f) * deg;
-}
-
-float Degrees(const float rad)
-{
-	return (180.f / (float)3.14) * rad;
-}
 
 Transform::Transform(
 	const float t00, const float t01, const float t02, const float t03,
@@ -141,8 +132,8 @@ Transform TranslationTransform(const float x, const float y, const float z)
 
 Transform RotationX(const float a)
 {
-	float sin_t = sinf(Radians(a));
-	float cos_t = cosf(Radians(a));
+	float sin_t = sinf(Math::Radians(a));
+	float cos_t = cosf(Math::Radians(a));
 
 	return Transform(
 		1, 0, 0, 0,
@@ -153,8 +144,8 @@ Transform RotationX(const float a)
 
 Transform RotationY(const float a)
 {
-	float sin_t = sinf(Radians(a));
-	float cos_t = cosf(Radians(a));
+	float sin_t = sinf(Math::Radians(a));
+	float cos_t = cosf(Math::Radians(a));
 
 	return Transform(
 		cos_t, 0, sin_t, 0,
@@ -165,8 +156,8 @@ Transform RotationY(const float a)
 
 Transform RotationZ(const float a)
 {
-	float sin_t = sinf(Radians(a));
-	float cos_t = cosf(Radians(a));
+	float sin_t = sinf(Math::Radians(a));
+	float cos_t = cosf(Math::Radians(a));
 
 	return Transform(
 		cos_t, -sin_t, 0, 0,
@@ -178,8 +169,8 @@ Transform RotationZ(const float a)
 Transform Rotation(const Vector3& axis, const float angle)
 {
 	Vector3 a = Normalize(axis);
-	float s = sinf(Radians(angle));
-	float c = cosf(Radians(angle));
+	float s = sinf(Math::Radians(angle));
+	float c = cosf(Math::Radians(angle));
 
 	return Transform(
 		a.x * a.x + (1 - a.x * a.x) * c,
@@ -203,7 +194,7 @@ Transform Rotation(const Vector3& axis, const float angle)
 Transform Perspective(const float fov, const float aspect, const float znear, const float zfar)
 {
 	// perspective, openGL version
-	float itan = 1 / tanf(Radians(fov) * 0.5f);
+	float itan = 1 / tanf(Math::Radians(fov) * 0.5f);
 	float id = 1 / (znear - zfar);
 
 	return Transform(

@@ -215,9 +215,20 @@ static GLuint compile_shader(const GLuint program, const GLenum shader_type, con
 
 
 /* Shader Specifics */
+Shader::Shader(const std::string& filename, const std::string& definitions)
+{
+	program = glCreateProgram();
+	Reload(filename, definitions);
+}
+
 void Shader::Attach()
 {
 	glUseProgram(program);
+}
+
+void Shader::Detach()
+{
+	glUseProgram(0);
 }
 
 int Shader::Reload(const std::string&filename, const std::string& definitions)
@@ -274,12 +285,6 @@ int Shader::Reload(const std::string&filename, const std::string& definitions)
 	// pour etre coherent avec les autres fonctions de creation, active l'objet gl qui vient d'etre cree.
 	glUseProgram(program);
 	return 0;
-}
-
-void Shader::InitFromFile(const std::string&filename, const std::string&definitions)
-{
-	program = glCreateProgram();
-	Reload(filename, definitions);
 }
 
 int Shader::Release()
@@ -439,7 +444,7 @@ static int location(const GLuint program, const std::string&uniform)
 	return location;
 }
 
-void Shader::UniformUInt(const std::string&uniform, const unsigned int& v)
+void Shader::UniformUInt(const std::string&uniform, unsigned int v)
 {
 	glUniform1ui(location(program, uniform), v);
 }
@@ -469,7 +474,7 @@ void Shader::UniformVec4(const std::string&uniform, const Vector4& v)
 	glUniform4fv(location(program, uniform), 1, (float*)&v.x);
 }
 
-void Shader::UniformColor(const char* uniform, const Color& c)
+void Shader::UniformColor(const std::string& uniform, const Color& c)
 {
 	glUniform4fv(location(program, uniform), 1, (float*)&c.r);
 }
@@ -479,7 +484,7 @@ void Shader::UniformTransform(const std::string&uniform, const Transform& v)
 	glUniformMatrix4fv(location(program, uniform), 1, GL_TRUE, (const float*)v.Buffer());
 }
 
-void Shader::UniformTexture(const std::string&uniform, const int unit, const GLuint texture, const GLuint sampler)
+void Shader::UniformTexture(const std::string&uniform, int unit, GLuint texture, GLuint sampler)
 {
 	// verifie que l'uniform existe
 	int id = location(program, uniform);
