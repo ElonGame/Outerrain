@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "random.h"
 
 int main()
 {

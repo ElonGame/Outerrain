@@ -51,7 +51,7 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
-	InitBasicTerrain();
+	InitNoiseTerrain();
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 

@@ -1,18 +1,18 @@
 #include "noise.h"
-#include <cstdlib>
-#include <cmath>
+#include "random.h"
 
 /*
 \brief Basic perlin nosie class. Returns value between [-1, 1] in 2D or 3D.
 */
+
+// get base random alias which is auto seeded and has static API and internal state
+using Random = effolkronium::random_static;
 
 /*
 \brief Constructor. Initialize gradient arrays.
 */
 PerlinNoise::PerlinNoise()
 {
-	srand(19);
-
 	p = new int[256];
 	Gx = new float[256];
 	Gy = new float[256];
@@ -21,16 +21,16 @@ PerlinNoise::PerlinNoise()
 	for (int i = 0; i < 256; ++i) 
 	{
 		p[i] = i;
-		Gx[i] = (float(rand()) / (RAND_MAX / 2)) - 1.0f;
-		Gy[i] = (float(rand()) / (RAND_MAX / 2)) - 1.0f;
-		Gz[i] = (float(rand()) / (RAND_MAX / 2)) - 1.0f;
+		Gx[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
+		Gy[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
+		Gz[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
 	}
 
 	int j = 0;
 	int swp = 0;
 	for (int i = 0; i < 256; i++)
 	{
-		j = rand() & 255;
+		j = Random::get() & 255;
 		swp = p[i];
 		p[i] = p[j];
 		p[j] = swp;

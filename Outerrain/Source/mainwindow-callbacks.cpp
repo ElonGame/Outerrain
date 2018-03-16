@@ -36,7 +36,7 @@ void MainWindow::InitNoiseTerrain()
 	settings.frequency = 0.005f;
 	settings.octaves = 8;
 	settings.amplitude = 50.0f;
-	settings.fractalType = FractalType::Ridge;
+	settings.fractalType = FractalType::fBm;
 	settings.shaderType = TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
