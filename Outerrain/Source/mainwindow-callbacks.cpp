@@ -75,7 +75,7 @@ void MainWindow::TranslateNoise(int y, int x)
 	if (settings.terrainType != TerrainType::NoiseFieldTerrain)
 		return;
 	settings.offsetVector = settings.offsetVector + Vector3((float)x, 0.0f, (float)y);
-	GenerateTerrainFromSettings();
+	hf->InitFromNoise(*settings.noise, settings.amplitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
 	UpdateMeshRenderer();
 }
 

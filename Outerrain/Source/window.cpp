@@ -6,6 +6,7 @@
 #include "GL/glew.h"
 #include "window.h"
 
+
 #ifndef NO_GLEW
 #ifndef GK_RELEASE
 static void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message, const void *userParam)
@@ -23,7 +24,6 @@ static void GLAPIENTRY debug(GLenum source, GLenum type, unsigned int id, GLenum
 }
 #endif
 #endif
-
 
 int Window::UpdateEvents()
 {

@@ -13,7 +13,6 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 
 MainWindow::~MainWindow()
 {
-	Quit();
 }
 
 void MainWindow::Quit()

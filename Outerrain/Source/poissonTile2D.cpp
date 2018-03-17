@@ -1,4 +1,7 @@
 #include "poissonTile2D.h"
+#include "random.h"
+
+using Random = effolkronium::random_static;
 
 
 PoissonTile2D::PoissonTile2D() : r(0), tileSize(0), maxTries(0)
@@ -18,8 +21,8 @@ void PoissonTile2D::Generate()
 	while (i < maxTries)
 	{
 		// Get random sample point
-		float randX = rand() / static_cast<float>(RAND_MAX);
-		float randY = rand() / static_cast<float>(RAND_MAX);
+		float randX = Random::get() / static_cast<float>(Random::max());
+		float randY = Random::get() / static_cast<float>(Random::max());
 		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
 		i++;
 

@@ -2,11 +2,15 @@
 #include "vec.h"
 #include "fractal.h"
 #include "mathUtils.h"
+#include "random.h"
 
 #include <numeric>
 #include <deque>
 #include <queue>
 #include <array>
+
+
+using Random = effolkronium::random_static;
 
 /*
 \brief Main Class for representing 2D HeightField.
@@ -416,8 +420,8 @@ Scalarfield2D Heightfield::Illumination() const
 
 			for (int k = 0; k < rayCount; k++)
 			{
-				float angleH = (rand() % 360) * 0.0174533f;
-				float angleV = rand() / static_cast<float>(RAND_MAX);
+				float angleH = (Random::get() % 360) * 0.0174533f;
+				float angleV = Random::get() / static_cast<float>(Random::max());
 				Vector3 rayDir = Vector3(cos(angleH), 0.0f, sin(angleH));
 				rayDir = Slerp(rayDir, Vector3(0.0f, 1.0f, 0.0f), angleV);
 				if (Intersect(Ray(rayPos, rayDir), rayHit, K) == true)

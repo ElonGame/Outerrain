@@ -9,9 +9,6 @@
 
 class Heightfield : public Scalarfield2D
 {
-protected:
-	void InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
-
 public:
 	Heightfield();
 	Heightfield(const TerrainSettings& settings);
@@ -21,6 +18,8 @@ public:
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type);
 	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 	~Heightfield();
+
+	void InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 
 	virtual void ThermalWeathering(float amplitude, float tanThresholdAngle = 0.6f);
 	virtual void StreamPowerErosion(float amplitude);
