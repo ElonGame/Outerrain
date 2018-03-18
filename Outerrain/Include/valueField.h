@@ -73,6 +73,20 @@ public:
 	}
 
 
+	Vector2i ToIndex2D(const Vector2& p) const
+	{
+		Vector2 q = p - box.Vertex(0);
+		Vector2 d = box.Vertex(1) - box.Vertex(0);
+
+		float u = q[0] / d[0];
+		float v = q[1] / d[1];
+
+		int j = int(u * (nx - 1));
+		int i = int(v * (ny - 1));
+
+		return Vector2i(i, j);
+	}
+
 	void ToIndex2D(int index, int& i, int& j) const
 	{
 		i = index / nx;

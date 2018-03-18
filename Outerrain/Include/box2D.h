@@ -14,10 +14,10 @@ public:
 	bool Contains(const Vector2&) const;
 	void Extend(const Vector2&);
 	Box2D Extended(const Vector2&) const;
-	void Scale(float);
-	Box2D Scaled(float) const;
+	void Scale(float f);
+	Box2D Scaled(float f) const;
 
-	Vector2 Vertex(int) const;
+	Vector2 Vertex(int i) const;
 	Vector2 Center() const;
 	Vector2 BottomLeft() const;
 	Vector2 TopRight() const;

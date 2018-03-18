@@ -8,10 +8,10 @@
 struct Transform
 {
 	Transform(
-		const float t00 = 1.f, const float t01 = 0.f, const float t02 = 0.f, const float t03 = 0.f,
-		const float t10 = 0.f, const float t11 = 1.f, const float t12 = 0.f, const float t13 = 0.f,
-		const float t20 = 0.f, const float t21 = 0.f, const float t22 = 1.f, const float t23 = 0.f,
-		const float t30 = 0.f, const float t31 = 0.f, const float t32 = 0.f, const float t33 = 1.f);
+		float t00 = 1.f, float t01 = 0.f, float t02 = 0.f, float t03 = 0.f,
+		float t10 = 0.f, float t11 = 1.f, float t12 = 0.f, float t13 = 0.f,
+		float t20 = 0.f, float t21 = 0.f, float t22 = 1.f, float t23 = 0.f,
+		float t30 = 0.f, float t31 = 0.f, float t32 = 0.f, float t33 = 1.f);
 
 	Transform(const Vector3& x, const Vector3& y, const Vector3& z, const Vector3& w);
 
@@ -31,7 +31,7 @@ struct Transform
 	Transform Normal() const;
 
 	//! renvoie l'adresse de la premiere valeur de la matrice.
-	const float *Buffer() const { return &m[0][0]; }
+	const float* Buffer() const { return &m[0][0]; }
 
 	float m[4][4];
 };
@@ -47,26 +47,26 @@ Transform Inverse(const Transform& m);
 Transform Normal(const Transform& m);
 
 //! renvoie la matrice representant une mise a l'echelle / etirement.
-Transform Scale(const float x, const float y, const float z);
+Transform Scale(float x, float y, float z);
 
 //! renvoie la matrice representant une translation par un vecteur.
 Transform TranslationTransform(const Vector3& v);
 //! renvoie la matrice representant une translation par un vecteur x y z.
-Transform TranslationTransform(const float x, const float y, const float z);
+Transform TranslationTransform(float x, float y, float z);
 
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe X.
-Transform RotationX(const float angle);
+Transform RotationX(float angle);
 //! renvoie la matrice representation une rotation de a degree autour de l'axe Y.
-Transform RotationY(const float angle);
+Transform RotationY(float angle);
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe Z.
-Transform RotationZ(const float angle);
+Transform RotationZ(float angle);
 //! renvoie la matrice representation une rotation de angle degree autour de l'axe axis.
-Transform Rotation(const Vector3& axis, const float angle);
+Transform Rotation(const Vector3& axis, float angle);
 
 //! renvoie la matrice representant une transformation viewport.
-Transform Viewport(const float width, const float height);
+Transform Viewport(float width, float height);
 //! renvoie la matrice representant une transformation projection perspective.
-Transform Perspective(const float fov, const float aspect, const float znear, const float zfar);
+Transform Perspective(float fov, float aspect, float znear, float zfar);
 //! renvoie la matrice representant le placement et l'orientation d'une camera pour observer le Vector3 to.
 Transform LookAt(const Vector3& from, const Vector3& to, const Vector3& up);
 

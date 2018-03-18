@@ -50,7 +50,9 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
-	InitNoiseTerrain();
+	//InitNoiseTerrain();
+	//InitBasicTerrain();
+	InitLayerTerrain();
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 
@@ -92,6 +94,9 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mainWindowHandler->KeyState(SDLK_F9))
 		InitNoiseTerrain();
 
+	/* LayerField Callbacks */
+	if (mainWindowHandler->KeyState(SDLK_F4))
+		LightingImpact();
 
 	/* Noise Callbacks */
 	if (mainWindowHandler->KeyState(SDLK_UP))

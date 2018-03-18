@@ -9,7 +9,6 @@ MeshRenderer::MeshRenderer()
 MeshRenderer::MeshRenderer(MeshModel* m)
 {
 	mesh = std::unique_ptr<MeshModel>(m);
-
 	CreateBuffers();
 }
 
@@ -67,7 +66,7 @@ void MeshRenderer::RenderInternal()
 void MeshRenderer::Render(const CameraOrbiter& cam)
 {
 	Transform trs = gameObject->GetObjectToWorldMatrix();
-	Transform mvp = cam.Projection((float)cam.FrameWidth(), (float)cam.FrameHeight(), 45.0f) * (cam.View() * trs);
+	Transform mvp = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f) * (cam.View() * trs);
 	Vector3 camPos = cam.Position();
 
 	material.SetFrameUniforms(trs, mvp, camPos);
@@ -100,7 +99,7 @@ void MeshRenderer::CreateBuffers()
 	size_t offset = 0;
 	size = mesh->VertexBufferSize();
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->VertexBufferPtr());
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (const void *)offset);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 	glEnableVertexAttribArray(0);
 
 	if (mesh->texcoords.size() == mesh->vertices.size())
@@ -108,7 +107,7 @@ void MeshRenderer::CreateBuffers()
 		offset = offset + size;
 		size = mesh->TexcoordBufferSize();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->TexcoordBufferPtr());
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (const void *)offset);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 		glEnableVertexAttribArray(1);
 	}
 
@@ -117,7 +116,7 @@ void MeshRenderer::CreateBuffers()
 		offset = offset + size;
 		size = mesh->NormalBufferSize();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->NormalBufferPtr());
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (const void *)offset);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 		glEnableVertexAttribArray(2);
 	}
 

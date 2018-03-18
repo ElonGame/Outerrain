@@ -4,19 +4,17 @@
 #include "mathUtils.h"
 
 
-CameraOrbiter::CameraOrbiter() 
-	: center(), position(), rotation(), size(5.0f)
+CameraOrbiter::CameraOrbiter() : center(0.0f), position(0.0f), rotation(0.0f), size(5.0f)
 {
 	SetClippingPlanes(0.1f, 5000.0f);
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) 
-	: center(center), position(), rotation(), size(size)
+CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) : center(center), position(0.0f), rotation(0.0f), size(size)
 {
 	SetClippingPlanes(zNear, zFar);
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Math::Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax))
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Math::Center(pmin, pmax)), position(0.0f), rotation(0.0f), size(Magnitude(pmin - pmax))
 {
 	SetClippingPlanes(0.1f, 1000.0f);
 }

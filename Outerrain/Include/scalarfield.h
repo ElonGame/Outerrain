@@ -16,6 +16,7 @@ public:
 	void Add(int i, int j, float v);
 	void Remove(int i, int j, float v);
 
+	Vector3 Vertex(const Vector2& v) const;
 	Vector3 Vertex(int i, int j) const;
 	Vector3 Vertex(const Vector2i& v) const;
 

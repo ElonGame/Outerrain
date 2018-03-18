@@ -128,23 +128,18 @@ void GameObject::SetRotation(TQuaternion<float, Vector3> quat)
 			rotation.m[i][j] = temp[i * 4 + j];
 		}
 	}
-	/*rotation.m[2][0] = -rotation.m[2][0];
-	rotation.m[2][1] = -rotation.m[2][1];
-	rotation.m[2][2] = -rotation.m[2][2];*/
 	MarkTransformAsChanged();
 }
 
 void GameObject::RotateAround(const Vector3& axis, float degrees)
 {
 	degrees *= 0.0174533f;
-	TQuaternion<float, Vector3> quat = TQuaternion<float, Vector3>(axis, degrees);
-	SetRotation(rotationQuat * quat);
+	SetRotation(rotationQuat * TQuaternion<float, Vector3>(axis, degrees));
 }
 
 void GameObject::RotateAroundRadian(const Vector3& axis, float radian)
 {
-	TQuaternion<float, Vector3> quat = TQuaternion<float, Vector3>(axis, radian);
-	SetRotation(rotationQuat * quat);
+	SetRotation(rotationQuat * TQuaternion<float, Vector3>(axis, radian));
 }
 
 void GameObject::LookAt(const Vector3& destPoint)

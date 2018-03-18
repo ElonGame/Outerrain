@@ -6,10 +6,10 @@
 
 
 Transform::Transform(
-	const float t00, const float t01, const float t02, const float t03,
-	const float t10, const float t11, const float t12, const float t13,
-	const float t20, const float t21, const float t22, const float t23,
-	const float t30, const float t31, const float t32, const float t33)
+	float t00, float t01, float t02, float t03,
+	float t10, float t11, float t12, float t13,
+	float t20, float t21, float t22, float t23,
+	float t30, float t31, float t32, float t33)
 {
 	m[0][0] = t00; m[0][1] = t01; m[0][2] = t02; m[0][3] = t03;
 	m[1][0] = t10; m[1][1] = t11; m[1][2] = t12; m[1][3] = t13;
@@ -107,7 +107,7 @@ Transform Normal(const Transform& m)
 	return m.Normal();
 }
 
-Transform Scale(const float x, const float y, const float z)
+Transform Scale(float x, float y, float z)
 {
 	return Transform(
 		x, 0, 0, 0,
@@ -125,12 +125,12 @@ Transform TranslationTransform(const Vector3& v)
 		0, 0, 0, 1);
 }
 
-Transform TranslationTransform(const float x, const float y, const float z)
+Transform TranslationTransform(float x, float y, float z)
 {
 	return TranslationTransform(Vector3(x, y, z));
 }
 
-Transform RotationX(const float a)
+Transform RotationX(float a)
 {
 	float sin_t = sinf(Math::Radians(a));
 	float cos_t = cosf(Math::Radians(a));
@@ -142,7 +142,7 @@ Transform RotationX(const float a)
 		0, 0, 0, 1);
 }
 
-Transform RotationY(const float a)
+Transform RotationY(float a)
 {
 	float sin_t = sinf(Math::Radians(a));
 	float cos_t = cosf(Math::Radians(a));
@@ -154,7 +154,7 @@ Transform RotationY(const float a)
 		0, 0, 0, 1);
 }
 
-Transform RotationZ(const float a)
+Transform RotationZ(float a)
 {
 	float sin_t = sinf(Math::Radians(a));
 	float cos_t = cosf(Math::Radians(a));
@@ -166,7 +166,7 @@ Transform RotationZ(const float a)
 		0, 0, 0, 1);
 }
 
-Transform Rotation(const Vector3& axis, const float angle)
+Transform Rotation(const Vector3& axis, float angle)
 {
 	Vector3 a = Normalize(axis);
 	float s = sinf(Math::Radians(angle));
@@ -191,7 +191,7 @@ Transform Rotation(const Vector3& axis, const float angle)
 		0, 0, 0, 1);
 }
 
-Transform Perspective(const float fov, const float aspect, const float znear, const float zfar)
+Transform Perspective(float fov, float aspect, float znear, float zfar)
 {
 	// perspective, openGL version
 	float itan = 1 / tanf(Math::Radians(fov) * 0.5f);
@@ -204,7 +204,7 @@ Transform Perspective(const float fov, const float aspect, const float znear, co
 		0, 0, -1, 0);
 }
 
-Transform Viewport(const float width, const float height)
+Transform Viewport(float width, float height)
 {
 	float w = width / 2.f;
 	float h = height / 2.f;

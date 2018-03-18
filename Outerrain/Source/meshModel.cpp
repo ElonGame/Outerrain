@@ -19,7 +19,7 @@ void MeshModel::AddNormal(const Vector3& n)
 	isDirty = true;
 }
 
-void MeshModel::AddTriangle(const unsigned int a, const unsigned int b, const unsigned int c)
+void MeshModel::AddTriangle(unsigned int a, unsigned int b, unsigned int c)
 {
 	indices.push_back(a);
 	indices.push_back(b);

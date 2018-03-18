@@ -58,6 +58,9 @@ Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, 
 		values[i] = field.values[i];
 }
 
+/*
+\brief Destructor
+*/
 Scalarfield2D::~Scalarfield2D() 
 {
 }
@@ -183,6 +186,15 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 	float y = Get(v);
 	float z = box.Vertex(0).y + v.y * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
 	return Vector3(x, y, z);
+}
+
+/*
+\brief Get Vertex world position by performing bilinear interpolation.
+\param v world position in 2D
+*/
+Vector3 Scalarfield2D::Vertex(const Vector2& v) const
+{
+	return Vector3(v.x, GetValueBilinear(v), v.y);
 }
 
 /*

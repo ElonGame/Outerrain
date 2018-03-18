@@ -29,7 +29,5 @@ public:
 	Transform View() const;
 	Transform Projection(float width, float height, float fov) const;
 	void Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
-	 
 	Vector3 Position() const;
-
 };

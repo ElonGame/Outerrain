@@ -7,6 +7,7 @@
 #include "cameraOrbiter.h"
 #include "meshRenderer.h"
 #include "terrainSettings.h"
+#include "layerfield.h"
 #include "box2D.h"
 
 class MainWindow
@@ -17,6 +18,7 @@ private:
 	CameraOrbiter orbiter;
 
 	/* Application Data */
+	LayerField* layerfield;
 	Heightfield* hf;
 	GPUHeightfield* gpuHeightfield;
 	GameObject* hfObject;
@@ -25,11 +27,13 @@ private:
 	/* Functions */
 	void InitBasicTerrain();
 	void InitNoiseTerrain();
+	void InitLayerTerrain();
 
 	void StreamPowerErosionStep();
 	void HydraulicErosionStep();
 	void ThermalErosionStep();
 	void TranslateNoise(int, int);
+	void LightingImpact();
 
 	void GenerateTerrainFromSettings();
 	void UpdateMeshMaterial();

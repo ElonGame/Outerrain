@@ -2,7 +2,9 @@
 #include "random.h"
 
 /*
-\brief Basic perlin nosie class. Returns value between [-1, 1] in 2D or 3D.
+\brief Perlin/Gradient noise class. Returns value between [-1, 1] in 2D or 3D.
+https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/perlin-noise-part-2/perlin-noise
+
 */
 
 // get base random alias which is auto seeded and has static API and internal state
@@ -21,9 +23,9 @@ PerlinNoise::PerlinNoise()
 	for (int i = 0; i < 256; ++i) 
 	{
 		p[i] = i;
-		Gx[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
-		Gy[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
-		Gz[i] = (float(Random::get()) / (Random::max() / 2)) - 1.0f;
+		Gx[i] = (static_cast<float>(Random::get()) / (Random::max() / 2)) - 1.0f;
+		Gy[i] = (static_cast<float>(Random::get()) / (Random::max() / 2)) - 1.0f;
+		Gz[i] = (static_cast<float>(Random::get()) / (Random::max() / 2)) - 1.0f;
 	}
 
 	int j = 0;
@@ -59,19 +61,19 @@ float PerlinNoise::At(const Vector3& point) const
 	float sample_z = point.z;
 
 	// Unit cube vertex coordinates surrounding the sample point
-	int x0 = int(floorf(sample_x));
+	int x0 = static_cast<int>(floorf(sample_x));
 	int x1 = x0 + 1;
-	int y0 = int(floorf(sample_y));
+	int y0 = static_cast<int>(floorf(sample_y));
 	int y1 = y0 + 1;
-	int z0 = int(floorf(sample_z));
+	int z0 = static_cast<int>(floorf(sample_z));
 	int z1 = z0 + 1;
 
 	// Determine sample point position within unit cube
-	float px0 = sample_x - float(x0);
+	float px0 = sample_x - static_cast<float>(x0);
 	float px1 = px0 - 1.0f;
-	float py0 = sample_y - float(y0);
+	float py0 = sample_y - static_cast<float>(y0);
 	float py1 = py0 - 1.0f;
-	float pz0 = sample_z - float(z0);
+	float pz0 = sample_z - static_cast<float>(z0);
 	float pz1 = pz0 - 1.0f;
 
 	// Compute dot product between gradient and sample position vector

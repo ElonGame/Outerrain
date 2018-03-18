@@ -7,12 +7,12 @@ void MainWindow::InitBasicTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.nx = 1025;
+	settings.ny = 1025;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/dome-2048.png");
+	settings.filePath = std::string("Data/Heightmaps/wild.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 250.0f;
 	settings.shaderType = TerrainSplatmap;
@@ -40,6 +40,13 @@ void MainWindow::InitNoiseTerrain()
 	settings.shaderType = TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
+	UpdateMeshRenderer();
+}
+
+void MainWindow::InitLayerTerrain()
+{
+	settings.shaderType = TerrainSplatmap;
+	layerfield = new LayerField(std::string("Data/Heightmaps/island.png"), 0, 250, 256, 256, Box2D(Vector2(-512), Vector2(512)));
 	UpdateMeshRenderer();
 }
 
@@ -74,8 +81,16 @@ void MainWindow::TranslateNoise(int y, int x)
 {
 	if (settings.terrainType != TerrainType::NoiseFieldTerrain)
 		return;
-	settings.offsetVector = settings.offsetVector + Vector3((float)x, 0.0f, (float)y);
+	settings.offsetVector = settings.offsetVector + Vector3(static_cast<float>(x), 0.0f, static_cast<float>(y));
 	hf->InitFromNoise(*settings.noise, settings.amplitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
+	UpdateMeshRenderer();
+}
+
+void MainWindow::LightingImpact()
+{
+	if (!layerfield)
+		return;
+	layerfield->LightingEventSimulate(5.0, 100, 5);
 	UpdateMeshRenderer();
 }
 
@@ -105,7 +120,7 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		hfObject->AddComponent(new HeightfieldMeshModel(hf));
+		hfObject->AddComponent(new HeightfieldMeshModel(layerfield));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMeshModel>(), mat));
 		return;
 	}

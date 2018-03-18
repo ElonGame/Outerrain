@@ -4,17 +4,16 @@
 \brief All these functions are copied/pasted from Musgrave article :
 https://www.classes.cs.uchicago.edu/archive/2015/fall/23700-1/final-project/MusgraveTerrain00.pdf
 
-Some work would be needed in order to make more of a C++ version, and factorize initialization of
-all the exponent_array into a static function. Comments are from the original implementation.
+And adapted a little to match with C++.
 */
 
 static bool first = true;
-static float *exponent_array;
+static float* exponent_array;
 
 static void InitExponentArrays(float lacunarity, float octaves, float H)
 {
 	float frequency;
-	exponent_array = new float[(int)octaves + 1];
+	exponent_array = new float[static_cast<int>(octaves) + 1];
 	frequency = 1.0;
 	for (int i = 0; i <= octaves; i++)
 	{
@@ -50,7 +49,7 @@ float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunar
 		point.z *= lacunarity;
 	}
 
-	float remainder = octaves - (int)octaves;
+	float remainder = octaves - static_cast<int>(octaves);
 	if (remainder)
 		value += remainder * n.GetValue(point) * exponent_array[i];
 	return value;
@@ -86,7 +85,7 @@ float Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, float H, floa
 		point.z *= lacunarity;
 	}
 
-	float remainder = octaves - (int)octaves;
+	float remainder = octaves - static_cast<int>(octaves);
 	if (remainder)
 		value += remainder * n.GetValue(point) * exponent_array[i];
 
@@ -141,7 +140,7 @@ float Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, flo
 	}
 
 	/* take care of remainder in ``octaves''  */
-	float remainder = octaves - (int)octaves;
+	float remainder = octaves - static_cast<int>(octaves);
 	if (remainder)
 	{
 		increment = (n.GetValue(point) + offset) * exponent_array[i];
@@ -198,7 +197,7 @@ float Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H
 	}
 
 	/* take care of remainder in ``octaves''  */
-	float remainder = octaves - (int)octaves;
+	float remainder = octaves - static_cast<int>(octaves);
 	if (remainder)
 		result += remainder * n.GetValue(point) * exponent_array[i];
 	return result;
@@ -223,7 +222,7 @@ float Fractal::MusgraveRidgedMultifractal(const Noise& n, Vector3 point, float H
 	float signal = n.GetValue(point);
 
 	/* get absolute value of signal (this creates the ridges) */
-	if (signal < 0.0) 
+	if (signal < 0.0)
 		signal = -signal;
 
 	/* invert and translate (note that "offset" should be ~= 1.0) */
@@ -244,12 +243,12 @@ float Fractal::MusgraveRidgedMultifractal(const Noise& n, Vector3 point, float H
 		point.z *= lacunarity;
 		/* weight successive contributions by previous signal */
 		weight = signal * gain;
-		if (weight > 1.0) 
+		if (weight > 1.0)
 			weight = 1.0;
 		if (weight < 0.0)
 			weight = 0.0;
 		signal = n.GetValue(point);
-		if (signal < 0.0) 
+		if (signal < 0.0)
 			signal = -signal;
 		signal = offset - signal;
 		signal *= signal;

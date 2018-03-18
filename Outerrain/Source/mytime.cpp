@@ -12,7 +12,6 @@ float Time::GlobalTime()
     last_delta = now - last_time;
     last_time = now;
     return static_cast<float>(last_time);
-    return 0.0f;
 }
 
 float Time::DeltaTime()
