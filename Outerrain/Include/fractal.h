@@ -6,6 +6,11 @@ enum FractalType
 {
 	fBm = 0,
 	Ridge = 1,
+	MusgravefBm = 2,
+	MusgraveMultifractal = 3,
+	MusgraveHeteroTerrain = 4,
+	MusgraveHybridMultifractal = 5,
+	MusgraveRidgedMultifractal = 6
 };
 
 class Fractal

@@ -126,6 +126,9 @@
     <ClInclude Include="Source\random.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\layerfield.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\heightfield.cpp">
@@ -183,9 +186,6 @@
     <ClCompile Include="Source\box2D.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\fractalMusgrave.cpp">
-      <Filter>Core\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\gpuheightfield.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -215,6 +215,12 @@
     </ClCompile>
     <ClCompile Include="Source\texture.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\layerfield.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\fractalMusgrave.cpp">
+      <Filter>Core\Source\noise</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

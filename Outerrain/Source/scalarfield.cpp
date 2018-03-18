@@ -58,6 +58,10 @@ Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, 
 		values[i] = field.values[i];
 }
 
+Scalarfield2D::~Scalarfield2D() 
+{
+}
+
 /*
 \brief Compute the gradient for the vertex (i, j)
 */
