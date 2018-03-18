@@ -3,18 +3,15 @@
 #include "vec.h"
 #include "transform.h"
 #include "box.h"
+#include "camera.h"
 
-class CameraOrbiter
+class CameraOrbiter : public Camera
 {
 protected:
 	Vector3 center;
 	Vector2 position;
 	Vector2 rotation;
 	float size;
-	int frameWidth;
-	int frameHeight;
-	float zNear;
-	float zFar;
 
 public:
 	CameraOrbiter();
@@ -34,9 +31,5 @@ public:
 	void Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
 	 
 	Vector3 Position() const;
-	void SetFrameWidth(int w);
-	void SetFrameHeight(int h);
-	int FrameWidth() const;
-	int FrameHeight() const;
-	void SetClippingPlanes(float n, float f);
+
 };

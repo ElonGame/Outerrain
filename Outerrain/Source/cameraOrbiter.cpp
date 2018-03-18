@@ -5,19 +5,20 @@
 
 
 CameraOrbiter::CameraOrbiter() 
-	: center(), position(), rotation(), size(5.0f), zNear(0.1f), zFar(5000.0f)
+	: center(), position(), rotation(), size(5.0f)
 {
+	SetClippingPlanes(0.1f, 5000.0f);
 }
 
 CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) 
-	: center(center), position(), rotation(), size(size), zNear(zNear), zFar(zFar)
+	: center(center), position(), rotation(), size(size)
 {
+	SetClippingPlanes(zNear, zFar);
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) 
-	: center(Math::Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax)), 
-		zNear(0.1f), zFar(1000.0f)
+CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Math::Center(pmin, pmax)), position(), rotation(), size(Magnitude(pmin - pmax))
 {
+	SetClippingPlanes(0.1f, 1000.0f);
 }
 
 void CameraOrbiter::LookAt(const Vector3& c, float s)
@@ -95,30 +96,4 @@ Vector3 CameraOrbiter::Position() const
 	Transform t = View(); // passage monde vers camera
 	Transform tinv = t.Inverse(); // l'inverse, passage camera vers monde
 	return tinv(Vector3(0, 0, 0)); // la camera se trouve a l'origine, dans le repere camera...
-}
-
-void CameraOrbiter::SetFrameWidth(int w)
-{ 
-	frameWidth = w;
-}
-
-void CameraOrbiter::SetFrameHeight(int h)
-{ 
-	frameHeight = h; 
-}
-
-int CameraOrbiter::FrameWidth() const
-{ 
-	return frameWidth; 
-}
-
-int CameraOrbiter::FrameHeight() const
-{ 
-	return frameHeight; 
-}
-
-void CameraOrbiter::SetClippingPlanes(float n, float f)
-{
-	zNear = n;
-	zFar = f;
 }

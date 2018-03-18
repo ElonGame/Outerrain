@@ -129,6 +129,9 @@
     <ClInclude Include="Include\layerfield.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Include\camera.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\heightfield.cpp">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="Source\fractalMusgrave.cpp">
       <Filter>Core\Source\noise</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\camera.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

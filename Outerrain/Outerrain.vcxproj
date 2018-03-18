@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\box2D.h" />
+    <ClInclude Include="Include\camera.h" />
     <ClInclude Include="Include\cameraOrbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
@@ -57,6 +58,7 @@
   <ItemGroup>
     <ClCompile Include="Source\box.cpp" />
     <ClCompile Include="Source\box2D.cpp" />
+    <ClCompile Include="Source\camera.cpp" />
     <ClCompile Include="Source\cameraOrbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\fractal.cpp" />
