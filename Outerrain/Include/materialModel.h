@@ -25,7 +25,6 @@ public:
 	GLuint texture2;
 	GLuint texture3;
 
-
 	MaterialModel();
 	virtual bool operator==(const MaterialModel& m);
 	virtual void SetShader(const Shader& s);

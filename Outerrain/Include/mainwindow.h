@@ -18,16 +18,15 @@ private:
 	CameraOrbiter orbiter;
 
 	/* Application Data */
-	LayerField* layerfield;
-	Heightfield* hf;
-	GPUHeightfield* gpuHeightfield;
 	GameObject* hfObject;
+	Heightfield* hf;
 	TerrainSettings settings;
 
 	/* Functions */
 	void InitBasicTerrain();
 	void InitNoiseTerrain();
 	void InitLayerTerrain();
+	void InitGPUTerrain();
 
 	void StreamPowerErosionStep();
 	void HydraulicErosionStep();
@@ -35,7 +34,7 @@ private:
 	void TranslateNoise(int, int);
 	void LightingImpact();
 
-	void GenerateTerrainFromSettings();
+	void GenerateTerrainFromSettings(bool gpu = false);
 	void UpdateMeshMaterial();
 	void UpdateMeshRenderer();
 	void ClearScene();

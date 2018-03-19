@@ -5,7 +5,6 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
 	hfObject = nullptr;
 	hf = nullptr;
-	gpuHeightfield = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
 	mainWindowHandler->CreateGLContext(4, 3);
 	Init();
@@ -52,7 +51,9 @@ void MainWindow::Init()
 
 	//InitNoiseTerrain();
 	//InitBasicTerrain();
-	InitLayerTerrain();
+	//InitLayerTerrain();
+	InitGPUTerrain();
+
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
 

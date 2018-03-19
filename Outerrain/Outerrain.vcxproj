@@ -84,6 +84,7 @@
     </ClCompile>
     <ClCompile Include="Source\layerfield.cpp" />
     <ClCompile Include="Source\mainwindow-callbacks.cpp" />
+    <ClCompile Include="Source\mainwindow-examples.cpp" />
     <ClCompile Include="Source\mainwindow.cpp" />
     <ClCompile Include="Source\materialModel.cpp" />
     <ClCompile Include="Source\meshModel.cpp" />

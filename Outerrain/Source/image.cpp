@@ -7,7 +7,7 @@
 #include "image.h"
 using namespace std;
 
-void Image::ReadImage(const std::string& filename, bool flipY)
+void Image::ReadImage(const string& filename, bool flipY)
 {
 	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if (surface == NULL)
@@ -71,7 +71,7 @@ void Image::ReadImage(const std::string& filename, bool flipY)
 	SDL_FreeSurface(surface);
 }
 
-int Image::WriteImage(const std::string& filename, bool flipY)
+int Image::WriteImage(const string& filename, bool flipY)
 {
 	if (filename.rfind(".png") == std::string::npos && filename.rfind(".bmp") == std::string::npos)
 	{
@@ -80,7 +80,7 @@ int Image::WriteImage(const std::string& filename, bool flipY)
 	}
 
 	// flip de l'image : Y inverse entre GL et BMP
-	std::vector<Uint8> flip(width * height * 4);
+	vector<Uint8> flip(width * height * 4);
 
 	int p = 0;
 	for (int y = 0; y < height; y++)
@@ -99,8 +99,7 @@ int Image::WriteImage(const std::string& filename, bool flipY)
 			p = p + 4;
 		}
 
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void*)&flip.front(), width, height,
-		32, width * 4,
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void*)&flip.front(), width, height, 32, width * 4,
 #if 0
 		0xFF000000,
 		0x00FF0000,
@@ -115,9 +114,9 @@ int Image::WriteImage(const std::string& filename, bool flipY)
 	);
 
 	int code = -1;
-	if (std::string(filename).rfind(".png") != std::string::npos)
+	if (string(filename).rfind(".png") != string::npos)
 		code = IMG_SavePNG(surface, filename.c_str());
-	else if (std::string(filename).rfind(".bmp") != std::string::npos)
+	else if (string(filename).rfind(".bmp") != string::npos)
 		code = SDL_SaveBMP(surface, filename.c_str());
 
 	SDL_FreeSurface(surface);
@@ -126,7 +125,7 @@ int Image::WriteImage(const std::string& filename, bool flipY)
 	return code;
 }
 
-void ImageData::ReadImageData(const std::string& filename)
+void ImageData::ReadImageData(const string& filename)
 {
 	SDL_Surface *surface = IMG_Load(filename.c_str());
 	if (surface == NULL)
@@ -198,9 +197,9 @@ void ImageData::ReadImageData(const std::string& filename)
 	SDL_FreeSurface(surface);
 }
 
-int ImageData::WriteImageData(const std::string& filename)
+int ImageData::WriteImageData(const string& filename)
 {
-	if (filename.rfind(".png") == std::string::npos && filename.rfind(".bmp") == std::string::npos)
+	if (filename.rfind(".png") == string::npos && filename.rfind(".bmp") == string::npos)
 	{
 		cout << "Error writing image : " << filename << " is not a .png/bmp image" << endl;
 		return -1;
@@ -213,7 +212,7 @@ int ImageData::WriteImageData(const std::string& filename)
 	}
 
 	// flip de l'image : origine en bas a gauche
-	std::vector<Uint8> flip(width * height * 4);
+	vector<Uint8> flip(width * height * 4);
 
 	int p = 0;
 	for (int y = 0; y < height; y++)
@@ -235,8 +234,7 @@ int ImageData::WriteImageData(const std::string& filename)
 		}
 
 	// construit la surface sdl
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), width, height,
-		32, width * 4,
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)&flip.front(), width, height, 32, width * 4,
 #if 0
 		0xFF000000,
 		0x00FF0000,
@@ -252,9 +250,9 @@ int ImageData::WriteImageData(const std::string& filename)
 
 	// enregistre le fichier
 	int code = -1;
-	if (std::string(filename).rfind(".png") != std::string::npos)
+	if (string(filename).rfind(".png") != string::npos)
 		code = IMG_SavePNG(surface, filename.c_str());
-	else if (std::string(filename).rfind(".bmp") != std::string::npos)
+	else if (string(filename).rfind(".bmp") != string::npos)
 		code = SDL_SaveBMP(surface, filename.c_str());
 
 	SDL_FreeSurface(surface);

@@ -228,5 +228,8 @@
     <ClCompile Include="Source\camera.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\mainwindow-examples.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

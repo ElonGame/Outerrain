@@ -14,10 +14,8 @@ using Random = effolkronium::random_static;
 /*
 \brief
 */
-LayerField::LayerField(int nx, int ny, const Box2D& bbox)
+LayerField::LayerField(int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox, 1.0)
 {
-	bedrock = Scalarfield2D(nx, ny, bbox, 1.0);
-
 	rocks = Scalarfield2D(nx, ny, bbox, 0.0);
 	vegetation = Scalarfield2D(nx, ny, bbox, 0.0);
 	snow = Scalarfield2D(nx, ny, bbox, 0.0);
@@ -28,10 +26,8 @@ LayerField::LayerField(int nx, int ny, const Box2D& bbox)
 /*
 \brief
 */
-LayerField::LayerField(int nx, int ny, const Box2D& bbox, float value)
+LayerField::LayerField(int nx, int ny, const Box2D& bbox, float value) : Heightfield(nx, ny, bbox, value)
 {
-	bedrock = Scalarfield2D(nx, ny, bbox, value);
-
 	rocks = Scalarfield2D(nx, ny, bbox, 0.0);
 	vegetation = Scalarfield2D(nx, ny, bbox, 0.0);
 	snow = Scalarfield2D(nx, ny, bbox, 0.0);
@@ -42,10 +38,8 @@ LayerField::LayerField(int nx, int ny, const Box2D& bbox, float value)
 /*
 \brief
 */
-LayerField::LayerField(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox)
+LayerField::LayerField(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox) : Heightfield(filePath, blackAltitude, whiteAltitude, nx, ny, bbox)
 {
-	bedrock = Scalarfield2D(filePath, blackAltitude, whiteAltitude, nx, ny, bbox);
-
 	rocks = Scalarfield2D(nx, ny, bbox, 0.0);
 	vegetation = Scalarfield2D(nx, ny, bbox, 0.0);
 	snow = Scalarfield2D(nx, ny, bbox, 0.0);
@@ -58,41 +52,9 @@ LayerField::LayerField(const std::string& filePath, float blackAltitude, float w
 */
 Vector3 LayerField::Vertex(int i, int j) const
 {
-	Vector3 ret = bedrock.Vertex(i, j);
+	Vector3 ret = Vertex(i, j);
 	ret.y += sediments.Get(i, j);
 	return ret;
-}
-
-/*
-\brief
-*/
-int LayerField::ToIndex1D(int i, int j) const
-{
-	return i * bedrock.SizeX() + j;
-}
-
-/*
-\brief
-*/
-Box2D LayerField::GetBox() const
-{
-	return bedrock.GetBox();
-}
-
-/*
-\brief
-*/
-int LayerField::SizeX() const
-{
-	return bedrock.SizeX();
-}
-
-/*
-\brief
-*/
-int LayerField::SizeY() const
-{
-	return bedrock.SizeY();
 }
 
 /*
@@ -100,7 +62,7 @@ int LayerField::SizeY() const
 */
 float LayerField::Height(const Vector2& p) const 
 {
-	float ret = bedrock.GetValueBilinear(p);
+	float ret = GetValueBilinear(p);
 	ret += sediments.GetValueBilinear(p);
 	return ret;
 }
@@ -112,8 +74,8 @@ void LayerField::LightingEventSimulate(float strength, int probability, int fire
 {
 	if (Random::get(0, 100) < probability)
 	{
-		float x = static_cast<float>(Random::get(-bedrock.SizeX(), bedrock.SizeX()));
-		float y = static_cast<float>(Random::get(-bedrock.SizeY(), bedrock.SizeY()));
+		float x = static_cast<float>(Random::get(-SizeX(), SizeX()));
+		float y = static_cast<float>(Random::get(-SizeY(), SizeY()));
 		LightingEvent(Vector2(x, y), strength, fireProbability);
 	}
 }
@@ -127,7 +89,7 @@ Also has a chance of triggering a fire in the vegetation layer.
 */
 void LayerField::LightingEvent(const Vector2& position, float strength, int fireProbability)
 {
-	Vector2i gridCoordinates = bedrock.ToIndex2D(position);
+	Vector2i gridCoordinates = ToIndex2D(position);
 	int radius = 5;
 
 	// Impact in point neighborhood
@@ -136,7 +98,7 @@ void LayerField::LightingEvent(const Vector2& position, float strength, int fire
 		for (int j = gridCoordinates.y - radius; j < gridCoordinates.y + radius; j++)
 		{
 			// Discard if not in terrain
-			if (!bedrock.Inside(i, j))
+			if (!Inside(i, j))
 				continue;
 
 			// Look for lowest neighbour to go to
@@ -146,9 +108,9 @@ void LayerField::LightingEvent(const Vector2& position, float strength, int fire
 			{
 				for (int l = -1; l <= 1; l++)
 				{
-					if ((k == 0 && l == 0) || bedrock.Inside(i + k, j + l) == false)
+					if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
 						continue;
-					float z = bedrock.Get(i, j) - bedrock.Get(i + k, j + l);
+					float z = Get(i, j) - Get(i + k, j + l);
 					if (z > maxZDiff)
 					{
 						maxZDiff = z;
@@ -162,7 +124,7 @@ void LayerField::LightingEvent(const Vector2& position, float strength, int fire
 
 			// Impact strength depends on distance to impact point
 			float pointImpactStrength = strength - (Magnitude(Vector2(i, j) - Vector2(gridCoordinates)) / radius);
-			bedrock.Remove(i, j, pointImpactStrength);
+			Remove(i, j, pointImpactStrength);
 			vegetation.Set(i, j, -1.0f); // -1.0f means dead vegetation.
 			rocks.Add(neiI, neiJ, pointImpactStrength);
 		}
@@ -196,11 +158,11 @@ void LayerField::Stabilize()
 */
 MeshModel* LayerField::GetHeightfieldMesh() const
 {
-	int ny = bedrock.SizeY();
-	int nx = bedrock.SizeX();
+	int ny = SizeY();
+	int nx = SizeX();
 
 	MeshModel* ret = new MeshModel();
-	ValueField<Vector3> normals = ValueField<Vector3>(bedrock.SizeX(), bedrock.SizeY(), bedrock.GetBox(), Vector3(0));
+	ValueField<Vector3> normals = ValueField<Vector3>(SizeX(), SizeY(), GetBox(), Vector3(0));
 	for (int i = 0; i < ny - 1; i++)
 	{
 		for (int j = 0; j < nx - 1; j++)
