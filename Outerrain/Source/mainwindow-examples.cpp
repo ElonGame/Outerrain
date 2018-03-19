@@ -6,12 +6,12 @@ void MainWindow::InitBasicTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1025;
-	settings.ny = 1025;
+	settings.nx = 256;
+	settings.ny = 256;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/wild.png");
+	settings.filePath = std::string("Data/Heightmaps/island.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 250.0f;
 	settings.shaderType = TerrainSplatmap;
@@ -26,8 +26,8 @@ void MainWindow::InitGPUTerrain()
 	hfObject = nullptr;
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1025;
-	settings.ny = 1025;
+	settings.nx = 256;
+	settings.ny = 256;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);

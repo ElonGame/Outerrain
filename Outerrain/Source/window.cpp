@@ -233,6 +233,12 @@ void Window::ClearWheelEvent()
 	last_wheel.y = 0;
 }
 
+void Window::ClearAllKeyStates()
+{
+	for (int i = 0; i < key_states.size(); i++)
+		key_states[i] = 0;
+}
+
 void Window::ClearKeyState(const SDL_Keycode& key)
 {
 	SDL_Scancode code = SDL_GetScancodeFromKey(key);

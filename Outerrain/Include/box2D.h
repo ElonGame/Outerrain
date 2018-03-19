@@ -1,5 +1,6 @@
 #pragma once
 #include "vec.h"
+#include "box.h"
 
 class Box2D
 {
@@ -22,6 +23,7 @@ public:
 	Vector2 BottomLeft() const;
 	Vector2 TopRight() const;
 
+	Box ToBox(double zMin, double zMax) const;
 	Vector2& operator[](int i);
 
 	friend std::ostream& operator<< (std::ostream& stream, const Box2D& b);

@@ -4,6 +4,7 @@
 #include "transform.h"
 #include "box.h"
 #include "camera.h"
+#include "ray.h"
 
 class CameraOrbiter : public Camera
 {
@@ -21,6 +22,9 @@ public:
 	void LookAt(const Vector3& center, const float size);
 	void LookAt(const Vector3& pmin, const Vector3& pmax);
 	void LookAt(const Box&);
+
+	Ray PixelToRay(const Vector2i& pixel);
+	Vector2i VectorToPixel(const Vector3& worldPoint);
 
 	float GetSize() const { return size; }
 	void Rotation(float x, float y);

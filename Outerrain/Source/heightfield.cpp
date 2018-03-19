@@ -9,7 +9,6 @@
 #include <queue>
 #include <array>
 
-
 using Random = effolkronium::random_static;
 
 /*
@@ -442,14 +441,17 @@ Scalarfield2D Heightfield::Illumination() const
 */
 bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
-	float step = (ray.origin.y - GetValueBilinear(Vector2(ray.origin.x, ray.origin.z))) / K;
+	Box bbox = GetBox().ToBox(Min(), Max());
+	float step = 1.0f;
 	while (true)
 	{
 		Vector3 q = ray.origin + ray.direction * step;
 		Vector2 rayPos2D = Vector2(q.x, q.z);
-		if (Inside(rayPos2D) == false)
+		if (bbox.Intersect(ray) == false)
 			break;
-		float delta = q.y - GetValueBilinear(rayPos2D);
+		float delta = 1.0f;
+		if (Inside(rayPos2D))
+			delta = q.y - GetValueBilinear(rayPos2D);
 		if (delta <= 0.01f)
 		{
 			hit.position = q;

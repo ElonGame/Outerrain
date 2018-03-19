@@ -1,5 +1,6 @@
 #pragma once
 #include "vec.h"
+#include "ray.h"
 
 class Box
 {
@@ -17,6 +18,7 @@ public:
     void Scale(float);
     Box Scaled(float) const;
 
+	bool Intersect(const Ray& ray);
     Vector3 Vertex(int) const;
     Vector3 Center() const;
     Vector3 BottomLeft() const;

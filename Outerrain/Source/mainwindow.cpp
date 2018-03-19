@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "mytime.h"
+#include <iostream>
+using namespace std;
 
 MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
@@ -50,9 +52,9 @@ void MainWindow::Init()
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
 	//InitNoiseTerrain();
-	//InitBasicTerrain();
+	InitBasicTerrain();
 	//InitLayerTerrain();
-	InitGPUTerrain();
+	//InitGPUTerrain();
 
 	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
 }
@@ -88,6 +90,19 @@ void MainWindow::Update(float time, float deltaTime)
 		ThermalErosionStep();
 	if (mainWindowHandler->KeyState(SDLK_F3))
 		HydraulicErosionStep();
+
+	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL))
+	{
+		SDL_GetMouseState(&mx, &my);
+		Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
+		Hit hit;
+		if (hf->Intersect(ray, hit))
+		{
+			Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
+			hf->Add(v.x, v.y, 50.0);
+			UpdateMeshRenderer();
+		}
+	}
 
 	/* Example Scenes */
 	if (mainWindowHandler->KeyState(SDLK_F8))
@@ -126,7 +141,8 @@ void MainWindow::Update(float time, float deltaTime)
 		UpdateMeshRenderer();
 	}
 
-	mainWindowHandler->ClearKeyState(SDLK_a);
+	mainWindowHandler->ClearButtonEvent();
+	mainWindowHandler->ClearAllKeyStates();
 	mainWindowHandler->ClearWheelEvent();
 	hfObject->UpdateTransformIfNeeded();
 }

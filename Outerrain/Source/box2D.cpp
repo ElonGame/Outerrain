@@ -107,6 +107,14 @@ Vector2 Box2D::TopRight() const
 }
 
 /*
+\brief Todo
+*/
+Box Box2D::ToBox(double zMin, double zMax) const
+{
+	return Box(Vector3(a.x, a.y, zMin), Vector3(b.x, b.y, zMax));
+}
+
+/*
 \brief Access box vertex by reference
 */
 Vector2& Box2D::operator[](int i)

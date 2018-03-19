@@ -73,6 +73,38 @@ Box Box::Scaled(float f) const
 }
 
 /*
+\brief Todo
+*/
+bool Box::Intersect(const Ray& r)
+{
+	float tmin = (a.x - r.origin.x) / r.direction.x;
+	float tmax = (b.x - r.origin.x) / r.direction.x;
+
+	if (tmin > tmax) 
+		Math::Swap(tmin, tmax);
+	float tymin = (a.y - r.origin.y) / r.direction.y;
+	float tymax = (b.y - r.origin.y) / r.direction.y;
+
+	if (tymin > tymax) 
+		Math::Swap(tymin, tymax);
+	if ((tmin > tymax) || (tymin > tmax))
+		return false;
+	if (tymin > tmin)
+		tmin = tymin;
+	if (tymax < tmax)
+		tmax = tymax;
+
+	float tzmin = (a.z - r.origin.z) / r.direction.z;
+	float tzmax = (b.z - r.origin.z) / r.direction.z;
+	if (tzmin > tzmax) 
+		Math::Swap(tzmin, tzmax);
+
+	if ((tmin > tzmax) || (tzmin > tmax))
+		return false;
+	return true;
+}
+
+/*
 \brief Get one of the vertex of the box.
 */
 Vector3 Box::Vertex(int i) const

@@ -37,6 +37,24 @@ void CameraOrbiter::LookAt(const Box& b)
 	LookAt(b.BottomLeft(), b.TopRight());
 }
 
+Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
+{
+	float x = pixel.x;
+	float y = pixel.y;
+	float fov = 45.0f;
+
+	float imageAspectRatio = (float)frameWidth / (float)frameHeight;
+	float Px = (2 * ((x + 0.5) / frameWidth) - 1) * tan(fov / 2 * 3.14f / 180) * imageAspectRatio;
+	float Py = (1 - 2 * ((y + 0.5) / frameHeight) * tan(fov / 2 * 3.14f / 180));
+
+	return Ray(Position(), Normalize(Vector3(Px, Py, -1.0f) - Position()));
+}
+
+Vector2i CameraOrbiter::VectorToPixel(const Vector3& worldPoint)
+{
+	return Vector2i(0);
+}
+
 void CameraOrbiter::Rotation(float x, float y)
 {
 	rotation.x = rotation.x + y;

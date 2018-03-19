@@ -37,6 +37,7 @@ public:
 	SDL_TextInputEvent TextEvent();
 
 	void ClearTextEvent();
+	void ClearAllKeyStates();
 	void ClearKeyState(const SDL_Keycode& key);
 	void ClearWheelEvent();
 	void ClearButtonEvent();

@@ -18,6 +18,14 @@ namespace Math
 		return x < a ? a : x > b ? b : x;
 	}
 
+	template<typename T>
+	inline void Swap(T& a, T& b)
+	{
+		T tmp = a;
+		a = b;
+		b = tmp;
+	}
+
 	template<typename T, size_t N>
 	inline T Accumulate(std::array<T, N>& arr)
 	{
