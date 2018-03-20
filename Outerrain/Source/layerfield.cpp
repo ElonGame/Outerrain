@@ -156,33 +156,16 @@ void LayerField::Stabilize()
 /*
 \brief
 */
-std::vector<EcosystemInstance> LayerField::GetVegetationInstances() const
+MeshSetRenderer LayerField::GetVegetationInstances() const
 {
-	std::vector<EcosystemInstance> ret;
-	for (int i = 0; i < vegetation.SizeY(); i++)
-	{
-		for (int j = 0; j < vegetation.SizeX(); j++)
-		{
-			if (vegetation.Get(i, j) != 0)
-				ret.push_back(EcosystemInstance(vegetation.Vertex(i, j), vegetation.Get(i, j), 1));
-		}
-	}
-	return ret;
 }
 
 /*
 \brief
 */
-std::vector<EcosystemInstance> LayerField::GetRockInstances() const
+MeshSetRenderer LayerField::GetRockInstances() const
 {
-	std::vector<EcosystemInstance> ret;
-	for (int i = 0; i < rocks.SizeY(); i++)
-	{
-		for (int j = 0; j < rocks.SizeX(); j++)
-		{
-			if (rocks.Get(i, j) != 0)
-				ret.push_back(EcosystemInstance(rocks.Vertex(i, j), rocks.Get(i, j), 1));
-		}
-	}
+	MeshSetRenderer ret = MeshSetRenderer();
+
 	return ret;
 }

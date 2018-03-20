@@ -11,6 +11,7 @@ protected:
 
 public:
 	Frame();
+	~Frame();
 
 	Vector3 GetPosition() const;
 	void SetPosition(const Vector3& vector);

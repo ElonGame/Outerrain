@@ -5,6 +5,11 @@ Frame::Frame()
 
 }
 
+Frame::~Frame()
+{
+
+}
+
 Vector3 Frame::GetPosition() const
 {
 	return Vector3(translation.m[0][3], translation.m[1][3], translation.m[2][3]);

@@ -2,12 +2,18 @@
 
 MeshSetRenderer::MeshSetRenderer()
 {
+	mesh = nullptr;
+}
 
+MeshSetRenderer::MeshSetRenderer(Mesh* m)
+{
+	mesh = nullptr;
+	CreateBuffers();
 }
 
 MeshSetRenderer::~MeshSetRenderer()
 {
-	mesh.release();
+	delete mesh;
 	frames.clear();
 	ClearBuffers();
 }
@@ -66,7 +72,7 @@ void MeshSetRenderer::SetShader(const Shader& s)
 
 const Mesh& MeshSetRenderer::GetMeshModel() const 
 {
-	return *mesh.get();
+	return *mesh;
 }
 
 void MeshSetRenderer::UpdateBuffers()

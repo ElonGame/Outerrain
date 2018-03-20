@@ -1,16 +1,18 @@
 #pragma once
 #include <memory>
-#include <vector>
+#include <GL/glew.h>
 
-#include "meshModel.h"
-#include "frame.h"
 #include "cameraOrbiter.h"
+#include "meshModel.h"
+#include "gameobject.h"
+#include "shader.h"
 #include "materialModel.h"
+#include "frame.h"
 
 class MeshSetRenderer
 {
 protected:
-	std::unique_ptr<Mesh> mesh;
+	Mesh* mesh;
 	std::vector<Frame> frames;
 
 	GLenum primitiveMode;
@@ -25,6 +27,7 @@ protected:
 
 public:
 	MeshSetRenderer();
+	MeshSetRenderer(Mesh*);
 	~MeshSetRenderer();
 
 	void AddFrame(const Frame& f);
