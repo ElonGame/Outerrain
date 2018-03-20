@@ -1,6 +1,6 @@
 #pragma once
 
-#include "meshModel.h"
+#include "meshSet.h"
 #include "heightfield.h"
 #include "ecosystem.h"
 
@@ -27,7 +27,6 @@ public:
 
 	void Stabilize();
 
-	std::vector<EcosystemInstance> GetVegetationInstances() const;
-	std::vector<EcosystemInstance> GetRockInstances() const;
-	MeshModel* GetHeightfieldMesh() const;
+	MeshSetRenderer GetVegetationInstances() const;
+	MeshSetRenderer GetRockInstances() const;
 };

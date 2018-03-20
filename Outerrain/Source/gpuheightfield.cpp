@@ -2,9 +2,8 @@
 #include "mathUtils.h"
 
 /*
-\brief Todo
+\brief Constructor
 */
-
 GPUHeightfield::GPUHeightfield() : Heightfield()
 {
 	InitGPUPrograms();

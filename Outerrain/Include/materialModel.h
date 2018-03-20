@@ -11,7 +11,7 @@ enum ShaderType
 	SimpleTextured = 2
 };
 
-class MaterialModel
+class Material
 {
 public:
 	Shader shader;
@@ -25,8 +25,8 @@ public:
 	GLuint texture2;
 	GLuint texture3;
 
-	MaterialModel();
-	virtual bool operator==(const MaterialModel& m);
+	Material();
+	virtual bool operator==(const Material& m);
 	virtual void SetShader(const Shader& s);
 	virtual void SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos);
 	virtual void Release();
@@ -34,7 +34,7 @@ public:
 	/* Static Materials */
 	static void InitStaticMaterials();
 	static void ReleaseStaticMaterials();
-	static MaterialModel DefaultTexturedMat;
-	static MaterialModel DefaultDiffuseMat;
-	static MaterialModel TerrainTexturedMat;
+	static Material DefaultTexturedMat;
+	static Material DefaultDiffuseMat;
+	static Material TerrainTexturedMat;
 };

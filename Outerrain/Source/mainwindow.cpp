@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::Quit()
 {
-	MaterialModel::ReleaseStaticMaterials();
+	Material::ReleaseStaticMaterials();
 	if (hf)
 	{
 		delete hf;
@@ -45,7 +45,7 @@ void MainWindow::Show()
 void MainWindow::Init()
 {
 	mainWindowHandler->SetDefaultGLState();
-	MaterialModel::InitStaticMaterials();
+	Material::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
@@ -56,7 +56,7 @@ void MainWindow::Init()
 	//InitLayerTerrain();
 	//InitGPUTerrain();
 
-	orbiter.LookAt(hfObject->GetComponent<MeshModel>()->GetBounds());
+	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
 }
 
 void MainWindow::MainLoop()

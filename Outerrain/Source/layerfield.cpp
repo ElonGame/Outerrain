@@ -156,99 +156,16 @@ void LayerField::Stabilize()
 /*
 \brief
 */
-MeshModel* LayerField::GetHeightfieldMesh() const
+MeshSetRenderer LayerField::GetVegetationInstances() const
 {
-	int ny = SizeY();
-	int nx = SizeX();
-
-	MeshModel* ret = new MeshModel();
-	ValueField<Vector3> normals = ValueField<Vector3>(SizeX(), SizeY(), GetBox(), Vector3(0));
-	for (int i = 0; i < ny - 1; i++)
-	{
-		for (int j = 0; j < nx - 1; j++)
-		{
-			Vector3 AB = (Vertex(i + 1, j) - Vertex(i, j));
-			Vector3 AC = (Vertex(i + 1, j + 1) - Vertex(i, j));
-			Vector3 normal = Normalize(-Cross(AB, AC));
-
-			normals.Set(i, j, normals.Get(i, j) + normal);
-			normals.Set(i + 1, j, normals.Get(i + 1, j) + normal);
-			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
-
-			AB = AC;
-			AC = (Vertex(i, j + 1) - Vertex(i, j));
-			normal = Normalize(-Cross(AB, AC));
-
-			normals.Set(i, j, normals.Get(i, j) + normal);
-			normals.Set(i + 1, j + 1, normals.Get(i + 1, j + 1) + normal);
-			normals.Set(i, j + 1, normals.Get(i, j + 1) + normal);
-		}
-	}
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-			normals.Set(i, j, Normalize(normals.Get(i, j)));
-	}
-
-	// Vertices & Texcoords & Normals
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float u = j / ((float)nx - 1);
-			float v = i / ((float)ny - 1);
-			ret->AddVertex(Vertex(i, j));
-			ret->AddTexcoord(Vector2(u, v));
-			ret->AddNormal(normals.Get(i, j));
-		}
-	}
-
-	// Triangles
-	int c = 0;
-	int vertexArrayLength = ny * nx;
-	while (c < vertexArrayLength - nx - 1)
-	{
-		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
-		{
-			ret->AddTriangle(c + nx + 1, c + nx, c);
-			ret->AddTriangle(c, c + 1, c + nx + 1);
-		}
-		c++;
-	}
-
-	return ret;
 }
 
 /*
 \brief
 */
-std::vector<EcosystemInstance> LayerField::GetVegetationInstances() const
+MeshSetRenderer LayerField::GetRockInstances() const
 {
-	std::vector<EcosystemInstance> ret;
-	for (int i = 0; i < vegetation.SizeY(); i++)
-	{
-		for (int j = 0; j < vegetation.SizeX(); j++)
-		{
-			if (vegetation.Get(i, j) != 0)
-				ret.push_back(EcosystemInstance(vegetation.Vertex(i, j), vegetation.Get(i, j), 1));
-		}
-	}
-	return ret;
-}
+	MeshSetRenderer ret = MeshSetRenderer();
 
-/*
-\brief
-*/
-std::vector<EcosystemInstance> LayerField::GetRockInstances() const
-{
-	std::vector<EcosystemInstance> ret;
-	for (int i = 0; i < rocks.SizeY(); i++)
-	{
-		for (int j = 0; j < rocks.SizeX(); j++)
-		{
-			if (rocks.Get(i, j) != 0)
-				ret.push_back(EcosystemInstance(rocks.Vertex(i, j), rocks.Get(i, j), 1));
-		}
-	}
 	return ret;
 }

@@ -3,14 +3,17 @@
 
 namespace Math
 {
+	template <typename T = float>
+	constexpr T PI = T(3.14159265358979323846L);
+
 	inline float Radians(float deg)
 	{
-		return ((float)3.14 / 180.f) * deg;
+		return (PI<float> / 180.f) * deg;
 	}
 
 	inline float Degrees(float rad)
 	{
-		return (180.f / (float)3.14) * rad;
+		return (180.f / PI<float>) * rad;
 	}
 
 	inline float Clamp(float x, float a = 0.0f, float b = 1.0f)
@@ -62,6 +65,6 @@ namespace Math
 	template<typename T>
     inline T Center(const T& a, const T& b)
     {
-	    return (a + b) / 2;
+	    return (a + b) / 2.0f;
     }
 }

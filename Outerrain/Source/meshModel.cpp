@@ -3,23 +3,23 @@
 #include<iostream>
 
 
-MeshModel::MeshModel() : isDirty(false)
+Mesh::Mesh() : isDirty(false)
 {
 }
 
-void MeshModel::AddVertex(const Vector3& v)
+void Mesh::AddVertex(const Vector3& v)
 {
 	vertices.push_back(v);
 	isDirty = true;
 }
 
-void MeshModel::AddNormal(const Vector3& n)
+void Mesh::AddNormal(const Vector3& n)
 {
 	normals.push_back(n);
 	isDirty = true;
 }
 
-void MeshModel::AddTriangle(unsigned int a, unsigned int b, unsigned int c)
+void Mesh::AddTriangle(unsigned int a, unsigned int b, unsigned int c)
 {
 	indices.push_back(a);
 	indices.push_back(b);
@@ -27,13 +27,13 @@ void MeshModel::AddTriangle(unsigned int a, unsigned int b, unsigned int c)
 	isDirty = true;
 }
 
-void MeshModel::AddTexcoord(const Vector2& t)
+void Mesh::AddTexcoord(const Vector2& t)
 {
 	texcoords.push_back(t);
 	isDirty = true;
 }
 
-Box MeshModel::GetBounds() const
+Box Mesh::GetBounds() const
 {
 	Box ret = Box(Vector3(0), 1.0);
 	if (vertices.size() < 1)
@@ -48,7 +48,7 @@ Box MeshModel::GetBounds() const
 	return ret;
 }
 
-bool MeshModel::LoadObj(const std::string& path)
+bool Mesh::LoadObj(const std::string& path)
 {
 	std::ifstream ifs(path, std::ios::in);
 	if (ifs.is_open() == false)
@@ -100,7 +100,7 @@ bool MeshModel::LoadObj(const std::string& path)
 	return true;
 }
 
-void MeshModel::ClearBuffers()
+void Mesh::ClearBuffers()
 {
 	vertices.clear();
 	normals.clear();
@@ -109,7 +109,7 @@ void MeshModel::ClearBuffers()
 	isDirty = true;
 }
 
-void MeshModel::PrintInfos()
+void Mesh::PrintInfos()
 {
 	std::cout << "Printing mesh properties..." << std::endl;
 	std::cout << "Vertice count : " << VerticeCount() << std::endl;

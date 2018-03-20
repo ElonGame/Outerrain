@@ -9,9 +9,10 @@
 #include "vec.h"
 #include "box.h"
 
-class MeshModel : public Component
+class Mesh : public Component
 {
 	friend class MeshRenderer;
+	friend class MeshSetRenderer;
 
 protected:
 	std::vector<Vector3> vertices;
@@ -22,7 +23,7 @@ protected:
 	bool isDirty;
 
 public:
-	MeshModel();
+	Mesh();
 
 	void AddVertex(const Vector3&);
 	void AddNormal(const Vector3&);

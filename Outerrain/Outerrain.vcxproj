@@ -26,6 +26,7 @@
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\fractal.h" />
+    <ClInclude Include="Include\frame.h" />
     <ClInclude Include="Include\gameobject.h" />
     <ClInclude Include="Include\gpuHeightfield.h" />
     <ClInclude Include="Include\heightfield.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="Include\mathUtils.h" />
     <ClInclude Include="Include\meshModel.h" />
     <ClInclude Include="Include\meshRenderer.h" />
+    <ClInclude Include="Include\meshSet.h" />
     <ClInclude Include="Include\mytime.h" />
     <ClInclude Include="Include\poissonTile2D.h" />
     <ClInclude Include="Include\quaternion.h" />
@@ -66,6 +68,7 @@
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\fractal.cpp" />
     <ClCompile Include="Source\fractalMusgrave.cpp" />
+    <ClCompile Include="Source\frame.cpp" />
     <ClCompile Include="Source\gameobject.cpp" />
     <ClCompile Include="Source\gpuheightfield.cpp" />
     <ClCompile Include="Source\heightfield.cpp" />
@@ -89,6 +92,7 @@
     <ClCompile Include="Source\materialModel.cpp" />
     <ClCompile Include="Source\meshModel.cpp" />
     <ClCompile Include="Source\meshRenderer.cpp" />
+    <ClCompile Include="Source\meshSetRenderer.cpp" />
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\poissonTile2D.cpp" />
     <ClCompile Include="Source\scalarfield.cpp" />
@@ -106,7 +110,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{5AE1C777-AD03-46C4-B6AD-76EE6BEC839D}</ProjectGuid>
     <RootNamespace>Outerrain</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -125,13 +129,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

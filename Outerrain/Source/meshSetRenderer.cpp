@@ -1,30 +1,81 @@
-#include "meshRenderer.h"
-#include <iostream>
+#include "meshSet.h"
 
-
-MeshRenderer::MeshRenderer()
-{ 
+MeshSetRenderer::MeshSetRenderer()
+{
+	mesh = nullptr;
 }
 
-MeshRenderer::MeshRenderer(Mesh* m)
+MeshSetRenderer::MeshSetRenderer(Mesh* m)
 {
-	mesh = std::unique_ptr<Mesh>(m);
+	mesh = nullptr;
 	CreateBuffers();
 }
 
-MeshRenderer::MeshRenderer(Mesh* m, const Material& mat) : MeshRenderer(m)
+MeshSetRenderer::~MeshSetRenderer()
 {
-	material = mat;
-}
-
-MeshRenderer::~MeshRenderer()
-{
-	mesh.release();
+	delete mesh;
+	frames.clear();
 	ClearBuffers();
 }
 
+void MeshSetRenderer::AddFrame(const Frame& f)
+{
+	frames.push_back(f);
+}
 
-void MeshRenderer::UpdateBuffers()
+void MeshSetRenderer::ClearFrames()
+{
+	frames.clear();
+}
+
+void MeshSetRenderer::Render(const CameraOrbiter& cam) 
+{
+	Transform mvp = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f);
+	Vector3 camPos = cam.Position();
+	Transform trs = frames[0].GetMatrix();
+	material.SetFrameUniforms(trs, mvp, camPos);
+
+	if (vao == 0)
+		CreateBuffers();
+	if (mesh->isDirty == true)
+		UpdateBuffers();
+
+	for (int i = 1; i < frames.size(); i++)
+	{
+		trs = frames[i].GetMatrix();
+		mvp = mvp * (cam.View() * trs);
+		material.shader.UniformTransform("trsMatrix", trs);
+		material.shader.UniformTransform("mvpMatrix", mvp);
+
+		glBindVertexArray(vao);
+		if (mesh->indices.size() > 0)
+			glDrawElements(primitiveMode, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0);
+		else
+			glDrawArrays(primitiveMode, 0, (GLsizei)mesh->vertices.size());
+	}
+}
+
+void MeshSetRenderer::SetMaterial(const Material& m)
+{
+	material = m;
+}
+
+void MeshSetRenderer::SetPrimitiveMode(const GLuint& p)
+{
+	primitiveMode = p;
+}
+
+void MeshSetRenderer::SetShader(const Shader& s)
+{
+	material.SetShader(s);
+}
+
+const Mesh& MeshSetRenderer::GetMeshModel() const 
+{
+	return *mesh;
+}
+
+void MeshSetRenderer::UpdateBuffers()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, fullBuffer);
 	size_t offset = 0;
@@ -48,33 +99,7 @@ void MeshRenderer::UpdateBuffers()
 	mesh->isDirty = false;
 }
 
-void MeshRenderer::RenderInternal()
-{
-	if (vao == 0)
-		CreateBuffers();
-	if (mesh->isDirty == true)
-		UpdateBuffers();
-
-	glBindVertexArray(vao);
-	if (mesh->indices.size() > 0)
-		glDrawElements(primitiveMode, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0);
-	else
-		glDrawArrays(primitiveMode, 0, (GLsizei)mesh->vertices.size());
-}
-
-
-void MeshRenderer::Render(const CameraOrbiter& cam)
-{
-	Transform trs = gameObject->GetObjectToWorldMatrix();
-	Transform mvp = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f) * (cam.View() * trs);
-	Vector3 camPos = cam.Position();
-
-	material.SetFrameUniforms(trs, mvp, camPos);
-
-	RenderInternal();
-}
-
-void MeshRenderer::CreateBuffers()
+void MeshSetRenderer::CreateBuffers()
 {
 	if (mesh->VerticeCount() == 0)
 	{
@@ -133,29 +158,9 @@ void MeshRenderer::CreateBuffers()
 	primitiveMode = GL_TRIANGLES;
 }
 
-void MeshRenderer::ClearBuffers()
+void MeshSetRenderer::ClearBuffers()
 {
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &fullBuffer);
 	glDeleteBuffers(1, &indexBuffer);
-}
-
-void MeshRenderer::SetMaterial(const Material& m)
-{
-	material = m;
-}
-
-void MeshRenderer::SetShader(const Shader& s)
-{
-	material.SetShader(s);
-}
-
-void MeshRenderer::SetPrimitiveMode(const GLuint& p)
-{
-	primitiveMode = p;
-}
-
-const Mesh& MeshRenderer::GetMeshModel() const
-{ 
-	return *mesh.get();
 }

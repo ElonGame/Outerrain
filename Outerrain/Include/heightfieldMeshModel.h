@@ -4,13 +4,13 @@
 class Heightfield;
 class LayerField;
 
-class HeightfieldMeshModel : public MeshModel
+class HeightfieldMesh : public Mesh
 {
 protected:
 	Heightfield* hf;
 
 public:
-	HeightfieldMeshModel(Heightfield* h);
+	HeightfieldMesh(Heightfield* h);
 
 	void UpdateMeshBuffers();
 };

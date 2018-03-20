@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Todo">
-      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{553aeee7-d818-4849-b4ff-67ec0ebd8103}</UniqueIdentifier>
     </Filter>
@@ -25,28 +22,31 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
     </Filter>
+    <Filter Include="To Refactor">
+      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Include">
+      <UniqueIdentifier>{7e065c67-1d44-4e13-9d7e-db2f5e23bf22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Source">
+      <UniqueIdentifier>{24b7bc65-7e76-492e-b1e2-ce3386858c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Include">
+      <UniqueIdentifier>{85a96720-6587-4739-ae8f-4ac62ff7f30d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Source">
+      <UniqueIdentifier>{1cdcd0ec-71ec-4fa6-8e9f-ae874aa5921b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\heightfield.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\valueField.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\scalarfield.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Include\mainwindow.h">
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\window.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="Include\ecosystem.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Include\imgui_opengl.h">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClInclude>
     <ClInclude Include="Include\color.h">
       <Filter>Core\Include</Filter>
@@ -79,7 +79,7 @@
       <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\image.h">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClInclude>
     <ClInclude Include="Include\terrainSettings.h">
       <Filter>View</Filter>
@@ -90,56 +90,68 @@
     <ClInclude Include="Include\mathUtils.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\gpuHeightfield.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Include\box2D.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\sphere.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\materialModel.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshModel.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshRenderer.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\shader.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\heightfieldMeshModel.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\cameraOrbiter.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Include\poissonTile2D.h">
       <Filter>Core\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\texture.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Source\random.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\layerfield.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Include\camera.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\frame.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\cameraOrbiter.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\heightfieldMeshModel.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\materialModel.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshModel.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshRenderer.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshSet.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\texture.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\shader.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ecosystem.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\gpuHeightfield.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\heightfield.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\layerfield.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\scalarfield.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\valueField.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\heightfield.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\scalarfield.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Source\mainwindow.cpp">
       <Filter>View</Filter>
     </ClCompile>
@@ -150,17 +162,14 @@
       <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\ecosystem.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Source\imgui.cpp">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_opengl.cpp">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Source\transform.cpp">
       <Filter>Core\Source</Filter>
@@ -181,7 +190,7 @@
       <Filter>Core\Source\noise</Filter>
     </ClCompile>
     <ClCompile Include="Source\image.cpp">
-      <Filter>Todo</Filter>
+      <Filter>To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Source\box.cpp">
       <Filter>Core\Source</Filter>
@@ -189,38 +198,11 @@
     <ClCompile Include="Source\box2D.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\gpuheightfield.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Source\sphere.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\heightfieldMeshModel.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\materialModel.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshModel.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshRenderer.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\shader.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\cameraOrbiter.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Source\poissonTile2D.cpp">
       <Filter>Core\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\texture.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\layerfield.cpp">
-      <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Source\fractalMusgrave.cpp">
       <Filter>Core\Source\noise</Filter>
@@ -230,6 +212,48 @@
     </ClCompile>
     <ClCompile Include="Source\mainwindow-examples.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\frame.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cameraOrbiter.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\heightfieldMeshModel.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\materialModel.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshModel.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshRenderer.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshSetRenderer.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ecosystem.cpp">
+      <Filter>Framework\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gpuheightfield.cpp">
+      <Filter>Framework\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\heightfield.cpp">
+      <Filter>Framework\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\layerfield.cpp">
+      <Filter>Framework\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scalarfield.cpp">
+      <Filter>Framework\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

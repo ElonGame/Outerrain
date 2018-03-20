@@ -496,9 +496,9 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vec
 /*
 \brief Compute the heightfield mesh for rendering
 */
-MeshModel* Heightfield::GetMeshModel() const
+Mesh* Heightfield::GetMeshModel() const
 {
-	MeshModel* ret = new MeshModel();
+	Mesh* ret = new Mesh();
 	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, box, Vector3(0));
 	for (int i = 0; i < ny - 1; i++)
 	{
