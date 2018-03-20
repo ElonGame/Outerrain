@@ -10,6 +10,8 @@ public:
 
 	Ray() : origin(Vector3(0)), direction(Vector3(0)) { }
 	Ray(const Vector3& origin, const Vector3& direction) : origin(origin), direction(direction) { }
+
+	Vector3 At(float t) const { return origin + direction * t; }
 } Ray;
 
 typedef struct Hit

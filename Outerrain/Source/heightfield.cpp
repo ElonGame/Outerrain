@@ -442,23 +442,23 @@ Scalarfield2D Heightfield::Illumination() const
 bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 {
 	Box bbox = GetBox().ToBox(Min(), Max());
-	float step = 1.0f;
-	while (true)
+	float a, b;
+	if (!bbox.Intersect(ray, a, b))
+		return false;
+
+	float t = Math::Max(a + 0.01f, 0.0f);
+	while (t < b)
 	{
-		Vector3 q = ray.origin + ray.direction * step;
-		Vector2 rayPos2D = Vector2(q.x, q.z);
-		if (bbox.Intersect(ray) == false)
-			break;
-		float delta = 1.0f;
-		if (Inside(rayPos2D))
-			delta = q.y - GetValueBilinear(rayPos2D);
-		if (delta <= 0.01f)
+		Vector3 p = ray.At(t);
+		float z = GetValueBilinear(Vector2(p.x, p.y));
+		float h = p[2] - z;
+		if (h < 0.01f)
 		{
-			hit.position = q;
+			hit.position = Vector3(p.x, p.y, z);
 			hit.normal = Vector3(0);
 			return true;
 		}
-		step += delta / K;
+		t += Math::Max(h / K, 0.1f);
 	}
 	return false;
 }

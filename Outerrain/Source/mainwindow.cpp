@@ -101,6 +101,7 @@ void MainWindow::Update(float time, float deltaTime)
 			Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
 			hf->Add(v.x, v.y, 50.0);
 			UpdateMeshRenderer();
+			cout << "Hit at " << hit.position << endl;
 		}
 	}
 

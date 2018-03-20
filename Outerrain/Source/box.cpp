@@ -21,9 +21,9 @@ Box::Box(const Vector3& A, const Vector3& B) : a(A), b(B)
 */
 Box::Box(const Vector3& C, float R)
 {
-    Vector3 RR = Vector3(R);
-    a = C - RR;
-    b = C + RR;
+	Vector3 RR = Vector3(R);
+	a = C - RR;
+	b = C + RR;
 }
 
 /*
@@ -31,7 +31,7 @@ Box::Box(const Vector3& C, float R)
 */
 bool Box::Contains(const Vector3& p) const
 {
-    return (p > a && p < b);
+	return (p > a && p < b);
 }
 
 /*
@@ -40,8 +40,8 @@ bool Box::Contains(const Vector3& p) const
 */
 void Box::Extend(const Vector3& r)
 {
-    a -= r;
-    b += r;
+	a -= r;
+	b += r;
 }
 
 /*
@@ -50,7 +50,7 @@ void Box::Extend(const Vector3& r)
 */
 Box Box::Extended(const Vector3& r) const
 {
-    return Box(a - r, b + r);
+	return Box(a - r, b + r);
 }
 
 /*
@@ -59,8 +59,8 @@ Box Box::Extended(const Vector3& r) const
 */
 void Box::Scale(float f)
 {
-    a *= f;
-    b *= f;
+	a *= f;
+	b *= f;
 }
 
 /*
@@ -69,39 +69,124 @@ void Box::Scale(float f)
 */
 Box Box::Scaled(float f) const
 {
-    return Box(a * f, b * f);
+	return Box(a * f, b * f);
 }
 
 /*
 \brief Todo
 */
-bool Box::Intersect(const Ray& r)
+bool Box::Intersect(const Ray& r, float& tmin, float& tmax)
 {
-	float tmin = (a.x - r.origin.x) / r.direction.x;
-	float tmax = (b.x - r.origin.x) / r.direction.x;
+	tmin = -1e16;
+	tmax = 1e16;
 
-	if (tmin > tmax) 
-		Math::Swap(tmin, tmax);
-	float tymin = (a.y - r.origin.y) / r.direction.y;
-	float tymax = (b.y - r.origin.y) / r.direction.y;
+	Vector3 p = r.origin;
+	Vector3 d = r.direction;
 
-	if (tymin > tymax) 
-		Math::Swap(tymin, tymax);
-	if ((tmin > tymax) || (tymin > tmax))
-		return false;
-	if (tymin > tmin)
-		tmin = tymin;
-	if (tymax < tmax)
-		tmax = tymax;
+	double t;
+	// Ox
+	if (d[0] < -1.0e-5)
+	{
+		t = (a[0] - p[0]) / d[0];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (b[0] - p[0]) / d[0];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (d[0] > 1.0e-5)
+	{
+		t = (b[0] - p[0]) / d[0];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (a[0] - p[0]) / d[0];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (p[0]<a[0] || p[0]>b[0])
+		return 0;
 
-	float tzmin = (a.z - r.origin.z) / r.direction.z;
-	float tzmax = (b.z - r.origin.z) / r.direction.z;
-	if (tzmin > tzmax) 
-		Math::Swap(tzmin, tzmax);
+	// Oy
+	if (d[1] < -1.0e-5)
+	{
+		t = (a[1] - p[1]) / d[1];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (b[1] - p[1]) / d[1];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (d[1] > 1.0e-5)
+	{
+		t = (b[1] - p[1]) / d[1];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (a[1] - p[1]) / d[1];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (p[1]<a[1] || p[1]>b[1])
+		return 0;
 
-	if ((tmin > tzmax) || (tzmin > tmax))
-		return false;
-	return true;
+	// Oz
+	if (d[2] < -1.0e-5)
+	{
+		t = (a[2] - p[2]) / d[2];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (b[2] - p[2]) / d[2];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (d[2] > 1.0e-5)
+	{
+		t = (b[2] - p[2]) / d[2];
+		if (t < tmin)
+			return 0;
+		if (t <= tmax)
+			tmax = t;
+		t = (a[2] - p[2]) / d[2];
+		if (t >= tmin)
+		{
+			if (t > tmax)
+				return 0;
+			tmin = t;
+		}
+	}
+	else if (p[2]<a[2] || p[2]>b[2])
+		return 0;
+
+	return 1;
 }
 
 /*
@@ -109,9 +194,9 @@ bool Box::Intersect(const Ray& r)
 */
 Vector3 Box::Vertex(int i) const
 {
-    if (i == 0)
-        return a;
-    return b;
+	if (i == 0)
+		return a;
+	return b;
 }
 
 /*
@@ -119,7 +204,7 @@ Vector3 Box::Vertex(int i) const
 */
 Vector3 Box::Center() const
 {
-    return Math::Center(a, b);
+	return Math::Center(a, b);
 }
 
 /*
@@ -127,7 +212,7 @@ Vector3 Box::Center() const
 */
 Vector3 Box::BottomLeft() const
 {
-    return a;
+	return a;
 }
 
 /*
@@ -135,7 +220,7 @@ Vector3 Box::BottomLeft() const
 */
 Vector3 Box::TopRight() const
 {
-    return b;
+	return b;
 }
 
 /*

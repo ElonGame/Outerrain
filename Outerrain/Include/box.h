@@ -18,7 +18,7 @@ public:
     void Scale(float);
     Box Scaled(float) const;
 
-	bool Intersect(const Ray& ray);
+	bool Intersect(const Ray& ray, float& tmin, float& tmax);
     Vector3 Vertex(int) const;
     Vector3 Center() const;
     Vector3 BottomLeft() const;
