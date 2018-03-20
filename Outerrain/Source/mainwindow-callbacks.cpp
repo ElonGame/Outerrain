@@ -49,14 +49,14 @@ void MainWindow::LightingImpact()
 
 void MainWindow::UpdateMeshRenderer()
 {
-	MaterialModel mat;
+	Material mat;
 	if (settings.shaderType == TerrainSplatmap)
-		mat = MaterialModel::TerrainTexturedMat;
+		mat = Material::TerrainTexturedMat;
 	if (settings.shaderType == DiffuseGrey)
-		mat = MaterialModel::DefaultDiffuseMat;
+		mat = Material::DefaultDiffuseMat;
 	if (settings.shaderType == SimpleTextured && hf != nullptr)
 	{
-		mat = MaterialModel::DefaultTexturedMat;
+		mat = Material::DefaultTexturedMat;
 		glDeleteTextures(1, &mat.texture0);
 		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
 	}
@@ -66,24 +66,24 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		hfObject->AddComponent(new HeightfieldMeshModel(hf));
-		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMeshModel>(), mat));
+		hfObject->AddComponent(new HeightfieldMesh(hf));
+		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
 		return;
 	}
 
-	hfObject->GetComponent<HeightfieldMeshModel>()->UpdateMeshBuffers();
+	hfObject->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
 	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::UpdateMeshMaterial()
 {
-	MaterialModel mat;
+	Material mat;
 	if (settings.shaderType == TerrainSplatmap)
-		mat = MaterialModel::TerrainTexturedMat;
+		mat = Material::TerrainTexturedMat;
 	if (settings.shaderType == DiffuseGrey)
-		mat = MaterialModel::DefaultDiffuseMat;
+		mat = Material::DefaultDiffuseMat;
 	if (settings.shaderType == SimpleTextured)
-		mat = MaterialModel::DefaultTexturedMat;
+		mat = Material::DefaultTexturedMat;
 	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 

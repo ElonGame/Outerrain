@@ -1,41 +1,39 @@
 #pragma once
-
 #include <memory>
-#include <GL/glew.h>
+#include <vector>
 
-#include "cameraOrbiter.h"
 #include "meshModel.h"
-#include "gameobject.h"
-#include "shader.h"
+#include "frame.h"
+#include "cameraOrbiter.h"
 #include "materialModel.h"
-#include "component.h"
 
-class MeshRenderer : public Component
+class MeshSetRenderer
 {
 protected:
 	std::unique_ptr<Mesh> mesh;
+	std::vector<Frame> frames;
+
 	GLenum primitiveMode;
 	GLuint vao;
 	GLuint fullBuffer;
 	GLuint indexBuffer;
 	Material material;
 
+	void CreateBuffers();
 	void UpdateBuffers();
-	void RenderInternal();
+	void ClearBuffers();
 
 public:
-	MeshRenderer();
-	MeshRenderer(Mesh*);
-	MeshRenderer(Mesh*, const Material&);
-	~MeshRenderer();
+	MeshSetRenderer();
+	~MeshSetRenderer();
+
+	void AddFrame(const Frame& f);
+	void ClearFrames();
 
 	void Render(const CameraOrbiter&);
-	void CreateBuffers();
-	void ClearBuffers();
 
 	void SetMaterial(const Material& m);
 	void SetPrimitiveMode(const GLuint& p);
 	void SetShader(const Shader& s);
-
 	const Mesh& GetMeshModel() const;
 };

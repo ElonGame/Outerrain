@@ -35,5 +35,5 @@ public:
 	bool Intersect(const Ray& ray, Hit& hit) const;
 	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
-	MeshModel* GetMeshModel() const;
+	Mesh* GetMeshModel() const;
 };

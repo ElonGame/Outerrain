@@ -132,6 +132,12 @@
     <ClInclude Include="Include\camera.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\meshSet.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\frame.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\heightfield.cpp">
@@ -230,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="Source\mainwindow-examples.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\frame.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshSetRenderer.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

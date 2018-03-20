@@ -3,14 +3,14 @@
 #include "texture.h"
 
 
-MaterialModel::MaterialModel()
+Material::Material()
 {
 	texture0 = texture1 = texture2 = texture3 = 0;
 	albedo = Color(0.0f);
 	shininess = 0.0f;
 }
 
-void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
+void Material::SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
 {
 	shader.Attach();
 
@@ -40,7 +40,7 @@ void MaterialModel::SetFrameUniforms(const Transform& trs, const Transform& mvp,
 		shader.UniformTexture("texture3", 3, texture3);
 }
 
-void MaterialModel::Release()
+void Material::Release()
 {
 	if (shader.GetProgram() != 0)
 		glDeleteProgram(shader.GetProgram());
@@ -50,7 +50,7 @@ void MaterialModel::Release()
 	glDeleteTextures(1, &texture3);
 }
 
-bool MaterialModel::operator==(const MaterialModel& m)
+bool Material::operator==(const Material& m)
 {
 	if (albedo.r != m.albedo.r || albedo.g != m.albedo.g || albedo.b != m.albedo.b || albedo.a != m.albedo.a)
 		return false;
@@ -69,17 +69,17 @@ bool MaterialModel::operator==(const MaterialModel& m)
 	return true;
 }
 
-void MaterialModel::SetShader(const Shader& s)
+void Material::SetShader(const Shader& s)
 {
 	shader = s;
 }
 
 /* Static Materials */
-MaterialModel MaterialModel::DefaultDiffuseMat;
-MaterialModel MaterialModel::TerrainTexturedMat;
-MaterialModel MaterialModel::DefaultTexturedMat;
+Material Material::DefaultDiffuseMat;
+Material Material::TerrainTexturedMat;
+Material Material::DefaultTexturedMat;
 
-void MaterialModel::InitStaticMaterials()
+void Material::InitStaticMaterials()
 {
 	// Diffuse Grey
 	DefaultDiffuseMat.albedo = Color::Grey();
@@ -107,7 +107,7 @@ void MaterialModel::InitStaticMaterials()
 	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
 }
 
-void MaterialModel::ReleaseStaticMaterials()
+void Material::ReleaseStaticMaterials()
 {
 	DefaultDiffuseMat.Release();
 	DefaultTexturedMat.Release();

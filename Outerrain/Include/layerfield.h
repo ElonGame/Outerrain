@@ -29,5 +29,4 @@ public:
 
 	std::vector<EcosystemInstance> GetVegetationInstances() const;
 	std::vector<EcosystemInstance> GetRockInstances() const;
-	MeshModel* GetHeightfieldMesh() const;
 };
