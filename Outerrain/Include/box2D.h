@@ -23,7 +23,7 @@ public:
 	Vector2 BottomLeft() const;
 	Vector2 TopRight() const;
 
-	Box ToBox(double zMin, double zMax) const;
+	Box ToBox(float zMin, float zMax) const;
 	Vector2& operator[](int i);
 
 	friend std::ostream& operator<< (std::ostream& stream, const Box2D& b);

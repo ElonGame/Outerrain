@@ -24,6 +24,7 @@ protected:
 
 public:
 	Mesh();
+	Mesh(const std::string& path);
 
 	void AddVertex(const Vector3&);
 	void AddNormal(const Vector3&);

@@ -109,7 +109,7 @@ Vector2 Box2D::TopRight() const
 /*
 \brief Todo
 */
-Box Box2D::ToBox(double zMin, double zMax) const
+Box Box2D::ToBox(float zMin, float zMax) const
 {
 	return Box(Vector3(a.x, a.y, zMin), Vector3(b.x, b.y, zMax));
 }

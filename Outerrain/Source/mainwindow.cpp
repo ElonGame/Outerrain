@@ -7,6 +7,7 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
 	hfObject = nullptr;
 	hf = nullptr;
+	setExample = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
 	mainWindowHandler->CreateGLContext(4, 3);
 	Init();
@@ -23,6 +24,11 @@ void MainWindow::Quit()
 	{
 		delete hf;
 		hf = nullptr;
+	}
+	if (setExample)
+	{
+		delete setExample;
+		setExample = nullptr;
 	}
 	if (hfObject)
 	{
@@ -52,8 +58,8 @@ void MainWindow::Init()
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
 	//InitNoiseTerrain();
-	InitBasicTerrain();
-	//InitLayerTerrain();
+	//InitBasicTerrain();
+	InitLayerTerrain();
 	//InitGPUTerrain();
 
 	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
@@ -153,4 +159,6 @@ void MainWindow::Render()
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
+	if (setExample)
+		setExample->Render(orbiter);
 }

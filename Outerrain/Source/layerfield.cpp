@@ -52,7 +52,7 @@ LayerField::LayerField(const std::string& filePath, float blackAltitude, float w
 */
 Vector3 LayerField::Vertex(int i, int j) const
 {
-	Vector3 ret = Vertex(i, j);
+	Vector3 ret = Heightfield::Vertex(i, j);
 	ret.y += sediments.Get(i, j);
 	return ret;
 }
@@ -156,16 +156,33 @@ void LayerField::Stabilize()
 /*
 \brief
 */
-MeshSetRenderer LayerField::GetVegetationInstances() const
+MeshSetRenderer* LayerField::GetVegetationInstances() const
 {
+	MeshSetRenderer* ret = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"));
+	
+	return ret;
 }
 
 /*
 \brief
 */
-MeshSetRenderer LayerField::GetRockInstances() const
+MeshSetRenderer* LayerField::GetRockInstances() const
 {
-	MeshSetRenderer ret = MeshSetRenderer();
-
+	MeshSetRenderer* ret = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"));
+	ret->SetMaterial(Material::DefaultDiffuseMat);
+	for (int i = 0; i < rocks.SizeY(); i++)
+	{
+		for (int j = 0; j < rocks.SizeX(); j++)
+		{
+			float value = rocks.Get(i, j);
+			if (value > 0.0f)
+			{
+				Frame newFrame;
+				newFrame.SetPosition(Vertex(i, j));
+				newFrame.SetScale(Vector3(1.0f));
+				ret->AddFrame(newFrame);
+			}
+		}
+	}
 	return ret;
 }

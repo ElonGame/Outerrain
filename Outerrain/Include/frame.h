@@ -1,6 +1,7 @@
 #pragma once
 #include "transform.h"
 #include "vec.h"
+#include "quaternion.h"
 
 class Frame
 {
@@ -13,12 +14,13 @@ public:
 	Frame();
 	~Frame();
 
+	void SetRotation(TQuaternion<float, Vector3> quat);
+
 	Vector3 GetPosition() const;
 	void SetPosition(const Vector3& vector);
-	void SetPosition(float x, float y, float z);
+
 	Vector3 GetScale() const;
 	void SetScale(const Vector3& vector);
-	void SetScale(float x, float y, float z);
 
 	Transform GetMatrix() const;
 };

@@ -44,6 +44,7 @@ void MainWindow::LightingImpact()
 		return;
 	LayerField* lf = dynamic_cast<LayerField*>(hf);
 	lf->LightingEventSimulate(5.0, 100, 5);
+	setExample = lf->GetRockInstances();
 	UpdateMeshRenderer();
 }
 

@@ -27,6 +27,6 @@ public:
 
 	void Stabilize();
 
-	MeshSetRenderer GetVegetationInstances() const;
-	MeshSetRenderer GetRockInstances() const;
+	MeshSetRenderer* GetVegetationInstances() const;
+	MeshSetRenderer* GetRockInstances() const;
 };

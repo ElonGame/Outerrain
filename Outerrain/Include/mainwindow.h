@@ -6,6 +6,7 @@
 #include "gpuHeightfield.h"
 #include "cameraOrbiter.h"
 #include "meshRenderer.h"
+#include "meshSet.h"
 #include "terrainSettings.h"
 #include "layerfield.h"
 #include "box2D.h"
@@ -17,10 +18,13 @@ private:
 	Window* mainWindowHandler;
 	CameraOrbiter orbiter;
 
+
 	/* Application Data */
 	GameObject* hfObject;
 	Heightfield* hf;
 	TerrainSettings settings;
+	MeshSetRenderer* setExample;
+
 
 	/* Functions */
 	void InitBasicTerrain();

@@ -7,7 +7,7 @@ MeshSetRenderer::MeshSetRenderer()
 
 MeshSetRenderer::MeshSetRenderer(Mesh* m)
 {
-	mesh = nullptr;
+	mesh = m;
 	CreateBuffers();
 }
 
@@ -30,24 +30,22 @@ void MeshSetRenderer::ClearFrames()
 
 void MeshSetRenderer::Render(const CameraOrbiter& cam) 
 {
-	Transform mvp = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f);
+	Transform p = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f);
+	Transform view = cam.View();
 	Vector3 camPos = cam.Position();
-	Transform trs = frames[0].GetMatrix();
-	material.SetFrameUniforms(trs, mvp, camPos);
-
 	if (vao == 0)
 		CreateBuffers();
 	if (mesh->isDirty == true)
 		UpdateBuffers();
 
-	for (int i = 1; i < frames.size(); i++)
-	{
-		trs = frames[i].GetMatrix();
-		mvp = mvp * (cam.View() * trs);
-		material.shader.UniformTransform("trsMatrix", trs);
-		material.shader.UniformTransform("mvpMatrix", mvp);
+	glBindVertexArray(vao);
 
-		glBindVertexArray(vao);
+	for (int i = 0; i < frames.size(); i++)
+	{
+		Transform trs = frames[i].GetMatrix();
+		Transform mvp = p * (view * trs);
+		material.SetFrameUniforms(trs, mvp, camPos);
+
 		if (mesh->indices.size() > 0)
 			glDrawElements(primitiveMode, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0);
 		else

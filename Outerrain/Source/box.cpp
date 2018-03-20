@@ -83,7 +83,7 @@ bool Box::Intersect(const Ray& r, float& tmin, float& tmax)
 	Vector3 p = r.origin;
 	Vector3 d = r.direction;
 
-	double t;
+	float t;
 	// Ox
 	if (d[0] < -1.0e-5)
 	{
