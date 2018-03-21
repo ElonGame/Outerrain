@@ -1,4 +1,4 @@
-#include "heightfieldMeshModel.h"
+#include "heightfieldmesh.h"
 #include "heightfield.h"
 #include "layerfield.h"
 

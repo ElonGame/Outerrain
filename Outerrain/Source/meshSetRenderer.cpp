@@ -1,4 +1,4 @@
-#include "meshSet.h"
+#include "meshsetrenderer.h"
 
 MeshSetRenderer::MeshSetRenderer()
 {
@@ -30,7 +30,7 @@ void MeshSetRenderer::ClearFrames()
 
 void MeshSetRenderer::Render(const CameraOrbiter& cam) 
 {
-	Transform p = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f);
+	Transform p = cam.Projection();
 	Transform view = cam.View();
 	Vector3 camPos = cam.Position();
 	if (vao == 0)

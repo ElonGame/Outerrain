@@ -1,11 +1,20 @@
 #pragma once
 
-#include "scalarfield.h"
+#include "scalarfield2D.h"
 #include "ray.h"
-#include "meshModel.h"
+#include "mesh.h"
 #include "fractal.h"
 #include "terrainSettings.h"
 #include "box2D.h"
+
+/* Utility struct */
+typedef struct ScalarValue
+{
+	int x, y;
+	float value;
+	ScalarValue() { }
+	ScalarValue(int a, int b, float h) : x(a), y(b), value(h) { }
+} Point;
 
 class Heightfield : public Scalarfield2D
 {

@@ -1,4 +1,4 @@
-#include "meshRenderer.h"
+#include "meshrenderer.h"
 #include <iostream>
 
 
@@ -66,7 +66,7 @@ void MeshRenderer::RenderInternal()
 void MeshRenderer::Render(const CameraOrbiter& cam)
 {
 	Transform trs = gameObject->GetObjectToWorldMatrix();
-	Transform mvp = cam.Projection(static_cast<float>(cam.FrameWidth()), static_cast<float>(cam.FrameHeight()), 45.0f) * (cam.View() * trs);
+	Transform mvp = cam.Projection() * (cam.View() * trs);
 	Vector3 camPos = cam.Position();
 
 	material.SetFrameUniforms(trs, mvp, camPos);

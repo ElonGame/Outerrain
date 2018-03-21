@@ -303,20 +303,20 @@ void Heightfield::HydraulicErosion()
 Scalarfield2D Heightfield::DrainageArea() const
 {
 	// Sort all point by decreasing height
-	std::deque<Point> points;
+	std::deque<ScalarValue> points;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			points.push_back(Point(i, j, Get(i, j)));
+			points.push_back(ScalarValue(i, j, Get(i, j)));
 	}
-	std::sort(points.begin(), points.end(), [](Point p1, Point p2) { return p1.value > p2.value; });
+	std::sort(points.begin(), points.end(), [](ScalarValue p1, ScalarValue p2) { return p1.value > p2.value; });
 
 	std::array<float, 8> slopes;
 	std::array<Vector2i, 8> coords;
 	Scalarfield2D DA = Scalarfield2D(nx, ny, box, 1.0);
 	while (!points.empty())
 	{
-		Point p = points.front();
+		ScalarValue p = points.front();
 		points.pop_front();
 
 		slopes.fill(0.0f);

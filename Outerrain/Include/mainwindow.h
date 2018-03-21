@@ -3,13 +3,16 @@
 #include <cstring>
 #include "window.h"
 #include "heightfield.h"
-#include "gpuHeightfield.h"
-#include "cameraOrbiter.h"
+#include "gpuheightfield.h"
+#include "cameraorbiter.h"
 #include "meshRenderer.h"
-#include "meshSet.h"
-#include "terrainSettings.h"
+#include "meshsetrenderer.h"
+#include "terrainsettings.h"
 #include "layerfield.h"
 #include "box2D.h"
+#include "imgui\imgui.h"
+#include "imgui_opengl.h"
+#include "apptime.h"
 
 class MainWindow
 {

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\apptime.h" />
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\box2D.h" />
     <ClInclude Include="Include\camera.h" />
@@ -30,25 +31,25 @@
     <ClInclude Include="Include\gameobject.h" />
     <ClInclude Include="Include\gpuHeightfield.h" />
     <ClInclude Include="Include\heightfield.h" />
-    <ClInclude Include="Include\heightfieldMeshModel.h" />
+    <ClInclude Include="Include\heightfieldmesh.h" />
     <ClInclude Include="Include\imgui_opengl.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Include\layerfield.h" />
     <ClInclude Include="Include\mainwindow.h" />
-    <ClInclude Include="Include\materialModel.h" />
+    <ClInclude Include="Include\material.h" />
     <ClInclude Include="Include\mathUtils.h" />
-    <ClInclude Include="Include\meshModel.h" />
+    <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\meshRenderer.h" />
-    <ClInclude Include="Include\meshSet.h" />
+    <ClInclude Include="Include\meshsetrenderer.h" />
     <ClInclude Include="Include\mytime.h" />
     <ClInclude Include="Include\poissonTile2D.h" />
     <ClInclude Include="Include\quaternion.h" />
     <ClInclude Include="Include\ray.h" />
-    <ClInclude Include="Include\scalarfield.h" />
     <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\noise.h" />
+    <ClInclude Include="Include\scalarfield2D.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\sphere.h" />
     <ClInclude Include="Include\terrainSettings.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Source\random.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\apptime.cpp" />
     <ClCompile Include="Source\box.cpp" />
     <ClCompile Include="Source\box2D.cpp" />
     <ClCompile Include="Source\camera.cpp" />
@@ -72,33 +74,33 @@
     <ClCompile Include="Source\gameobject.cpp" />
     <ClCompile Include="Source\gpuheightfield.cpp" />
     <ClCompile Include="Source\heightfield.cpp" />
-    <ClCompile Include="Source\heightfieldMeshModel.cpp" />
+    <ClCompile Include="Source\heightfieldmesh.cpp" />
     <ClCompile Include="Source\imgui.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\imgui_draw.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\imgui_opengl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\layerfield.cpp" />
     <ClCompile Include="Source\mainwindow-callbacks.cpp" />
     <ClCompile Include="Source\mainwindow-examples.cpp" />
     <ClCompile Include="Source\mainwindow.cpp" />
-    <ClCompile Include="Source\materialModel.cpp" />
-    <ClCompile Include="Source\meshModel.cpp" />
-    <ClCompile Include="Source\meshRenderer.cpp" />
-    <ClCompile Include="Source\meshSetRenderer.cpp" />
+    <ClCompile Include="Source\material.cpp" />
+    <ClCompile Include="Source\mesh.cpp" />
+    <ClCompile Include="Source\meshrenderer.cpp" />
+    <ClCompile Include="Source\meshsetrenderer.cpp" />
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\poissonTile2D.cpp" />
-    <ClCompile Include="Source\scalarfield.cpp" />
     <ClCompile Include="Source\image.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />
+    <ClCompile Include="Source\scalarfield2D.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
     <ClCompile Include="Source\texture.cpp" />

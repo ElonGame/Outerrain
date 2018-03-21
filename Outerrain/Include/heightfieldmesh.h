@@ -1,5 +1,5 @@
 #pragma once
-#include "meshModel.h"
+#include "mesh.h"
 
 class Heightfield;
 class LayerField;

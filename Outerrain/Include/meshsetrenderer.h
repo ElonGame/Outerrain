@@ -3,10 +3,10 @@
 #include <GL/glew.h>
 
 #include "cameraOrbiter.h"
-#include "meshModel.h"
+#include "mesh.h"
 #include "gameobject.h"
 #include "shader.h"
-#include "materialModel.h"
+#include "material.h"
 #include "frame.h"
 
 class MeshSetRenderer

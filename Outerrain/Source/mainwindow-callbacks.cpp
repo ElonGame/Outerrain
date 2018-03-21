@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "heightfieldMeshModel.h"
+#include "heightfieldmesh.h"
 
 
 void MainWindow::StreamPowerErosionStep()

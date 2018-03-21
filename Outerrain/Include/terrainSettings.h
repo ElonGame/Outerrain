@@ -2,7 +2,7 @@
 
 #include "vec.h"
 #include "fractal.h"
-#include "materialModel.h"
+#include "material.h"
 
 enum TerrainType
 {

@@ -26,12 +26,11 @@ public:
 	Ray PixelToRay(const Vector2i& pixel);
 	Vector2i VectorToPixel(const Vector3& worldPoint);
 
-	float GetSize() const { return size; }
 	void Rotation(float x, float y);
 	void Translation(float x, float y);
 	void Move(float z);
 	Transform View() const;
-	Transform Projection(float width, float height, float fov) const;
+	Transform Projection() const;
 	void Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
 	Vector3 Position() const;
 };

@@ -7,10 +7,11 @@ protected:
 	int frameHeight;
 	float zNear;
 	float zFar;
+	float fov;
 
 public:
 	Camera();
-	Camera(int width, int height, float near, float far);
+	Camera(int width, int height, float near, float far, float fov=45.0f);
 
 	void SetFrameWidth(int w);
 	void SetFrameHeight(int h);

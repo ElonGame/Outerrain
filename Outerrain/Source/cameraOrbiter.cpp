@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <algorithm>
-#include "cameraOrbiter.h"
-#include "mathUtils.h"
+#include "cameraorbiter.h"
+#include "mathutils.h"
 
 
 CameraOrbiter::CameraOrbiter() : center(0.0f), position(0.0f), rotation(0.0f), size(5.0f)
@@ -41,7 +41,7 @@ Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
 {
 	Vector3 dl;
 	Vector3 dxl, dyl;
-	Frame(frameWidth, frameHeight, 1.0f, 45.0f, dl, dxl, dyl);
+	Frame(frameWidth, frameHeight, 1.0f, fov, dl, dxl, dyl);
 
 	Vector3 o = Position();
 	Vector3 e = dl + dxl * pixel.x + dyl * pixel.y;
@@ -75,20 +75,18 @@ void CameraOrbiter::Move(float z)
 
 Transform CameraOrbiter::View() const
 {
-	return TranslationTransform(-position.x, -position.y, -size)
-		* RotationX(rotation.x) * RotationY(rotation.y)
-		* TranslationTransform(-Vector3(center));
+	return TranslationTransform(-position.x, -position.y, -size) * RotationX(rotation.x) * RotationY(rotation.y) * TranslationTransform(-Vector3(center));
 }
 
-Transform CameraOrbiter::Projection(float width, float height, float fov) const
+Transform CameraOrbiter::Projection() const
 {
-	return Perspective(fov, width / height, zNear, zFar);
+	return Perspective(fov, (float)frameWidth / (float)frameHeight, zNear, zFar);
 }
 
 void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
 	Transform v = View();
-	Transform p = Projection(width, height, fov);
+	Transform p = Projection();
 	Transform viewport = Viewport(width, height);
 	Transform t = viewport * p * v;              // passage monde vers image
 	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde

@@ -20,6 +20,8 @@ MainWindow::~MainWindow()
 void MainWindow::Quit()
 {
 	Material::ReleaseStaticMaterials();
+	ImGui_OpenGL_Shutdown();
+	AppTime::Release();
 	if (hf)
 	{
 		delete hf;
@@ -51,6 +53,7 @@ void MainWindow::Show()
 void MainWindow::Init()
 {
 	mainWindowHandler->SetDefaultGLState();
+	ImGui_OpenGL_Init(mainWindowHandler->GetSDLWindow());
 	Material::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
@@ -69,6 +72,8 @@ void MainWindow::MainLoop()
 {
 	while (mainWindowHandler->UpdateEvents())
 	{
+		ImGui_OpenGL_NewFrame(mainWindowHandler->GetSDLWindow());
+		AppTime::StartClock();
 		Update(Time::GlobalTime(), Time::DeltaTime());
 		Render();
 		mainWindowHandler->SwapWindow();
@@ -156,9 +161,19 @@ void MainWindow::Update(float time, float deltaTime)
 
 void MainWindow::Render()
 {
+	// World
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
 	if (setExample)
 		setExample->Render(orbiter);
+
+	// GUI
+	ImGui::Begin("Statistics");
+	stringstream cpuStream, gpuStream;
+	AppTime::StopClock(cpuStream, gpuStream);
+	ImGui::Text(cpuStream.str().data());
+	ImGui::Text(gpuStream.str().data());
+	ImGui::End();
+	ImGui::Render();
 }

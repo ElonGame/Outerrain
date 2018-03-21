@@ -111,19 +111,7 @@
     <ClInclude Include="Include\cameraOrbiter.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\heightfieldMeshModel.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\materialModel.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshModel.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\meshRenderer.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\meshSet.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\texture.h">
@@ -144,11 +132,26 @@
     <ClInclude Include="Include\layerfield.h">
       <Filter>Framework\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\scalarfield.h">
-      <Filter>Framework\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\valueField.h">
       <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\heightfieldmesh.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\material.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\mesh.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\meshsetrenderer.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\scalarfield2D.h">
+      <Filter>Framework\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\apptime.h">
+      <Filter>Rendering\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,24 +219,6 @@
     <ClCompile Include="Source\frame.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\cameraOrbiter.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\heightfieldMeshModel.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\materialModel.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshModel.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshRenderer.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshSetRenderer.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\shader.cpp">
       <Filter>Rendering\Source</Filter>
     </ClCompile>
@@ -252,8 +237,29 @@
     <ClCompile Include="Source\layerfield.cpp">
       <Filter>Framework\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\scalarfield.cpp">
+    <ClCompile Include="Source\cameraOrbiter.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\heightfieldmesh.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\material.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mesh.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshrenderer.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\meshsetrenderer.cpp">
+      <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scalarfield2D.cpp">
       <Filter>Framework\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\apptime.cpp">
+      <Filter>Rendering\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

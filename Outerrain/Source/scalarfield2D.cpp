@@ -1,4 +1,4 @@
-#include "scalarfield.h"
+#include "scalarfield2D.h"
 #include "mathUtils.h"
 #include "image.h"
 #include "texture.h"

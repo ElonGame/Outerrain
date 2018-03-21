@@ -8,15 +8,6 @@
 #include "box2D.h"
 #include "image.h"
 
-/* Utility struct */
-typedef struct Point
-{
-	int x, y;
-	float value;
-	Point() { }
-	Point(int a, int b, float h) : x(a), y(b), value(h) { }
-} Point;
-
 template<typename T>
 class ValueField
 {

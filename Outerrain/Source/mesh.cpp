@@ -1,4 +1,4 @@
-#include "meshModel.h"
+#include "mesh.h"
 
 #include<iostream>
 
