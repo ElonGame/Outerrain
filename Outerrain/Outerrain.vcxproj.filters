@@ -159,6 +159,9 @@
     <ClInclude Include="Include\terratree.h">
       <Filter>Framework\TerraTree</Filter>
     </ClInclude>
+    <ClInclude Include="Include\texture2D.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\mainwindow.cpp">
@@ -278,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="Source\terravertex.cpp">
       <Filter>Framework\TerraTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\texture2D.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

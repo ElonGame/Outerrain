@@ -25,7 +25,7 @@ GLuint MakeTexture( const int unit, const ImageData& im, const GLenum texel_type
 GLuint ReadTexture( const int unit, const std::string&filename, const GLenum texel_type= GL_RGBA );
 
 //! renvoie le nombre de mipmap d'une image width x height.
-int miplevels( const int width, const int height );
+int MipLevels( const int width, const int height );
 
 ///@}
 #endif

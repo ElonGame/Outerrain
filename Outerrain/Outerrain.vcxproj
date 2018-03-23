@@ -55,6 +55,7 @@
     <ClInclude Include="Include\sphere.h" />
     <ClInclude Include="Include\terrainSettings.h" />
     <ClInclude Include="Include\texture.h" />
+    <ClInclude Include="Include\texture2D.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
     <ClInclude Include="Include\vec.h" />
@@ -109,6 +110,7 @@
     <ClCompile Include="Source\terratree.cpp" />
     <ClCompile Include="Source\terravertex.cpp" />
     <ClCompile Include="Source\texture.cpp" />
+    <ClCompile Include="Source\texture2D.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
     <ClCompile Include="Source\window.cpp" />
