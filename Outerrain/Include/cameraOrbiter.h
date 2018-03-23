@@ -2,9 +2,10 @@
 
 #include "vec.h"
 #include "transform.h"
-#include "box.h"
 #include "camera.h"
 #include "ray.h"
+
+class Box;
 
 class CameraOrbiter : public Camera
 {

@@ -61,6 +61,8 @@ void MainWindow::UpdateMeshRenderer()
 		glDeleteTextures(1, &mat.texture0);
 		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
 	}
+	if (settings.shaderType == Wireframe)
+		mat = Material::WireframeMat;
 
 	// Only done once the first time
 	if (hfObject == nullptr)
@@ -69,6 +71,7 @@ void MainWindow::UpdateMeshRenderer()
 		hfObject->SetPosition(Vector3(0));
 		hfObject->AddComponent(new HeightfieldMesh(hf));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
+		hfMesh = hfObject->GetComponent<Mesh>();
 		return;
 	}
 

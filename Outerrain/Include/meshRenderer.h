@@ -3,12 +3,14 @@
 #include <memory>
 #include <GL/glew.h>
 
-#include "cameraOrbiter.h"
-#include "mesh.h"
 #include "gameobject.h"
 #include "shader.h"
 #include "material.h"
 #include "component.h"
+
+class Mesh;
+class CameraOrbiter;
+class Shader;
 
 class MeshRenderer : public Component
 {
@@ -34,7 +36,6 @@ public:
 	void ClearBuffers();
 
 	void SetMaterial(const Material& m);
-	void SetPrimitiveMode(const GLuint& p);
 	void SetShader(const Shader& s);
 
 	const Mesh& GetMeshModel() const;

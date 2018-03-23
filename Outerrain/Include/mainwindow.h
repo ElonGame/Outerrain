@@ -2,16 +2,14 @@
 
 #include <cstring>
 #include "window.h"
-#include "heightfield.h"
 #include "gpuheightfield.h"
 #include "cameraorbiter.h"
-#include "meshRenderer.h"
+#include "gameobject.h"
+#include "meshrenderer.h"
 #include "meshsetrenderer.h"
 #include "terrainsettings.h"
 #include "layerfield.h"
-#include "box2D.h"
-#include "imgui\imgui.h"
-#include "imgui_opengl.h"
+
 #include "apptime.h"
 
 class MainWindow
@@ -26,6 +24,8 @@ private:
 	GameObject* hfObject;
 	Heightfield* hf;
 	TerrainSettings settings;
+
+	Mesh* hfMesh;
 	MeshSetRenderer* setExample;
 
 

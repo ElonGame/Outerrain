@@ -1,8 +1,9 @@
 #include "apptime.h"
+#include "GL\glew.h"
 
 std::chrono::high_resolution_clock::time_point AppTime::cpu_start;
 std::chrono::high_resolution_clock::time_point AppTime::cpu_stop;
-GLuint AppTime::gpuTimeQuery = 0;
+unsigned int AppTime::gpuTimeQuery = 0;
 
 static bool first = false;
 

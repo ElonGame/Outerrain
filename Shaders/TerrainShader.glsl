@@ -45,6 +45,58 @@ const vec3 lightDir = vec3(0.707, -0.707, 0);
 const vec3 lightColor = vec3(1, 1, 1);
 const float lightStrength = 0.8;
 
+//	<https://www.shadertoy.com/view/4dS3Wd>
+//	By Morgan McGuire @morgan3d, http://graphicscodex.com
+//
+float hash(float n) { return fract(sin(n) * 1e4); }
+float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
+float noise(float x) 
+{
+	float i = floor(x);
+	float f = fract(x);
+	float u = f * f * (3.0 - 2.0 * f);
+	return mix(hash(i), hash(i + 1.0), u);
+}
+float noise(vec2 x) 
+{
+	vec2 i = floor(x);
+	vec2 f = fract(x);
+
+	// Four corners in 2D of a tile
+	float a = hash(i);
+	float b = hash(i + vec2(1.0, 0.0));
+	float c = hash(i + vec2(0.0, 1.0));
+	float d = hash(i + vec2(1.0, 1.0));
+
+	// Simple 2D lerp using smoothstep envelope between the values.
+	// return vec3(mix(mix(a, b, smoothstep(0.0, 1.0, f.x)),
+	//			mix(c, d, smoothstep(0.0, 1.0, f.x)),
+	//			smoothstep(0.0, 1.0, f.y)));
+
+	// Same code, with the clamps in smoothstep and common subexpressions
+	// optimized away.
+	vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+float noise(vec3 x) 
+{
+	// This one has non-ideal tiling properties that I'm still tuning
+	const vec3 step = vec3(110, 241, 171);
+
+	vec3 i = floor(x);
+	vec3 f = fract(x);
+ 
+	// For performance, compute the base input to a 1D hash from the integer part of the argument and the 
+	// incremental change to the 1D based on the 3D -> 1D wrapping
+    float n = dot(i, step);
+
+	vec3 u = f * f * (3.0 - 2.0 * f);
+	return mix(mix(mix( hash(n + dot(step, vec3(0, 0, 0))), hash(n + dot(step, vec3(1, 0, 0))), u.x),
+                   mix( hash(n + dot(step, vec3(0, 1, 0))), hash(n + dot(step, vec3(1, 1, 0))), u.x), u.y),
+               mix(mix( hash(n + dot(step, vec3(0, 0, 1))), hash(n + dot(step, vec3(1, 0, 1))), u.x),
+                   mix( hash(n + dot(step, vec3(0, 1, 1))), hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
+}
+
 
 vec3 NormalShading()
 {
@@ -53,7 +105,6 @@ vec3 NormalShading()
 
 vec3 TerrainShading(vec2 uv)
 {
-	// Terrain material placement
 	float Stretching = 100;
 	
 	vec3 grassColor = texture(texture0, vertex_texcoord.xy * Stretching).rgb;
@@ -61,14 +112,9 @@ vec3 TerrainShading(vec2 uv)
 	vec3 rockColor 	= texture(texture2, vertex_texcoord.xy * Stretching).rgb;
 	vec3 snowColor 	= texture(texture3, vertex_texcoord.xy * Stretching).rgb;
 	
-	// Grass/Rock
-	float slope = 1.0 - worldNormal.y;
-	vec3 terrainColor = mix(grassColor, dirtColor, clamp(pow(slope * 5.0, 2), 0, 1));
-	terrainColor = mix(terrainColor, rockColor, pow(slope, 4));
-	
-	// Snow
-	float altitude = pow(worldPos.y / 100.0f, 2);
-	//terrainColor = mix(terrainColor, snowColor, clamp(pow(1.0 + (altitude / 2.0), 2) * 3.0, 0, 1));
+	float noiseValue = noise(worldPos * 0.1f);
+	float h = clamp(worldPos.y, 0, 120.0f) / 120.0f;
+	vec3 terrainColor = mix(rockColor, snowColor, h);
 	
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
@@ -116,18 +162,9 @@ void main()
 		fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 	else if (shaderType == 1)
 		fragment_color = vec4(DiffuseShading(), 1.0);
-	else
+	else if (shaderType == 2)
 		fragment_color = vec4(texture(texture0, vertex_texcoord.xy).rgb, 1);
-	
-	// if (renderMode == 0) 		  // Diffuse gray
-		// fragment_color = vec4(DiffuseShading(), 1.0);
-	// else if (renderMode == 1) 	  // Normal
-		// fragment_color = vec4(NormalShading(), 1.0);
-	// else if (renderMode == 2) 	  // WireFrame
-		// fragment_color = vec4(0.0, 0.8, 0.3, 1.0);
-	// else if (renderMode == 3)     // Diffuse Splatmap
-		// fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
-	// else
-	//fragment_color = vec4(texture(texture3, vertex_texcoord.xy).rgb, 1);
+	else 
+		fragment_color = albedo;
 }
 #endif

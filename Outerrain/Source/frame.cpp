@@ -11,7 +11,7 @@ Frame::~Frame()
 
 }
 
-void Frame::SetRotation(TQuaternion<float, Vector3> quat)
+void Frame::SetRotation(const TQuaternion<float, Vector3>& quat)
 {
 	const float* temp = quat.matrix();
 	for (int i = 0; i < 4; i++)

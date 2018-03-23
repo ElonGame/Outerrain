@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\terratree.h" />
     <ClInclude Include="Include\apptime.h" />
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\box2D.h" />
@@ -103,6 +104,10 @@
     <ClCompile Include="Source\scalarfield2D.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\sphere.cpp" />
+    <ClCompile Include="Source\terrafbm.cpp" />
+    <ClCompile Include="Source\terranode.cpp" />
+    <ClCompile Include="Source\terratree.cpp" />
+    <ClCompile Include="Source\terravertex.cpp" />
     <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />
@@ -170,10 +175,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>Out\</OutDir>
     <IntDir>Temp\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>Out\</OutDir>
     <IntDir>Temp\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -197,8 +204,12 @@
       </SDLCheck>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Visual Leak Detector\include;.;..\Dependencies\include;Include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG;WIN32;NVWIDGETS_EXPORTS;_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4244;4305;4312;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4305;4312;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -232,7 +243,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Visual Leak Detector\include;.;..\Dependencies\include;Include</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4312</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4305;4312;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -6,6 +6,15 @@
 */
 
 /*
+\brief Default Constructor
+*/
+Box2D::Box2D()
+{
+	a = Vector2(0);
+	b = Vector2(0);
+}
+
+/*
 \brief Constructor
 \param A lower left vertex in world coordinates
 \param B upper right vertex in world coordinates

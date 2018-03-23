@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "cameraorbiter.h"
 #include "mathutils.h"
+#include "box.h"
 
 
 CameraOrbiter::CameraOrbiter() : center(0.0f), position(0.0f), rotation(0.0f), size(5.0f)

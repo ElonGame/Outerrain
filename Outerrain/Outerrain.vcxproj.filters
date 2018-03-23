@@ -37,6 +37,9 @@
     <Filter Include="Framework\Source">
       <UniqueIdentifier>{1cdcd0ec-71ec-4fa6-8e9f-ae874aa5921b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\TerraTree">
+      <UniqueIdentifier>{b6f55eef-cf50-4d83-bae6-aa5974a40a13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\mainwindow.h">
@@ -153,6 +156,9 @@
     <ClInclude Include="Include\apptime.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\terratree.h">
+      <Filter>Framework\TerraTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\mainwindow.cpp">
@@ -260,6 +266,18 @@
     </ClCompile>
     <ClCompile Include="Source\apptime.cpp">
       <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terratree.cpp">
+      <Filter>Framework\TerraTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terranode.cpp">
+      <Filter>Framework\TerraTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terrafbm.cpp">
+      <Filter>Framework\TerraTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terravertex.cpp">
+      <Filter>Framework\TerraTree</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

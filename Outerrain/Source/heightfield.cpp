@@ -4,6 +4,7 @@
 #include "mathUtils.h"
 #include "random.h"
 
+#include <iostream>
 #include <numeric>
 #include <deque>
 #include <queue>
@@ -121,14 +122,26 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 		for (int j = 0; j < nx; j++)
 		{
 			Vector3 p = Vertex(i, j);
+			p = p + offset;
 			float h = 0.0f;
 			if (type == FractalType::fBm)
-				h = Fractal::fBm(n, p + offset, amplitude, freq, oct);
+				h = Fractal::fBm(n, p, amplitude, freq, oct);
 			else if (type == FractalType::Ridge)
-				h = Fractal::RidgeNoise(n, p + offset, amplitude, freq, oct);
+				h = Fractal::RidgeNoise(n, p * freq, amplitude, freq, oct);
+			else if (type == FractalType::MusgravefBm)
+				h = amplitude * Fractal::MusgravefBm(n, p * freq, 1.0, 2.0, oct);
+			else if (type == FractalType::MusgraveHeteroTerrain)
+				h = amplitude * Fractal::MusgraveHeteroTerrain(n, p * freq, 1.0, 2.0, oct, 1.0f);
+			else if (type == FractalType::MusgraveHybridMultifractal)
+				h = (amplitude / 2.0) * Fractal::MusgraveHybridMultifractal(n, p * freq, 0.25, 2.0, oct, 0.7f);
+			else if (type == FractalType::MusgraveRidgedMultifractal)
+				h = amplitude * Fractal::MusgraveRidgedMultifractal(n, p * freq, 1.0, 2.0, oct, 1.0f, 2.0f);
 			Set(i, j, h);
 		}
 	}
+
+	std::cout << Min() << std::endl;
+	std::cout << Max() << std::endl;
 }
 
 /*

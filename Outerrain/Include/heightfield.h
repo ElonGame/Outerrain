@@ -5,7 +5,6 @@
 #include "mesh.h"
 #include "fractal.h"
 #include "terrainSettings.h"
-#include "box2D.h"
 
 /* Utility struct */
 typedef struct ScalarValue

@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "mytime.h"
+#include "imgui\imgui.h"
+#include "imgui_opengl.h"
 #include <iostream>
 using namespace std;
 
@@ -60,9 +62,9 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
-	//InitNoiseTerrain();
+	InitNoiseTerrain();
 	//InitBasicTerrain();
-	InitLayerTerrain();
+	//InitLayerTerrain();
 	//InitGPUTerrain();
 
 	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
@@ -104,16 +106,16 @@ void MainWindow::Update(float time, float deltaTime)
 
 	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL))
 	{
-		SDL_GetMouseState(&mx, &my);
-		Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
-		Hit hit;
-		if (hf->Intersect(ray, hit))
-		{
-			Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
-			hf->Add(v.x, v.y, 50.0);
-			UpdateMeshRenderer();
-			cout << "Hit at " << hit.position << endl;
-		}
+		//SDL_GetMouseState(&mx, &my);
+		//Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
+		//Hit hit;
+		//if (hf->Intersect(ray, hit))
+		//{
+		//	Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
+		//	hf->Add(v.x, v.y, 50.0);
+		//	UpdateMeshRenderer();
+		//	cout << "Hit at " << hit.position << endl;
+		//}
 	}
 
 	/* Example Scenes */
@@ -127,29 +129,35 @@ void MainWindow::Update(float time, float deltaTime)
 		LightingImpact();
 
 	/* Noise Callbacks */
+	int offset = 10;
 	if (mainWindowHandler->KeyState(SDLK_UP))
-		TranslateNoise(1, 0);
+		TranslateNoise(offset, 0);
 	if (mainWindowHandler->KeyState(SDLK_DOWN))
-		TranslateNoise(-1, 0);
+		TranslateNoise(-offset, 0);
 	if (mainWindowHandler->KeyState(SDLK_LEFT))
-		TranslateNoise(0, 1);
+		TranslateNoise(0, offset);
 	if (mainWindowHandler->KeyState(SDLK_RIGHT))
-		TranslateNoise(0, -1);
+		TranslateNoise(0, -offset);
 
 	// Changing shader
-	if (mainWindowHandler->KeyState(SDLK_k))
+	if (mainWindowHandler->KeyState(SDLK_1))
 	{
 		settings.shaderType = ShaderType::TerrainSplatmap;
 		UpdateMeshRenderer();
 	}
-	else if (mainWindowHandler->KeyState(SDLK_l))
+	else if (mainWindowHandler->KeyState(SDLK_2))
 	{
 		settings.shaderType = ShaderType::DiffuseGrey;
 		UpdateMeshRenderer();
 	}
-	else if (mainWindowHandler->KeyState(SDLK_m))
+	else if (mainWindowHandler->KeyState(SDLK_3))
 	{
 		settings.shaderType = ShaderType::SimpleTextured;
+		UpdateMeshRenderer();
+	}
+	else if (mainWindowHandler->KeyState(SDLK_4))
+	{
+		settings.shaderType = ShaderType::Wireframe;
 		UpdateMeshRenderer();
 	}
 
@@ -174,6 +182,8 @@ void MainWindow::Render()
 	AppTime::StopClock(cpuStream, gpuStream);
 	ImGui::Text(cpuStream.str().data());
 	ImGui::Text(gpuStream.str().data());
+	ImGui::Text((std::string("Vertices : ") + std::to_string(hfMesh->VerticeCount())).c_str());
+	ImGui::Text((std::string("Triangles : ") + std::to_string(hfMesh->IndicesCount())).c_str());
 	ImGui::End();
 	ImGui::Render();
 }

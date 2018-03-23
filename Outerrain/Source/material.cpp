@@ -78,6 +78,7 @@ void Material::SetShader(const Shader& s)
 Material Material::DefaultDiffuseMat;
 Material Material::TerrainTexturedMat;
 Material Material::DefaultTexturedMat;
+Material Material::WireframeMat;
 
 void Material::InitStaticMaterials()
 {
@@ -105,6 +106,13 @@ void Material::InitStaticMaterials()
 	DefaultTexturedMat.shader = DefaultDiffuseMat.shader;
 	DefaultTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);;
 	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
+
+	// Wireframe
+	WireframeMat.albedo = Color::Green();
+	WireframeMat.shininess = 0.0f;
+	WireframeMat.shaderType = ShaderType::Wireframe;
+	WireframeMat.shader = DefaultDiffuseMat.shader;
+	WireframeMat.texture0 = WireframeMat.texture1 = WireframeMat.texture2 = WireframeMat.texture3 = 0;
 }
 
 void Material::ReleaseStaticMaterials()

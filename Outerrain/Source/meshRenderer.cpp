@@ -1,4 +1,7 @@
 #include "meshrenderer.h"
+#include "mesh.h"
+#include "shader.h"
+#include "cameraOrbiter.h"
 #include <iostream>
 
 
@@ -22,7 +25,6 @@ MeshRenderer::~MeshRenderer()
 	mesh.release();
 	ClearBuffers();
 }
-
 
 void MeshRenderer::UpdateBuffers()
 {
@@ -62,7 +64,6 @@ void MeshRenderer::RenderInternal()
 		glDrawArrays(primitiveMode, 0, (GLsizei)mesh->vertices.size());
 }
 
-
 void MeshRenderer::Render(const CameraOrbiter& cam)
 {
 	Transform trs = gameObject->GetObjectToWorldMatrix();
@@ -70,6 +71,7 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 	Vector3 camPos = cam.Position();
 
 	material.SetFrameUniforms(trs, mvp, camPos);
+	primitiveMode = material.shaderType == ShaderType::Wireframe ? GL_LINES : GL_TRIANGLES;
 
 	RenderInternal();
 }
@@ -148,11 +150,6 @@ void MeshRenderer::SetMaterial(const Material& m)
 void MeshRenderer::SetShader(const Shader& s)
 {
 	material.SetShader(s);
-}
-
-void MeshRenderer::SetPrimitiveMode(const GLuint& p)
-{
-	primitiveMode = p;
 }
 
 const Mesh& MeshRenderer::GetMeshModel() const

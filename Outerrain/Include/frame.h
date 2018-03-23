@@ -14,7 +14,7 @@ public:
 	Frame();
 	~Frame();
 
-	void SetRotation(TQuaternion<float, Vector3> quat);
+	void SetRotation(const TQuaternion<float, Vector3>& quat);
 
 	Vector3 GetPosition() const;
 	void SetPosition(const Vector3& vector);

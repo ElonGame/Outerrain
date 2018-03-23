@@ -1,4 +1,8 @@
 #include "meshsetrenderer.h"
+#include "cameraorbiter.h"
+#include "gameobject.h"
+#include "mesh.h"
+#include "shader.h"
 
 MeshSetRenderer::MeshSetRenderer()
 {

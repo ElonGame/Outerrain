@@ -9,6 +9,7 @@ protected:
 	Vector2 b;
 
 public:
+	Box2D();
 	Box2D(const Vector2& A, const Vector2& B);
 	Box2D(const Vector2& C, float R);
 

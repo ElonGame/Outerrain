@@ -1,13 +1,14 @@
 #pragma once
 #include <memory>
 #include <GL/glew.h>
+#include <vector>
 
-#include "cameraOrbiter.h"
-#include "mesh.h"
-#include "gameobject.h"
-#include "shader.h"
 #include "material.h"
 #include "frame.h"
+
+class Mesh;
+class CameraOrbiter;
+class Shader;
 
 class MeshSetRenderer
 {

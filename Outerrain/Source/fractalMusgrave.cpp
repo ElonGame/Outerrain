@@ -56,44 +56,6 @@ float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunar
 }
 
 /*
- * Procedural multifractal evaluated at "point";
- * returns value stored in "value".
- *
- * Copyright 1994 F. Kenton Musgrave
- *
- * Parameters:
- *    ``H''  determines the highest fractal dimension
- *    ``lacunarity''  is gap between successive frequencies
- *    ``octaves''  is the number of frequencies in the fBm
- *    ``offset''  is the zero offset, which determines multifractality
- */
-float Fractal::MusgraveMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset)
-{
-	if (first)
-		InitExponentArrays(lacunarity, octaves, H);
-
-	float value = 0.0;
-	float frequency = 1.0;
-	int i = 0;
-
-	/* inner loop of multifractal construction */
-	for (i = 0; i < octaves; i++)
-	{
-		value *= offset * frequency * n.GetValue(point);
-		point.x *= lacunarity;
-		point.y *= lacunarity;
-		point.z *= lacunarity;
-	}
-
-	float remainder = octaves - static_cast<int>(octaves);
-	if (remainder)
-		value += remainder * n.GetValue(point) * exponent_array[i];
-
-	return value;
-
-}
-
-/*
  * Heterogeneous procedural terrain function: stats by altitude method.
  * Evaluated at "point"; returns value stored in "value".
  *

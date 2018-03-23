@@ -2,7 +2,6 @@
 #include "mesh.h"
 
 class Heightfield;
-class LayerField;
 
 class HeightfieldMesh : public Mesh
 {
