@@ -2,8 +2,8 @@
 #include "mytime.h"
 #include "imgui\imgui.h"
 #include "imgui_opengl.h"
-#include <iostream>
-using namespace std;
+
+DirectionnalLight MainWindow::sceneLight = DirectionnalLight(Vector3(0.707f, -0.707f, 0.0f), Color(1.0f, 1.0f, 1.0f), Color(0.1, 0.1f, 0.1f), 0.8f);
 
 MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
@@ -178,7 +178,7 @@ void MainWindow::Render()
 
 	// GUI
 	ImGui::Begin("Statistics");
-	stringstream cpuStream, gpuStream;
+	std::stringstream cpuStream, gpuStream;
 	AppTime::StopClock(cpuStream, gpuStream);
 	ImGui::Text(cpuStream.str().data());
 	ImGui::Text(gpuStream.str().data());

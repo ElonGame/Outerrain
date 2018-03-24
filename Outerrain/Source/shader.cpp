@@ -13,27 +13,25 @@
 #include "transform.h"
 
 #ifdef _WIN32
-	#define SSCANF sscanf_s
-	#define SPRINTF sprintf_s
+#define SSCANF sscanf_s
+#define SPRINTF sprintf_s
 #else
-	#define SSCANF sscanf
-	#define SPRINTF sprintf
+#define SSCANF sscanf
+#define SPRINTF sprintf
 #endif
 
 
 /* File scope */
-// charge un fichier texte.
 static std::string read(const std::string& filename)
 {
 	std::stringbuf source;
 	std::ifstream in(filename);
 	if (in.good() == false)
 		printf("[error] loading program '%s'...\n", filename.c_str());
-	in.get(source, 0);        // lire tout le fichier, le caractere '\0' ne peut pas se trouver dans le source de shader
+	in.get(source, 0);
 	return source.str();
 }
 
-// insere les definitions apres la ligne contenant #version
 static std::string prepare_source(std::string file, const std::string& definitions)
 {
 	if (file.empty())
@@ -236,7 +234,6 @@ int Shader::Reload(const std::string&filename, const std::string& definitions)
 	if (program == 0)
 		return -1;
 
-	// supprime les shaders attaches au program
 	int shaders_max = 0;
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &shaders_max);
 	if (shaders_max > 0)
@@ -254,13 +251,11 @@ int Shader::Reload(const std::string&filename, const std::string& definitions)
 	glObjectLabel(GL_PROGRAM, program, -1, filename.c_str());
 #endif
 
-	// prepare les sources
 	std::string common_source = read(filename);
 	for (int i = 0; i < shader_keys_max; i++)
 	{
 		if (common_source.find(shader_keys[i]) != std::string::npos)
 		{
-			// cree et compile les shaders detectes dans le source
 			std::string source = prepare_source(common_source, std::string(definitions).append("#define ").append(shader_keys[i]).append("\n"));
 			GLuint shader = compile_shader(program, shader_types[i], source);
 			if (shader == 0)
@@ -292,10 +287,8 @@ int Shader::Release()
 	if (program == 0)
 		return -1;
 
-	// recupere les shaders
 	int shaders_max = 0;
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &shaders_max);
-
 	if (shaders_max > 0)
 	{
 		std::vector<GLuint> shaders(shaders_max, 0);
@@ -306,7 +299,6 @@ int Shader::Release()
 			glDeleteShader(shaders[i]);
 		}
 	}
-
 	glDeleteProgram(program);
 	return 0;
 }
@@ -327,7 +319,6 @@ int Shader::GetCompileErrors(std::string& errors)
 		return 0;
 
 	int first_error = INT_MAX;
-	// recupere les shaders
 	int shaders_max = 0;
 	glGetProgramiv(program, GL_ATTACHED_SHADERS, &shaders_max);
 	if (shaders_max == 0)
@@ -407,12 +398,9 @@ static int location(const GLuint program, const std::string&uniform)
 #else
 		sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
 #endif
-
 		static std::set<std::string> log;
 		if (log.insert(error).second == true)
-			// pas la peine d'afficher le message 60 fois par seconde...
 			printf("%s\n", error);
-
 		return -1;
 	}
 
@@ -486,19 +474,11 @@ void Shader::UniformTransform(const std::string&uniform, const Transform& v)
 
 void Shader::UniformTexture(const std::string&uniform, int unit, GLuint texture, GLuint sampler)
 {
-	// verifie que l'uniform existe
 	int id = location(program, uniform);
 	if (id < 0)
 		return;
-
-	// selectionne l'unite de texture
 	glActiveTexture(GL_TEXTURE0 + unit);
-	// configure la texture
 	glBindTexture(GL_TEXTURE_2D, texture);
-
-	// les parametres de filtrage
 	glBindSampler(unit, sampler);
-
-	// transmet l'indice de l'unite de texture au shader
 	glUniform1i(id, unit);
 }

@@ -156,6 +156,9 @@
     <ClInclude Include="Include\texture2D.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\light.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\mainwindow.cpp">
@@ -272,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="Source\texture2D.cpp">
       <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\light.cpp">
+      <Filter>Rendering\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

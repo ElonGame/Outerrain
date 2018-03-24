@@ -1,5 +1,6 @@
 #include "material.h"
 #include "texture2D.h"
+#include "mainwindow.h"
 
 
 Material::Material()
@@ -12,6 +13,11 @@ Material::Material()
 void Material::SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
 {
 	shader.Attach();
+
+	shader.UniformVec3("lightDir", MainWindow::sceneLight.Direction());
+	shader.UniformColor("lightColor", MainWindow::sceneLight.GetColor());
+	shader.UniformColor("lightAmbientColor", MainWindow::sceneLight.AmbientColor());
+	shader.UniformFloat("lightStrength", MainWindow::sceneLight.Strength());
 
 	shader.UniformTransform("trsMatrix", trs);
 	shader.UniformTransform("mvpMatrix", mvp);

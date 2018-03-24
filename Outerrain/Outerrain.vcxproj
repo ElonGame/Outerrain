@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\light.h" />
     <ClInclude Include="Include\terratree.h" />
     <ClInclude Include="Include\apptime.h" />
     <ClInclude Include="Include\box.h" />
@@ -88,6 +89,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\layerfield.cpp" />
+    <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\mainwindow-callbacks.cpp" />
     <ClCompile Include="Source\mainwindow-examples.cpp" />
     <ClCompile Include="Source\mainwindow.cpp" />

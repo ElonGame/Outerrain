@@ -33,21 +33,20 @@ uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform sampler2D texture3;
 
+uniform vec3 lightDir;
+uniform vec4 lightColor;
+uniform vec4 lightAmbientColor;
+uniform float lightStrength;
+
 in vec2 vertex_texcoord;
 in vec3 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragment_color;
 
-// Constants
-const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
-const vec3 lightDir = vec3(0.707, -0.707, 0);
-const vec3 lightColor = vec3(1, 1, 1);
-const float lightStrength = 0.8;
 
 //	<https://www.shadertoy.com/view/4dS3Wd>
 //	By Morgan McGuire @morgan3d, http://graphicscodex.com
-//
 float hash(float n) { return fract(sin(n) * 1e4); }
 float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
 float noise(float x) 
@@ -130,9 +129,9 @@ vec3 TerrainShading(vec2 uv)
 	}
 
 	// Final color
-	return ambientLight 
-			+ diffuse * terrainColor.rgb * (lightColor * lightStrength) 
-			+ specular * (lightColor * lightStrength);
+	return lightAmbientColor.rgb 
+			+ diffuse * terrainColor * (lightColor.rgb * lightStrength) 
+			+ specular * (lightColor.rgb * lightStrength);
 }
 
 vec3 DiffuseShading()
@@ -151,9 +150,9 @@ vec3 DiffuseShading()
 	}
 
 	// Final color
-	return ambientLight 
-			+ diffuse * albedo.rgb * (lightColor * lightStrength) 
-			+ specular * (lightColor * lightStrength);
+	return lightAmbientColor.rgb 
+			+ diffuse * albedo.rgb * (lightColor.rgb * lightStrength) 
+			+ specular * (lightColor.rgb * lightStrength);
 }
 
 void main()

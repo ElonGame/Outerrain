@@ -9,8 +9,8 @@
 #include "meshsetrenderer.h"
 #include "terrainsettings.h"
 #include "layerfield.h"
-
 #include "apptime.h"
+#include "light.h"
 
 class MainWindow
 {
@@ -57,4 +57,6 @@ public:
 
 	void Show();
 	void Quit();
+
+	static DirectionnalLight sceneLight;
 };
