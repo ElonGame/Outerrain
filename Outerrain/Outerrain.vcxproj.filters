@@ -22,9 +22,6 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{90f3ceca-15c2-4be2-b1a8-8a8dfc094952}</UniqueIdentifier>
     </Filter>
-    <Filter Include="To Refactor">
-      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering\Include">
       <UniqueIdentifier>{7e065c67-1d44-4e13-9d7e-db2f5e23bf22}</UniqueIdentifier>
     </Filter>
@@ -40,6 +37,9 @@
     <Filter Include="Framework\TerraTree">
       <UniqueIdentifier>{b6f55eef-cf50-4d83-bae6-aa5974a40a13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Imgui">
+      <UniqueIdentifier>{a55fe33c-f47a-4deb-a236-dbac818c80e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\mainwindow.h">
@@ -49,7 +49,7 @@
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Include\imgui_opengl.h">
-      <Filter>To Refactor</Filter>
+      <Filter>Rendering\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Include\color.h">
       <Filter>Core\Include</Filter>
@@ -169,13 +169,13 @@
     </ClCompile>
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\imgui.cpp">
-      <Filter>To Refactor</Filter>
+      <Filter>Rendering\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>To Refactor</Filter>
+      <Filter>Rendering\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui_opengl.cpp">
-      <Filter>To Refactor</Filter>
+      <Filter>Rendering\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\transform.cpp">
       <Filter>Core\Source</Filter>

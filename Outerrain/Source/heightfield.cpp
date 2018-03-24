@@ -139,9 +139,6 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 			Set(i, j, h);
 		}
 	}
-
-	std::cout << Min() << std::endl;
-	std::cout << Max() << std::endl;
 }
 
 /*

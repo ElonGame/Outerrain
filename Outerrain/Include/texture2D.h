@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <SDL2/SDL_image.h>
+#include <SDL2\SDL.h>
 
 class Texture2D
 {
@@ -27,6 +28,7 @@ public:
 	int Width() const;
 	int Height() const;
 	int BytesPerPixel() const;
+	void Save(const std::string& filePath) const;
 
 	GLuint GetGLTexture(int unit, bool mipmap) const;
 	static GLuint MakeGLTexture(const std::string& filePath, int unit, bool mipmap);
