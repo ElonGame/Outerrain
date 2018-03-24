@@ -97,4 +97,6 @@ void MainWindow::ClearScene()
 		delete hf;
 	if (hfObject != nullptr)
 		delete hfObject;
+	hf = nullptr;
+	hfObject = nullptr;
 }

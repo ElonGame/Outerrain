@@ -28,6 +28,11 @@ private:
 	Mesh* hfMesh;
 	MeshSetRenderer* setExample;
 
+	/* Example scenes */
+	void ExampleScene1();
+	void ExampleScene2();
+	void ExampleScene3();
+	void ExampleScene4();
 
 	/* Functions */
 	void InitBasicTerrain();
@@ -50,6 +55,7 @@ private:
 	void MainLoop();
 	void Update(float time, float deltaTime);
 	void Render();
+	void RenderGUI();
 
 public:
 	MainWindow(int windowWidth, int windowHeight);

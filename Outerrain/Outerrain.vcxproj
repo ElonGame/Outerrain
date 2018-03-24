@@ -92,6 +92,7 @@
     <ClCompile Include="Source\light.cpp" />
     <ClCompile Include="Source\mainwindow-callbacks.cpp" />
     <ClCompile Include="Source\mainwindow-examples.cpp" />
+    <ClCompile Include="Source\mainwindow-gui.cpp" />
     <ClCompile Include="Source\mainwindow.cpp" />
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\mesh.cpp" />

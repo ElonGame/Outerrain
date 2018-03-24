@@ -129,13 +129,13 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 			else if (type == FractalType::Ridge)
 				h = Fractal::RidgeNoise(n, p * freq, amplitude, freq, oct);
 			else if (type == FractalType::MusgravefBm)
-				h = amplitude * Fractal::MusgravefBm(n, p * freq, 1.0, 2.0, oct);
+				h = (amplitude / 2.0) * Fractal::MusgravefBm(n, p * freq, 1.0f, 2.0f, oct);
 			else if (type == FractalType::MusgraveHeteroTerrain)
-				h = amplitude * Fractal::MusgraveHeteroTerrain(n, p * freq, 1.0, 2.0, oct, 1.0f);
+				h = (amplitude / 2.0f) * (Fractal::MusgraveHeteroTerrain(n, p * freq, 1.0f, 2.0f, oct, 1.0f) * 0.5f - 0.5f);
 			else if (type == FractalType::MusgraveHybridMultifractal)
-				h = (amplitude / 2.0) * Fractal::MusgraveHybridMultifractal(n, p * freq, 0.25, 2.0, oct, 0.7f);
+				h = amplitude * Fractal::MusgraveHybridMultifractal(n, p * freq, 0.25f, 2.0f, oct, 0.7f);
 			else if (type == FractalType::MusgraveRidgedMultifractal)
-				h = amplitude * Fractal::MusgraveRidgedMultifractal(n, p * freq, 1.0, 2.0, oct, 1.0f, 2.0f);
+				h = amplitude * Fractal::MusgraveRidgedMultifractal(n, p * freq, 1.0f, 2.0f, oct, 1.0f, 2.0f);
 			Set(i, j, h);
 		}
 	}
@@ -185,7 +185,7 @@ void Heightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 		}
 	}
 }
-	
+
 /*
 \brief Perform a stream power erosion step with maximum amplitude defined by user. Based on https://hal.inria.fr/hal-01262376/document.
 This erosion called 'Fluvial' is based on Drainasge and Slope. One of the weakness of the stream power erosion is that it can create peaks
@@ -266,14 +266,14 @@ void Heightfield::HydraulicErosion()
 						index++;
 						continue;
 					}
-					
+
 					// Bug here for sure
 					// Remake implementation based on http://hpcg.purdue.edu/bbenes/papers/Benes02WSCG.pdf
 					// Instead of Musgrave, which is not very precise and misses some details.
 					waterTransport[index] = waterTransport[index] * neighbourHeightDiff[index] / lowerVertexCount;
 					waterTransport[index] = Math::Clamp(waterTransport[index], 0.0f, 1.0f);
 					//cout << waterTransport[index] << endl;
-					
+
 					if (waterTransport[index] <= 0.0f)
 					{
 						Add(i, j, Kd * sediments.Get(i, j));

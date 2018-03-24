@@ -95,7 +95,7 @@ Window::Window(int w, int h) : width(w), height(h), stop(0)
 	std::cout << "SDL Linked Version : " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch << std::endl;
 	atexit(SDL_Quit);
 
-	windowSDL = SDL_CreateWindow("Outerrain", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	windowSDL = SDL_CreateWindow("Outerrain", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
 	if (windowSDL == NULL)
 	{
 		std::cout << "SDL_CreateWindow() failed : " << SDL_GetError() << std::endl;

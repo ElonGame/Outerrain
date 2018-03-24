@@ -56,6 +56,7 @@ void MainWindow::Init()
 {
 	mainWindowHandler->SetDefaultGLState();
 	ImGui_OpenGL_Init(mainWindowHandler->GetSDLWindow());
+	std::cout << "Dear ImGui Version : " << ImGui::GetVersion() << std::endl;
 	Material::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
@@ -89,7 +90,7 @@ void MainWindow::Update(float time, float deltaTime)
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
 	float mxF = static_cast<float>(mx);
 	float myF = static_cast<float>(my);
-	if (mb & SDL_BUTTON(1))
+	if (mb & SDL_BUTTON(1) && mainWindowHandler->KeyState(SDLK_LCTRL))
 		orbiter.Rotation(mxF, myF);
 	if (mainWindowHandler->WheelEvent().y != 0)
 		orbiter.Move(mainWindowHandler->WheelEvent().y * 10.0f);
@@ -162,7 +163,6 @@ void MainWindow::Update(float time, float deltaTime)
 	}
 
 	mainWindowHandler->ClearButtonEvent();
-	mainWindowHandler->ClearAllKeyStates();
 	mainWindowHandler->ClearWheelEvent();
 	hfObject->UpdateTransformIfNeeded();
 }
@@ -177,13 +177,5 @@ void MainWindow::Render()
 		setExample->Render(orbiter);
 
 	// GUI
-	ImGui::Begin("Statistics");
-	std::stringstream cpuStream, gpuStream;
-	AppTime::StopClock(cpuStream, gpuStream);
-	ImGui::Text(cpuStream.str().data());
-	ImGui::Text(gpuStream.str().data());
-	ImGui::Text((std::string("Vertices : ") + std::to_string(hfMesh->VerticeCount())).c_str());
-	ImGui::Text((std::string("Triangles : ") + std::to_string(hfMesh->IndicesCount())).c_str());
-	ImGui::End();
-	ImGui::Render();
+	RenderGUI();
 }

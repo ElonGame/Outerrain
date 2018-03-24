@@ -279,5 +279,8 @@
     <ClCompile Include="Source\light.cpp">
       <Filter>Rendering\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\mainwindow-gui.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
