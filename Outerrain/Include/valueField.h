@@ -6,7 +6,6 @@
 
 #include "vec.h"
 #include "box2D.h"
-#include "image.h"
 
 template<typename T>
 class ValueField

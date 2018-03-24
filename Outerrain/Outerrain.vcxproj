@@ -48,13 +48,11 @@
     <ClInclude Include="Include\poissonTile2D.h" />
     <ClInclude Include="Include\quaternion.h" />
     <ClInclude Include="Include\ray.h" />
-    <ClInclude Include="Include\image.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\scalarfield2D.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\sphere.h" />
     <ClInclude Include="Include\terrainSettings.h" />
-    <ClInclude Include="Include\texture.h" />
     <ClInclude Include="Include\texture2D.h" />
     <ClInclude Include="Include\transform.h" />
     <ClInclude Include="Include\valueField.h" />
@@ -99,7 +97,6 @@
     <ClCompile Include="Source\meshsetrenderer.cpp" />
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\poissonTile2D.cpp" />
-    <ClCompile Include="Source\image.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\perlinNoise.cpp" />
     <ClCompile Include="Source\scalarfield2D.cpp" />
@@ -109,7 +106,6 @@
     <ClCompile Include="Source\terranode.cpp" />
     <ClCompile Include="Source\terratree.cpp" />
     <ClCompile Include="Source\terravertex.cpp" />
-    <ClCompile Include="Source\texture.cpp" />
     <ClCompile Include="Source\texture2D.cpp" />
     <ClCompile Include="Source\transform.cpp" />
     <ClCompile Include="Source\ecosystem.cpp" />

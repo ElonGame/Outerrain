@@ -62,8 +62,8 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
-	InitNoiseTerrain();
-	//InitBasicTerrain();
+	//InitNoiseTerrain();
+	InitBasicTerrain();
 	//InitLayerTerrain();
 	//InitGPUTerrain();
 

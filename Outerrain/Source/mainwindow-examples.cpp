@@ -11,7 +11,7 @@ void MainWindow::InitBasicTerrain()
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/canyon-513.png");
+	settings.filePath = std::string("Data/Heightmaps/island.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 250.0f;
 	settings.shaderType = ShaderType::TerrainSplatmap;

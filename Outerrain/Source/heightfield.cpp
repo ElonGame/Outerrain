@@ -359,7 +359,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 		}
 
 		// Distribute to those lower neighbours
-		float sum = Math::Accumulate<float, 8>(slopes);
+		float sum = Math::Sum<float, 8>(slopes);
 		for (int k = 0; k < neighbourCount; k++)
 			DA.Set(coords[k], DA.Get(coords[k]) + DA.Get(i, j) * (slopes[k] / sum));
 	}

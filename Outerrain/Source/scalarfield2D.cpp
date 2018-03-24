@@ -1,7 +1,6 @@
 #include "scalarfield2D.h"
 #include "mathUtils.h"
-#include "image.h"
-#include "texture.h"
+#include "texture2D.h"
 
 /*!
 \class Scalarfield2D scalarfield.h
@@ -202,11 +201,9 @@ Vector3 Scalarfield2D::Vertex(const Vector2& v) const
 */
 void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue, float whiteValue)
 {
-	Image heightmap;
-	heightmap.ReadImage(filePath, false);
-	float texelX = 1.0f / (heightmap.Width());
-	float texelY = 1.0f / (heightmap.Height());
-
+	Texture2D grayscaleTex = Texture2D(filePath);
+	float texelX = 1.0f / (grayscaleTex.Width());
+	float texelY = 1.0f / (grayscaleTex.Height());
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -214,18 +211,18 @@ void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue,
 			float u = j / (static_cast<float>(nx - 1));
 			float v = i / (static_cast<float>(ny - 1));
 
-			int anchorX = static_cast<int>((u * (heightmap.Width() - 1)));
-			int anchorY = static_cast<int>((v * (heightmap.Height() - 1)));
-			if (anchorX == heightmap.Width() - 1)
+			int anchorX = static_cast<int>((u * (grayscaleTex.Width() - 1)));
+			int anchorY = static_cast<int>((v * (grayscaleTex.Height() - 1)));
+			if (anchorX == grayscaleTex.Width() - 1)
 				anchorX--;
-			if (anchorY == heightmap.Height() - 1)
+			if (anchorY == grayscaleTex.Height() - 1)
 				anchorY--;
 
 			// Bilinear interpolation
-			float a = heightmap(anchorX, anchorY).r;
-			float b = heightmap(anchorX, anchorY + 1).r;
-			float c = heightmap(anchorX + 1, anchorY + 1).r;
-			float d = heightmap(anchorX + 1, anchorY).r;
+			float a = grayscaleTex.Pixel(anchorX, anchorY).r;
+			float b = grayscaleTex.Pixel(anchorX, anchorY + 1).r;
+			float c = grayscaleTex.Pixel(anchorX + 1, anchorY + 1).r;
+			float d = grayscaleTex.Pixel(anchorX + 1, anchorY).r;
 
 			float anchorU = anchorX * texelX;
 			float anchorV = anchorY * texelY;
@@ -248,18 +245,7 @@ void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue,
 */
 void Scalarfield2D::SaveAsImage(const std::string& path)
 {
-	Image im = Image(nx, ny);
-	float min = Min();
-	float max = Max();
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			float v = (Get(i, j) - min) / (max - min);
-			im(j, i) = Color(v, v, v, 1.0);
-		}
-	}
-	im.WriteImage(path, true);
+	// Todo
 }
 
 /*
@@ -268,7 +254,7 @@ void Scalarfield2D::SaveAsImage(const std::string& path)
 */
 GLuint Scalarfield2D::GetGLTexture(int unit) const
 {
-	Image im = Image(nx, ny);
+	Texture2D tex = Texture2D(nx, ny);
 	float min = Min();
 	float max = Max();
 	for (int i = 0; i < ny; i++)
@@ -276,8 +262,8 @@ GLuint Scalarfield2D::GetGLTexture(int unit) const
 		for (int j = 0; j < nx; j++)
 		{
 			float v = (Get(i, j) - min) / (max - min);
-			im(j, i) = Color(v, v, v, 1.0);
+			tex.SetPixel(i, j, Color(v, v, v, 1.0));
 		}
 	}
-	return MakeTexture(unit, im, GL_RGBA);
+	return tex.GetGLTexture(unit, true);
 }

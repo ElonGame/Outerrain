@@ -1,6 +1,5 @@
 #include "material.h"
-#include "image.h"
-#include "texture.h"
+#include "texture2D.h"
 
 
 Material::Material()
@@ -94,17 +93,17 @@ void Material::InitStaticMaterials()
 	TerrainTexturedMat.shininess = 0.0f;
 	TerrainTexturedMat.shaderType = ShaderType::TerrainSplatmap;
 	TerrainTexturedMat.shader = DefaultDiffuseMat.shader; //Shader("Shaders/TerrainShader.glsl");
-	TerrainTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);
-	TerrainTexturedMat.texture1 = ReadTexture(1, "Data/Textures/sand.png", GL_RGBA);
-	TerrainTexturedMat.texture2 = ReadTexture(2, "Data/Textures/rock.png", GL_RGBA);
-	TerrainTexturedMat.texture3 = ReadTexture(3, "Data/Textures/snow.png", GL_RGBA);
+	TerrainTexturedMat.texture0 = Texture2D::MakeGLTexture("Data/Textures/grass.png", 0, true);
+	TerrainTexturedMat.texture1 = Texture2D::MakeGLTexture("Data/Textures/sand.png", 1, true);
+	TerrainTexturedMat.texture2 = Texture2D::MakeGLTexture("Data/Textures/rock.png", 3, true);
+	TerrainTexturedMat.texture3 = Texture2D::MakeGLTexture("Data/Textures/snow.png", 4, true);
 
 	// Simple Textured
 	DefaultTexturedMat.albedo = Color::Grey();
 	DefaultTexturedMat.shininess = 0.0f;
 	DefaultTexturedMat.shaderType = ShaderType::SimpleTextured;
 	DefaultTexturedMat.shader = DefaultDiffuseMat.shader;
-	DefaultTexturedMat.texture0 = ReadTexture(0, "Data/Textures/grass.png", GL_RGBA);;
+	DefaultTexturedMat.texture0 = TerrainTexturedMat.texture0;
 	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
 
 	// Wireframe
