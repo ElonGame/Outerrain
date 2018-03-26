@@ -152,9 +152,9 @@ void MainWindow::ExampleScene4()
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);
 	settings.noise = new PerlinNoise();
-	settings.frequency = 0.00008f;
+	settings.frequency = 0.002f;
 	settings.octaves = 8;
-	settings.amplitude = 50.0f;
+	settings.amplitude = 100.0f;
 	settings.fractalType = FractalType::MusgraveHeteroTerrain;
 	settings.shaderType = ShaderType::TerrainSplatmap;
 

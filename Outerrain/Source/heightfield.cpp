@@ -131,7 +131,7 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 			else if (type == FractalType::MusgravefBm)
 				h = (amplitude / 2.0) * Fractal::MusgravefBm(n, p * freq, 1.0f, 2.0f, oct);
 			else if (type == FractalType::MusgraveHeteroTerrain)
-				h = (amplitude / 2.0f) * (Fractal::MusgraveHeteroTerrain(n, p * freq, 1.0f, 2.0f, oct, 1.0f) * 0.5f - 0.5f);
+				h = amplitude * (Fractal::MusgraveHeteroTerrain(n, p * freq, 1.0f, 2.0f, oct, 1.0f) * 0.5f - 0.5f);
 			else if (type == FractalType::MusgraveHybridMultifractal)
 				h = amplitude * Fractal::MusgraveHybridMultifractal(n, p * freq, 0.25f, 2.0f, oct, 0.7f);
 			else if (type == FractalType::MusgraveRidgedMultifractal)

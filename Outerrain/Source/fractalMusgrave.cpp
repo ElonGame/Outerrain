@@ -7,11 +7,12 @@ https://www.classes.cs.uchicago.edu/archive/2015/fall/23700-1/final-project/Musg
 And adapted a little to match with C++.
 */
 
-static bool first = true;
-static float* exponent_array;
+static float* exponent_array = nullptr;
 
 static void InitExponentArrays(float lacunarity, float octaves, float H)
 {
+	delete exponent_array;
+
 	float frequency;
 	exponent_array = new float[static_cast<int>(octaves) + 1];
 	frequency = 1.0;
@@ -20,7 +21,6 @@ static void InitExponentArrays(float lacunarity, float octaves, float H)
 		exponent_array[i] = pow(frequency, -H);
 		frequency *= lacunarity;
 	}
-	first = false;
 }
 
 /*
@@ -35,8 +35,7 @@ static void InitExponentArrays(float lacunarity, float octaves, float H)
  */
 float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunarity, float octaves)
 {
-	if (first)
-		InitExponentArrays(lacunarity, octaves, H);
+	InitExponentArrays(lacunarity, octaves, H);
 
 	float value = 0.0;
 	float frequency = 1.0;
@@ -69,8 +68,7 @@ float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunar
  */
 float Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset)
 {
-	if (first)
-		InitExponentArrays(lacunarity, octaves, H);
+	InitExponentArrays(lacunarity, octaves, H);
 
 	/* first unscaled octave of function; later octaves are scaled */
 	float value = offset + n.GetValue(point);
@@ -123,8 +121,7 @@ float Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, flo
  */
 float Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset)
 {
-	if (first)
-		InitExponentArrays(lacunarity, octaves, H);
+	InitExponentArrays(lacunarity, octaves, H);
 
 	/* get first octave of function */
 	float result = (n.GetValue(point) + offset) * exponent_array[0];
@@ -177,8 +174,7 @@ float Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H
  */
 float Fractal::MusgraveRidgedMultifractal(const Noise& n, Vector3 point, float H, float lacunarity, float octaves, float offset, float gain)
 {
-	if (first)
-		InitExponentArrays(lacunarity, octaves, H);
+	InitExponentArrays(lacunarity, octaves, H);
 
 	/* get first octave */
 	float signal = n.GetValue(point);

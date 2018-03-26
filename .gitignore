@@ -351,3 +351,5 @@ OpenCover/
 
 # Azure Stream Analytics local run output 
 ASALocalRun/
+Outerrain/Out/Outerrain.iobj
+Outerrain/Out/Outerrain.ipdb
