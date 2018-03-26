@@ -1,10 +1,10 @@
 # Prerequisites
 *.d
-Dependencies/
-Out/
 Temp/
 
 # Compiled Object files
+*.tmp
+*.exe
 *.slo
 *.lo
 *.o
@@ -20,7 +20,6 @@ bin/
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
