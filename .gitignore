@@ -8,6 +8,7 @@ Temp/
 *.slo
 *.lo
 *.o
+*.pdb
 
 *.Make
 Makefile
