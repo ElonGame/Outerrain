@@ -69,15 +69,14 @@ void MainWindow::UpdateMeshRenderer()
 	{
 		hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
-		setExample = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"), hf->GetVoxelFrames());
-		setExample->SetMaterial(Material::DefaultDiffuseMat);
-		//hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
-		//hfMesh = hfObject->GetComponent<Mesh>();
+		hfObject->AddComponent(new HeightfieldMesh(hf));
+		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
+		hfMesh = hfObject->GetComponent<Mesh>();
 		return;
 	}
 
-	//hfObject->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
-	//hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
+	hfObject->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
+	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::UpdateMeshMaterial()

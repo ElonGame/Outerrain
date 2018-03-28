@@ -1,13 +1,13 @@
 #include "mainwindow.h"
 
+DirectionnalLight MainWindow::sceneLight = DirectionnalLight(Vector3(0.707f, -0.707f, 0.0f), Color(1.0f, 1.0f, 1.0f), Color(0.1, 0.1f, 0.1f), 0.8f);
 
 void MainWindow::InitBasicTerrain()
 {
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 128;
-	settings.ny = 128;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
@@ -25,8 +25,7 @@ void MainWindow::InitGPUTerrain()
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 256;
-	settings.ny = 256;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
@@ -44,8 +43,7 @@ void MainWindow::InitNoiseTerrain()
 	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 512;
-	settings.ny = 512;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024, -1024);
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);
@@ -84,8 +82,7 @@ void MainWindow::ExampleScene1()
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
@@ -104,8 +101,7 @@ void MainWindow::ExampleScene2()
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
@@ -124,8 +120,7 @@ void MainWindow::ExampleScene3()
 	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024, -1024);
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);
@@ -146,8 +141,7 @@ void MainWindow::ExampleScene4()
 	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-1024, -1024);
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);

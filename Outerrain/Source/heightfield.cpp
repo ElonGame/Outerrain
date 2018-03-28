@@ -98,7 +98,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, floa
 \brief Constructor from TerrainSettings class for convenience and consistancy.
 \param settings TerrainSettings for the heightfield.
 */
-Heightfield::Heightfield(const TerrainSettings& settings) : Scalarfield2D(settings.nx, settings.ny, Box2D(settings.bottomLeft, settings.topRight))
+Heightfield::Heightfield(const TerrainSettings& settings) : Scalarfield2D(settings.resolution, settings.resolution, Box2D(settings.bottomLeft, settings.topRight))
 {
 	if (settings.terrainType == TerrainType::HeightFieldTerrain)
 		ReadFromImage(settings.filePath.c_str(), settings.minAltitude, settings.maxAltitude);
