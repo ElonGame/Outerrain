@@ -186,8 +186,8 @@ void Mesh::ClearBuffers()
 void Mesh::PrintInfos()
 {
 	std::cout << "Printing mesh properties..." << std::endl;
-	std::cout << "Vertice count : " << VerticeCount() << std::endl;
+	std::cout << "Vertice count : " << VertexCount() << std::endl;
 	std::cout << "Normal count : " << NormalCount() << std::endl;
 	std::cout << "Texcoord count : " << TexcoordCount() << std::endl;
-	std::cout << "Indices count : " << IndicesCount() << std::endl;
+	std::cout << "Indices count : " << TriangleCount() << std::endl;
 }

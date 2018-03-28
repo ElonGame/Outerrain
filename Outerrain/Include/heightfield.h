@@ -36,5 +36,5 @@ public:
 	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
 	std::vector<Frame> GetVoxelFrames() const;
-	Mesh* GetMeshModel() const;
+	Mesh* GetMesh() const;
 };

@@ -38,5 +38,5 @@ public:
 	void SetMaterial(const Material& m);
 	void SetShader(const Shader& s);
 
-	const Mesh& GetMeshModel() const;
+	const Mesh& GetMesh() const;
 };

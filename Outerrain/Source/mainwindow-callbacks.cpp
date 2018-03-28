@@ -44,8 +44,19 @@ void MainWindow::LightingImpact()
 		return;
 	LayerField* lf = dynamic_cast<LayerField*>(hf);
 	lf->LightingEventSimulate(5.0, 100, 5);
-	setExample = lf->GetRockInstances();
 	UpdateMeshRenderer();
+}
+
+void MainWindow::GenerateTerrainFromSettings(bool gpu)
+{
+	if (hf != nullptr)
+		delete hf;
+	if (instanceRenderer == nullptr)
+		instanceRenderer = new MeshSetRenderer();
+	if (gpu)
+		hf = new GPUHeightfield(settings);
+	else
+		hf = new Heightfield(settings);
 }
 
 void MainWindow::UpdateMeshRenderer()

@@ -15,7 +15,7 @@ using Random = effolkronium::random_static;
 /*
 \brief Main Class for representing 2D HeightField.
 Various functions and erosion processes are available (Wetness, Slope.. ; Thermal, Stream Power erosion...)
-Can be rendered using GetMeshModel() and GetVoxelFrames()
+Can be rendered using GetMesh() and GetVoxelFrames()
 */
 
 /*
@@ -522,7 +522,7 @@ std::vector<Frame> Heightfield::GetVoxelFrames() const
 /*
 \brief Compute the heightfield mesh for rendering
 */
-Mesh* Heightfield::GetMeshModel() const
+Mesh* Heightfield::GetMesh() const
 {
 	Mesh* ret = new Mesh();
 	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, box, Vector3(0));

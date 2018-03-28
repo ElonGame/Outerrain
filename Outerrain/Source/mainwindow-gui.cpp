@@ -10,27 +10,32 @@ void MainWindow::RenderGUI()
 	AppTime::StopClock(cpuStream, gpuStream);
 	ImGui::Text(cpuStream.str().data());
 	ImGui::Text(gpuStream.str().data());
-	ImGui::Text((std::string("Vertices : ") + std::to_string(hfMesh->VerticeCount())).c_str());
-	ImGui::Text((std::string("Triangles : ") + std::to_string(hfMesh->IndicesCount())).c_str());
+	size_t frameCount = instanceRenderer->GetFrameCount();
+	size_t vertexCount = hfMesh->VertexCount();
+	size_t triangleCount = hfMesh->TriangleCount();
+	ImGui::Text((std::string("Vertices : ")	 + std::to_string(vertexCount)).c_str());
+	ImGui::Text((std::string("Triangles : ") + std::to_string(triangleCount)).c_str());
+	ImGui::Text((std::string("Instances : ") + std::to_string(frameCount)).c_str());
 	ImGui::End();
 
 	ImGui::Begin("Examples");
 	if (ImGui::Button("Heightfield 1"))
-		ExampleScene1();
+		Heightfield1Scene();
 	ImGui::Spacing();
 	if (ImGui::Button("Heightfield 2"))
-		ExampleScene2();
+		Heightfield2Scene();
 	ImGui::Spacing();
 	if (ImGui::Button("NoiseField 1"))
-		ExampleScene3();
+		NoiseField1Scene();
 	ImGui::Spacing();
 	if (ImGui::Button("NoiseField 2"))
-		ExampleScene4();
+		NoiseField2Scene();
 	ImGui::Spacing();
 	ImGui::Spacing();
 	ImGui::Spacing();
 
-	ImGui::SliderInt("Resolution", &settings.resolution, 128, 4096);
+	ImGui::SliderInt("Res", &settings.resolution, 128, 2048);
+	ImGui::Spacing();
 	if (ImGui::Button("Generate"))
 	{
 		ClearScene();

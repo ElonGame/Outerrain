@@ -66,6 +66,9 @@ void MeshRenderer::RenderInternal()
 
 void MeshRenderer::Render(const CameraOrbiter& cam)
 {
+	if (mesh == nullptr)
+		return;
+
 	Transform trs = gameObject->GetObjectToWorldMatrix();
 	Transform mvp = cam.Projection() * (cam.View() * trs);
 	Vector3 camPos = cam.Position();
@@ -78,7 +81,7 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 
 void MeshRenderer::CreateBuffers()
 {
-	if (mesh->VerticeCount() == 0)
+	if (mesh->VertexCount() == 0)
 	{
 		std::cout << "Can't create buffers on empty mesh - aborting" << std::endl;
 		return;
@@ -152,7 +155,7 @@ void MeshRenderer::SetShader(const Shader& s)
 	material.SetShader(s);
 }
 
-const Mesh& MeshRenderer::GetMeshModel() const
+const Mesh& MeshRenderer::GetMesh() const
 { 
 	return *mesh.get();
 }

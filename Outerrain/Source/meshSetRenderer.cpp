@@ -38,13 +38,16 @@ void MeshSetRenderer::ClearFrames()
 	frames.clear();
 }
 
-int MeshSetRenderer::GetFrameCount() const
+size_t MeshSetRenderer::GetFrameCount() const
 {
 	return frames.size();
 }
 
 void MeshSetRenderer::Render(const CameraOrbiter& cam) 
 {
+	if (mesh == nullptr || frames.empty())
+		return;
+
 	Transform p = cam.Projection();
 	Transform view = cam.View();
 	Vector3 camPos = cam.Position();
@@ -54,7 +57,6 @@ void MeshSetRenderer::Render(const CameraOrbiter& cam)
 		UpdateBuffers();
 
 	glBindVertexArray(vao);
-
 	for (int i = 0; i < frames.size(); i++)
 	{
 		Transform trs = frames[i].GetMatrix();
@@ -96,9 +98,9 @@ void MeshSetRenderer::SetShader(const Shader& s)
 	material.SetShader(s);
 }
 
-const Mesh& MeshSetRenderer::GetMeshModel() const 
+Mesh* MeshSetRenderer::GetMesh() const 
 {
-	return *mesh;
+	return mesh;
 }
 
 void MeshSetRenderer::UpdateBuffers()
@@ -127,7 +129,7 @@ void MeshSetRenderer::UpdateBuffers()
 
 void MeshSetRenderer::CreateBuffers()
 {
-	if (mesh->VerticeCount() == 0)
+	if (mesh->VertexCount() == 0)
 	{
 		std::cout << "Can't create buffers on empty mesh - aborting" << std::endl;
 		return;

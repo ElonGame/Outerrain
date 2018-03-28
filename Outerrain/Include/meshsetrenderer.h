@@ -35,12 +35,12 @@ public:
 
 	void AddFrame(const Frame& f);
 	void ClearFrames();
-	int GetFrameCount() const;
+	size_t GetFrameCount() const;
 	Box GetBounds() const;
 	void Render(const CameraOrbiter&);
 
 	void SetMaterial(const Material& m);
 	void SetPrimitiveMode(const GLuint& p);
 	void SetShader(const Shader& s);
-	const Mesh& GetMeshModel() const;
+	Mesh* GetMesh() const;
 };

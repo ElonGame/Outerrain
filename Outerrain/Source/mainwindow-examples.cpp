@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "random.h"
 
 DirectionnalLight MainWindow::sceneLight = DirectionnalLight(Vector3(0.707f, -0.707f, 0.0f), Color(1.0f, 1.0f, 1.0f), Color(0.1, 0.1f, 0.1f), 0.8f);
 
@@ -66,18 +67,7 @@ void MainWindow::InitLayerTerrain()
 	UpdateMeshRenderer();
 }
 
-void MainWindow::GenerateTerrainFromSettings(bool gpu)
-{
-	if (hf != nullptr)
-		delete hf;
-	if (gpu)
-		hf = new GPUHeightfield(settings);
-	else
-		hf = new Heightfield(settings);
-}
-
-/* Heightfield 1 Scene */
-void MainWindow::ExampleScene1()
+void MainWindow::Heightfield1Scene()
 {
 	ClearScene();
 
@@ -95,8 +85,7 @@ void MainWindow::ExampleScene1()
 	UpdateMeshRenderer();
 }
 
-/* Heightfield 2 Scene */
-void MainWindow::ExampleScene2()
+void MainWindow::Heightfield2Scene()
 {
 	ClearScene();
 
@@ -114,8 +103,7 @@ void MainWindow::ExampleScene2()
 	UpdateMeshRenderer();
 }
 
-/* NoiseField 1 Scene */
-void MainWindow::ExampleScene3()
+void MainWindow::NoiseField1Scene()
 {
 	ClearScene();
 
@@ -135,8 +123,7 @@ void MainWindow::ExampleScene3()
 	UpdateMeshRenderer();
 }
 
-/* NoiseField 2 Scene */
-void MainWindow::ExampleScene4()
+void MainWindow::NoiseField2Scene()
 {
 	ClearScene();
 
@@ -154,4 +141,39 @@ void MainWindow::ExampleScene4()
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
+}
+
+void MainWindow::InstanceScene()
+{
+	hfObject = new GameObject();
+	hfObject->AddComponent(new MeshRenderer());
+
+	settings.terrainType = TerrainType::NoiseFieldTerrain;
+	settings.resolution = 128;
+	settings.bottomLeft = Vector2(-1024, -1024);
+	settings.topRight = Vector2(1024, 1024);
+	settings.offsetVector = Vector3(0);
+	settings.noise = new PerlinNoise();
+	settings.frequency = 0.002f;
+	settings.octaves = 8;
+	settings.amplitude = 100.0f;
+	settings.fractalType = FractalType::MusgraveHybridMultifractal;
+	settings.shaderType = ShaderType::TerrainSplatmap;
+
+	instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"));
+	instanceRenderer->SetMaterial(Material::DefaultDiffuseMat);
+	using Random = effolkronium::random_static;
+	Box box = Box(Vector3(0), 100);
+	for (int i = 0; i < 10000; i++)
+	{
+		float x = Random::get(box.Vertex(0).x, box.Vertex(1).x);
+		float y = Random::get(box.Vertex(0).y, box.Vertex(1).y);
+		float z = Random::get(box.Vertex(0).z, box.Vertex(1).z);
+		Frame f;
+		f.SetPosition(Vector3(x, y, z));
+		instanceRenderer->AddFrame(f);
+	}
+
+	hfMesh = new Mesh();
+	orbiter.LookAt(instanceRenderer->GetBounds());
 }

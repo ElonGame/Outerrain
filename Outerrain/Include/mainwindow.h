@@ -26,13 +26,14 @@ private:
 	TerrainSettings settings;
 
 	Mesh* hfMesh;
-	MeshSetRenderer* setExample;
+	MeshSetRenderer* instanceRenderer;
 
 	/* Example scenes */
-	void ExampleScene1();
-	void ExampleScene2();
-	void ExampleScene3();
-	void ExampleScene4();
+	void Heightfield1Scene();
+	void Heightfield2Scene();
+	void NoiseField1Scene();
+	void NoiseField2Scene();
+	void InstanceScene();
 
 	/* Functions */
 	void InitBasicTerrain();
