@@ -124,8 +124,8 @@ void MainWindow::ExampleScene3()
 	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 512;
-	settings.ny = 512;
+	settings.nx = 1024;
+	settings.ny = 1024;
 	settings.bottomLeft = Vector2(-1024, -1024);
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);
@@ -146,8 +146,8 @@ void MainWindow::ExampleScene4()
 	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.nx = 512;
-	settings.ny = 512;
+	settings.nx = 1024;
+	settings.ny = 1024;
 	settings.bottomLeft = Vector2(-1024, -1024);
 	settings.topRight = Vector2(1024, 1024);
 	settings.offsetVector = Vector3(0);
