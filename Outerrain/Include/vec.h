@@ -272,10 +272,10 @@ inline Vector3 Slerp(Vector3 start, Vector3 end, float percent)
 		dot = -1.0f;
 	if (dot > 1.0f)
 		dot = 1.0f;
-	float theta = acos(dot)*percent;
-	Vector3 RelativeVec = end - start*dot;
-	RelativeVec = Normalize(RelativeVec);
-	return ((start * cos(theta)) + (RelativeVec * sin(theta)));
+	float theta = acos(dot) * percent;
+	Vector3 relativeVector = end - start * dot;
+	relativeVector = Normalize(relativeVector);
+	return ((start * cos(theta)) + (relativeVector * sin(theta)));
 }
 inline Vector3 operator-(const Vector3& v)
 {

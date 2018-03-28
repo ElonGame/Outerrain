@@ -15,6 +15,12 @@ MeshSetRenderer::MeshSetRenderer(Mesh* m)
 	CreateBuffers();
 }
 
+MeshSetRenderer::MeshSetRenderer(Mesh* m, const std::vector<Frame>& f)
+{
+	mesh = m;
+	frames = f;
+}
+
 MeshSetRenderer::~MeshSetRenderer()
 {
 	delete mesh;
@@ -30,6 +36,11 @@ void MeshSetRenderer::AddFrame(const Frame& f)
 void MeshSetRenderer::ClearFrames()
 {
 	frames.clear();
+}
+
+int MeshSetRenderer::GetFrameCount() const
+{
+	return frames.size();
 }
 
 void MeshSetRenderer::Render(const CameraOrbiter& cam) 
@@ -55,6 +66,19 @@ void MeshSetRenderer::Render(const CameraOrbiter& cam)
 		else
 			glDrawArrays(primitiveMode, 0, (GLsizei)mesh->vertices.size());
 	}
+}
+
+Box MeshSetRenderer::GetBounds() const
+{
+	Box ret = Box(Vector3(0), 1.0);
+	ret = Box(frames[0].GetPosition(), frames[1].GetPosition());
+	for (unsigned int i = 1; i < frames.size(); i++)
+	{
+		Vector3 p = frames[i].GetPosition();
+		ret[0] = Vector3(Math::Min(ret[0].x, p.x), Math::Min(ret[0].y, p.y), Math::Min(ret[0].z, p.z));
+		ret[1] = Vector3(Math::Max(ret[1].x, p.x), Math::Max(ret[1].y, p.y), Math::Max(ret[1].z, p.z));
+	}
+	return ret;
 }
 
 void MeshSetRenderer::SetMaterial(const Material& m)

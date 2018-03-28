@@ -155,6 +155,64 @@ float Scalarfield2D::Average() const
 }
 
 /*
+\brief Get All points whose values are > threshold.
+\param threshold minimum value of range
+*/
+std::vector<ScalarValue> Scalarfield2D::FilterSuperiorTo(float threshold) const
+{
+	std::vector<ScalarValue> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float v = values[ToIndex1D(i, j)];
+			if (v > threshold)
+				ret.push_back(ScalarValue(i, j, v));
+		}
+	}
+	return ret;
+}
+
+/*
+\brief Get All points whose values are < threshold.
+\param threshold maximum value of range
+*/
+std::vector<ScalarValue> Scalarfield2D::FilterInferiorTo(float threshold) const
+{
+	std::vector<ScalarValue> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float v = values[ToIndex1D(i, j)];
+			if (v < threshold)
+				ret.push_back(ScalarValue(i, j, v));
+		}
+	}
+	return ret;
+}
+
+/*
+\brief Get All points whose values are in [min, max] range.
+\param min minimum threshold
+\param max maximum threshold
+*/
+std::vector<ScalarValue> Scalarfield2D::FilterBetween(float min, float max) const
+{
+	std::vector<ScalarValue> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float v = values[ToIndex1D(i, j)];
+			if (v >= min && v <= max)
+				ret.push_back(ScalarValue(i, j, v));
+		}
+	}
+	return ret;
+}
+
+/*
 \brief Compute the cell size of X/Y in world coordinates.
 */
 Vector2 Scalarfield2D::CellSize() const

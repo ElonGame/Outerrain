@@ -68,14 +68,14 @@ void MainWindow::Init()
 	//InitLayerTerrain();
 	//InitGPUTerrain();
 
-	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
+	orbiter.LookAt(setExample->GetBounds());
 }
 
 void MainWindow::MainLoop()
 {
 	while (mainWindowHandler->UpdateEvents())
 	{
-		ImGui_OpenGL_NewFrame(mainWindowHandler->GetSDLWindow());
+		//ImGui_OpenGL_NewFrame(mainWindowHandler->GetSDLWindow());
 		AppTime::StartClock();
 		Update(Time::GlobalTime(), Time::DeltaTime());
 		Render();
@@ -172,9 +172,9 @@ void MainWindow::Render()
 	// World
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
-	if (setExample)
-		setExample->Render(orbiter);
+	//hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
+	//if (setExample)
+	setExample->Render(orbiter);
 
 	// GUI
 	RenderGUI();

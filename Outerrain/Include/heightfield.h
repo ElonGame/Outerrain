@@ -5,15 +5,7 @@
 #include "mesh.h"
 #include "fractal.h"
 #include "terrainSettings.h"
-
-/* Utility struct */
-typedef struct ScalarValue
-{
-	int x, y;
-	float value;
-	ScalarValue() { }
-	ScalarValue(int a, int b, float h) : x(a), y(b), value(h) { }
-} Point;
+#include "frame.h"
 
 class Heightfield : public Scalarfield2D
 {
@@ -43,5 +35,6 @@ public:
 	bool Intersect(const Ray& ray, Hit& hit) const;
 	bool Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const;
 
+	std::vector<Frame> GetVoxelFrames() const;
 	Mesh* GetMeshModel() const;
 };

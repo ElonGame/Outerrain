@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <vector>
 
+#include "box.h"
 #include "material.h"
 #include "frame.h"
 
@@ -29,11 +30,13 @@ protected:
 public:
 	MeshSetRenderer();
 	MeshSetRenderer(Mesh*);
+	MeshSetRenderer(Mesh*, const std::vector<Frame>&);
 	~MeshSetRenderer();
 
 	void AddFrame(const Frame& f);
 	void ClearFrames();
-
+	int GetFrameCount() const;
+	Box GetBounds() const;
 	void Render(const CameraOrbiter&);
 
 	void SetMaterial(const Material& m);

@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 
+
 void MainWindow::InitBasicTerrain()
 {
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.nx = 1024;
-	settings.ny = 1024;
+	settings.nx = 128;
+	settings.ny = 128;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
@@ -76,7 +77,6 @@ void MainWindow::GenerateTerrainFromSettings(bool gpu)
 	else
 		hf = new Heightfield(settings);
 }
-
 
 /* Heightfield 1 Scene */
 void MainWindow::ExampleScene1()

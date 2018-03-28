@@ -3,6 +3,14 @@
 #include "GL/glew.h"
 #include "valuefield.h"
 
+typedef struct ScalarValue
+{
+	int x, y;
+	float value;
+	ScalarValue() { }
+	ScalarValue(int a, int b, float h) : x(a), y(b), value(h) { }
+} ScalarValue;
+
 class Scalarfield2D : public ValueField<float>
 {
 public:
@@ -26,6 +34,10 @@ public:
 	void NormalizeField();
 	void NormalizeField(float min, float max);
 	float Average() const;
+
+	std::vector<ScalarValue> FilterSuperiorTo(float threshold) const;
+	std::vector<ScalarValue> FilterInferiorTo(float threshold) const;
+	std::vector<ScalarValue> FilterBetween(float min, float max) const;
 
 	void SaveAsImage(const std::string& filePath);
 	void ReadFromImage(const std::string& filePath, float, float);

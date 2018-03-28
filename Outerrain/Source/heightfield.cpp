@@ -384,13 +384,12 @@ Scalarfield2D Heightfield::Wetness() const
 {
 	Scalarfield2D DA = DrainageArea();
 	Scalarfield2D S = Slope();
-	Scalarfield2D W = Scalarfield2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			W.Set(i, j, abs(log(DA.Get(i, j) / (1.0f + S.Get(i, j)))));
+			DA.Set(i, j, abs(log(DA.Get(i, j) / (1.0f + S.Get(i, j)))));
 	}
-	return W;
+	return DA;
 }
 
 /*
@@ -400,13 +399,12 @@ Scalarfield2D Heightfield::StreamPower() const
 {
 	Scalarfield2D DA = DrainageArea();
 	Scalarfield2D S = Slope();
-	Scalarfield2D SP = Scalarfield2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
-			SP.Set(i, j, sqrt(DA.Get(i, j)) * S.Get(i, j));
+			DA.Set(i, j, sqrt(DA.Get(i, j)) * S.Get(i, j));
 	}
-	return SP;
+	return DA;
 }
 
 /*
@@ -501,6 +499,24 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vec
 	hitPos = hit.position;
 	hitNormal = hit.normal;
 	return res;
+}
+
+/*
+\brief
+*/
+std::vector<Frame> Heightfield::GetVoxelFrames() const
+{
+	std::vector<Frame> ret;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			Frame f;
+			f.SetPosition(Vertex(i, j));
+			ret.push_back(f);
+		}
+	}
+	return ret;
 }
 
 /*
