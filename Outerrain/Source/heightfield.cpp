@@ -15,7 +15,7 @@ using Random = effolkronium::random_static;
 /*
 \brief Main Class for representing 2D HeightField.
 Various functions and erosion processes are available (Wetness, Slope.. ; Thermal, Stream Power erosion...)
-Can be rendered using GetMeshModel().
+Can be rendered using GetMeshModel() and GetVoxelFrames()
 */
 
 /*

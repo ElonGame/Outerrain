@@ -2,7 +2,12 @@
 #include <cassert>
 
 /*
-\brief Todo
+\brief 2D Texture class. Loads and saves using SDL functions. Conversion to OpenGL texture available as static and member functions.
+*/
+
+/*
+\brief Constructs a texture from a file.
+\param filePath relative file to load
 */
 Texture2D::Texture2D(const std::string& filePath)
 {
@@ -65,7 +70,7 @@ Texture2D::Texture2D(const std::string& filePath)
 }
 
 /*
-\brief Todo
+\brief Constructs an empty texture.
 */
 Texture2D::Texture2D(int w, int h)
 {
@@ -76,14 +81,17 @@ Texture2D::Texture2D(int w, int h)
 }
 
 /*
-\brief Todo
+\brief Destructor
 */
 Texture2D::~Texture2D()
 {
 }
 
 /*
-\brief Todo
+\brief Set color to pixel
+\param x
+\param y
+\param c
 */
 void Texture2D::SetPixel(int x, int y, const Color& c)
 {
@@ -91,7 +99,9 @@ void Texture2D::SetPixel(int x, int y, const Color& c)
 }
 
 /*
-\brief Todo
+\brief Get Pixel value
+\param x
+\param y
 */
 Color Texture2D::Pixel(int x, int y) const
 {
@@ -99,7 +109,7 @@ Color Texture2D::Pixel(int x, int y) const
 }
 
 /*
-\brief Todo
+\brief Get pixel buffer.
 */
 void* Texture2D::PixelBuffer() const
 {
@@ -107,7 +117,7 @@ void* Texture2D::PixelBuffer() const
 }
 
 /*
-\brief Todo
+\brief Get texture width.
 */
 int Texture2D::Width() const
 {
@@ -115,7 +125,7 @@ int Texture2D::Width() const
 }
 
 /*
-\brief Todo
+\brief Get texture height.
 */
 int Texture2D::Height() const
 {
@@ -123,7 +133,7 @@ int Texture2D::Height() const
 }
 
 /*
-\brief Todo
+\brief Get bytes per pixel.
 */
 int Texture2D::BytesPerPixel() const
 {
@@ -131,7 +141,8 @@ int Texture2D::BytesPerPixel() const
 }
 
 /*
-\brief
+\brief Save the current texture with SDL functions.
+\param filePath relative path
 */
 void Texture2D::Save(const std::string& filePath) const
 {
@@ -171,7 +182,9 @@ void Texture2D::Save(const std::string& filePath) const
 }
 
 /*
-\brief
+\brief Build the opengl texture and returns it
+\param unit gl texture unit id
+\param mipmap generates mipmap for the gl texture if true
 */
 GLuint Texture2D::GetGLTexture(int unit, bool mipmap) const
 {
@@ -222,7 +235,10 @@ GLuint Texture2D::GetGLTexture(int unit, bool mipmap) const
 }
 
 /*
-\brief Todo
+\brief Build an opengl texture from a file and returns it.
+\param filePath relative path
+\param unit gl texture unit id
+\param mipmap generates mipmap for the gl texture if true
 */
 GLuint Texture2D::MakeGLTexture(const std::string& filePath, int unit, bool mipmap)
 {
