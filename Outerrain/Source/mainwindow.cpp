@@ -62,7 +62,8 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 5000.0f);
 
-	InstanceScene();
+	//InstanceScene();
+	InitGPUTerrain();
 }
 
 void MainWindow::MainLoop()
@@ -117,7 +118,7 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mainWindowHandler->KeyState(SDLK_F8))
 		InitBasicTerrain();
 	if (mainWindowHandler->KeyState(SDLK_F9))
-		InitNoiseTerrain();
+		InitGPUTerrain();
 
 	/* LayerField Callbacks */
 	if (mainWindowHandler->KeyState(SDLK_F4))

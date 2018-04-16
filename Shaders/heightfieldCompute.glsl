@@ -2,12 +2,20 @@
 
 #ifdef COMPUTE_SHADER
 
-layout(binding = 0, std430) coherent buffer HeightfieldData
+layout(binding = 0, std430) coherent buffer HeightfieldDataInt
 {
-    int data[];
+    int integerHeightBuffer[];
 };
 
-const int nx = 1024;
+layout(binding = 1, std430) coherent buffer HeightfieldDataFloat
+{
+	float floatingHeightBuffer[];
+};
+
+uniform int nx;
+uniform float amplitude;
+uniform float cellSize;
+uniform float tanThresholdAngle;
 
 bool Inside(int i, int j)
 {
@@ -25,13 +33,9 @@ layout(local_size_x = 1024) in;
 void main()
 {
 	uint id = gl_GlobalInvocationID.x;
-	if(id >= data.length())
+	if(id >= floatingHeightBuffer.length())
         return;
 	
-	int amplitude = 1;
-	float tanThresholdAngle = 0.6f;
-	float cellDistX = 2.0f;
-
 	float maxZDiff = 0;
 	int neiIndex = -1;
 	int i = int(id) / nx;
@@ -43,8 +47,8 @@ void main()
 			if (Inside(i + k, j + l) == false)
 				continue;
 			int index = ToIndex1D(i + k, j + l);
-			float h = data[index]; 
-			float z = data[id] - h;
+			float h = floatingHeightBuffer[index]; 
+			float z = floatingHeightBuffer[id] - h;
 			if (z > maxZDiff)
 			{
 				maxZDiff = z;
@@ -52,12 +56,16 @@ void main()
 			}
 		}
 	}
-	
-	if (maxZDiff / cellDistX > tanThresholdAngle)
+	if (maxZDiff / cellSize > tanThresholdAngle)
 	{
-		atomicAdd(data[id], -amplitude);
-		atomicAdd(data[neiIndex], amplitude);
+		floatingHeightBuffer[id] = floatingHeightBuffer[id] - amplitude;
+		floatingHeightBuffer[neiIndex] = floatingHeightBuffer[neiIndex] + amplitude;
+		
+		//atomicMin(integerHeightBuffer[id], floatBitsToInt(floatingHeightBuffer[id] - amplitude));
+		//atomicMax(integerHeightBuffer[neiIndex], floatBitsToInt(floatingHeightBuffer[neiIndex] + amplitude));
 	}
+	
+	//floatingHeightBuffer[id] = intBitsToFloat(integerHeightBuffer[id]);
 }
 
 #endif

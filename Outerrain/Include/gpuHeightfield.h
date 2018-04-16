@@ -4,10 +4,9 @@
 class GPUHeightfield : public Heightfield
 {
 protected:
-	std::vector<int> heightIntegerData;
-
 	Shader computeShader;
-	GLuint dataBuffer;
+	GLuint integerDataBuffer;
+	GLuint floatingDataBuffer;
 	int threadGroupCount;
 
 	void InitGPUPrograms();

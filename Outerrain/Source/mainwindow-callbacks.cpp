@@ -16,8 +16,7 @@ void MainWindow::ThermalErosionStep()
 		return;
 	//for (int i = 0; i < 1000; i++)
 		hf->ThermalWeathering(1.0f);
-
-	//std::cout << "1000 iterations of thermal erosion" << std::endl;
+	std::cout << "1000 iterations of thermal erosion" << std::endl;
 	UpdateMeshRenderer();
 }
 

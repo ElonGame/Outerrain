@@ -8,11 +8,11 @@ void MainWindow::InitBasicTerrain()
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.resolution = 128;
+	settings.resolution = 512;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/canyon-513.png");
+	settings.filePath = std::string("Data/Heightmaps/wild.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 250.0f;
 	settings.shaderType = ShaderType::TerrainSplatmap;
@@ -26,7 +26,7 @@ void MainWindow::InitGPUTerrain()
 	ClearScene();
 
 	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.resolution = 128;
+	settings.resolution = 512;
 	settings.bottomLeft = Vector2(-1024);
 	settings.topRight = Vector2(1024);
 	settings.offsetVector = Vector3(0.0f);
