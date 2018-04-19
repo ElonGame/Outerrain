@@ -60,10 +60,11 @@ void MainWindow::Init()
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
-	orbiter.SetClippingPlanes(1.0f, 5000.0f);
+	orbiter.SetClippingPlanes(1.0f, 10000.0f);
 
 	//InstanceScene();
-	InitGPUTerrain();
+	InitBasicTerrain();
+	orbiter.LookAt(hf->GetBox().ToBox(0, 250));
 }
 
 void MainWindow::MainLoop()

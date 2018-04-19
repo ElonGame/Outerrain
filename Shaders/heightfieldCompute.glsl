@@ -7,10 +7,10 @@ layout(binding = 0, std430) coherent buffer HeightfieldDataInt
     int integerHeightBuffer[];
 };
 
-layout(binding = 1, std430) coherent buffer HeightfieldDataFloat
-{
-	float floatingHeightBuffer[];
-};
+// layout(binding = 1, std430) coherent buffer HeightfieldDataFloat
+// {
+	// float floatingHeightBuffer[];
+// };
 
 uniform int nx;
 uniform float amplitude;
@@ -33,9 +33,10 @@ layout(local_size_x = 1024) in;
 void main()
 {
 	uint id = gl_GlobalInvocationID.x;
-	if(id >= floatingHeightBuffer.length())
+	if(id >= integerHeightBuffer.length())
         return;
 	
+	int integerAmplitude = int(amplitude);
 	float maxZDiff = 0;
 	int neiIndex = -1;
 	int i = int(id) / nx;
@@ -47,8 +48,8 @@ void main()
 			if (Inside(i + k, j + l) == false)
 				continue;
 			int index = ToIndex1D(i + k, j + l);
-			float h = floatingHeightBuffer[index]; 
-			float z = floatingHeightBuffer[id] - h;
+			float h = float(integerHeightBuffer[index]);
+			float z = float(integerHeightBuffer[id] - h);
 			if (z > maxZDiff)
 			{
 				maxZDiff = z;
@@ -58,13 +59,17 @@ void main()
 	}
 	if (maxZDiff / cellSize > tanThresholdAngle)
 	{
-		floatingHeightBuffer[id] = floatingHeightBuffer[id] - amplitude;
-		floatingHeightBuffer[neiIndex] = floatingHeightBuffer[neiIndex] + amplitude;
+		//floatingHeightBuffer[id] = floatingHeightBuffer[id] - amplitude;
+		//floatingHeightBuffer[neiIndex] = floatingHeightBuffer[neiIndex] + amplitude;
 		
 		//atomicMin(integerHeightBuffer[id], floatBitsToInt(floatingHeightBuffer[id] - amplitude));
 		//atomicMax(integerHeightBuffer[neiIndex], floatBitsToInt(floatingHeightBuffer[neiIndex] + amplitude));
+		
+		atomicMin(integerHeightBuffer[id], integerHeightBuffer[id] - integerAmplitude);
+		atomicMax(integerHeightBuffer[neiIndex], integerHeightBuffer[neiIndex] + integerAmplitude);
 	}
 	
+	//barrier();
 	//floatingHeightBuffer[id] = intBitsToFloat(integerHeightBuffer[id]);
 }
 

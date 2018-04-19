@@ -121,28 +121,27 @@ void GPUHeightfield::InitGPUPrograms()
 */
 void GPUHeightfield::GenerateBuffers()
 {
-	typedef union {
-		int integerValue;
-		float floatingValue;
-	} myUnion;
+	//typedef union {
+	//	int integerValue;
+	//	float floatingValue;
+	//} myUnion;
 
-	std::vector<int> heightIntegerData;
-	heightIntegerData.resize(values.size());
-	for (int i = 0; i < heightIntegerData.size(); i++)
+	integerData.resize(values.size());
+	for (int i = 0; i < integerData.size(); i++)
 	{
-		myUnion u;
-		u.floatingValue = values[i];
-		heightIntegerData[i] = u.integerValue;
+		/*myUnion u;
+		u.floatingValue = values[i];*/
+		integerData[i] = int(values[i]); //u.integerValue;
 	}
 	
 	computeShader.Attach();
 	glGenBuffers(1, &integerDataBuffer);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, integerDataBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(int) * heightIntegerData.size(), &heightIntegerData.front(), GL_STREAM_COPY);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(int) * integerData.size(), &integerData.front(), GL_STREAM_COPY);
 
-	glGenBuffers(1, &floatingDataBuffer);
+	/*glGenBuffers(1, &floatingDataBuffer);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, floatingDataBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * values.size(), &values.front(), GL_STREAM_COPY);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * values.size(), &values.front(), GL_STREAM_COPY);*/
 }
 
 /*
@@ -165,7 +164,9 @@ void GPUHeightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	
 	// Update CPU data
-	glGetNamedBufferSubData(floatingDataBuffer, 0, sizeof(float) * values.size(), values.data());
+	glGetNamedBufferSubData(integerDataBuffer, 0, sizeof(int) * integerData.size(), integerData.data());
+	for (int i = 0; i < values.size(); i++)
+		values[i] = float(integerData[i]);
 
 	glDeleteBuffers(1, &integerDataBuffer);
 	glDeleteBuffers(1, &floatingDataBuffer);

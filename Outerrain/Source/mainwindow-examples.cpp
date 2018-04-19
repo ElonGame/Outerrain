@@ -7,14 +7,16 @@ void MainWindow::InitBasicTerrain()
 {
 	ClearScene();
 
-	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.resolution = 512;
-	settings.bottomLeft = Vector2(-1024);
-	settings.topRight = Vector2(1024);
-	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/wild.png");
-	settings.minAltitude = 0.0f;
-	settings.maxAltitude = 250.0f;
+	settings.terrainType = TerrainType::NoiseFieldTerrain;
+	settings.resolution = 1024;
+	settings.bottomLeft = Vector2(-2048, -2048);
+	settings.topRight = Vector2(2048, 2048);
+	settings.offsetVector = Vector3(0);
+	settings.noise = new PerlinNoise();
+	settings.frequency = 0.002f;
+	settings.octaves = 8;
+	settings.amplitude = 100;
+	settings.fractalType = FractalType::MusgraveHybridMultifractal;
 	settings.shaderType = ShaderType::TerrainSplatmap;
 
 	GenerateTerrainFromSettings();
@@ -25,14 +27,16 @@ void MainWindow::InitGPUTerrain()
 {
 	ClearScene();
 
-	settings.terrainType = TerrainType::HeightFieldTerrain;
-	settings.resolution = 512;
-	settings.bottomLeft = Vector2(-1024);
-	settings.topRight = Vector2(1024);
-	settings.offsetVector = Vector3(0.0f);
-	settings.filePath = std::string("Data/Heightmaps/wild.png");
-	settings.minAltitude = 0.0f;
-	settings.maxAltitude = 250.0f;
+	settings.terrainType = TerrainType::NoiseFieldTerrain;
+	settings.resolution = 4096;
+	settings.bottomLeft = Vector2(-4096, -4096);
+	settings.topRight = Vector2(4096, 4096);
+	settings.offsetVector = Vector3(0);
+	settings.noise = new PerlinNoise();
+	settings.frequency = 0.002f;
+	settings.octaves = 8;
+	settings.amplitude = 100;
+	settings.fractalType = FractalType::MusgraveHybridMultifractal;
 	settings.shaderType = ShaderType::TerrainSplatmap;
 
 	GenerateTerrainFromSettings(true);

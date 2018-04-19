@@ -14,9 +14,16 @@ void MainWindow::ThermalErosionStep()
 {
 	if (hf == nullptr)
 		return;
-	//for (int i = 0; i < 1000; i++)
+
+	auto cpu_start = std::chrono::high_resolution_clock::now();
+
+	for (int i = 0; i < 1000; i++)
 		hf->ThermalWeathering(1.0f);
-	std::cout << "1000 iterations of thermal erosion" << std::endl;
+
+	auto cpu_stop = std::chrono::high_resolution_clock::now();
+	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
+	std::cout << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us" << std::endl;
+
 	UpdateMeshRenderer();
 }
 

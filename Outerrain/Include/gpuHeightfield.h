@@ -4,6 +4,8 @@
 class GPUHeightfield : public Heightfield
 {
 protected:
+	std::vector<int> integerData;
+
 	Shader computeShader;
 	GLuint integerDataBuffer;
 	GLuint floatingDataBuffer;
