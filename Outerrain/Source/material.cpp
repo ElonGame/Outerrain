@@ -10,6 +10,14 @@ Material::Material()
 	shininess = 0.0f;
 }
 
+Material::Material(const std::string& shaderPath, const Color& alb, double shin)
+{
+	shader = Shader(shaderPath);
+	albedo = alb;
+	shininess = shin;
+	texture0 = texture1 = texture2 = texture3 = 0;
+}
+
 void Material::SetFrameUniforms(const Transform& trs, const Transform& mvp, const Vector3 camPos)
 {
 	shader.Attach();
@@ -27,20 +35,40 @@ void Material::SetFrameUniforms(const Transform& trs, const Transform& mvp, cons
 	shader.UniformFloat("shininess", shininess);
 	shader.UniformInt("shaderType", shaderType);
 
+	shader.UniformInt("useTexture", texture0 != 0 ? 1 : 0);
 	if (texture0 != 0)
-	{
-		shader.UniformInt("useTexture", 1);
 		shader.UniformTexture("texture0", 0, texture0);
-	}
-	else
-		shader.UniformInt("useTexture", 0);
-
 	if (texture1 != 0)
 		shader.UniformTexture("texture1", 1, texture1);
-
 	if (texture2 != 0)
 		shader.UniformTexture("texture2", 2, texture2);
+	if (texture3 != 0)
+		shader.UniformTexture("texture3", 3, texture3);
+}
 
+void Material::SetFrameUniforms(const Transform& mvp, const Vector3 camPos)
+{
+	shader.Attach();
+
+	shader.UniformVec3("lightDir", MainWindow::sceneLight.Direction());
+	shader.UniformColor("lightColor", MainWindow::sceneLight.GetColor());
+	shader.UniformColor("lightAmbientColor", MainWindow::sceneLight.AmbientColor());
+	shader.UniformFloat("lightStrength", MainWindow::sceneLight.Strength());
+
+	shader.UniformTransform("mvpMatrix", mvp);
+	shader.UniformVec3("camPos", camPos);
+
+	shader.UniformColor("albedo", albedo);
+	shader.UniformFloat("shininess", shininess);
+	shader.UniformInt("shaderType", shaderType);
+
+	shader.UniformInt("useTexture", texture0 != 0 ? 1 : 0);
+	if (texture0 != 0)
+		shader.UniformTexture("texture0", 0, texture0);
+	if (texture1 != 0)
+		shader.UniformTexture("texture1", 1, texture1);
+	if (texture2 != 0)
+		shader.UniformTexture("texture2", 2, texture2);
 	if (texture3 != 0)
 		shader.UniformTexture("texture3", 3, texture3);
 }

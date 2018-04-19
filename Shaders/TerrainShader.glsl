@@ -56,6 +56,7 @@ float noise(float x)
 	float u = f * f * (3.0 - 2.0 * f);
 	return mix(hash(i), hash(i + 1.0), u);
 }
+
 float noise(vec2 x) 
 {
 	vec2 i = floor(x);
@@ -77,6 +78,7 @@ float noise(vec2 x)
 	vec2 u = f * f * (3.0 - 2.0 * f);
 	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
+
 float noise(vec3 x) 
 {
 	// This one has non-ideal tiling properties that I'm still tuning

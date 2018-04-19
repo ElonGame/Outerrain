@@ -47,7 +47,7 @@ void Frame::SetScale(const Vector3& vector)
 	scale.m[2][2] = vector.z;
 }
 
-Transform Frame::GetMatrix() const
+Transform Frame::GetTRS() const
 {
 	return translation * rotation * scale;
 }

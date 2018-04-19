@@ -62,9 +62,9 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 10000.0f);
 
-	//InstanceScene();
-	InitBasicTerrain();
-	orbiter.LookAt(hf->GetBox().ToBox(0, 250));
+	InstanceScene();
+	//InitBasicTerrain();
+	//orbiter.LookAt(hf->GetBox().ToBox(0, 250));
 }
 
 void MainWindow::MainLoop()

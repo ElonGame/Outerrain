@@ -164,9 +164,8 @@ void MainWindow::InstanceScene()
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
 	settings.shaderType = ShaderType::TerrainSplatmap;
 
-	instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"));
-	instanceRenderer->SetMaterial(Material::DefaultDiffuseMat);
 	using Random = effolkronium::random_static;
+	std::vector<Frame> frames;
 	Box box = Box(Vector3(0), 100);
 	for (int i = 0; i < 10000; i++)
 	{
@@ -175,8 +174,11 @@ void MainWindow::InstanceScene()
 		float z = Random::get(box.Vertex(0).z, box.Vertex(1).z);
 		Frame f;
 		f.SetPosition(Vector3(x, y, z));
-		instanceRenderer->AddFrame(f);
+		frames.push_back(f);
 	}
+
+	instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"), frames);
+	instanceRenderer->SetMaterial(Material("Shaders/InstanceShader.glsl", Color::Blue(), 0.0f));
 
 	hfMesh = new Mesh();
 	orbiter.LookAt(instanceRenderer->GetBounds());

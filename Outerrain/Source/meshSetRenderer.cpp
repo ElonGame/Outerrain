@@ -12,13 +12,13 @@ MeshSetRenderer::MeshSetRenderer()
 MeshSetRenderer::MeshSetRenderer(Mesh* m)
 {
 	mesh = m;
-	CreateBuffers();
 }
 
 MeshSetRenderer::MeshSetRenderer(Mesh* m, const std::vector<Frame>& f)
 {
 	mesh = m;
 	frames = f;
+	CreateBuffers();
 }
 
 MeshSetRenderer::~MeshSetRenderer()
@@ -28,46 +28,28 @@ MeshSetRenderer::~MeshSetRenderer()
 	ClearBuffers();
 }
 
-void MeshSetRenderer::AddFrame(const Frame& f)
-{
-	frames.push_back(f);
-}
-
-void MeshSetRenderer::ClearFrames()
-{
-	frames.clear();
-}
-
 size_t MeshSetRenderer::GetFrameCount() const
 {
 	return frames.size();
 }
 
-void MeshSetRenderer::Render(const CameraOrbiter& cam) 
+void MeshSetRenderer::Render(const CameraOrbiter& cam)
 {
 	if (mesh == nullptr || frames.empty())
 		return;
 
-	Transform p = cam.Projection();
+	Transform proj = cam.Projection();
 	Transform view = cam.View();
 	Vector3 camPos = cam.Position();
 	if (vao == 0)
 		CreateBuffers();
-	if (mesh->isDirty == true)
-		UpdateBuffers();
-
 	glBindVertexArray(vao);
-	for (int i = 0; i < frames.size(); i++)
-	{
-		Transform trs = frames[i].GetMatrix();
-		Transform mvp = p * (view * trs);
-		material.SetFrameUniforms(trs, mvp, camPos);
-
-		if (mesh->indices.size() > 0)
-			glDrawElements(primitiveMode, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0);
-		else
-			glDrawArrays(primitiveMode, 0, (GLsizei)mesh->vertices.size());
-	}
+	Transform pv = proj * view;
+	material.SetFrameUniforms(pv, camPos);
+	if (mesh->indices.size() > 0)
+		glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0, frames.size());
+	else
+		glDrawArraysInstanced(GL_TRIANGLES, 0, (GLsizei)mesh->vertices.size(), frames.size());
 }
 
 Box MeshSetRenderer::GetBounds() const
@@ -98,33 +80,9 @@ void MeshSetRenderer::SetShader(const Shader& s)
 	material.SetShader(s);
 }
 
-Mesh* MeshSetRenderer::GetMesh() const 
+Mesh* MeshSetRenderer::GetMesh() const
 {
 	return mesh;
-}
-
-void MeshSetRenderer::UpdateBuffers()
-{
-	glBindBuffer(GL_ARRAY_BUFFER, fullBuffer);
-	size_t offset = 0;
-	size_t size = mesh->VertexBufferSize();
-	glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->VertexBufferPtr());
-
-	if (mesh->texcoords.size() == mesh->vertices.size())
-	{
-		offset = offset + size;
-		size = mesh->TexcoordBufferSize();
-		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->TexcoordBufferPtr());
-	}
-
-	if (mesh->normals.size() == mesh->vertices.size())
-	{
-		offset = offset + size;
-		size = mesh->NormalBufferSize();
-		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->NormalBufferPtr());
-	}
-
-	mesh->isDirty = false;
 }
 
 void MeshSetRenderer::CreateBuffers()
@@ -134,16 +92,18 @@ void MeshSetRenderer::CreateBuffers()
 		std::cout << "Can't create buffers on empty mesh - aborting" << std::endl;
 		return;
 	}
-
 	if (mesh->texcoords.size() > 0 && mesh->texcoords.size() < mesh->vertices.size())
 		std::cout << "Invalid texcoord array on mesh" << std::endl;
 	if (mesh->normals.size() > 0 && mesh->normals.size() < mesh->vertices.size())
 		std::cout << "Invalid normal array on mesh" << std::endl;
 
+	int mat4Size = 16 * sizeof(float);
+	int vec4Size = 4  * sizeof(float);
+
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	size_t fullSize = mesh->VertexBufferSize() + mesh->TexcoordBufferSize() + mesh->NormalBufferSize();
+	size_t fullSize = mesh->VertexBufferSize() + mesh->TexcoordBufferSize() + mesh->NormalBufferSize() + (frames.size() * mat4Size);
 	glGenBuffers(1, &fullBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, fullBuffer);
 	glBufferData(GL_ARRAY_BUFFER, fullSize, nullptr, GL_STATIC_DRAW);
@@ -154,7 +114,6 @@ void MeshSetRenderer::CreateBuffers()
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->VertexBufferPtr());
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 	glEnableVertexAttribArray(0);
-
 	if (mesh->texcoords.size() == mesh->vertices.size())
 	{
 		offset = offset + size;
@@ -163,7 +122,6 @@ void MeshSetRenderer::CreateBuffers()
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 		glEnableVertexAttribArray(1);
 	}
-
 	if (mesh->normals.size() == mesh->vertices.size())
 	{
 		offset = offset + size;
@@ -172,8 +130,42 @@ void MeshSetRenderer::CreateBuffers()
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
 		glEnableVertexAttribArray(2);
 	}
+	if (frames.size() > 0)
+	{
+		offset = offset + size;
+		size = (frames.size() * mat4Size);
+		std::vector<float> instanceMatrices;
+		for (int i = 0; i < frames.size(); i++)
+		{
+			Transform transform = frames[i].GetTRS();
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < 4; k++)
+					instanceMatrices.push_back(transform[j][k]);
+			}
+		}
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, &instanceMatrices.front());
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (const void*)offset);
+		glEnableVertexAttribArray(3);
 
-	if (mesh->IndexBufferSize())
+		// TODO : manque notion de divisor/divisor matrix pour que ca fonctionne.
+
+		/*glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, mat4Size, (const void*)offset);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, mat4Size, (void*)(offset + vec4Size));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, mat4Size, (void*)(offset + 2 * vec4Size));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, mat4Size, (void*)(offset + 3 * vec4Size));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);*/
+	}
+
+	if (mesh->IndexBufferSize() > 0)
 	{
 		glGenBuffers(1, &indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

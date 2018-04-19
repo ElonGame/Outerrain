@@ -24,7 +24,6 @@ protected:
 	Material material;
 
 	void CreateBuffers();
-	void UpdateBuffers();
 	void ClearBuffers();
 
 public:
@@ -33,8 +32,6 @@ public:
 	MeshSetRenderer(Mesh*, const std::vector<Frame>&);
 	~MeshSetRenderer();
 
-	void AddFrame(const Frame& f);
-	void ClearFrames();
 	size_t GetFrameCount() const;
 	Box GetBounds() const;
 	void Render(const CameraOrbiter&);

@@ -22,5 +22,5 @@ public:
 	Vector3 GetScale() const;
 	void SetScale(const Vector3& vector);
 
-	Transform GetMatrix() const;
+	Transform GetTRS() const;
 };

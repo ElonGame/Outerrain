@@ -169,7 +169,7 @@ MeshSetRenderer* LayerField::GetVegetationInstances() const
 MeshSetRenderer* LayerField::GetRockInstances() const
 {
 	MeshSetRenderer* ret = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"));
-	ret->SetMaterial(Material::DefaultDiffuseMat);
+	/*ret->SetMaterial(Material::DefaultDiffuseMat);
 	for (int i = 0; i < rocks.SizeY(); i++)
 	{
 		for (int j = 0; j < rocks.SizeX(); j++)
@@ -183,6 +183,6 @@ MeshSetRenderer* LayerField::GetRockInstances() const
 				ret->AddFrame(newFrame);
 			}
 		}
-	}
+	}*/
 	return ret;
 }
