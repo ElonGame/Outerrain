@@ -9,7 +9,7 @@
 #include "meshsetrenderer.h"
 #include "terrainsettings.h"
 #include "layerfield.h"
-#include "apptime.h"
+#include "app-stats.h"
 #include "light.h"
 
 class MainWindow
@@ -19,14 +19,10 @@ private:
 	Window* mainWindowHandler;
 	CameraOrbiter orbiter;
 
-
 	/* Application Data */
 	GameObject* hfObject;
 	Heightfield* hf;
 	TerrainSettings settings;
-
-	Mesh* hfMesh;
-	MeshSetRenderer* instanceRenderer;
 
 	/* Example scenes */
 	void Heightfield1Scene();

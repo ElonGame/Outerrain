@@ -1,13 +1,16 @@
-#include "apptime.h"
+#include "app-stats.h"
 #include "GL\glew.h"
 
-std::chrono::high_resolution_clock::time_point AppTime::cpu_start;
-std::chrono::high_resolution_clock::time_point AppTime::cpu_stop;
-unsigned int AppTime::gpuTimeQuery = 0;
+std::chrono::high_resolution_clock::time_point AppStatistics::cpu_start;
+std::chrono::high_resolution_clock::time_point AppStatistics::cpu_stop;
+unsigned int AppStatistics::gpuTimeQuery = 0;
+
+unsigned int AppStatistics::vertexCount = 0;
+unsigned int AppStatistics::triangleCount = 0;
 
 static bool first = false;
 
-void AppTime::StartClock()
+void AppStatistics::StartClock()
 {
 	if (!first)
 	{
@@ -19,7 +22,7 @@ void AppTime::StartClock()
 	cpu_start = std::chrono::high_resolution_clock::now();
 }
 
-void AppTime::StopClock(std::stringstream& cpuStream, std::stringstream& gpuStream)
+void AppStatistics::StopClock(std::stringstream& cpuStream, std::stringstream& gpuStream)
 {
 	cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
@@ -34,7 +37,7 @@ void AppTime::StopClock(std::stringstream& cpuStream, std::stringstream& gpuStre
 	gpuStream << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
 }
 
-void AppTime::Release()
+void AppStatistics::Release()
 {
 	glDeleteQueries(1, &gpuTimeQuery);
 }

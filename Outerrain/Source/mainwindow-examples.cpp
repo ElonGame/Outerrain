@@ -177,9 +177,6 @@ void MainWindow::InstanceScene()
 		frames.push_back(f);
 	}
 
-	instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"), frames);
-	instanceRenderer->SetMaterial(Material("Shaders/InstanceShader.glsl", Color::Blue(), 0.0f));
-
-	hfMesh = new Mesh();
-	orbiter.LookAt(instanceRenderer->GetBounds());
+	//instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"), frames);
+	//instanceRenderer->SetMaterial(Material("Shaders/InstanceShader.glsl", Color::Blue(), 0.0f));
 }

@@ -57,8 +57,6 @@ void MainWindow::GenerateTerrainFromSettings(bool gpu)
 {
 	if (hf != nullptr)
 		delete hf;
-	if (instanceRenderer == nullptr)
-		instanceRenderer = new MeshSetRenderer();
 	if (gpu)
 		hf = new GPUHeightfield(settings);
 	else
@@ -88,7 +86,6 @@ void MainWindow::UpdateMeshRenderer()
 		hfObject->SetPosition(Vector3(0));
 		hfObject->AddComponent(new HeightfieldMesh(hf));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
-		hfMesh = hfObject->GetComponent<Mesh>();
 		return;
 	}
 

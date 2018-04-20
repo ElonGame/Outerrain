@@ -2,31 +2,26 @@
 
 #ifdef COMPUTE_SHADER
 
-layout(binding = 0, std430) coherent buffer HeightfieldDataInt
+layout(binding = 0, std430) coherent buffer HeightfieldDataFloat
 {
-    int integerHeightBuffer[];
+	float floatingHeightBuffer[];
 };
 
-// layout(binding = 1, std430) coherent buffer HeightfieldDataFloat
-// {
-	// float floatingHeightBuffer[];
-// };
-
-uniform int nx;
+uniform int gridSize;
 uniform float amplitude;
 uniform float cellSize;
 uniform float tanThresholdAngle;
 
 bool Inside(int i, int j)
 {
-	if (i < 0 || i >= nx || j < 0 || j >= nx)
+	if (i < 0 || i >= gridSize || j < 0 || j >= gridSize)
 		return false;
 	return true;
 }
 
 int ToIndex1D(int i, int j)
 {
-	return i * nx + j;
+	return i * gridSize + j;
 }
 
 layout(local_size_x = 1024) in;
@@ -39,8 +34,8 @@ void main()
 	int integerAmplitude = int(amplitude);
 	float maxZDiff = 0;
 	int neiIndex = -1;
-	int i = int(id) / nx;
-	int j = int(id) % nx;
+	int i = int(id) / gridSize;
+	int j = int(id) % gridSize;
 	for (int k = -1; k <= 1; k += 2)
 	{
 		for (int l = -1; l <= 1; l += 2)
@@ -59,18 +54,9 @@ void main()
 	}
 	if (maxZDiff / cellSize > tanThresholdAngle)
 	{
-		//floatingHeightBuffer[id] = floatingHeightBuffer[id] - amplitude;
-		//floatingHeightBuffer[neiIndex] = floatingHeightBuffer[neiIndex] + amplitude;
-		
-		//atomicMin(integerHeightBuffer[id], floatBitsToInt(floatingHeightBuffer[id] - amplitude));
-		//atomicMax(integerHeightBuffer[neiIndex], floatBitsToInt(floatingHeightBuffer[neiIndex] + amplitude));
-		
-		atomicMin(integerHeightBuffer[id], integerHeightBuffer[id] - integerAmplitude);
-		atomicMax(integerHeightBuffer[neiIndex], integerHeightBuffer[neiIndex] + integerAmplitude);
+		floatingHeightBuffer[id] = floatingHeightBuffer[id] - amplitude;
+		floatingHeightBuffer[neiIndex] = floatingHeightBuffer[neiIndex] + amplitude;
 	}
-	
-	//barrier();
-	//floatingHeightBuffer[id] = intBitsToFloat(integerHeightBuffer[id]);
 }
 
 #endif

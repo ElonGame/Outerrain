@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\light.h" />
-    <ClInclude Include="Include\apptime.h" />
+    <ClInclude Include="Include\app-stats.h" />
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\box2D.h" />
     <ClInclude Include="Include\camera.h" />
@@ -62,7 +62,7 @@
     <ClInclude Include="Source\random.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\apptime.cpp" />
+    <ClCompile Include="Source\app-stats.cpp" />
     <ClCompile Include="Source\box.cpp" />
     <ClCompile Include="Source\box2D.cpp" />
     <ClCompile Include="Source\camera.cpp" />

@@ -2,7 +2,7 @@
 #include <chrono>
 #include <sstream>
 
-class AppTime
+class AppStatistics
 {
 private:
 	static std::chrono::high_resolution_clock::time_point cpu_start;
@@ -13,4 +13,7 @@ public:
 	static void StartClock();
 	static void StopClock(std::stringstream& cpuStream, std::stringstream& gpuStream);
 	static void Release();
+
+	static unsigned int vertexCount;
+	static unsigned int triangleCount;
 };

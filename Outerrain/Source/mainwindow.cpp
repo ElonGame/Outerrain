@@ -8,7 +8,6 @@ MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
 	hfObject = nullptr;
 	hf = nullptr;
-	instanceRenderer = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
 	mainWindowHandler->CreateGLContext(4, 3);
 	Init();
@@ -22,16 +21,11 @@ void MainWindow::Quit()
 {
 	Material::ReleaseStaticMaterials();
 	ImGui_OpenGL_Shutdown();
-	AppTime::Release();
+	AppStatistics::Release();
 	if (hf)
 	{
 		delete hf;
 		hf = nullptr;
-	}
-	if (instanceRenderer)
-	{
-		delete instanceRenderer;
-		instanceRenderer = nullptr;
 	}
 	if (hfObject)
 	{
@@ -62,9 +56,9 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(1.0f, 10000.0f);
 
-	InstanceScene();
-	//InitBasicTerrain();
-	//orbiter.LookAt(hf->GetBox().ToBox(0, 250));
+	//InstanceScene();
+	InitBasicTerrain();
+	orbiter.LookAt(hf->GetBox().ToBox(0, 250));
 }
 
 void MainWindow::MainLoop()
@@ -72,7 +66,7 @@ void MainWindow::MainLoop()
 	while (mainWindowHandler->UpdateEvents())
 	{
 		ImGui_OpenGL_NewFrame(mainWindowHandler->GetSDLWindow());
-		AppTime::StartClock();
+		AppStatistics::StartClock();
 		Update(Time::GlobalTime(), Time::DeltaTime());
 		Render();
 		mainWindowHandler->SwapWindow();
@@ -169,7 +163,6 @@ void MainWindow::Render()
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
-	instanceRenderer->Render(orbiter);
 	
 	// GUI
 	RenderGUI();

@@ -144,13 +144,13 @@
     <ClInclude Include="Include\scalarfield2D.h">
       <Filter>Framework\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\apptime.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\texture2D.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\light.h">
+      <Filter>Rendering\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\app-stats.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -252,9 +252,6 @@
     <ClCompile Include="Source\scalarfield2D.cpp">
       <Filter>Framework\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\apptime.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\texture2D.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
@@ -263,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="Source\mainwindow-gui.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\app-stats.cpp">
+      <Filter>Rendering\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

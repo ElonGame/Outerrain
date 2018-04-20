@@ -90,17 +90,16 @@ GPUHeightfield::GPUHeightfield(const TerrainSettings& settings) : Heightfield(se
 }
 
 /*
-\brief Destructor
+\brief Destructor. Delete buffers and release compute shader program.
 */
 GPUHeightfield::~GPUHeightfield()
 {
-	glDeleteBuffers(1, &integerDataBuffer);
 	glDeleteBuffers(1, &floatingDataBuffer);
 	computeShader.Release();
 }
 
 /*
-\brief todo
+\brief Load the compute shaders and compute thread group count. This function prints errors if needed.
 */
 void GPUHeightfield::InitGPUPrograms()
 {
@@ -117,57 +116,40 @@ void GPUHeightfield::InitGPUPrograms()
 }
 
 /*
-\brief todo
+\brief Allocate floating point data buffer on the gpu for the heightfield.
 */
-void GPUHeightfield::GenerateBuffers()
+void GPUHeightfield::AllocateBuffers()
 {
-	//typedef union {
-	//	int integerValue;
-	//	float floatingValue;
-	//} myUnion;
-
-	integerData.resize(values.size());
-	for (int i = 0; i < integerData.size(); i++)
-	{
-		/*myUnion u;
-		u.floatingValue = values[i];*/
-		integerData[i] = int(values[i]); //u.integerValue;
-	}
-	
 	computeShader.Attach();
-	glGenBuffers(1, &integerDataBuffer);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, integerDataBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(int) * integerData.size(), &integerData.front(), GL_STREAM_COPY);
-
-	/*glGenBuffers(1, &floatingDataBuffer);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, floatingDataBuffer);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * values.size(), &values.front(), GL_STREAM_COPY);*/
+	glGenBuffers(1, &floatingDataBuffer);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, floatingDataBuffer);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * values.size(), &values.front(), GL_STREAM_COPY);
 }
 
 /*
-\brief todo
+\brief Performs a thermal weathering erosion step. This function allocates and deletes buffers in the same frame.
+\param amplitude max erosion amplitude
+\param tanThresholdAngle tangent of the repose angle of the material.
 */
 void GPUHeightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 {
-	// Prepare buffers
-	GenerateBuffers();
+	// Allocate buffers
+	AllocateBuffers();
 
 	// Uniforms
-	computeShader.UniformInt("nx", nx);
+	computeShader.Attach();
+	computeShader.UniformInt("gridSize", nx);
 	computeShader.UniformFloat("amplitude", amplitude);
 	computeShader.UniformFloat("tanThresholdAngle", tanThresholdAngle);
 	computeShader.UniformFloat("cellSize", CellSize().x);
 
 	// Dispatch
-	computeShader.Attach();
 	glDispatchCompute(threadGroupCount, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	
 	// Update CPU data
-	glGetNamedBufferSubData(integerDataBuffer, 0, sizeof(int) * integerData.size(), integerData.data());
-	for (int i = 0; i < values.size(); i++)
-		values[i] = float(integerData[i]);
+	glGetNamedBufferSubData(floatingDataBuffer, 0, sizeof(float) * values.size(), values.data());
 
-	glDeleteBuffers(1, &integerDataBuffer);
+	// Delete buffers
 	glDeleteBuffers(1, &floatingDataBuffer);
 }

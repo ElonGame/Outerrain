@@ -2,6 +2,7 @@
 #include "mesh.h"
 #include "shader.h"
 #include "cameraOrbiter.h"
+#include "app-stats.h"
 #include <iostream>
 
 
@@ -22,6 +23,8 @@ MeshRenderer::MeshRenderer(Mesh* m, const Material& mat) : MeshRenderer(m)
 
 MeshRenderer::~MeshRenderer()
 {
+	AppStatistics::vertexCount -= mesh->VertexCount();
+	AppStatistics::triangleCount -= mesh->TriangleCount();
 	mesh.release();
 	ClearBuffers();
 }
@@ -136,6 +139,10 @@ void MeshRenderer::CreateBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	primitiveMode = GL_TRIANGLES;
+
+	// Records stats
+	AppStatistics::vertexCount	 += mesh->VertexCount();
+	AppStatistics::triangleCount += mesh->TriangleCount();
 }
 
 void MeshRenderer::ClearBuffers()
