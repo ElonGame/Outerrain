@@ -108,49 +108,59 @@ void Material::SetShader(const Shader& s)
 }
 
 /* Static Materials */
-Material Material::DefaultDiffuseMat;
-Material Material::TerrainTexturedMat;
-Material Material::DefaultTexturedMat;
+Material Material::DiffuseMat;
+Material Material::TerrainSplatmapMat;
+Material Material::SimpleTexturedMat;
 Material Material::WireframeMat;
+Material Material::NormalMat;
 
 void Material::InitStaticMaterials()
 {
-	// Diffuse Grey
-	DefaultDiffuseMat.albedo = Color::Grey();
-	DefaultDiffuseMat.shaderType = ShaderType::DiffuseGrey;
-	DefaultDiffuseMat.shininess = 0.0f;
-	DefaultDiffuseMat.shader = Shader("Shaders/TerrainShader.glsl");
-	DefaultDiffuseMat.texture0 = DefaultDiffuseMat.texture1 = DefaultDiffuseMat.texture2 = DefaultDiffuseMat.texture3 = 0;
+	// Diffuse
+	DiffuseMat.shader = Shader("Shaders/Diffuse.glsl");
+	DiffuseMat.albedo = Color::Grey();
+	DiffuseMat.shaderType = ShaderType::DiffuseShader;
+	DiffuseMat.shininess = 0.0f;
+	DiffuseMat.texture0 = DiffuseMat.texture1 = DiffuseMat.texture2 = DiffuseMat.texture3 = 0;
 
 	// Terrain splatmap
-	TerrainTexturedMat.albedo = Color::White();
-	TerrainTexturedMat.shininess = 0.0f;
-	TerrainTexturedMat.shaderType = ShaderType::TerrainSplatmap;
-	TerrainTexturedMat.shader = DefaultDiffuseMat.shader; //Shader("Shaders/TerrainShader.glsl");
-	TerrainTexturedMat.texture0 = Texture2D::MakeGLTexture("Data/Textures/grass.png", 0, true);
-	TerrainTexturedMat.texture1 = Texture2D::MakeGLTexture("Data/Textures/sand.png", 1, true);
-	TerrainTexturedMat.texture2 = Texture2D::MakeGLTexture("Data/Textures/rock.png", 3, true);
-	TerrainTexturedMat.texture3 = Texture2D::MakeGLTexture("Data/Textures/snow.png", 4, true);
+	TerrainSplatmapMat.shader = Shader("Shaders/TerrainSplatmap.glsl");
+	TerrainSplatmapMat.albedo = Color::White();
+	TerrainSplatmapMat.shininess = 0.0f;
+	TerrainSplatmapMat.shaderType = ShaderType::TerrainSplatmapShader;
+	TerrainSplatmapMat.texture0 = Texture2D::MakeGLTexture("Data/Textures/grass.png", 0, true);
+	TerrainSplatmapMat.texture1 = Texture2D::MakeGLTexture("Data/Textures/sand.png", 1, true);
+	TerrainSplatmapMat.texture2 = Texture2D::MakeGLTexture("Data/Textures/rock.png", 3, true);
+	TerrainSplatmapMat.texture3 = Texture2D::MakeGLTexture("Data/Textures/snow.png", 4, true);
 
 	// Simple Textured
-	DefaultTexturedMat.albedo = Color::Grey();
-	DefaultTexturedMat.shininess = 0.0f;
-	DefaultTexturedMat.shaderType = ShaderType::SimpleTextured;
-	DefaultTexturedMat.shader = DefaultDiffuseMat.shader;
-	DefaultTexturedMat.texture0 = TerrainTexturedMat.texture0;
-	DefaultTexturedMat.texture1 = DefaultTexturedMat.texture2 = DefaultTexturedMat.texture3 = 0;
+	SimpleTexturedMat.shader = Shader("Shaders/SimpleTextured.glsl");
+	SimpleTexturedMat.albedo = Color::Grey();
+	SimpleTexturedMat.shininess = 0.0f;
+	SimpleTexturedMat.shaderType = ShaderType::SimpleTexturedShader;
+	SimpleTexturedMat.texture0 = TerrainSplatmapMat.texture0;
+	SimpleTexturedMat.texture1 = SimpleTexturedMat.texture2 = SimpleTexturedMat.texture3 = 0;
 
 	// Wireframe
+	WireframeMat.shader = Shader("Shaders/Wireframe.glsl");
 	WireframeMat.albedo = Color::Green();
 	WireframeMat.shininess = 0.0f;
-	WireframeMat.shaderType = ShaderType::Wireframe;
-	WireframeMat.shader = DefaultDiffuseMat.shader;
+	WireframeMat.shaderType = ShaderType::WireframeShader;
 	WireframeMat.texture0 = WireframeMat.texture1 = WireframeMat.texture2 = WireframeMat.texture3 = 0;
+
+	// Normal
+	NormalMat.shader = Shader("Shaders/Normal.glsl");
+	NormalMat.albedo = Color::Green();
+	NormalMat.shininess = 0.0f;
+	NormalMat.shaderType = ShaderType::NormalShader;
+	NormalMat.texture0 = WireframeMat.texture1 = WireframeMat.texture2 = WireframeMat.texture3 = 0;
 }
 
 void Material::ReleaseStaticMaterials()
 {
-	DefaultDiffuseMat.Release();
-	DefaultTexturedMat.Release();
-	TerrainTexturedMat.Release();
+	DiffuseMat.Release();
+	SimpleTexturedMat.Release();
+	TerrainSplatmapMat.Release();
+	WireframeMat.Release();
+	NormalMat.Release();
 }

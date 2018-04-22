@@ -77,7 +77,7 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 	Vector3 camPos = cam.Position();
 
 	material.SetFrameUniforms(trs, mvp, camPos);
-	primitiveMode = material.shaderType == ShaderType::Wireframe ? GL_LINES : GL_TRIANGLES;
+	primitiveMode = material.shaderType == ShaderType::WireframeShader ? GL_LINES : GL_TRIANGLES;
 
 	RenderInternal();
 }
@@ -128,7 +128,7 @@ void MeshRenderer::CreateBuffers()
 		glEnableVertexAttribArray(2);
 	}
 
-	if (mesh->IndexBufferSize())
+	if (mesh->IndexBufferSize() > 0)
 	{
 		glGenBuffers(1, &indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

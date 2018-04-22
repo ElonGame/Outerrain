@@ -1,4 +1,3 @@
-
 #version 330
 
 #ifdef VERTEX_SHADER
@@ -25,16 +24,17 @@ void main( )
 
 #ifdef FRAGMENT_SHADER
 uniform vec3 camPos;
-uniform vec4 diffuseColor;
 uniform float shininess;
-uniform int renderMode;
 
 uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
 
-const vec3 ambientLight = vec3(0.1, 0.1, 0.1);
-const vec3 lightDir = vec3(0.707, -0.707, 0);
-const vec3 lightColor = vec3(1, 1, 1);
-const float lightStrength = 1.0;
+uniform vec3 lightDir;
+uniform vec4 lightColor;
+uniform vec4 lightAmbientColor;
+uniform float lightStrength;
 
 in vec2 vertex_texcoord;
 in vec3 worldPos;
@@ -42,8 +42,18 @@ in vec3 worldNormal;
 
 out vec4 fragment_color;
 
-vec3 DiffuseShading()
+vec3 TerrainShading(vec2 uv)
 {
+	float Stretching = 100;
+	
+	vec3 grassColor = texture(texture0, vertex_texcoord.xy * Stretching).rgb;
+	vec3 dirtColor 	= texture(texture1, vertex_texcoord.xy * Stretching).rgb;
+	vec3 rockColor 	= texture(texture2, vertex_texcoord.xy * Stretching).rgb;
+	vec3 snowColor 	= texture(texture3, vertex_texcoord.xy * Stretching).rgb;
+	
+	float h = clamp(worldPos.y, 0, 120.0f) / 120.0f;
+	vec3 terrainColor = mix(rockColor, snowColor, h);
+	
 	// Diffuse term (Lambert)
 	float diffuse = max(0.0, dot(-lightDir, worldNormal));
 
@@ -56,20 +66,15 @@ vec3 DiffuseShading()
 		float specAngle = max(dot(halfDir, worldNormal), 0.0);
 		specular = pow(specAngle, shininess);
 	}
-	
-	vec4 albedo = texture(texture0, vertex_texcoord.xy);
 
 	// Final color
-	return ambientLight 
-			+ diffuse * albedo.rgb * (lightColor * lightStrength) 
-			+ specular * (lightColor * lightStrength);
+	return lightAmbientColor.rgb 
+			+ diffuse * terrainColor * (lightColor.rgb * lightStrength) 
+			+ specular * (lightColor.rgb * lightStrength);
 }
 
 void main()
 {
-	if (renderMode == -1) // Hack to avoid warnings
-		fragment_color = diffuseColor;
-	else
-		fragment_color = vec4(DiffuseShading(), 1.0);
+	fragment_color = vec4(TerrainShading(vertex_texcoord.xy), 1.0);
 }
 #endif

@@ -66,17 +66,19 @@ void MainWindow::GenerateTerrainFromSettings(bool gpu)
 void MainWindow::UpdateMeshRenderer()
 {
 	Material mat;
-	if (settings.shaderType == TerrainSplatmap)
-		mat = Material::TerrainTexturedMat;
-	if (settings.shaderType == DiffuseGrey)
-		mat = Material::DefaultDiffuseMat;
-	if (settings.shaderType == SimpleTextured && hf != nullptr)
+	if (settings.shaderType == TerrainSplatmapShader)
+		mat = Material::TerrainSplatmapMat;
+	if (settings.shaderType == DiffuseShader)
+		mat = Material::DiffuseMat;
+	if (settings.shaderType == SimpleTexturedShader && hf != nullptr)
 	{
-		mat = Material::DefaultTexturedMat;
+		mat = Material::SimpleTexturedMat;
 		glDeleteTextures(1, &mat.texture0);
-		mat.texture0 = hf->DrainageArea().GetGLTexture(0);
+		mat.texture0 = hf->Slope().GetGLTexture(0);
 	}
-	if (settings.shaderType == Wireframe)
+	if (settings.shaderType == NormalShader)
+		mat = Material::NormalMat;
+	if (settings.shaderType == WireframeShader)
 		mat = Material::WireframeMat;
 
 	// Only done once the first time
@@ -96,12 +98,16 @@ void MainWindow::UpdateMeshRenderer()
 void MainWindow::UpdateMeshMaterial()
 {
 	Material mat;
-	if (settings.shaderType == TerrainSplatmap)
-		mat = Material::TerrainTexturedMat;
-	if (settings.shaderType == DiffuseGrey)
-		mat = Material::DefaultDiffuseMat;
-	if (settings.shaderType == SimpleTextured)
-		mat = Material::DefaultTexturedMat;
+	if (settings.shaderType == TerrainSplatmapShader)
+		mat = Material::TerrainSplatmapMat;
+	if (settings.shaderType == DiffuseShader)
+		mat = Material::DiffuseMat;
+	if (settings.shaderType == SimpleTexturedShader)
+		mat = Material::SimpleTexturedMat;
+	if (settings.shaderType == NormalShader)
+		mat = Material::NormalMat;
+	if (settings.shaderType == WireframeShader)
+		mat = Material::WireframeMat;
 	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 

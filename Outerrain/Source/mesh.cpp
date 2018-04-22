@@ -120,7 +120,6 @@ bool Mesh::LoadObj(const std::string& path)
 				tex.push_back(Vector2(x, y));
 			}
 		}
-
 		else if (line[0] == 'f')
 		{
 			idp.clear();

@@ -89,4 +89,9 @@ public:
 	Transform GetObjectToWorldMatrix();
 	void MarkTransformAsChanged();
 	void UpdateTransformIfNeeded();
+
+	// Static
+	static GameObject* CreateSphere();
+	static GameObject* CreateCube();
+	static GameObject* CreatePlane();
 };

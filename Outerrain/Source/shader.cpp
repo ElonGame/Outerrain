@@ -217,6 +217,7 @@ Shader::Shader(const std::string& filename, const std::string& definitions)
 {
 	program = glCreateProgram();
 	Reload(filename, definitions);
+	PrintCompileErrors();
 }
 
 void Shader::Attach()

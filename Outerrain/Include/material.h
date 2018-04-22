@@ -6,10 +6,11 @@
 
 enum ShaderType
 {
-	TerrainSplatmap = 0,
-	DiffuseGrey = 1,
-	SimpleTextured = 2,
-	Wireframe = 3,
+	TerrainSplatmapShader = 1,
+	DiffuseShader = 2,
+	SimpleTexturedShader = 3,
+	NormalShader = 4,
+	WireframeShader = 5,
 };
 
 class Material
@@ -38,8 +39,9 @@ public:
 	/* Static Materials */
 	static void InitStaticMaterials();
 	static void ReleaseStaticMaterials();
-	static Material DefaultTexturedMat;
-	static Material DefaultDiffuseMat;
-	static Material TerrainTexturedMat;
+	static Material SimpleTexturedMat;
+	static Material DiffuseMat;
+	static Material TerrainSplatmapMat;
+	static Material NormalMat;
 	static Material WireframeMat;
 };

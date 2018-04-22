@@ -54,11 +54,12 @@ void MainWindow::Init()
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
-	orbiter.SetClippingPlanes(1.0f, 10000.0f);
+	orbiter.SetClippingPlanes(0.01f, 10000.0f);
 
 	//InstanceScene();
 	InitBasicTerrain();
-	orbiter.LookAt(hf->GetBox().ToBox(0, 250));
+	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
+	//orbiter.LookAt(hf->GetBox().ToBox(0, 250));
 }
 
 void MainWindow::MainLoop()
@@ -133,23 +134,28 @@ void MainWindow::Update(float time, float deltaTime)
 	// Changing shader
 	if (mainWindowHandler->KeyState(SDLK_1))
 	{
-		settings.shaderType = ShaderType::TerrainSplatmap;
-		UpdateMeshRenderer();
+		settings.shaderType = ShaderType::TerrainSplatmapShader;
+		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_2))
 	{
-		settings.shaderType = ShaderType::DiffuseGrey;
-		UpdateMeshRenderer();
+		settings.shaderType = ShaderType::DiffuseShader;
+		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_3))
 	{
-		settings.shaderType = ShaderType::SimpleTextured;
-		UpdateMeshRenderer();
+		settings.shaderType = ShaderType::SimpleTexturedShader;
+		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_4))
 	{
-		settings.shaderType = ShaderType::Wireframe;
-		UpdateMeshRenderer();
+		settings.shaderType = ShaderType::NormalShader;
+		UpdateMeshMaterial();
+	}
+	else if (mainWindowHandler->KeyState(SDLK_5))
+	{
+		settings.shaderType = ShaderType::WireframeShader;
+		UpdateMeshMaterial();
 	}
 
 	mainWindowHandler->ClearButtonEvent();

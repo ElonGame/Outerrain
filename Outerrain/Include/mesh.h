@@ -42,7 +42,7 @@ public:
 	size_t VertexCount() const { return vertices.size(); }
 	size_t NormalCount() const { return normals.size(); }
 	size_t TexcoordCount() const { return texcoords.size(); }
-	size_t TriangleCount() const { return indices.size(); }
+	size_t TriangleCount() const { return indices.size() / 3; }
 
 	const float* VertexBufferPtr() const { return &vertices.front().x; }
 	size_t VertexBufferSize() const { return vertices.size() * sizeof(Vector3); }

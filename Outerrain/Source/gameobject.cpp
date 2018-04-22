@@ -1,6 +1,8 @@
 ﻿#include "gameobject.h"
 #include "component.h"
 
+#include "mesh.h"
+#include "meshRenderer.h"
 
 /* Constructor & Destructor */
 GameObject::GameObject()
@@ -248,4 +250,59 @@ void GameObject::UpdateTransformIfNeeded()
 			objectToWorld = localTRS;
 		transformNeedsToUpdate = false;
 	}
+}
+
+
+/* Static */
+GameObject* GameObject::CreateSphere()
+{
+	GameObject* ret = new GameObject();
+	return ret;
+}
+
+GameObject* GameObject::CreateCube()
+{
+	GameObject* ret = new GameObject();
+	return ret;
+}
+
+GameObject* GameObject::CreatePlane()
+{
+	GameObject* ret = new GameObject();
+	ret->SetPosition(Vector3(0));
+
+	Mesh* planeMesh = new Mesh();
+	int nx = 2;
+	int ny = 2;
+	float nxMinusOne = nx - 1;
+	float nyMinusOne = ny - 1;
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			float u = j / nxMinusOne;
+			float v = i / nyMinusOne;
+			planeMesh->AddVertex(Vector3(i / (nx - 1), 0, j / (ny - 1)));
+			planeMesh->AddTexcoord(Vector2(u, v));
+			planeMesh->AddNormal(Vector3(0, 1.0, 0));
+		}
+	}
+
+	// Triangles
+	int c = 0;
+	int vertexArrayLength = ny * nx;
+	while (c < vertexArrayLength - nx - 1)
+	{
+		if (c == 0 || (((c + 1) % nx != 0) && c <= vertexArrayLength - nx))
+		{
+			planeMesh->AddTriangle(c + nx + 1, c + nx, c);
+			planeMesh->AddTriangle(c, c + 1, c + nx + 1);
+		}
+		c++;
+	}
+
+	ret->AddComponent(planeMesh);
+	ret->AddComponent(new MeshRenderer(planeMesh, Material::DiffuseMat));
+
+	return ret;
 }
