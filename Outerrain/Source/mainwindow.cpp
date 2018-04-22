@@ -88,16 +88,18 @@ void MainWindow::Update(float time, float deltaTime)
 
 	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL))
 	{
-		//SDL_GetMouseState(&mx, &my);
-		//Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
-		//Hit hit;
-		//if (hf->Intersect(ray, hit))
-		//{
-		//	Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
-		//	hf->Add(v.x, v.y, 50.0);
-		//	UpdateMeshRenderer();
-		//	cout << "Hit at " << hit.position << endl;
-		//}
+		SDL_GetMouseState(&mx, &my);
+		Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
+		Hit hit;
+		//std::cout << "Pixel : " << mx << ", " << my << std::endl;
+		std::cout << "Ray : " << ray << std::endl;
+		if (hf->Intersect(ray, hit))
+		{
+			Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
+			hf->Add(v.x, v.y, 50.0);
+			UpdateMeshRenderer();
+			std::cout << "Hit : " << hit << std::endl;
+		}
 	}
 
 	/* Example Scenes */

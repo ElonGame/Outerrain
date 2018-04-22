@@ -40,14 +40,35 @@ void CameraOrbiter::LookAt(const Box& b)
 
 Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
 {
-	Vector3 dl;
-	Vector3 dxl, dyl;
-	Frame(frameWidth, frameHeight, 1.0f, fov, dl, dxl, dyl);
+	// Get coordinates
+	Vector3 view = Normalize(center - Position());
+	Vector3 horizontal = Normalize(Cross(view, Vector3(0.0, 1.0, 0.0)));
+	Vector3 vertical = Normalize(Cross(horizontal, view));
 
-	Vector3 o = Position();
-	Vector3 e = dl + dxl * pixel.x + dyl * pixel.y;
+	double length = 1.0;
 
-	return Ray(o, Normalize(e - o));
+	// Convert to radians 
+	// Horizontal angle of view  
+	double avh = 2.0 * atan(0.980 * 25.4 * 0.5 / fov);
+	double avv = 2.0*atan(tan(avh / 2.0)*frameHeight / frameWidth);
+	double rad = avv;
+
+	double vLength = tan(rad / 2.0) * length;
+	double hLength = vLength * (double(frameWidth) / double(frameHeight));
+
+	vertical *= vLength;
+	horizontal *= hLength;
+
+	// Translate mouse coordinates so that the origin lies in the center of the view port
+	double x = pixel.x - frameWidth / 2.0;
+	double y = frameHeight / 2.0 - pixel.y;
+
+	// Scale mouse coordinates so that half the view port width and height becomes 1.0
+	x /= frameWidth  / 2.0;
+	y /= frameHeight / 2.0;
+
+	// Direction is a linear combination to compute intersection of picking ray with view port plane
+	return Ray(Position(), Normalize(view*length + horizontal*x + vertical*y));
 }
 
 Vector2i CameraOrbiter::VectorToPixel(const Vector3& worldPoint)
@@ -107,7 +128,7 @@ void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3
 
 Vector3 CameraOrbiter::Position() const
 {
-	Transform t = View(); // passage monde vers camera
-	Transform tinv = t.Inverse(); // l'inverse, passage camera vers monde
-	return tinv(Vector3(0, 0, 0)); // la camera se trouve a l'origine, dans le repere camera...
+	Transform t = View();			// passage monde vers camera
+	Transform tinv = t.Inverse();	// l'inverse, passage camera vers monde
+	return tinv(Vector3(0, 0, 0));	// la camera se trouve a l'origine, dans le repere camera...
 }
