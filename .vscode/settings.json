@@ -1,0 +1,165 @@
+{
+    "format.newLine": {
+        "brace": false
+      },
+      "editor.detectIndentation": false,
+    // The number of spaces to place before/after particular character.
+  "format.space": {
+    "language": {
+      "php": {
+        ".": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "javascript": {
+        "+": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "java": {
+        "+": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "css": {
+        ":": {
+          "before": 0,
+          "after": 1
+        },
+        "=": {
+          "before": 0,
+          "after": 0
+        }
+      }
+    },
+    "and": {
+      "before": 1,
+      "after": 1
+    },
+    "or": {
+      "before": 1,
+      "after": 1
+    },
+    "equal": {
+      "before": 1,
+      "after": 1
+    },
+    "not": {
+      "before": 1,
+      "after": 1
+    },
+    "greaterThan": {
+      "before": 1,
+      "after": 1
+    },
+    "lessThan": {
+      "before": 1,
+      "after": 1
+    },
+    "comma": {
+      "before": 0,
+      "after": 1
+    },
+    "question": {
+      "before": 1,
+      "after": 1
+    },
+    "colon": {
+      "before": 1,
+      "after": 1
+    },
+    "semicolon": {
+      "before": 0,
+      "after": 1
+    },
+    "increment": {
+      "before": 0,
+      "after": 0
+    },
+    "decrement": {
+      "before": 0,
+      "after": 0
+    },
+    "add": {
+      "before": 1,
+      "after": 1
+    },
+    "subtract": {
+      "before": 1,
+      "after": 1
+    },
+    "multiply": {
+      "before": 1,
+      "after": 1
+    },
+    "divide": {
+      "before": 1,
+      "after": 1
+    },
+    "modulo": {
+      "before": 1,
+      "after": 1
+    },
+    "parenthesis": {
+      "open": {
+        "before": {
+          "other": 1,
+          "foreach": 1,
+          "for": 1,
+          "while": 1,
+          "if": 1,
+          "elseif": 1,
+          "elif": 1,
+          "switch": 1,
+          "do": 1,
+          "function": 1
+        },
+        "after": {
+          "other": 1,
+          "foreach": 0,
+          "for": 0,
+          "while": 0,
+          "if": 0,
+          "elseif": 0,
+          "elif": 0,
+          "switch": 0,
+          "do": 0,
+          "function": 0
+        }
+      },
+      "close": {
+        "before": {
+          "other": 1,
+          "foreach": 0,
+          "for": 0,
+          "while": 0,
+          "if": 0,
+          "elseif": 0,
+          "elif": 0,
+          "switch": 0,
+          "do": 0,
+          "function": 0
+        }
+      }
+    },
+    "brace": {
+      "open": {
+        "before": {
+          "other": 1,
+          "foreach": 1,
+          "for": 1,
+          "while": 1,
+          "if": 1,
+          "elseif": 1,
+          "elif": 1,
+          "switch": 1,
+          "do": 1,
+          "function": 1
+        }
+      }
+    }
+  },
+}
