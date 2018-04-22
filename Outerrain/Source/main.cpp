@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include "camerabis.h"
 
 //#include "ray.h"
 //#include "cameraOrbiter.h"

@@ -2,7 +2,7 @@
 
 #include "box.h"
 
-class Camera 
+class CameraBis
 {
 protected:
     Vector3 eye;
@@ -20,9 +20,9 @@ protected:
     float farplane;
 
 public:
-    Camera(); 
-    Camera(const Vector3&, const Vector3&, const Vector3& = Vector3(0.0f, 0.0f, 1.0f), float = 1.0, float = 1.0, float = 1.0, float = 100000.0);
-    Camera(const Vector3&, const Vector3&, const Vector3&, float, float = 1.0, float = 100000.0);
+    CameraBis(); 
+    CameraBis(const Vector3&, const Vector3&, const Vector3& = Vector3(0.0f, 0.0f, 1.0f), float = 1.0, float = 1.0, float = 1.0, float = 100000.0);
+    CameraBis(const Vector3&, const Vector3&, const Vector3&, float, float = 1.0, float = 100000.0);
 
     void Translate(const Vector3&);
 
@@ -63,28 +63,28 @@ public:
     void LeftRightHorizontal(float); 
     Ray PixelToRay(int, int, int, int) const;
     bool VectorToPixel(const Vector3&, float, float, int, int) const; 
-    static Camera View(const Box&); 
+    static CameraBis View(const Box&); 
 }; 
 
 //! Returns the look-at point.
-inline Vector3 Camera::At()const {
+inline Vector3 CameraBis::At()const {
     return at; 
 }
 
 //! Returns the eye point.
-inline Vector3 Camera::Eye()const {
+inline Vector3 CameraBis::Eye()const {
     return eye; 
 }
 
 //! Returns the up point.
-inline Vector3 Camera::Up()const {
+inline Vector3 CameraBis::Up()const {
     return up; 
 }
 
 /*!
 \brief Returns the view direction.
 */
-inline Vector3 Camera::View()const {
+inline Vector3 CameraBis::View()const {
     return at - eye; 
 }
 
@@ -92,7 +92,7 @@ inline Vector3 Camera::View()const {
 \brief Sets the camera target vector.
 \param p Look-at point.
 */
-inline void Camera::SetAt(const Vector3& p) {
+inline void CameraBis::SetAt(const Vector3& p) {
     at = p; 
     up = Vector3(0.0, 0.0, 1.0); 
 }
@@ -101,42 +101,42 @@ inline void Camera::SetAt(const Vector3& p) {
 \brief Sets the camera eye point.
 \param p Eye point.
 */
-inline void Camera::SetEye(const Vector3& p) {
+inline void CameraBis::SetEye(const Vector3& p) {
     eye = p; 
 }
 
 /*!
 \brief Get the near distance.
 */
-inline float Camera::GetNear()const {
+inline float CameraBis::GetNear()const {
     return nearplane; 
 }
 
 /*!
 \brief Get the far distance.
 */
-inline float Camera::GetFar()const {
+inline float CameraBis::GetFar()const {
     return farplane; 
 }
 
 /*!
 \brief Get the far distance.
 */
-inline float Camera::GetCameraApertureH()const {
+inline float CameraBis::GetCameraApertureH()const {
     return cah; 
 }
 
 /*!
 \brief Get the far distance.
 */
-inline float Camera::GetCameraApertureV()const {
+inline float CameraBis::GetCameraApertureV()const {
     return cav; 
 }
 
 /*!
 \brief Get the far distance.
 */
-inline float Camera::GetFocalLength()const {
+inline float CameraBis::GetFocalLength()const {
     return fl; 
 }
 
@@ -144,7 +144,7 @@ inline float Camera::GetFocalLength()const {
 \brief Set the near and far planes.
 \param n, f Near and far planes distance to th eye.
 */
-inline void Camera::SetPlanes(float n, float f) {
+inline void CameraBis::SetPlanes(float n, float f) {
     nearplane = n; 
     farplane = f; 
 }
