@@ -71,14 +71,14 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 {
 	if (mesh == nullptr)
 		return;
-
 	Transform trs = gameObject->GetObjectToWorldMatrix();
 	Transform mvp = cam.Projection() * (cam.View() * trs);
 	Vector3 camPos = cam.Position();
-
+	if (material.shaderType == MaterialType::WireframeMaterial)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	material.SetFrameUniforms(trs, mvp, camPos);
-	primitiveMode = material.shaderType == ShaderType::WireframeShader ? GL_LINES : GL_TRIANGLES;
-
 	RenderInternal();
 }
 

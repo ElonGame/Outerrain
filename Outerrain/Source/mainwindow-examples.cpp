@@ -39,7 +39,7 @@ void MainWindow::InitGPUTerrain()
 	settings.octaves = 8;
 	settings.amplitude = 100;
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings(true);
 	UpdateMeshRenderer();
@@ -59,7 +59,7 @@ void MainWindow::InitNoiseTerrain()
 	settings.octaves = 8;
 	settings.amplitude = 100.0f;
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -68,7 +68,7 @@ void MainWindow::InitNoiseTerrain()
 void MainWindow::InitLayerTerrain()
 {
 	ClearScene();
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 	hf = new LayerField(std::string("Data/Heightmaps/island.png"), 0, 250, 256, 256, Box2D(Vector2(-512), Vector2(512)));
 	UpdateMeshRenderer();
 }
@@ -85,7 +85,7 @@ void MainWindow::Heightfield1Scene()
 	settings.filePath = std::string("Data/Heightmaps/heightmap1.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 250.0f;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -103,7 +103,7 @@ void MainWindow::Heightfield2Scene()
 	settings.filePath = std::string("Data/Heightmaps/island.png");
 	settings.minAltitude = 0.0f;
 	settings.maxAltitude = 350.0f;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -123,7 +123,7 @@ void MainWindow::NoiseField1Scene()
 	settings.octaves = 8;
 	settings.amplitude = 100.0f;
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -143,7 +143,7 @@ void MainWindow::NoiseField2Scene()
 	settings.octaves = 8;
 	settings.amplitude = 100.0f;
 	settings.fractalType = FractalType::MusgraveHeteroTerrain;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
@@ -164,7 +164,7 @@ void MainWindow::InstanceScene()
 	settings.octaves = 8;
 	settings.amplitude = 100.0f;
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = ShaderType::TerrainSplatmapShader;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	using Random = effolkronium::random_static;
 	std::vector<Frame> frames;

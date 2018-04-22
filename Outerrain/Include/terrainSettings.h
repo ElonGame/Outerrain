@@ -14,7 +14,7 @@ class TerrainSettings
 {
 public:
 	TerrainType terrainType;
-	ShaderType shaderType;
+	MaterialType shaderType;
 
 	int resolution;
 	Vector2 bottomLeft;

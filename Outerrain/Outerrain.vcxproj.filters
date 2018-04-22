@@ -153,6 +153,9 @@
     <ClInclude Include="Include\app-stats.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\scene-hierarchy.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\mainwindow.cpp">

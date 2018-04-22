@@ -50,6 +50,7 @@
     <ClInclude Include="Include\ray.h" />
     <ClInclude Include="Include\noise.h" />
     <ClInclude Include="Include\scalarfield2D.h" />
+    <ClInclude Include="Include\scene-hierarchy.h" />
     <ClInclude Include="Include\shader.h" />
     <ClInclude Include="Include\sphere.h" />
     <ClInclude Include="Include\terrainSettings.h" />

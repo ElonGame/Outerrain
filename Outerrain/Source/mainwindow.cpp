@@ -134,27 +134,27 @@ void MainWindow::Update(float time, float deltaTime)
 	// Changing shader
 	if (mainWindowHandler->KeyState(SDLK_1))
 	{
-		settings.shaderType = ShaderType::TerrainSplatmapShader;
+		settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_2))
 	{
-		settings.shaderType = ShaderType::DiffuseShader;
+		settings.shaderType = MaterialType::DiffuseMaterial;
 		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_3))
 	{
-		settings.shaderType = ShaderType::SimpleTexturedShader;
+		settings.shaderType = MaterialType::TexturedMaterial;
 		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_4))
 	{
-		settings.shaderType = ShaderType::NormalShader;
+		settings.shaderType = MaterialType::NormalMaterial;
 		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_5))
 	{
-		settings.shaderType = ShaderType::WireframeShader;
+		settings.shaderType = MaterialType::WireframeMaterial;
 		UpdateMeshMaterial();
 	}
 

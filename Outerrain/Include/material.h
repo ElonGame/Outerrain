@@ -4,20 +4,26 @@
 #include "transform.h"
 #include "color.h"
 
-enum ShaderType
+enum MaterialType
 {
-	TerrainSplatmapShader = 1,
-	DiffuseShader = 2,
-	SimpleTexturedShader = 3,
-	NormalShader = 4,
-	WireframeShader = 5,
+	TerrainSplatmapMaterial = 1,
+	DiffuseMaterial = 2,
+	TexturedMaterial = 3,
+	NormalMaterial = 4,
+	WireframeMaterial = 5,
 };
 
+//
+// Todo : Refactor this to make sure materials only store the right properties.
+// -Diffuse should only have albedo and shininess
+// -TerrainSplatmap should only have textures
+// -SimpleTextured : one gl texture
+// -Normal/Wireframe : nothing except for the overriden functions.
 class Material
 {
 public:
 	Shader shader;
-	ShaderType shaderType;
+	MaterialType shaderType;
 
 	Color albedo;
 	float shininess;
@@ -39,9 +45,9 @@ public:
 	/* Static Materials */
 	static void InitStaticMaterials();
 	static void ReleaseStaticMaterials();
-	static Material SimpleTexturedMat;
-	static Material DiffuseMat;
-	static Material TerrainSplatmapMat;
-	static Material NormalMat;
-	static Material WireframeMat;
+	static Material TexturedMaterialInstance;
+	static Material DiffuseMaterialInstance;
+	static Material TerrainSplatmapMaterialInstance;
+	static Material NormalMaterialInstance;
+	static Material WireframeMaterialInstance;
 };
