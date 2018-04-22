@@ -2,11 +2,11 @@
 #include "vec.h"
 #include "color.h"
 
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <string>
 #include <vector>
 #include <SDL2/SDL_image.h>
-#include <SDL2\SDL.h>
+#include <SDL2/SDL.h>
 
 class Texture2D
 {

@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <algorithm>
-#include "cameraorbiter.h"
-#include "mathutils.h"
+#include "cameraOrbiter.h"
+#include "mathUtils.h"
 #include "box.h"
 
 

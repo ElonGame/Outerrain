@@ -1,11 +1,11 @@
--- Only works for linux - Windows is not yet supported.
+-- Only works for linux - See the included visual studio solution for Windows.
 solution "Outerrain"
 	configurations { "debug", "release" }
 
 	platforms { "x64", "x32" }
 	
-	includedirs { ".", "./Outerrain/Include", "./Dependencies/include", "/usr/include/"}
-	
+	includedirs { ".", "./Outerrain/Include", "/usr/include/", "./Dependencies/include"}
+
 	rootDir = path.getabsolute("./Outerrain")
 	
 	configuration "debug"
@@ -19,7 +19,7 @@ solution "Outerrain"
 
 	configuration "linux"
 		buildoptions { "-mtune=native -march=native" }
-		buildoptions { "-std=c++11" }
+		buildoptions { "-std=c++14" }
 		buildoptions { "-W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable" }
 		buildoptions { "-flto"}
 		linkoptions { "-flto"}

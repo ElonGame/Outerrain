@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GL/glew.h"
-#include "valuefield.h"
+#include "valueField.h"
 
 typedef struct ScalarValue
 {

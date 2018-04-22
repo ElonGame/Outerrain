@@ -24,9 +24,9 @@ ifeq ($(config),debug64)
   TARGETDIR  = bin
   TARGET     = $(TARGETDIR)/Outerrain
   DEFINES   += -DDEBUG
-  INCLUDES  += -I. -IOuterrain/Include -IDependencies/include -I/usr/include
+  INCLUDES  += -I. -IOuterrain/Include -I/usr/include -IDependencies/include
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -m64 -mtune=native -march=native -std=c++11 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -g
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -m64 -mtune=native -march=native -std=c++14 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -g
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += -m64 -L/usr/lib64 -flto -g
   LIBS      += -lGLEW -lSDL2 -lSDL2_image -lGL
@@ -46,9 +46,9 @@ ifeq ($(config),release64)
   TARGETDIR  = bin
   TARGET     = $(TARGETDIR)/Outerrain
   DEFINES   += 
-  INCLUDES  += -I. -IOuterrain/Include -IDependencies/include -I/usr/include
+  INCLUDES  += -I. -IOuterrain/Include -I/usr/include -IDependencies/include
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -O3 -m64 -mtune=native -march=native -std=c++11 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -fopenmp
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -O3 -m64 -mtune=native -march=native -std=c++14 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -fopenmp
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += -s -m64 -L/usr/lib64 -flto -fopenmp
   LIBS      += -lGLEW -lSDL2 -lSDL2_image -lGL
@@ -68,9 +68,9 @@ ifeq ($(config),debug32)
   TARGETDIR  = bin
   TARGET     = $(TARGETDIR)/Outerrain
   DEFINES   += -DDEBUG
-  INCLUDES  += -I. -IOuterrain/Include -IDependencies/include -I/usr/include
+  INCLUDES  += -I. -IOuterrain/Include -I/usr/include -IDependencies/include
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -m32 -mtune=native -march=native -std=c++11 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -g
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -g -m32 -mtune=native -march=native -std=c++14 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -g
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += -m32 -L/usr/lib32 -flto -g
   LIBS      += -lGLEW -lSDL2 -lSDL2_image -lGL
@@ -90,9 +90,9 @@ ifeq ($(config),release32)
   TARGETDIR  = bin
   TARGET     = $(TARGETDIR)/Outerrain
   DEFINES   += 
-  INCLUDES  += -I. -IOuterrain/Include -IDependencies/include -I/usr/include
+  INCLUDES  += -I. -IOuterrain/Include -I/usr/include -IDependencies/include
   CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
-  CFLAGS    += $(CPPFLAGS) $(ARCH) -O3 -m32 -mtune=native -march=native -std=c++11 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -fopenmp
+  CFLAGS    += $(CPPFLAGS) $(ARCH) -O3 -m32 -mtune=native -march=native -std=c++14 -W -Wall -Wsign-compare -Wno-unused-parameter -Wno-unused-variable -flto -fopenmp
   CXXFLAGS  += $(CFLAGS) 
   LDFLAGS   += -s -m32 -L/usr/lib32 -flto -fopenmp
   LIBS      += -lGLEW -lSDL2 -lSDL2_image -lGL
@@ -108,9 +108,11 @@ ifeq ($(config),release32)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/meshModel.o \
+	$(OBJDIR)/layerfield.o \
 	$(OBJDIR)/mytime.o \
+	$(OBJDIR)/camera.o \
 	$(OBJDIR)/ecosystem.o \
+	$(OBJDIR)/sphere.o \
 	$(OBJDIR)/meshRenderer.o \
 	$(OBJDIR)/transform.o \
 	$(OBJDIR)/fractalMusgrave.o \
@@ -118,23 +120,32 @@ OBJECTS := \
 	$(OBJDIR)/box.o \
 	$(OBJDIR)/gameobject.o \
 	$(OBJDIR)/mainwindow-callbacks.o \
-	$(OBJDIR)/image.o \
-	$(OBJDIR)/scalarfield.o \
+	$(OBJDIR)/gpuheightfield.o \
+	$(OBJDIR)/material.o \
 	$(OBJDIR)/perlinNoise.o \
-	$(OBJDIR)/texture.o \
-	$(OBJDIR)/materialModel.o \
+	$(OBJDIR)/frame.o \
+	$(OBJDIR)/meshSetRenderer.o \
 	$(OBJDIR)/color.o \
+	$(OBJDIR)/scalarfield2D.o \
+	$(OBJDIR)/poissonTile2D.o \
 	$(OBJDIR)/imgui_draw.o \
 	$(OBJDIR)/mainwindow.o \
+	$(OBJDIR)/app-stats.o \
 	$(OBJDIR)/imgui.o \
 	$(OBJDIR)/heightfield.o \
 	$(OBJDIR)/cameraOrbiter.o \
+	$(OBJDIR)/mainwindow-gui.o \
 	$(OBJDIR)/window.o \
 	$(OBJDIR)/shader.o \
 	$(OBJDIR)/imgui_opengl.o \
+	$(OBJDIR)/heightfieldmesh.o \
 	$(OBJDIR)/fractal.o \
+	$(OBJDIR)/scene-hierarchy.o \
 	$(OBJDIR)/box2D.o \
-	$(OBJDIR)/poissonTile.o \
+	$(OBJDIR)/mainwindow-examples.o \
+	$(OBJDIR)/light.o \
+	$(OBJDIR)/mesh.o \
+	$(OBJDIR)/texture2D.o \
 
 RESOURCES := \
 
@@ -195,13 +206,19 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 endif
 
-$(OBJDIR)/meshModel.o: Outerrain/Source/meshModel.cpp
+$(OBJDIR)/layerfield.o: Outerrain/Source/layerfield.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/mytime.o: Outerrain/Source/mytime.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/camera.o: Outerrain/Source/camera.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/ecosystem.o: Outerrain/Source/ecosystem.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/sphere.o: Outerrain/Source/sphere.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/meshRenderer.o: Outerrain/Source/meshRenderer.cpp
@@ -225,28 +242,37 @@ $(OBJDIR)/gameobject.o: Outerrain/Source/gameobject.cpp
 $(OBJDIR)/mainwindow-callbacks.o: Outerrain/Source/mainwindow-callbacks.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/image.o: Outerrain/Source/image.cpp
+$(OBJDIR)/gpuheightfield.o: Outerrain/Source/gpuheightfield.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/scalarfield.o: Outerrain/Source/scalarfield.cpp
+$(OBJDIR)/material.o: Outerrain/Source/material.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/perlinNoise.o: Outerrain/Source/perlinNoise.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/texture.o: Outerrain/Source/texture.cpp
+$(OBJDIR)/frame.o: Outerrain/Source/frame.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/materialModel.o: Outerrain/Source/materialModel.cpp
+$(OBJDIR)/meshSetRenderer.o: Outerrain/Source/meshSetRenderer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/color.o: Outerrain/Source/color.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/scalarfield2D.o: Outerrain/Source/scalarfield2D.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/poissonTile2D.o: Outerrain/Source/poissonTile2D.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/imgui_draw.o: Outerrain/Source/imgui_draw.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/mainwindow.o: Outerrain/Source/mainwindow.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/app-stats.o: Outerrain/Source/app-stats.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/imgui.o: Outerrain/Source/imgui.cpp
@@ -258,6 +284,9 @@ $(OBJDIR)/heightfield.o: Outerrain/Source/heightfield.cpp
 $(OBJDIR)/cameraOrbiter.o: Outerrain/Source/cameraOrbiter.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mainwindow-gui.o: Outerrain/Source/mainwindow-gui.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/window.o: Outerrain/Source/window.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
@@ -267,13 +296,28 @@ $(OBJDIR)/shader.o: Outerrain/Source/shader.cpp
 $(OBJDIR)/imgui_opengl.o: Outerrain/Source/imgui_opengl.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/heightfieldmesh.o: Outerrain/Source/heightfieldmesh.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/fractal.o: Outerrain/Source/fractal.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/scene-hierarchy.o: Outerrain/Source/scene-hierarchy.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 $(OBJDIR)/box2D.o: Outerrain/Source/box2D.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-$(OBJDIR)/poissonTile.o: Outerrain/Source/poissonTile.cpp
+$(OBJDIR)/mainwindow-examples.o: Outerrain/Source/mainwindow-examples.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/light.o: Outerrain/Source/light.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/mesh.o: Outerrain/Source/mesh.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+$(OBJDIR)/texture2D.o: Outerrain/Source/texture2D.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 

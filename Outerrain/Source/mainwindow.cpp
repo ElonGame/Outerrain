@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "mytime.h"
-#include "imgui\imgui.h"
+#include "imgui/imgui.h"
 #include "imgui_opengl.h"
 
 
@@ -153,7 +153,7 @@ void MainWindow::Update(float time, float deltaTime)
 	mainWindowHandler->ClearButtonEvent();
 	mainWindowHandler->ClearWheelEvent();
 	auto objs = hierarchy.GetAllObjects();
-	for (int i = 0; i < objs.size(); i++)
+	for (size_t i = 0; i < objs.size(); i++)
 		objs[i]->UpdateTransformIfNeeded();
 }
 
@@ -163,7 +163,7 @@ void MainWindow::Render()
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	auto objs = hierarchy.GetAllObjects();
-	for (int i = 0; i < objs.size(); i++)
+	for (size_t i = 0; i < objs.size(); i++)
 	{
 		MeshRenderer* renderer = objs[i]->GetComponent<MeshRenderer>();
 		if (renderer != nullptr)

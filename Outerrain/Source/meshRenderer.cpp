@@ -1,4 +1,4 @@
-#include "meshrenderer.h"
+#include "meshRenderer.h"
 #include "mesh.h"
 #include "shader.h"
 #include "cameraOrbiter.h"

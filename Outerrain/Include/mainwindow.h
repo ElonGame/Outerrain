@@ -2,11 +2,11 @@
 
 #include <cstring>
 #include "window.h"
-#include "gpuheightfield.h"
-#include "cameraorbiter.h"
-#include "meshrenderer.h"
+#include "gpuHeightfield.h"
+#include "cameraOrbiter.h"
+#include "meshRenderer.h"
 #include "meshsetrenderer.h"
-#include "terrainsettings.h"
+#include "terrainSettings.h"
 #include "layerfield.h"
 #include "app-stats.h"
 #include "light.h"

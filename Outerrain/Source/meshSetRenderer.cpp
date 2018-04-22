@@ -1,5 +1,5 @@
 #include "meshsetrenderer.h"
-#include "cameraorbiter.h"
+#include "cameraOrbiter.h"
 #include "gameobject.h"
 #include "mesh.h"
 #include "shader.h"
@@ -56,7 +56,7 @@ Box MeshSetRenderer::GetBounds() const
 {
 	Box ret = Box(Vector3(0), 1.0);
 	ret = Box(frames[0].GetPosition(), frames[1].GetPosition());
-	for (unsigned int i = 1; i < frames.size(); i++)
+	for (size_t i = 1; i < frames.size(); i++)
 	{
 		Vector3 p = frames[i].GetPosition();
 		ret[0] = Vector3(Math::Min(ret[0].x, p.x), Math::Min(ret[0].y, p.y), Math::Min(ret[0].z, p.z));
@@ -135,7 +135,7 @@ void MeshSetRenderer::CreateBuffers()
 		offset = offset + size;
 		size = (frames.size() * mat4Size);
 		std::vector<float> instanceMatrices;
-		for (int i = 0; i < frames.size(); i++)
+		for (size_t i = 0; i < frames.size(); i++)
 		{
 			Transform transform = frames[i].GetTRS();
 			for (int j = 0; j < 4; j++)

@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera() : frameHeight(0), frameWidth(0), zNear(0.1f), zFar(5000.0f), fov(45.0f)
+Camera::Camera() : frameWidth(0), frameHeight(0), zNear(0.1f), zFar(5000.0f), fov(45.0f)
 {
 }
 

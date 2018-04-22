@@ -115,7 +115,7 @@ Window::Window(int w, int h) : width(w), height(h), stop(0)
 	last_text = SDL_TextInputEvent();
 	last_wheel = SDL_MouseWheelEvent();
 
-	CreateGLContext(4, 3);
+	CreateGLContext(3, 3);
 	SetDefaultGLState();
 }
 
@@ -232,7 +232,7 @@ void Window::ClearWheelEvent()
 
 void Window::ClearAllKeyStates()
 {
-	for (int i = 0; i < key_states.size(); i++)
+	for (size_t i = 0; i < key_states.size(); i++)
 		key_states[i] = 0;
 }
 

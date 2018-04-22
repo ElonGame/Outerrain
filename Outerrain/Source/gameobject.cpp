@@ -13,11 +13,11 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	for (int i = 0; i < children.size(); i++)
+	for (size_t i = 0; i < children.size(); i++)
 		delete children[i];
 	children.clear();
 
-	for (int i = 0; i < components.size(); i++)
+	for (size_t i = 0; i < components.size(); i++)
 		delete components[i];
 	components.clear();
 }
@@ -224,7 +224,7 @@ Transform GameObject::GetObjectToWorldMatrix()
 void GameObject::MarkTransformAsChanged()
 {
 	transformNeedsToUpdate = true;
-	for (int i = 0; i < children.size(); i++)
+	for (size_t i = 0; i < children.size(); i++)
 		children[i]->MarkTransformAsChanged();
 }
 

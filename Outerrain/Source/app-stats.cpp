@@ -1,5 +1,5 @@
 #include "app-stats.h"
-#include "GL\glew.h"
+#include <GL/glew.h>
 
 std::chrono::high_resolution_clock::time_point AppStatistics::cpu_start;
 std::chrono::high_resolution_clock::time_point AppStatistics::cpu_stop;

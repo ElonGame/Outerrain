@@ -158,21 +158,21 @@ static int print_errors(std::string& errors, const std::string&log, const std::s
 	return first_error;
 }
 
-static char* shader_string(const GLenum type)
+static std::string shader_string(const GLenum type)
 {
 	switch (type)
 	{
-	case GL_VERTEX_SHADER: return "vertex shader";
-	case GL_FRAGMENT_SHADER: return "fragment shader";
-	case GL_GEOMETRY_SHADER: return "geometry shader";
+	case GL_VERTEX_SHADER: return std::string("vertex shader");
+	case GL_FRAGMENT_SHADER: return std::string("fragment shader");
+	case GL_GEOMETRY_SHADER: return std::string("geometry shader");
 #ifdef GL_VERSION_4_0
-	case GL_TESS_CONTROL_SHADER: return "control shader";
-	case GL_TESS_EVALUATION_SHADER: return "evaluation shader";
+	case GL_TESS_CONTROL_SHADER: return std::string("control shader");
+	case GL_TESS_EVALUATION_SHADER: return std::string("evaluation shader");
 #endif
 #ifdef GL_VERSION_4_3
-	case GL_COMPUTE_SHADER: return "compute shader";
+	case GL_COMPUTE_SHADER: return std::string("compute shader");
 #endif
-	default: return "shader";
+	default: return std::string("shader");
 	}
 }
 
@@ -260,7 +260,7 @@ int Shader::Reload(const std::string&filename, const std::string& definitions)
 			std::string source = prepare_source(common_source, std::string(definitions).append("#define ").append(shader_keys[i]).append("\n"));
 			GLuint shader = compile_shader(program, shader_types[i], source);
 			if (shader == 0)
-				printf("[error] compiling %s...\n%s\n", shader_string(shader_types[i]), definitions.c_str());
+				printf("[error] compiling %s...\n%s\n", shader_string(shader_types[i]).c_str(), definitions.c_str());
 		}
 	}
 

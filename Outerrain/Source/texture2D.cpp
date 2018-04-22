@@ -1,5 +1,6 @@
 #include "texture2D.h"
 #include <cassert>
+#include <cmath>
 
 /*
 \brief 2D Texture class. Loads and saves using SDL functions. Conversion to OpenGL texture available as static and member functions.
