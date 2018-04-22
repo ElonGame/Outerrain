@@ -22,6 +22,9 @@ protected:
 	GLuint indexBuffer;
 	Material material;
 
+	size_t vertexCount;
+	size_t triangleCount;
+
 	void UpdateBuffers();
 	void RenderInternal();
 

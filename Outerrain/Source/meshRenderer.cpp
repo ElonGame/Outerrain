@@ -23,8 +23,8 @@ MeshRenderer::MeshRenderer(Mesh* m, const Material& mat) : MeshRenderer(m)
 
 MeshRenderer::~MeshRenderer()
 {
-	AppStatistics::vertexCount -= mesh->VertexCount();
-	AppStatistics::triangleCount -= mesh->TriangleCount();
+	AppStatistics::vertexCount -= vertexCount;
+	AppStatistics::triangleCount -= triangleCount;
 	mesh.release();
 	ClearBuffers();
 }
@@ -141,8 +141,10 @@ void MeshRenderer::CreateBuffers()
 	primitiveMode = GL_TRIANGLES;
 
 	// Records stats
-	AppStatistics::vertexCount	 += mesh->VertexCount();
-	AppStatistics::triangleCount += mesh->TriangleCount();
+	triangleCount = mesh->TriangleCount();
+	vertexCount = mesh->VertexCount();
+	AppStatistics::vertexCount	 += vertexCount;
+	AppStatistics::triangleCount += triangleCount;
 }
 
 void MeshRenderer::ClearBuffers()

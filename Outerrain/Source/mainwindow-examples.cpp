@@ -5,10 +5,10 @@ DirectionnalLight MainWindow::sceneLight = DirectionnalLight(Vector3(0.707f, -0.
 
 void MainWindow::InitBasicTerrain()
 {
-	/*ClearScene();
+	ClearScene();
 
 	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.resolution = 1024;
+	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-2048, -2048);
 	settings.topRight = Vector2(2048, 2048);
 	settings.offsetVector = Vector3(0);
@@ -17,12 +17,10 @@ void MainWindow::InitBasicTerrain()
 	settings.octaves = 8;
 	settings.amplitude = 100;
 	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = ShaderType::TerrainSplatmap;
+	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
-	UpdateMeshRenderer();*/
-	hfObject = GameObject::CreatePlane();
-	hfObject->SetScale(Vector3(10, 1, 10));
+	UpdateMeshRenderer();
 }
 
 void MainWindow::InitGPUTerrain()
@@ -147,38 +145,4 @@ void MainWindow::NoiseField2Scene()
 
 	GenerateTerrainFromSettings();
 	UpdateMeshRenderer();
-}
-
-void MainWindow::InstanceScene()
-{
-	hfObject = new GameObject();
-	hfObject->AddComponent(new MeshRenderer());
-
-	settings.terrainType = TerrainType::NoiseFieldTerrain;
-	settings.resolution = 128;
-	settings.bottomLeft = Vector2(-1024, -1024);
-	settings.topRight = Vector2(1024, 1024);
-	settings.offsetVector = Vector3(0);
-	settings.noise = new PerlinNoise();
-	settings.frequency = 0.002f;
-	settings.octaves = 8;
-	settings.amplitude = 100.0f;
-	settings.fractalType = FractalType::MusgraveHybridMultifractal;
-	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
-
-	using Random = effolkronium::random_static;
-	std::vector<Frame> frames;
-	Box box = Box(Vector3(0), 100);
-	for (int i = 0; i < 10000; i++)
-	{
-		float x = Random::get(box.Vertex(0).x, box.Vertex(1).x);
-		float y = Random::get(box.Vertex(0).y, box.Vertex(1).y);
-		float z = Random::get(box.Vertex(0).z, box.Vertex(1).z);
-		Frame f;
-		f.SetPosition(Vector3(x, y, z));
-		frames.push_back(f);
-	}
-
-	//instanceRenderer = new MeshSetRenderer(new Mesh("Data/Objs/cube.obj"), frames);
-	//instanceRenderer->SetMaterial(Material("Shaders/InstanceShader.glsl", Color::Blue(), 0.0f));
 }

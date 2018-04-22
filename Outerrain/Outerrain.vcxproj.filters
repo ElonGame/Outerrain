@@ -154,7 +154,7 @@
       <Filter>Rendering\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\scene-hierarchy.h">
-      <Filter>Core\Include</Filter>
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="Source\app-stats.cpp">
       <Filter>Rendering\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\scene-hierarchy.cpp">
+      <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

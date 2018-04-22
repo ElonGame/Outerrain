@@ -6,10 +6,8 @@
 
 MainWindow::MainWindow(int windowWidth, int windowHeight)
 {
-	hfObject = nullptr;
 	hf = nullptr;
 	mainWindowHandler = new Window(windowWidth, windowHeight);
-	mainWindowHandler->CreateGLContext(4, 3);
 	Init();
 }
 
@@ -27,11 +25,6 @@ void MainWindow::Quit()
 		delete hf;
 		hf = nullptr;
 	}
-	if (hfObject)
-	{
-		delete hfObject;
-		hfObject = nullptr;
-	}
 	if (mainWindowHandler)
 	{
 		mainWindowHandler->ReleaseGLContext();
@@ -47,7 +40,6 @@ void MainWindow::Show()
 
 void MainWindow::Init()
 {
-	mainWindowHandler->SetDefaultGLState();
 	ImGui_OpenGL_Init(mainWindowHandler->GetSDLWindow());
 	std::cout << "Dear ImGui Version : " << ImGui::GetVersion() << std::endl;
 	Material::InitStaticMaterials();
@@ -56,10 +48,8 @@ void MainWindow::Init()
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
 	orbiter.SetClippingPlanes(0.01f, 10000.0f);
 
-	//InstanceScene();
 	InitBasicTerrain();
-	orbiter.LookAt(hfObject->GetComponent<Mesh>()->GetBounds());
-	//orbiter.LookAt(hf->GetBox().ToBox(0, 250));
+	orbiter.LookAt(hierarchy.GetObject(0)->GetComponent<Mesh>()->GetBounds());
 }
 
 void MainWindow::MainLoop()
@@ -160,7 +150,9 @@ void MainWindow::Update(float time, float deltaTime)
 
 	mainWindowHandler->ClearButtonEvent();
 	mainWindowHandler->ClearWheelEvent();
-	hfObject->UpdateTransformIfNeeded();
+	auto objs = hierarchy.GetAllObjects();
+	for (int i = 0; i < objs.size(); i++)
+		objs[i]->UpdateTransformIfNeeded();
 }
 
 void MainWindow::Render()
@@ -168,8 +160,14 @@ void MainWindow::Render()
 	// World
 	glClearColor(0.11f, 0.42f, 0.66f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	hfObject->GetComponent<MeshRenderer>()->Render(orbiter);
-	
+	auto objs = hierarchy.GetAllObjects();
+	for (int i = 0; i < objs.size(); i++)
+	{
+		MeshRenderer* renderer = objs[i]->GetComponent<MeshRenderer>();
+		if (renderer != nullptr)
+			renderer->Render(orbiter);
+	}
+		
 	// GUI
 	RenderGUI();
 }

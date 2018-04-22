@@ -114,6 +114,9 @@ Window::Window(int w, int h) : width(w), height(h), stop(0)
 	last_key = SDL_KeyboardEvent();
 	last_text = SDL_TextInputEvent();
 	last_wheel = SDL_MouseWheelEvent();
+
+	CreateGLContext(4, 3);
+	SetDefaultGLState();
 }
 
 Window::~Window()

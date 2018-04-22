@@ -82,17 +82,18 @@ void MainWindow::UpdateMeshRenderer()
 		mat = Material::WireframeMaterialInstance;
 
 	// Only done once the first time
-	if (hfObject == nullptr)
+	if (hierarchy.GetAllObjects().size() == 0)
 	{
-		hfObject = new GameObject();
+		GameObject* hfObject = new GameObject();
 		hfObject->SetPosition(Vector3(0));
 		hfObject->AddComponent(new HeightfieldMesh(hf));
 		hfObject->AddComponent(new MeshRenderer(hfObject->GetComponent<HeightfieldMesh>(), mat));
+		hierarchy.AddObject(hfObject);
 		return;
 	}
 
-	hfObject->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
-	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
+	hierarchy.GetObject(0)->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
+	hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::UpdateMeshMaterial()
@@ -108,15 +109,13 @@ void MainWindow::UpdateMeshMaterial()
 		mat = Material::NormalMaterialInstance;
 	if (settings.shaderType == WireframeMaterial)
 		mat = Material::WireframeMaterialInstance;
-	hfObject->GetComponent<MeshRenderer>()->SetMaterial(mat);
+	hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::ClearScene() 
 {
 	if (hf != nullptr)
 		delete hf;
-	if (hfObject != nullptr)
-		delete hfObject;
 	hf = nullptr;
-	hfObject = nullptr;
+	hierarchy.DeleteObject(0);
 }

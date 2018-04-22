@@ -394,10 +394,10 @@ static int location(const GLuint program, const std::string&uniform)
 			char label[1024];
 			glGetObjectLabel(GL_PROGRAM, program, sizeof(label), NULL, label);
 
-			SPRINTF(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform.c_str());
+			//SPRINTF(error, "uniform( %s %u, '%s' ): not found.", label, program, uniform.c_str());
 		}
 #else
-		sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
+		//sprintf(error, "uniform( program %u, '%s'): not found.", program, uniform);
 #endif
 		static std::set<std::string> log;
 		if (log.insert(error).second == true)
