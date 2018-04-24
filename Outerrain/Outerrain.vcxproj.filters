@@ -99,14 +99,8 @@
     <ClInclude Include="Source\random.h">
       <Filter>Core\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\camera.h">
-      <Filter>Core\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\frame.h">
       <Filter>Core\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\cameraOrbiter.h">
-      <Filter>Rendering\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\meshRenderer.h">
       <Filter>Rendering\Include</Filter>
@@ -138,9 +132,6 @@
     <ClInclude Include="Include\mesh.h">
       <Filter>Rendering\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Include\meshsetrenderer.h">
-      <Filter>Rendering\Include</Filter>
-    </ClInclude>
     <ClInclude Include="Include\scalarfield2D.h">
       <Filter>Framework\Include</Filter>
     </ClInclude>
@@ -155,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="Include\scene-hierarchy.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\camera-standard.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\camera-orbiter.h">
+      <Filter>Core\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\camera-base.h">
+      <Filter>Core\Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +234,6 @@
     <ClCompile Include="Source\layerfield.cpp">
       <Filter>Framework\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\cameraOrbiter.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\heightfieldmesh.cpp">
       <Filter>Rendering\Source</Filter>
     </ClCompile>
@@ -247,9 +244,6 @@
       <Filter>Rendering\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\meshrenderer.cpp">
-      <Filter>Rendering\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\meshsetrenderer.cpp">
       <Filter>Rendering\Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\scalarfield2D.cpp">
@@ -269,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="Source\scene-hierarchy.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\camera-standard.cpp">
+      <Filter>Core\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\camera-orbiter.cpp">
+      <Filter>Core\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

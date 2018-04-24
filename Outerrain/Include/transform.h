@@ -64,7 +64,7 @@ Transform RotationZ(float angle);
 Transform Rotation(const Vector3& axis, float angle);
 
 //! renvoie la matrice representant une transformation viewport.
-Transform Viewport(float width, float height);
+Transform Viewport(float frameWidth, float frameHeight);
 //! renvoie la matrice representant une transformation projection perspective.
 Transform Perspective(float fov, float aspect, float znear, float zfar);
 //! renvoie la matrice representant le placement et l'orientation d'une camera pour observer le Vector3 to.

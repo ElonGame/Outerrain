@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <algorithm>
-#include "cameraOrbiter.h"
+#include "camera-orbiter.h"
 #include "mathUtils.h"
 #include "box.h"
 
@@ -10,9 +10,9 @@ CameraOrbiter::CameraOrbiter() : center(0.0f), position(0.0f), rotation(0.0f), s
 	SetClippingPlanes(0.1f, 5000.0f);
 }
 
-CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float zNear, float zFar) : center(center), position(0.0f), rotation(0.0f), size(size)
+CameraOrbiter::CameraOrbiter(const Vector3& center, float size, float nearplane, float farplane) : center(center), position(0.0f), rotation(0.0f), size(size)
 {
-	SetClippingPlanes(zNear, zFar);
+	SetClippingPlanes(nearplane, farplane);
 }
 
 CameraOrbiter::CameraOrbiter(const Vector3& pmin, const Vector3& pmax) : center(Math::Center(pmin, pmax)), position(0.0f), rotation(0.0f), size(Magnitude(pmin - pmax))
@@ -50,14 +50,14 @@ Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
 	// Convert to radians 
 	// Horizontal angle of view  
 	double avh = 2.0 * atan(0.980 * 25.4 * 0.5 / fov);
-	double avv = 2.0*atan(tan(avh / 2.0)*frameHeight / frameWidth);
+	double avv = 2.0 * atan(tan(avh / 2.0) * frameHeight / frameWidth);
 	double rad = avv;
 
 	double vLength = tan(rad / 2.0) * length;
 	double hLength = vLength * (double(frameWidth) / double(frameHeight));
 
-	vertical *= vLength;
-	horizontal *= hLength;
+	vertical	*= vLength;
+	horizontal	*= hLength;
 
 	// Translate mouse coordinates so that the origin lies in the center of the view port
 	double x = pixel.x - frameWidth / 2.0;
@@ -68,7 +68,7 @@ Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
 	y /= frameHeight / 2.0;
 
 	// Direction is a linear combination to compute intersection of picking ray with view port plane
-	return Ray(Position(), Normalize(view*length + horizontal*x + vertical*y));
+	return Ray(Position(), Normalize(view * length + horizontal * x + vertical * y));
 }
 
 Vector2i CameraOrbiter::VectorToPixel(const Vector3& worldPoint)
@@ -95,21 +95,21 @@ void CameraOrbiter::Move(float z)
 		size = 0.01f;
 }
 
-Transform CameraOrbiter::View() const
+Transform CameraOrbiter::ViewDirection() const
 {
 	return TranslationTransform(-position.x, -position.y, -size) * RotationX(rotation.x) * RotationY(rotation.y) * TranslationTransform(-Vector3(center));
 }
 
 Transform CameraOrbiter::Projection() const
 {
-	return Perspective(fov, (float)frameWidth / (float)frameHeight, zNear, zFar);
+	return Perspective(fov, (float)frameWidth / (float)frameHeight, nearplane, farplane);
 }
 
-void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::Frame(float frameWidth, float frameHeight, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
-	Transform v = View();
+	Transform v = ViewDirection();
 	Transform p = Projection();
-	Transform viewport = Viewport(width, height);
+	Transform viewport = Viewport(frameWidth, frameHeight);
 	Transform t = viewport * p * v;              // passage monde vers image
 	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde
 
@@ -128,7 +128,7 @@ void CameraOrbiter::Frame(float width, float height, float z, float fov, Vector3
 
 Vector3 CameraOrbiter::Position() const
 {
-	Transform t = View();			// passage monde vers camera
+	Transform t = ViewDirection();			// passage monde vers camera
 	Transform tinv = t.Inverse();	// l'inverse, passage camera vers monde
 	return tinv(Vector3(0, 0, 0));	// la camera se trouve a l'origine, dans le repere camera...
 }

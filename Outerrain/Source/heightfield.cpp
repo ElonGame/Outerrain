@@ -121,8 +121,7 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			Vector3 p = Vertex(i, j);
-			p = p + offset;
+			Vector3 p = Vertex(i, j) + offset;
 			float h = 0.0f;
 			if (type == FractalType::fBm)
 				h = Fractal::fBm(n, p, amplitude, freq, oct);
@@ -339,7 +338,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 			{
 				if ((k == 0 && l == 0) || Inside(i + k, j + l) == false)
 					continue;
-				// If current point as lower neighbour : compute slope to later distribute accordingly.
+				// If current point has lower neighbour : compute slope to later distribute accordingly.
 				float nH = Get(i + k, j + l);
 				if (h > nH)
 				{
@@ -458,11 +457,11 @@ bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
 	while (t < b)
 	{
 		Vector3 p = ray.At(t);
-		float z = GetValueBilinear(Vector2(p.x, p.y));
-		float h = p[2] - z;
+		float y = GetValueBilinear(Vector2(p.x, p.z));
+		float h = p.y - y;
 		if (h < 0.01f)
 		{
-			hit.position = Vector3(p.x, p.y, z);
+			hit.position = p;
 			hit.normal = Vector3(0);
 			return true;
 		}

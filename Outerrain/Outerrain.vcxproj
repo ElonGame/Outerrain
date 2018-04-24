@@ -19,12 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\camera-standard.h" />
     <ClInclude Include="Include\light.h" />
     <ClInclude Include="Include\app-stats.h" />
     <ClInclude Include="Include\box.h" />
     <ClInclude Include="Include\box2D.h" />
-    <ClInclude Include="Include\camera.h" />
-    <ClInclude Include="Include\cameraOrbiter.h" />
+    <ClInclude Include="Include\camera-base.h" />
+    <ClInclude Include="Include\camera-orbiter.h" />
     <ClInclude Include="Include\color.h" />
     <ClInclude Include="Include\component.h" />
     <ClInclude Include="Include\fractal.h" />
@@ -43,7 +44,6 @@
     <ClInclude Include="Include\mathUtils.h" />
     <ClInclude Include="Include\mesh.h" />
     <ClInclude Include="Include\meshRenderer.h" />
-    <ClInclude Include="Include\meshsetrenderer.h" />
     <ClInclude Include="Include\mytime.h" />
     <ClInclude Include="Include\poissonTile2D.h" />
     <ClInclude Include="Include\quaternion.h" />
@@ -67,7 +67,8 @@
     <ClCompile Include="Source\box.cpp" />
     <ClCompile Include="Source\box2D.cpp" />
     <ClCompile Include="Source\camera.cpp" />
-    <ClCompile Include="Source\cameraOrbiter.cpp" />
+    <ClCompile Include="Source\camera-standard.cpp" />
+    <ClCompile Include="Source\camera-orbiter.cpp" />
     <ClCompile Include="Source\color.cpp" />
     <ClCompile Include="Source\fractal.cpp" />
     <ClCompile Include="Source\fractalMusgrave.cpp" />
@@ -97,7 +98,6 @@
     <ClCompile Include="Source\material.cpp" />
     <ClCompile Include="Source\mesh.cpp" />
     <ClCompile Include="Source\meshrenderer.cpp" />
-    <ClCompile Include="Source\meshsetrenderer.cpp" />
     <ClCompile Include="Source\mytime.cpp" />
     <ClCompile Include="Source\poissonTile2D.cpp" />
     <ClCompile Include="Source\main.cpp" />

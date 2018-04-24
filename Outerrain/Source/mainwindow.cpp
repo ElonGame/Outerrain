@@ -17,7 +17,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::Quit()
 {
-	Material::ReleaseStaticMaterials();
+	MaterialBase::ReleaseStaticMaterials();
 	ImGui_OpenGL_Shutdown();
 	AppStatistics::Release();
 	if (hf)
@@ -42,11 +42,11 @@ void MainWindow::Init()
 {
 	ImGui_OpenGL_Init(mainWindowHandler->GetSDLWindow());
 	std::cout << "Dear ImGui Version : " << ImGui::GetVersion() << std::endl;
-	Material::InitStaticMaterials();
+	MaterialBase::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
 	orbiter.SetFrameHeight(mainWindowHandler->Height());
-	orbiter.SetClippingPlanes(0.01f, 10000.0f);
+	orbiter.SetClippingPlanes(0.1f, 10000.0f);
 
 	InitBasicTerrain();
 	orbiter.LookAt(hierarchy.GetObject(0)->GetComponent<Mesh>()->GetBounds());
@@ -136,7 +136,7 @@ void MainWindow::Update(float time, float deltaTime)
 	}
 	else if (mainWindowHandler->KeyState(SDLK_3))
 	{
-		settings.shaderType = MaterialType::TexturedMaterial;
+		settings.shaderType = MaterialType::SingleTexturedMaterial;
 		UpdateMeshMaterial();
 	}
 	else if (mainWindowHandler->KeyState(SDLK_4))

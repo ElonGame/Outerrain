@@ -1,13 +1,13 @@
 #include "meshRenderer.h"
 #include "mesh.h"
 #include "shader.h"
-#include "cameraOrbiter.h"
+#include "camera-orbiter.h"
 #include "app-stats.h"
 #include <iostream>
 
 
 MeshRenderer::MeshRenderer()
-{ 
+{
 }
 
 MeshRenderer::MeshRenderer(Mesh* m)
@@ -16,7 +16,7 @@ MeshRenderer::MeshRenderer(Mesh* m)
 	CreateBuffers();
 }
 
-MeshRenderer::MeshRenderer(Mesh* m, const Material& mat) : MeshRenderer(m)
+MeshRenderer::MeshRenderer(Mesh* m, MaterialBase* mat) : MeshRenderer(m)
 {
 	material = mat;
 }
@@ -35,21 +35,18 @@ void MeshRenderer::UpdateBuffers()
 	size_t offset = 0;
 	size_t size = mesh->VertexBufferSize();
 	glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->VertexBufferPtr());
-
 	if (mesh->texcoords.size() == mesh->vertices.size())
 	{
 		offset = offset + size;
 		size = mesh->TexcoordBufferSize();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->TexcoordBufferPtr());
 	}
-
 	if (mesh->normals.size() == mesh->vertices.size())
 	{
 		offset = offset + size;
 		size = mesh->NormalBufferSize();
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, mesh->NormalBufferPtr());
 	}
-
 	mesh->isDirty = false;
 }
 
@@ -57,10 +54,10 @@ void MeshRenderer::RenderInternal()
 {
 	if (vao == 0)
 		CreateBuffers();
-	if (mesh->isDirty == true)
-		UpdateBuffers();
 
 	glBindVertexArray(vao);
+	if (mesh->isDirty == true)
+		UpdateBuffers();
 	if (mesh->indices.size() > 0)
 		glDrawElements(primitiveMode, (GLsizei)mesh->indices.size(), GL_UNSIGNED_INT, 0);
 	else
@@ -72,13 +69,13 @@ void MeshRenderer::Render(const CameraOrbiter& cam)
 	if (mesh == nullptr)
 		return;
 	Transform trs = gameObject->GetObjectToWorldMatrix();
-	Transform mvp = cam.Projection() * (cam.View() * trs);
+	Transform mvp = cam.Projection() * (cam.ViewDirection() * trs);
 	Vector3 camPos = cam.Position();
-	if (material.shaderType == MaterialType::WireframeMaterial)
+	if (material->shaderType == MaterialType::WireframeMaterial)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	material.SetFrameUniforms(trs, mvp, camPos);
+	material->SetFrameUniforms(trs, mvp, camPos);
 	RenderInternal();
 }
 
@@ -143,7 +140,7 @@ void MeshRenderer::CreateBuffers()
 	// Records stats
 	triangleCount = mesh->TriangleCount();
 	vertexCount = mesh->VertexCount();
-	AppStatistics::vertexCount	 += vertexCount;
+	AppStatistics::vertexCount += vertexCount;
 	AppStatistics::triangleCount += triangleCount;
 }
 
@@ -154,17 +151,17 @@ void MeshRenderer::ClearBuffers()
 	glDeleteBuffers(1, &indexBuffer);
 }
 
-void MeshRenderer::SetMaterial(const Material& m)
+void MeshRenderer::SetMaterial(MaterialBase* m)
 {
 	material = m;
 }
 
 void MeshRenderer::SetShader(const Shader& s)
 {
-	material.SetShader(s);
+	material->SetShader(s);
 }
 
 const Mesh& MeshRenderer::GetMesh() const
-{ 
+{
 	return *mesh.get();
 }

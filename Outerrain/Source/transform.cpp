@@ -204,10 +204,10 @@ Transform Perspective(float fov, float aspect, float znear, float zfar)
 		0, 0, -1, 0);
 }
 
-Transform Viewport(float width, float height)
+Transform Viewport(float frameWidth, float frameHeight)
 {
-	float w = width / 2.f;
-	float h = height / 2.f;
+	float w = frameWidth / 2.f;
+	float h = frameHeight / 2.f;
 
 	return Transform(
 		w, 0, 0, w,

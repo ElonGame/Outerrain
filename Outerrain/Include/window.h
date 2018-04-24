@@ -11,8 +11,8 @@ class Window
 private:
 	SDL_GLContext glContext;
 	SDL_Window* windowSDL;
-	int width;
-	int height;
+	int frameWidth;
+	int frameHeight;
 
 	std::vector<unsigned char> key_states;
 	SDL_MouseButtonEvent last_button;
@@ -22,7 +22,7 @@ private:
 	int stop;
 
 public:
-	Window(int width, int height);
+	Window(int frameWidth, int frameHeight);
 	~Window();
 	void CreateGLContext(int major, int minor);
 	void SetDefaultGLState();

@@ -182,8 +182,8 @@ void ImGui_OpenGL_CreateFontsTexture()
 	// Build texture atlas
 	ImGuiIO& io = ImGui::GetIO();
 	unsigned char* pixels;
-	int width, height;
-	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits for OpenGL3 demo because it is more likely to be compatible with user's existing shader.
+	int frameWidth, frameHeight;
+	io.Fonts->GetTexDataAsRGBA32(&pixels, &frameWidth, &frameHeight);   // Load as RGBA 32-bits for OpenGL3 demo because it is more likely to be compatible with user's existing shader.
 
 															  // Upload texture to graphics system
 	GLint last_texture;
@@ -193,7 +193,7 @@ void ImGui_OpenGL_CreateFontsTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frameWidth, frameHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 	// Store our identifier
 	io.Fonts->TexID = (void *)(intptr_t)g_FontTexture;

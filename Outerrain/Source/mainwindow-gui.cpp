@@ -7,7 +7,7 @@
 static std::string PrettyFormatNumbers(int number)
 {
 	auto str = std::to_string(number);
-	int charCount = str.size();
+	size_t charCount = str.size();
 	if (charCount < 4)
 		return str;
 	if (charCount == 4)

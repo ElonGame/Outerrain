@@ -119,7 +119,7 @@ bool Box::Intersect(const Ray& r, float& tmin, float& tmax)
 		return 0;
 
 	// Oy
-	if (d[1] < -1.0e-5)
+	if (d[2] < -1.0e-5)
 	{
 		t = (a[1] - p[1]) / d[1];
 		if (t < tmin)

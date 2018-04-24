@@ -12,14 +12,14 @@ class Texture2D
 {
 protected:
 	std::vector<Color> data;
-	int width;
-	int height;
+	int frameWidth;
+	int frameHeight;
 	int bitsPerPixel;
 	int bytesPerPixel;
 
 public:
 	Texture2D(const std::string& filePath);
-	Texture2D(int width, int height);
+	Texture2D(int frameWidth, int frameHeight);
 	~Texture2D();
 
 	void SetPixel(int x, int y, const Color& c);

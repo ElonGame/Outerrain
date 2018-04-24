@@ -34,10 +34,10 @@ int Window::UpdateEvents()
 		case SDL_WINDOWEVENT:
 			if (event.window.event == SDL_WINDOWEVENT_RESIZED)
 			{
-				width = event.window.data1;
-				height = event.window.data2;
-				SDL_SetWindowSize(windowSDL, width, height);
-				glViewport(0, 0, width, height);
+				frameWidth = event.window.data1;
+				frameHeight = event.window.data2;
+				SDL_SetWindowSize(windowSDL, frameWidth, frameHeight);
+				glViewport(0, 0, frameWidth, frameHeight);
 			}
 			break;
 
@@ -80,7 +80,7 @@ int Window::UpdateEvents()
 	return 1 - stop;
 }
 
-Window::Window(int w, int h) : width(w), height(h), stop(0)
+Window::Window(int w, int h) : frameWidth(w), frameHeight(h), stop(0)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -91,8 +91,8 @@ Window::Window(int w, int h) : width(w), height(h), stop(0)
 	SDL_version linked;
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
-	std::cout << "SDL Compiled Version : " << (int)compiled.major << "." << (int)compiled.minor << "." << (int)compiled.patch << std::endl;
-	std::cout << "SDL Linked Version : " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch << std::endl;
+	std::cout << "SDL Compiled Version : "	<< (int)compiled.major << "." << (int)compiled.minor << "." << (int)compiled.patch	<< std::endl;
+	std::cout << "SDL Linked Version : "	<< (int)linked.major << "."	  << (int)linked.minor << "."	<< (int)linked.patch	<< std::endl;
 	atexit(SDL_Quit);
 
 	windowSDL = SDL_CreateWindow("Outerrain", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
@@ -108,12 +108,12 @@ Window::Window(int w, int h) : width(w), height(h), stop(0)
 
 	SDL_SetWindowDisplayMode(windowSDL, NULL);
 	SDL_StartTextInput();
-	SDL_GetWindowSize(windowSDL, &width, &height);
+	SDL_GetWindowSize(windowSDL, &frameWidth, &frameHeight);
 
 	last_button = SDL_MouseButtonEvent();
-	last_key = SDL_KeyboardEvent();
-	last_text = SDL_TextInputEvent();
-	last_wheel = SDL_MouseWheelEvent();
+	last_key	= SDL_KeyboardEvent();
+	last_text	= SDL_TextInputEvent();
+	last_wheel	= SDL_MouseWheelEvent();
 
 	CreateGLContext(3, 3);
 	SetDefaultGLState();
@@ -137,7 +137,7 @@ void Window::CreateGLContext(int major, int minor)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 #endif
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 15);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	glContext = SDL_GL_CreateContext(windowSDL);
@@ -174,11 +174,10 @@ void Window::CreateGLContext(int major, int minor)
 
 void Window::SetDefaultGLState()
 {
-	glClearDepthf(1);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 
-	glDepthFunc(GL_LESS);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
@@ -266,10 +265,10 @@ SDL_Window* Window::GetSDLWindow() const
 
 int Window::Width() const 
 { 
-	return width;
+	return frameWidth;
 }
 
 int Window::Height() const 
 { 
-	return height;
+	return frameHeight;
 }

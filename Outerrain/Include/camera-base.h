@@ -1,17 +1,17 @@
 #pragma once
 
-class Camera
+class CameraBase
 {
 protected:
 	int frameWidth;
 	int frameHeight;
-	float zNear;
-	float zFar;
+	float nearplane;
+	float farplane;
 	float fov;
 
 public:
-	Camera();
-	Camera(int width, int height, float near, float far, float fov=45.0f);
+	CameraBase();
+	CameraBase(int frameWidth, int frameHeight, float near, float far, float fov = 45.0f);
 
 	void SetFrameWidth(int w);
 	void SetFrameHeight(int h);

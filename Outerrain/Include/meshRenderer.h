@@ -20,7 +20,7 @@ protected:
 	GLuint vao;
 	GLuint fullBuffer;
 	GLuint indexBuffer;
-	Material material;
+	MaterialBase* material;
 
 	size_t vertexCount;
 	size_t triangleCount;
@@ -31,14 +31,14 @@ protected:
 public:
 	MeshRenderer();
 	MeshRenderer(Mesh*);
-	MeshRenderer(Mesh*, const Material&);
+	MeshRenderer(Mesh*, MaterialBase*);
 	~MeshRenderer();
 
 	void Render(const CameraOrbiter&);
 	void CreateBuffers();
 	void ClearBuffers();
 
-	void SetMaterial(const Material& m);
+	void SetMaterial(MaterialBase* m);
 	void SetShader(const Shader& s);
 
 	const Mesh& GetMesh() const;

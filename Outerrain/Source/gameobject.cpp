@@ -302,7 +302,7 @@ GameObject* GameObject::CreatePlane()
 	}
 
 	ret->AddComponent(planeMesh);
-	ret->AddComponent(new MeshRenderer(planeMesh, Material::DiffuseMaterialInstance));
+	ret->AddComponent(new MeshRenderer(planeMesh, MaterialBase::DiffuseMaterialInstance));
 
 	return ret;
 }

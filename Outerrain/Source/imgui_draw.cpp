@@ -1572,28 +1572,28 @@ ImFont* ImFontAtlas::AddFontFromMemoryCompressedBase85TTF(const char* compressed
     return font;
 }
 
-int ImFontAtlas::AddCustomRectRegular(unsigned int id, int width, int height)
+int ImFontAtlas::AddCustomRectRegular(unsigned int id, int frameWidth, int frameHeight)
 {
     IM_ASSERT(id >= 0x10000);
-    IM_ASSERT(width > 0 && width <= 0xFFFF);
-    IM_ASSERT(height > 0 && height <= 0xFFFF);
+    IM_ASSERT(frameWidth > 0 && frameWidth <= 0xFFFF);
+    IM_ASSERT(frameHeight > 0 && frameHeight <= 0xFFFF);
     CustomRect r;
     r.ID = id;
-    r.Width = (unsigned short)width;
-    r.Height = (unsigned short)height;
+    r.Width = (unsigned short)frameWidth;
+    r.Height = (unsigned short)frameHeight;
     CustomRects.push_back(r);
     return CustomRects.Size - 1; // Return index
 }
 
-int ImFontAtlas::AddCustomRectFontGlyph(ImFont* font, ImWchar id, int width, int height, float advance_x, const ImVec2& offset)
+int ImFontAtlas::AddCustomRectFontGlyph(ImFont* font, ImWchar id, int frameWidth, int frameHeight, float advance_x, const ImVec2& offset)
 {
     IM_ASSERT(font != NULL);
-    IM_ASSERT(width > 0 && width <= 0xFFFF);
-    IM_ASSERT(height > 0 && height <= 0xFFFF);
+    IM_ASSERT(frameWidth > 0 && frameWidth <= 0xFFFF);
+    IM_ASSERT(frameHeight > 0 && frameHeight <= 0xFFFF);
     CustomRect r;
     r.ID = id;
-    r.Width = (unsigned short)width;
-    r.Height = (unsigned short)height;
+    r.Width = (unsigned short)frameWidth;
+    r.Height = (unsigned short)frameHeight;
     r.GlyphAdvanceX = advance_x;
     r.GlyphOffset = offset;
     r.Font = font;

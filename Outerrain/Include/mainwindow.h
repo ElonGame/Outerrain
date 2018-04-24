@@ -3,9 +3,8 @@
 #include <cstring>
 #include "window.h"
 #include "gpuHeightfield.h"
-#include "cameraOrbiter.h"
+#include "camera-orbiter.h"
 #include "meshRenderer.h"
-#include "meshsetrenderer.h"
 #include "terrainSettings.h"
 #include "layerfield.h"
 #include "app-stats.h"

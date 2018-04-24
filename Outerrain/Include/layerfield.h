@@ -1,6 +1,5 @@
 #pragma once
 
-#include "meshsetrenderer.h"
 #include "heightfield.h"
 #include "ecosystem.h"
 
@@ -24,9 +23,5 @@ public:
 	void LightingEventSimulate(float strength, int probability, int fireProbability);
 	void LightingEvent(const Vector2& position, float strength, int fireProbability);
 	void FireEventSimulate(const Vector2& startPosition);
-
 	void Stabilize();
-
-	MeshSetRenderer* GetVegetationInstances() const;
-	MeshSetRenderer* GetRockInstances() const;
 };

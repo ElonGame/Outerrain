@@ -65,21 +65,17 @@ void MainWindow::GenerateTerrainFromSettings(bool gpu)
 
 void MainWindow::UpdateMeshRenderer()
 {
-	Material mat;
+	MaterialBase* mat = nullptr;
 	if (settings.shaderType == TerrainSplatmapMaterial)
-		mat = Material::TerrainSplatmapMaterialInstance;
+		mat = MaterialBase::TerrainSplatmapMaterialInstance;
 	if (settings.shaderType == DiffuseMaterial)
-		mat = Material::DiffuseMaterialInstance;
-	if (settings.shaderType == TexturedMaterial && hf != nullptr)
-	{
-		mat = Material::TexturedMaterialInstance;
-		glDeleteTextures(1, &mat.texture0);
-		mat.texture0 = hf->Slope().GetGLTexture(0);
-	}
+		mat = MaterialBase::DiffuseMaterialInstance;
+	if (settings.shaderType == SingleTexturedMaterial && hf != nullptr)
+		mat = MaterialBase::SingleTexturedMaterialInstance;
 	if (settings.shaderType == NormalMaterial)
-		mat = Material::NormalMaterialInstance;
+		mat = MaterialBase::NormalMaterialInstance;
 	if (settings.shaderType == WireframeMaterial)
-		mat = Material::WireframeMaterialInstance;
+		mat = MaterialBase::WireframeMaterialInstance;
 
 	// Only done once the first time
 	if (hierarchy.GetAllObjects().size() == 0)
@@ -93,23 +89,26 @@ void MainWindow::UpdateMeshRenderer()
 	}
 
 	hierarchy.GetObject(0)->GetComponent<HeightfieldMesh>()->UpdateMeshBuffers();
-	hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
+	if (mat != nullptr)
+		hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::UpdateMeshMaterial()
 {
-	Material mat;
+	MaterialBase* mat = nullptr;
 	if (settings.shaderType == TerrainSplatmapMaterial)
-		mat = Material::TerrainSplatmapMaterialInstance;
+		mat = MaterialBase::TerrainSplatmapMaterialInstance;
 	if (settings.shaderType == DiffuseMaterial)
-		mat = Material::DiffuseMaterialInstance;
-	if (settings.shaderType == TexturedMaterial)
-		mat = Material::TexturedMaterialInstance;
+		mat = MaterialBase::DiffuseMaterialInstance;
+	if (settings.shaderType == SingleTexturedMaterial)
+		mat = MaterialBase::SingleTexturedMaterialInstance;
 	if (settings.shaderType == NormalMaterial)
-		mat = Material::NormalMaterialInstance;
+		mat = MaterialBase::NormalMaterialInstance;
 	if (settings.shaderType == WireframeMaterial)
-		mat = Material::WireframeMaterialInstance;
-	hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
+		mat = MaterialBase::WireframeMaterialInstance;
+	
+	if (mat != nullptr)
+		hierarchy.GetObject(0)->GetComponent<MeshRenderer>()->SetMaterial(mat);
 }
 
 void MainWindow::ClearScene() 

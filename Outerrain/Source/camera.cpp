@@ -1,36 +1,36 @@
-#include "camera.h"
+#include "camera-base.h"
 
-Camera::Camera() : frameWidth(0), frameHeight(0), zNear(0.1f), zFar(5000.0f), fov(45.0f)
+CameraBase::CameraBase() : frameWidth(0), frameHeight(0), nearplane(0.1f), farplane(5000.0f), fov(45.0f)
 {
 }
 
-Camera::Camera(int width, int height, float near, float far, float f) : frameWidth(width), frameHeight(height), zNear(near), zFar(far), fov(f)
+CameraBase::CameraBase(int frameWidth, int frameHeight, float near, float far, float f) : frameWidth(frameWidth), frameHeight(frameHeight), nearplane(near), farplane(far), fov(f)
 {
 
 }
 
-void Camera::SetFrameWidth(int w)
+void CameraBase::SetFrameWidth(int w)
 {
 	frameWidth = w;
 }
 
-void Camera::SetFrameHeight(int h)
+void CameraBase::SetFrameHeight(int h)
 {
 	frameHeight = h;
 }
 
-int Camera::FrameWidth() const
+int CameraBase::FrameWidth() const
 {
 	return frameWidth;
 }
 
-int Camera::FrameHeight() const
+int CameraBase::FrameHeight() const
 {
 	return frameHeight;
 }
 
-void Camera::SetClippingPlanes(float n, float f)
+void CameraBase::SetClippingPlanes(float n, float f)
 {
-	zNear = n;
-	zFar = f;
+	nearplane = n;
+	farplane = f;
 }

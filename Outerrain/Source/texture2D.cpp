@@ -18,15 +18,15 @@ Texture2D::Texture2D(const std::string& filePath)
 	
 	const SDL_PixelFormat format = *tex->format;
 	data.resize(tex->h * tex->w);
-	width = tex->w;
-	height = tex->h;
+	frameWidth = tex->w;
+	frameHeight = tex->h;
 	bitsPerPixel = format.BitsPerPixel;
 	bytesPerPixel = format.BytesPerPixel;
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < frameHeight; y++)
 	{
 		int py = (tex->h - 1) - y;
 		Uint8* pixel = (Uint8*)tex->pixels + py * tex->pitch;
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < frameWidth; x++)
 		{
 			if (bitsPerPixel == 32)
 			{
@@ -75,8 +75,8 @@ Texture2D::Texture2D(const std::string& filePath)
 */
 Texture2D::Texture2D(int w, int h)
 {
-	width = w;
-	height = h;
+	frameWidth = w;
+	frameHeight = h;
 	data.resize(w * h);
 	bitsPerPixel = 32;
 }
@@ -96,7 +96,7 @@ Texture2D::~Texture2D()
 */
 void Texture2D::SetPixel(int x, int y, const Color& c)
 {
-	data[y * width + x] = c;
+	data[y * frameWidth + x] = c;
 }
 
 /*
@@ -106,7 +106,7 @@ void Texture2D::SetPixel(int x, int y, const Color& c)
 */
 Color Texture2D::Pixel(int x, int y) const
 {
-	return data[y * width + x];
+	return data[y * frameWidth + x];
 }
 
 /*
@@ -122,7 +122,7 @@ void* Texture2D::PixelBuffer() const
 */
 int Texture2D::Width() const
 {
-	return width;
+	return frameWidth;
 }
 
 /*
@@ -130,7 +130,7 @@ int Texture2D::Width() const
 */
 int Texture2D::Height() const
 {
-	return height;
+	return frameHeight;
 }
 
 /*
@@ -154,13 +154,13 @@ void Texture2D::Save(const std::string& filePath) const
 	}
 
 	// Creates the bytes vector
-	std::vector<Uint8> byteData(width * height * 4);
+	std::vector<Uint8> byteData(frameWidth * frameHeight * 4);
 	int byteArrayIndex = 0;
-	for (int y = 0; y < height; y++)
+	for (int y = 0; y < frameHeight; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < frameWidth; x++)
 		{
-			Color color = data[y * width + x];
+			Color color = data[y * frameWidth + x];
 			Uint8 r = (Uint8)Math::Min(std::floor(color.r * 255.f), 255.f);
 			Uint8 g = (Uint8)Math::Min(std::floor(color.g * 255.f), 255.f);
 			Uint8 b = (Uint8)Math::Min(std::floor(color.b * 255.f), 255.f);
@@ -176,7 +176,7 @@ void Texture2D::Save(const std::string& filePath) const
 
 	// Todo : support multiple pixel format
 	Uint32 format = SDL_PIXELFORMAT_RGBA32;
-	SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormatFrom(&byteData.front(), width, height, 32, width * 4, format);
+	SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormatFrom(&byteData.front(), frameWidth, frameHeight, 32, frameWidth * 4, format);
 	if (IMG_SavePNG(surface, filePath.c_str()) < 0)
 		std::cout << "Error : writing color image " << filePath << " : " << SDL_GetError() << std::endl;
 	SDL_FreeSurface(surface);
@@ -229,7 +229,7 @@ GLuint Texture2D::GetGLTexture(int unit, bool mipmap) const
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, texelType, width, height, 0, GL_RGBA, GL_FLOAT, PixelBuffer());
+	glTexImage2D(GL_TEXTURE_2D, 0, texelType, frameWidth, frameHeight, 0, GL_RGBA, GL_FLOAT, PixelBuffer());
 	if (mipmap)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	return texture;
