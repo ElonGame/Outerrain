@@ -151,7 +151,7 @@ float ScalarField2D::Average() const
 	float ret = 0.0f;
 	for (unsigned int i = 0; i < values.size(); i++)
 		ret += values[i];
-	return ret / static_cast<float>(values.size());
+	return ret / float(values.size());
 }
 
 /*
@@ -266,11 +266,11 @@ void ScalarField2D::ReadFromImage(const std::string& filePath, float blackValue,
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			float u = j / (static_cast<float>(nx - 1));
-			float v = i / (static_cast<float>(ny - 1));
+			float u = j / float(nx - 1);
+			float v = i / float(ny - 1);
 
-			int anchorX = static_cast<int>((u * (grayscaleTex.Width() - 1)));
-			int anchorY = static_cast<int>((v * (grayscaleTex.GetValueBilinear() - 1)));
+			int anchorX = int((u * (grayscaleTex.Width() - 1)));
+			int anchorY = int((v * (grayscaleTex.GetValueBilinear() - 1)));
 			if (anchorX == grayscaleTex.Width() - 1)
 				anchorX--;
 			if (anchorY == grayscaleTex.GetValueBilinear() - 1)

@@ -127,8 +127,8 @@ public:
 		Vector2 q = p - box.Vertex(0);
 		Vector2 d = box.Vertex(1) - box.Vertex(0);
 
-		float texelX = 1.0f / (static_cast<float>(nx - 1));
-		float texelY = 1.0f / (static_cast<float>(ny - 1));
+		float texelX = 1.0f / float(nx - 1);
+		float texelY = 1.0f / float(ny - 1);
 
 		float u = q[0] / d[0];
 		float v = q[1] / d[1];

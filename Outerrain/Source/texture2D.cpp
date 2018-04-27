@@ -30,10 +30,10 @@ Texture2D::Texture2D(const std::string& filePath)
 		{
 			if (bitsPerPixel == 32)
 			{
-				float r = static_cast<float>(pixel[format.Rshift / 8]);
-				float g = static_cast<float>(pixel[format.Gshift / 8]);
-				float b = static_cast<float>(pixel[format.Bshift / 8]);
-				float a = static_cast<float>(pixel[format.Ashift / 8]);
+				float r = float(pixel[format.Rshift / 8]);
+				float g = float(pixel[format.Gshift / 8]);
+				float b = float(pixel[format.Bshift / 8]);
+				float a = float(pixel[format.Ashift / 8]);
 
 				int index = y * tex->w + x;
 				data[index] = Color(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
@@ -41,9 +41,9 @@ Texture2D::Texture2D(const std::string& filePath)
 			}
 			else if (bitsPerPixel == 24)
 			{
-				float r = static_cast<float>(pixel[format.Rshift / 8]);
-				float g = static_cast<float>(pixel[format.Gshift / 8]);
-				float b = static_cast<float>(pixel[format.Bshift / 8]);
+				float r = float(pixel[format.Rshift / 8]);
+				float g = float(pixel[format.Gshift / 8]);
+				float b = float(pixel[format.Bshift / 8]);
 
 				int index = y * tex->w + x;
 				data[index] = Color(r / 255.f, g / 255.f, b / 255.f);
@@ -51,8 +51,8 @@ Texture2D::Texture2D(const std::string& filePath)
 			}
 			else if (bitsPerPixel == 16)
 			{
-				float r = static_cast<float>(pixel[format.Rshift / 8]);
-				float g = static_cast<float>(pixel[format.Gshift / 8]);
+				float r = float(pixel[format.Rshift / 8]);
+				float g = float(pixel[format.Gshift / 8]);
 
 				int index = y * tex->w + x;
 				data[index] = Color(r / 255.f, g / 255.f, 0.0f);
@@ -60,7 +60,7 @@ Texture2D::Texture2D(const std::string& filePath)
 			}
 			else if (bitsPerPixel == 8)
 			{
-				float r = static_cast<float>(pixel[format.Rshift / 8]);
+				float r = float(pixel[format.Rshift / 8]);
 				int index = y * tex->w + x;
 				data[index] = Color(r / 255.f, r / 255.f, r / 255.f);
 				pixel += bytesPerPixel;

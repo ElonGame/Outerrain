@@ -11,10 +11,10 @@ float Time::GlobalTime()
         now = last_time + 1;
     last_delta = now - last_time;
     last_time = now;
-    return static_cast<float>(last_time);
+    return float(last_time);
 }
 
 float Time::DeltaTime()
 {
-    return static_cast<float>(last_delta);
+    return float(last_delta);
 }

@@ -69,8 +69,8 @@ void MainWindow::Update()
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
-	float mxF = static_cast<float>(mx);
-	float myF = static_cast<float>(my);
+	float mxF = float(mx);
+	float myF = float(my);
 	if (mb & SDL_BUTTON(1) && mainWindowHandler->KeyState(SDLK_LCTRL))
 		orbiter.Rotation(mxF, myF);
 	if (mainWindowHandler->WheelEvent().y != 0)

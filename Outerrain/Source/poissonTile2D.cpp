@@ -21,8 +21,8 @@ void PoissonTile2D::Generate()
 	while (i < maxTries)
 	{
 		// Get random sample point
-		float randX = Random::get() / static_cast<float>(Random::max());
-		float randY = Random::get() / static_cast<float>(Random::max());
+		float randX = Random::get() / float(Random::max());
+		float randY = Random::get() / float(Random::max());
 		Vector2 point = Vector2(randX * tileSize, randY * tileSize);
 		i++;
 

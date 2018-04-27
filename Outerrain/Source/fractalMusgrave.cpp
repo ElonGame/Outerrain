@@ -14,7 +14,7 @@ static void InitExponentArrays(float lacunarity, float octaves, float H)
 	delete exponent_array;
 
 	float frequency;
-	exponent_array = new float[static_cast<int>(octaves) + 1];
+	exponent_array = new float[int(octaves) + 1];
 	frequency = 1.0;
 	for (int i = 0; i <= octaves; i++)
 	{
@@ -47,7 +47,7 @@ float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunar
 		point.z *= lacunarity;
 	}
 
-	float remainder = octaves - static_cast<int>(octaves);
+	float remainder = octaves - int(octaves);
 	if (remainder)
 		value += remainder * n.GetValue(point) * exponent_array[i];
 	return value;
@@ -99,7 +99,7 @@ float Fractal::MusgraveHeteroTerrain(const Noise& n, Vector3 point, float H, flo
 	}
 
 	/* take care of remainder in ``octaves''  */
-	float remainder = octaves - static_cast<int>(octaves);
+	float remainder = octaves - int(octaves);
 	if (remainder)
 	{
 		increment = (n.GetValue(point) + offset) * exponent_array[i];
@@ -155,7 +155,7 @@ float Fractal::MusgraveHybridMultifractal(const Noise& n, Vector3 point, float H
 	}
 
 	/* take care of remainder in ``octaves''  */
-	float remainder = octaves - static_cast<int>(octaves);
+	float remainder = octaves - int(octaves);
 	if (remainder)
 		result += remainder * n.GetValue(point) * exponent_array[i];
 	return result;

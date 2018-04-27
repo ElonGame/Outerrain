@@ -22,7 +22,7 @@ void MainWindow::ThermalErosionStep()
 
 	auto cpu_stop = std::chrono::high_resolution_clock::now();
 	long long int cpu_time = std::chrono::duration_cast<std::chrono::nanoseconds>(cpu_stop - cpu_start).count();
-	std::cout << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us" << std::endl;
+	std::cout << "CPU " << int((cpu_time / 1000000)) << "ms" << int(((cpu_time / 1000) % 1000)) << "us" << std::endl;
 
 	UpdateMeshRenderer();
 }
@@ -39,7 +39,7 @@ void MainWindow::TranslateNoise(int y, int x)
 {
 	if (settings.terrainType != TerrainType::NoiseFieldTerrain)
 		return;
-	settings.offsetVector = settings.offsetVector + Vector3(static_cast<float>(x), 0.0f, static_cast<float>(y));
+	settings.offsetVector = settings.offsetVector + Vector3(float(x), 0.0f, float(y));
 	hf->InitFromNoise(*settings.noise, settings.amplitude, settings.frequency, settings.octaves, settings.offsetVector, settings.fractalType);
 	UpdateMeshRenderer();
 }

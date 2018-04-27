@@ -426,13 +426,13 @@ ScalarField2D HeightField::Illumination() const
 			for (int k = 0; k < rayCount; k++)
 			{
 				float angleH = (Random::get() % 360) * 0.0174533f;
-				float angleV = Random::get() / static_cast<float>(Random::max());
+				float angleV = Random::get() / float(Random::max());
 				Vector3 rayDir = Vector3(cos(angleH), 0.0f, sin(angleH));
 				rayDir = Slerp(rayDir, Vector3(0.0f, 1.0f, 0.0f), angleV);
 				if (Intersect(Ray(rayPos, rayDir), rayHit, K) == true)
 					intersectionCount++;
 			}
-			Illu.Set(i, j, 1.0f - (intersectionCount / static_cast<float>(rayCount)));
+			Illu.Set(i, j, 1.0f - (intersectionCount / float(rayCount)));
 		}
 	}
 	return Illu;

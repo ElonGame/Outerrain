@@ -33,8 +33,8 @@ void AppStatistics::StopClock(std::stringstream& cpuStream, std::stringstream& g
 
 	cpuStream.str("");
 	gpuStream.str("");
-	cpuStream << "CPU " << static_cast<int>((cpu_time / 1000000)) << "ms" << static_cast<int>(((cpu_time / 1000) % 1000)) << "us";
-	gpuStream << "GPU " << static_cast<int>((gpu_time / 1000000)) << "ms" << static_cast<int>(((gpu_time / 1000) % 1000)) << "us";
+	cpuStream << "CPU " << int((cpu_time / 1000000)) << "ms" << int(((cpu_time / 1000) % 1000)) << "us";
+	gpuStream << "GPU " << int((gpu_time / 1000000)) << "ms" << int(((gpu_time / 1000) % 1000)) << "us";
 }
 
 void AppStatistics::Release()

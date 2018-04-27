@@ -33,7 +33,7 @@ public:
 	float x, y;
 
 	explicit Vector2() : x(0.0), y(0.0) { }
-	explicit Vector2(const Vector2i& v) : x(static_cast<float>(v.x)), y(static_cast<float>(v.y)) { }
+	explicit Vector2(const Vector2i& v) : x(float(v.x)), y(float(v.y)) { }
 	explicit Vector2(float n) : x(n), y(n) { }
 	explicit Vector2(float x, float y) : x(x), y(y) { }
 

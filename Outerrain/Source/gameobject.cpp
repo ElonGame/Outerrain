@@ -163,7 +163,7 @@ void GameObject::LookAt(const Vector3& destPoint)
 		return;
 	}
 
-	float rotAngle = static_cast<float>(acos(dotValue));
+	float rotAngle = float(acos(dotValue));
 	Vector3 rotAxis = Cross(GetForwardVector(), newForward);
 	rotAxis = Normalize(rotAxis);
 	RotateAroundRadian(rotAxis, -rotAngle);
@@ -188,7 +188,7 @@ void GameObject::LookAtUpVector(const Vector3& destPoint)
 		return;
 	}
 
-	float rotAngle = static_cast<float>(acos(dotValue));
+	float rotAngle = float(acos(dotValue));
 	Vector3 rotAxis = Cross(-GetUpVector(), newForward);
 	rotAxis = Normalize(rotAxis);
 	RotateAroundRadian(rotAxis, -rotAngle);
