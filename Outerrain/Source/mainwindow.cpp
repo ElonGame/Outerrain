@@ -86,20 +86,17 @@ void MainWindow::Update()
 	if (mainWindowHandler->KeyState(SDLK_F3))
 		HydraulicErosionStep();
 
-	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL))
+	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL) && mainWindowHandler->KeyState(SDLK_LSHIFT))
 	{
-		//SDL_GetMouseState(&mx, &my);
-		//Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
-		//Hit hit;
-		////std::cout << "Pixel : " << mx << ", " << my << std::endl;
-		//std::cout << "Ray : " << ray << std::endl;
-		//if (hf->Intersect(ray, hit))
-		//{
-		//	Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
-		//	hf->Add(v.x, v.y, 50.0);
-		//	UpdateMeshRenderer();
-		//	std::cout << "Hit : " << hit << std::endl;
-		//}
+		SDL_GetMouseState(&mx, &my);
+		Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
+		std::cout << "Ray : " << ray << std::endl;
+		Box b = hierarchy.GetObject(0)->GetComponent<Mesh>()->GetBounds();
+		float tmin, tmax;
+		if (b.Intersect(ray, tmin, tmax))
+		{
+			AddCube(ray.At(tmin), 0.2);
+		}
 	}
 
 	/* Example Scenes */

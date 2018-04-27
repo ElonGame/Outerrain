@@ -24,6 +24,7 @@ private:
 	TerrainSettings settings;
 
 	/* Example scenes */
+	void AddCube(const Vector3& p = Vector3(0), float s = 1.0);
 	void Heightfield1Scene();
 	void Heightfield2Scene();
 	void NoiseField1Scene();

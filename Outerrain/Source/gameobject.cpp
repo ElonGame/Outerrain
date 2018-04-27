@@ -126,9 +126,7 @@ void GameObject::SetRotation(TQuaternion<float, Vector3> quat)
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
-		{
 			rotation.m[i][j] = temp[i * 4 + j];
-		}
 	}
 	MarkTransformAsChanged();
 }
@@ -159,9 +157,7 @@ void GameObject::LookAt(const Vector3& destPoint)
 	}
 
 	if (abs(dotValue - 1.0f) < 0.000001f)
-	{
 		return;
-	}
 
 	float rotAngle = float(acos(dotValue));
 	Vector3 rotAxis = Cross(GetForwardVector(), newForward);

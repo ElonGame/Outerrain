@@ -3,11 +3,21 @@
 
 DirectionnalLight MainWindow::sceneLight = DirectionnalLight(Vector3(0.707f, -0.707f, 0.0f), Color(1.0f, 1.0f, 1.0f), Color(0.1, 0.1f, 0.1f), 0.8f);
 
+void MainWindow::AddCube(const Vector3& p, float s)
+{
+	GameObject* obj = new GameObject();
+	obj->AddComponent(new Mesh("Data/Objs/cube.obj"));
+	obj->AddComponent(new MeshRenderer(obj->GetComponent<Mesh>(), MaterialBase::DiffuseMaterialInstance));
+	obj->SetPosition(p);
+	obj->SetScale(Vector3(s));
+	hierarchy.AddObject(obj);
+}
+
 void MainWindow::InitBasicTerrain()
 {
 	ClearScene();
 
-	settings.terrainType = TerrainType::NoiseFieldTerrain;
+	/*settings.terrainType = TerrainType::NoiseFieldTerrain;
 	settings.resolution = 128;
 	settings.bottomLeft = Vector2(-2048, -2048);
 	settings.topRight = Vector2(2048, 2048);
@@ -20,7 +30,9 @@ void MainWindow::InitBasicTerrain()
 	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 
 	GenerateTerrainFromSettings();
-	UpdateMeshRenderer();
+	UpdateMeshRenderer();*/
+
+	AddCube(Vector3(0));
 }
 
 void MainWindow::InitGPUTerrain()
