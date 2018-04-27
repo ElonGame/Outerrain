@@ -1,15 +1,15 @@
 #pragma once
 #include "mesh.h"
 
-class Heightfield;
+class HeightField;
 
 class HeightfieldMesh : public Mesh
 {
 protected:
-	Heightfield* hf;
+	HeightField* hf;
 
 public:
-	HeightfieldMesh(Heightfield* h);
+	HeightfieldMesh(HeightField* h);
 
 	void UpdateMeshBuffers();
 };

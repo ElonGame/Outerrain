@@ -21,7 +21,7 @@ Can be rendered using GetMesh() and GetVoxelFrames()
 /*
 \brief Default constructor. Call Scalarfield2D default constructor.
 */
-Heightfield::Heightfield() : Scalarfield2D()
+HeightField::HeightField() : ScalarField2D()
 {
 }
 
@@ -32,7 +32,7 @@ Heightfield::Heightfield() : Scalarfield2D()
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(int nx, int ny, const Box2D& bbox) : Scalarfield2D(nx, ny, bbox)
+HeightField::HeightField(int nx, int ny, const Box2D& bbox) : ScalarField2D(nx, ny, bbox)
 {
 }
 
@@ -44,7 +44,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox) : Scalarfield2D(nx, 
 \param topRight top right vertex world coordinates
 \param value default value for the field
 */
-Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, float value) : Scalarfield2D(nx, ny, bbox, value)
+HeightField::HeightField(int nx, int ny, const Box2D& bbox, float value) : ScalarField2D(nx, ny, bbox, value)
 {
 
 }
@@ -57,7 +57,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, float value) : Scala
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : Scalarfield2D(file, minAlt, maxAlt, nx, ny, bbox)
+HeightField::HeightField(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : ScalarField2D(file, minAlt, maxAlt, nx, ny, bbox)
 {
 }
 
@@ -72,7 +72,7 @@ Heightfield::Heightfield(const std::string& file, float minAlt, float maxAlt, in
 \param oct noise octave count
 \param type fractal type. See enum.
 */
-Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Scalarfield2D(nx, ny, bbox)
+HeightField::HeightField(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : ScalarField2D(nx, ny, bbox)
 {
 	InitFromNoise(n, amplitude, freq, oct, Vector3(0), type);
 }
@@ -89,7 +89,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, floa
 \param offset noise offset vector
 \param type fractal type. See enum.
 */
-Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Scalarfield2D(nx, ny, bbox)
+HeightField::HeightField(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : ScalarField2D(nx, ny, bbox)
 {
 	InitFromNoise(n, amplitude, freq, oct, offset, type);
 }
@@ -98,7 +98,7 @@ Heightfield::Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, floa
 \brief Constructor from TerrainSettings class for convenience and consistancy.
 \param settings TerrainSettings for the heightfield.
 */
-Heightfield::Heightfield(const TerrainSettings& settings) : Scalarfield2D(settings.resolution, settings.resolution, Box2D(settings.bottomLeft, settings.topRight))
+HeightField::HeightField(const TerrainSettings& settings) : ScalarField2D(settings.resolution, settings.resolution, Box2D(settings.bottomLeft, settings.topRight))
 {
 	if (settings.terrainType == TerrainType::HeightFieldTerrain)
 		ReadFromImage(settings.filePath.c_str(), settings.minAltitude, settings.maxAltitude);
@@ -115,7 +115,7 @@ Heightfield::Heightfield(const TerrainSettings& settings) : Scalarfield2D(settin
 \param offset noise offset translation
 \param type noise fractal type.
 */
-void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type)
+void HeightField::InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type)
 {
 	for (int i = 0; i < ny; i++)
 	{
@@ -143,7 +143,7 @@ void Heightfield::InitFromNoise(const Noise& n, float amplitude, float freq, int
 /*
 \brief Destructor
 */
-Heightfield::~Heightfield()
+HeightField::~HeightField()
 {
 }
 
@@ -151,7 +151,7 @@ Heightfield::~Heightfield()
 \brief Perform a thermal erosion step with maximum amplitude defined by user. Based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8939&rep=rep1&type=pdf.
 \param amplitude maximum amount of matter moved from one point to another. Something between [0.05, 0.1] gives plausible results.
 */
-void Heightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
+void HeightField::ThermalWeathering(float amplitude, float tanThresholdAngle)
 {
 	float cellDistX = CellSize().x;
 	for (int i = 0; i < ny; i++)
@@ -159,7 +159,8 @@ void Heightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 		for (int j = 0; j < nx; j++)
 		{
 			float maxZDiff = 0.0f;
-			int neiI, neiJ;
+			int neiI = -1;
+			int neiJ = -1;
 			for (int k = -1; k <= 1; k++)
 			{
 				for (int l = -1; l <= 1; l++)
@@ -176,7 +177,7 @@ void Heightfield::ThermalWeathering(float amplitude, float tanThresholdAngle)
 				}
 			}
 
-			if (maxZDiff / cellDistX > tanThresholdAngle)
+			if (neiI != -1 && maxZDiff / cellDistX > tanThresholdAngle)
 			{
 				Remove(i, j, amplitude);
 				Add(neiI, neiJ, amplitude);
@@ -192,9 +193,9 @@ and generally unrealistic height sometimes. Therefore it can be improved by chec
 
 \param amplitude maximum amount of matter eroded in one step. Something between [0.5, 1.0] gives plausible results.
 */
-void Heightfield::StreamPowerErosion(float amplitude)
+void HeightField::StreamPowerErosion(float amplitude)
 {
-	Scalarfield2D SP = StreamPower();
+	ScalarField2D SP = StreamPower();
 	SP.NormalizeField();
 	for (int i = 0; i < ny; i++)
 	{
@@ -212,10 +213,10 @@ using namespace std;
 /*
 \brief
 */
-void Heightfield::HydraulicErosion()
+void HeightField::HydraulicErosion()
 {
-	Scalarfield2D droplets(nx, ny, box, 1.0f);
-	Scalarfield2D sediments(nx, ny, box, 1.0f);
+	ScalarField2D droplets(nx, ny, box, 1.0f);
+	ScalarField2D sediments(nx, ny, box, 1.0f);
 
 	const float Kd = 0.1f;
 	const float Kc = 5.0f;
@@ -309,7 +310,7 @@ void Heightfield::HydraulicErosion()
 /*
 \brief Compute the Drainage Area field.
 */
-Scalarfield2D Heightfield::DrainageArea() const
+ScalarField2D HeightField::DrainageArea() const
 {
 	// Sort all point by decreasing height
 	std::deque<ScalarValue> points;
@@ -322,7 +323,7 @@ Scalarfield2D Heightfield::DrainageArea() const
 
 	std::array<float, 8> slopes;
 	std::array<Vector2i, 8> coords;
-	Scalarfield2D DA = Scalarfield2D(nx, ny, box, 1.0);
+	ScalarField2D DA = ScalarField2D(nx, ny, box, 1.0);
 	while (!points.empty())
 	{
 		ScalarValue p = points.front();
@@ -365,9 +366,9 @@ Scalarfield2D Heightfield::DrainageArea() const
 /*
 \brief Compute the slope field, ie Norm(Gradient(i, j)).
 */
-Scalarfield2D Heightfield::Slope() const
+ScalarField2D HeightField::Slope() const
 {
-	Scalarfield2D S = Scalarfield2D(nx, ny, box);
+	ScalarField2D S = ScalarField2D(nx, ny, box);
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -379,10 +380,10 @@ Scalarfield2D Heightfield::Slope() const
 /*
 \brief Compute the Wetness Index Field.
 */
-Scalarfield2D Heightfield::Wetness() const
+ScalarField2D HeightField::Wetness() const
 {
-	Scalarfield2D DA = DrainageArea();
-	Scalarfield2D S = Slope();
+	ScalarField2D DA = DrainageArea();
+	ScalarField2D S = Slope();
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -394,10 +395,10 @@ Scalarfield2D Heightfield::Wetness() const
 /*
 \brief Compute the StreamPower field, as described by http://geosci.uchicago.edu/~kite/doc/Whipple_and_Tucker_1999.pdf.
 */
-Scalarfield2D Heightfield::StreamPower() const
+ScalarField2D HeightField::StreamPower() const
 {
-	Scalarfield2D DA = DrainageArea();
-	Scalarfield2D S = Slope();
+	ScalarField2D DA = DrainageArea();
+	ScalarField2D S = Slope();
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -409,21 +410,19 @@ Scalarfield2D Heightfield::StreamPower() const
 /*
 \brief Compute the 'Illumination' field, which is basically an approximation of Ambient Occlusion.
 */
-Scalarfield2D Heightfield::Illumination() const
+ScalarField2D HeightField::Illumination() const
 {
 	const int rayCount = 32;		// Ray count for each world point
 	const float epsilon = 0.01f;	// Ray start up offset
 	const float K = Slope().Max();	// Lipschitz constant
-	Scalarfield2D Illu = Scalarfield2D(nx, ny, box);
+	ScalarField2D Illu = ScalarField2D(nx, ny, box);
 	Hit rayHit;
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
 			Vector3 rayPos = Vertex(i, j) + Vector3(0.0, epsilon, 0.0);
-			float h = Get(i, j);
 			int intersectionCount = 0;
-
 			for (int k = 0; k < rayCount; k++)
 			{
 				float angleH = (Random::get() % 360) * 0.0174533f;
@@ -446,7 +445,7 @@ Scalarfield2D Heightfield::Illumination() const
 \param K Lipschitz Constant
 \return true of intersection occured, false otherwise
 */
-bool Heightfield::Intersect(const Ray& ray, Hit& hit, float K) const
+bool HeightField::Intersect(const Ray& ray, Hit& hit, float K) const
 {
 	Box bbox = GetBox().ToBox(Min(), Max());
 	float a, b;
@@ -477,7 +476,7 @@ Lipschitz constant is defined as the maximum slope
 \param hit returned hit
 \return true of intersection occured, false otherwise
 */
-bool Heightfield::Intersect(const Ray& ray, Hit& hit) const
+bool HeightField::Intersect(const Ray& ray, Hit& hit) const
 {
 	return Intersect(ray, hit, Slope().Max());
 }
@@ -491,7 +490,7 @@ Lipschitz constant is defined as the maximum slope
 \param hitNormal returned hit normal
 \return true of intersection occured, false otherwise
 */
-bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const
+bool HeightField::Intersect(const Vector3& origin, const Vector3& direction, Vector3& hitPos, Vector3& hitNormal) const
 {
 	Hit hit;
 	bool res = Intersect(Ray(origin, direction), hit, Slope().Max());
@@ -503,7 +502,7 @@ bool Heightfield::Intersect(const Vector3& origin, const Vector3& direction, Vec
 /*
 \brief
 */
-std::vector<Frame> Heightfield::GetVoxelFrames() const
+std::vector<Frame> HeightField::GetVoxelFrames() const
 {
 	std::vector<Frame> ret;
 	for (int i = 0; i < ny; i++)
@@ -521,7 +520,7 @@ std::vector<Frame> Heightfield::GetVoxelFrames() const
 /*
 \brief Compute the heightfield mesh for rendering
 */
-Mesh* Heightfield::GetMesh() const
+Mesh* HeightField::GetMesh() const
 {
 	Mesh* ret = new Mesh();
 	ValueField<Vector3> normals = ValueField<Vector3>(nx, ny, box, Vector3(0));

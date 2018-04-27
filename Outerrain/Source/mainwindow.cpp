@@ -45,7 +45,7 @@ void MainWindow::Init()
 	MaterialBase::InitStaticMaterials();
 
 	orbiter.SetFrameWidth(mainWindowHandler->Width());
-	orbiter.SetFrameHeight(mainWindowHandler->Height());
+	orbiter.SetFrameHeight(mainWindowHandler->GetValueBilinear());
 	orbiter.SetClippingPlanes(0.1f, 10000.0f);
 
 	InitBasicTerrain();
@@ -58,14 +58,14 @@ void MainWindow::MainLoop()
 	{
 		ImGui_OpenGL_NewFrame(mainWindowHandler->GetSDLWindow());
 		AppStatistics::StartClock();
-		Update(Time::GlobalTime(), Time::DeltaTime());
+		Update();
 		Render();
 		mainWindowHandler->SwapWindow();
 	}
 	Quit();
 }
 
-void MainWindow::Update(float time, float deltaTime)
+void MainWindow::Update()
 {
 	int mx, my;
 	unsigned int mb = SDL_GetRelativeMouseState(&mx, &my);
@@ -76,7 +76,7 @@ void MainWindow::Update(float time, float deltaTime)
 	if (mainWindowHandler->WheelEvent().y != 0)
 		orbiter.Move(mainWindowHandler->WheelEvent().y * 10.0f);
 	if (mb & SDL_BUTTON(2))
-		orbiter.Translation(mxF / mainWindowHandler->Width(), myF / mainWindowHandler->Height());
+		orbiter.Translation(mxF / mainWindowHandler->Width(), myF / mainWindowHandler->GetValueBilinear());
 
 	/* Erosion Callbacks */
 	if (mainWindowHandler->KeyState(SDLK_F1))
@@ -88,18 +88,18 @@ void MainWindow::Update(float time, float deltaTime)
 
 	if (mainWindowHandler->ButtonEvent().button == SDL_BUTTON_LEFT && mainWindowHandler->KeyState(SDLK_LCTRL))
 	{
-		SDL_GetMouseState(&mx, &my);
-		Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
-		Hit hit;
-		//std::cout << "Pixel : " << mx << ", " << my << std::endl;
-		std::cout << "Ray : " << ray << std::endl;
-		if (hf->Intersect(ray, hit))
-		{
-			Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
-			hf->Add(v.x, v.y, 50.0);
-			UpdateMeshRenderer();
-			std::cout << "Hit : " << hit << std::endl;
-		}
+		//SDL_GetMouseState(&mx, &my);
+		//Ray ray = orbiter.PixelToRay(Vector2i(mx, my));
+		//Hit hit;
+		////std::cout << "Pixel : " << mx << ", " << my << std::endl;
+		//std::cout << "Ray : " << ray << std::endl;
+		//if (hf->Intersect(ray, hit))
+		//{
+		//	Vector2i v = hf->ToIndex2D(Vector2(hit.position.x, hit.position.z));
+		//	hf->Add(v.x, v.y, 50.0);
+		//	UpdateMeshRenderer();
+		//	std::cout << "Hit : " << hit << std::endl;
+		//}
 	}
 
 	/* Example Scenes */
@@ -107,10 +107,6 @@ void MainWindow::Update(float time, float deltaTime)
 		InitBasicTerrain();
 	if (mainWindowHandler->KeyState(SDLK_F9))
 		InitGPUTerrain();
-
-	/* LayerField Callbacks */
-	if (mainWindowHandler->KeyState(SDLK_F4))
-		LightingImpact();
 
 	/* Noise Callbacks */
 	int offset = 10;

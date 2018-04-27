@@ -14,6 +14,6 @@ public:
 	static void StopClock(std::stringstream& cpuStream, std::stringstream& gpuStream);
 	static void Release();
 
-	static unsigned int vertexCount;
-	static unsigned int triangleCount;
+	static size_t vertexCount;
+	static size_t triangleCount;
 };

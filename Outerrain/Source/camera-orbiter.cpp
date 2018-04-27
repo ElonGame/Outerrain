@@ -73,7 +73,8 @@ Ray CameraOrbiter::PixelToRay(const Vector2i& pixel)
 
 Vector2i CameraOrbiter::VectorToPixel(const Vector3& worldPoint)
 {
-	return Vector2i(0);
+	Vector2i ret = Vector2i(int(worldPoint.x), int(worldPoint.y));
+	return ret;
 }
 
 void CameraOrbiter::Rotation(float x, float y)
@@ -105,11 +106,11 @@ Transform CameraOrbiter::Projection() const
 	return Perspective(fov, (float)frameWidth / (float)frameHeight, nearplane, farplane);
 }
 
-void CameraOrbiter::Frame(float frameWidth, float frameHeight, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const
+void CameraOrbiter::Frame(float fWidth, float fHeight, float z, Vector3& dO, Vector3& dx, Vector3& dy) const
 {
 	Transform v = ViewDirection();
 	Transform p = Projection();
-	Transform viewport = Viewport(frameWidth, frameHeight);
+	Transform viewport = Viewport(fWidth, fHeight);
 	Transform t = viewport * p * v;              // passage monde vers image
 	Transform tinv = t.Inverse();                // l'inverse, passage image vers monde
 

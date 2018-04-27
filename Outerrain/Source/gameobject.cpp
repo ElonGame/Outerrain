@@ -65,9 +65,9 @@ GameObject* GameObject::GetChildAt(int i) const
 	return children[i];
 }
 
-void GameObject::SetParent(GameObject* parent)
+void GameObject::SetParent(GameObject* p)
 {
-	parent = parent;
+	parent = p;
 }
 
 GameObject* GameObject::GetParent() const

@@ -235,7 +235,7 @@ Angle is in radian.
 
 \param w, h Width and height of the screen
 */
-float CameraStandard::GetAngleOfViewH(float w, float h) const
+float CameraStandard::GetAngleOfViewH() const
 {
 	// Calcul de param�tres de cam�ras (A garder)
 	// http://www.scratchapixel.com/lessons/3d-advanced-lessons/CameraBiss-advanced-techniques/film-aperture-focal-length/
@@ -254,7 +254,7 @@ Angle is in radian.
 float CameraStandard::GetAngleOfViewV(float w, float h) const
 {
 	// Horizontal angle of view  
-	float avh = GetAngleOfViewH(w, h);
+	float avh = GetAngleOfViewH();
 
 	float avv = 2.0*atan(tan(avh / 2.0)*float(h) / float(w));
 

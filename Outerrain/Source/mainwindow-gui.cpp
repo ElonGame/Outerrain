@@ -4,7 +4,7 @@
 #include "app-stats.h"
 
 
-static std::string PrettyFormatNumbers(int number)
+static std::string PrettyFormatNumbers(size_t number)
 {
 	auto str = std::to_string(number);
 	size_t charCount = str.size();

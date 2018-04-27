@@ -42,7 +42,7 @@ public:
 	}
 
 	TerrainSettings(int N, const Vector2& bLeft, const Vector2& tRight, float A, float F, int O, const Vector3& o, FractalType t, Noise* n) 
-					: resolution(N), bottomLeft(bLeft), topRight(tRight), amplitude(A), frequency(F), octaves(0), offsetVector(o), fractalType(t), noise(n)
+					: resolution(N), bottomLeft(bLeft), topRight(tRight), amplitude(A), frequency(F), octaves(O), offsetVector(o), fractalType(t), noise(n)
 	{
 		terrainType = NoiseFieldTerrain;
 	}

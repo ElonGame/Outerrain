@@ -128,7 +128,7 @@ int Texture2D::Width() const
 /*
 \brief Get texture height.
 */
-int Texture2D::Height() const
+int Texture2D::GetValueBilinear() const
 {
 	return frameHeight;
 }

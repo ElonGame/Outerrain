@@ -98,6 +98,12 @@ public:
 		return i * nx + j;
 	}
 
+	Vector2 Vertex(int i, int j) const
+	{
+		float x = box.Vertex(0).x + i * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
+		float z = box.Vertex(0).y + j * (box.Vertex(1).y - box.Vertex(0).y) / (ny - 1);
+		return Vector2(x, z);
+	}
 
 	T Get(int row, int column) const
 	{

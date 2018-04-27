@@ -4,7 +4,7 @@
 /*
 \brief Constructor
 */
-GPUHeightfield::GPUHeightfield() : Heightfield()
+GPUHeightfield::GPUHeightfield() : HeightField()
 {
 	InitGPUPrograms();
 }
@@ -16,7 +16,7 @@ GPUHeightfield::GPUHeightfield() : Heightfield()
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox) : Heightfield(nx, ny, bbox)
+GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox) : HeightField(nx, ny, bbox)
 {
 	InitGPUPrograms();
 }
@@ -29,7 +29,7 @@ GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox) : Heightfield(
 \param topRight top right vertex world coordinates
 \param value default value for the field
 */
-GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, float value) : Heightfield(nx, ny, bbox, value)
+GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, float value) : HeightField(nx, ny, bbox, value)
 {
 	InitGPUPrograms();
 }
@@ -42,7 +42,7 @@ GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, float value) :
 \param bottomLeft bottom left vertex world coordinates
 \param topRight top right vertex world coordinates
 */
-GPUHeightfield::GPUHeightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : Heightfield(file, minAlt, maxAlt, nx, ny, bbox)
+GPUHeightfield::GPUHeightfield(const std::string& file, float minAlt, float maxAlt, int nx, int ny, const Box2D& bbox) : HeightField(file, minAlt, maxAlt, nx, ny, bbox)
 {
 	InitGPUPrograms();
 }
@@ -58,7 +58,7 @@ GPUHeightfield::GPUHeightfield(const std::string& file, float minAlt, float maxA
 \param oct noise octave count
 \param type fractal type. See enum.
 */
-GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : Heightfield(nx, ny, bbox, n, amplitude, freq, oct, type)
+GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type) : HeightField(nx, ny, bbox, n, amplitude, freq, oct, type)
 {
 	InitGPUPrograms();
 }
@@ -75,7 +75,7 @@ GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n
 \param offset noise offset vector
 \param type fractal type. See enum.
 */
-GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : Heightfield(nx, ny, bbox, n, amplitude, freq, oct, offset, type)
+GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type) : HeightField(nx, ny, bbox, n, amplitude, freq, oct, offset, type)
 {
 	InitGPUPrograms();
 }
@@ -84,7 +84,7 @@ GPUHeightfield::GPUHeightfield(int nx, int ny, const Box2D& bbox, const Noise& n
 \brief Constructor from TerrainSettings class for convenience and consistancy.
 \param settings TerrainSettings for the heightfield.
 */
-GPUHeightfield::GPUHeightfield(const TerrainSettings& settings) : Heightfield(settings)
+GPUHeightfield::GPUHeightfield(const TerrainSettings& settings) : HeightField(settings)
 {
 	InitGPUPrograms();
 }
@@ -110,7 +110,7 @@ void GPUHeightfield::InitGPUPrograms()
 	GLuint computeShaderProgram = computeShader.GetProgram();
 	GLint threads[3] = {};
 	glGetProgramiv(computeShaderProgram, GL_COMPUTE_WORK_GROUP_SIZE, threads);
-	threadGroupCount = values.size() / threads[0];
+	threadGroupCount = int(values.size()) / threads[0];
 	if (values.size() % threads[0] > 0)
 		threadGroupCount++;
 }

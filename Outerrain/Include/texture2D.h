@@ -26,7 +26,7 @@ public:
 	Color Pixel(int x, int y) const;
 	void* PixelBuffer() const;
 	int Width() const;
-	int Height() const;
+	int GetValueBilinear() const;
 	int BytesPerPixel() const;
 	void Save(const std::string& filePath) const;
 

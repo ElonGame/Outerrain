@@ -65,10 +65,13 @@ void MainWindow::InitNoiseTerrain()
 
 void MainWindow::InitLayerTerrain()
 {
-	ClearScene();
+	/*ClearScene();
 	settings.shaderType = MaterialType::TerrainSplatmapMaterial;
 	hf = new LayerField(std::string("Data/Heightmaps/island.png"), 0, 250, 256, 256, Box2D(Vector2(-512), Vector2(512)));
-	UpdateMeshRenderer();
+	UpdateMeshRenderer();*/
+
+	//LayerField lf = LayerField(std::string("Data/Heightmaps/island.png"), 0, 250, 256, 256, Box2D(Vector2(-512), Vector2(512)));
+	//lf.Vertex(0, 0);
 }
 
 void MainWindow::Heightfield1Scene()

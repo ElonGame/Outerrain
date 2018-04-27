@@ -21,7 +21,7 @@ public:
 	Vector3 ViewDirection() const;
 
 	float GetCameraApertureH() const;
-	float GetAngleOfViewH(float, float) const;
+	float GetAngleOfViewH() const;
 	float GetAngleOfViewV(float, float) const;
 
 	void MoveForward(float);

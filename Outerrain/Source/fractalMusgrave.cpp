@@ -38,7 +38,6 @@ float Fractal::MusgravefBm(const Noise& n, Vector3 point, float H, float lacunar
 	InitExponentArrays(lacunarity, octaves, H);
 
 	float value = 0.0;
-	float frequency = 1.0;
 	int i = 0;
 	for (; i < octaves; i++)
 	{

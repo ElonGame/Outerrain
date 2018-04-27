@@ -5,8 +5,8 @@ std::chrono::high_resolution_clock::time_point AppStatistics::cpu_start;
 std::chrono::high_resolution_clock::time_point AppStatistics::cpu_stop;
 unsigned int AppStatistics::gpuTimeQuery = 0;
 
-unsigned int AppStatistics::vertexCount = 0;
-unsigned int AppStatistics::triangleCount = 0;
+size_t AppStatistics::vertexCount = 0;
+size_t AppStatistics::triangleCount = 0;
 
 static bool first = false;
 

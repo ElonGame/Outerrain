@@ -11,7 +11,7 @@ such as GetGLTexture(), Gradient(), Min/Max/Normalize()...
 /*
 \brief Default Constructor
 */
-Scalarfield2D::Scalarfield2D() : ValueField()
+ScalarField2D::ScalarField2D() : ValueField()
 {
 }
 
@@ -21,7 +21,7 @@ Scalarfield2D::Scalarfield2D() : ValueField()
 \param blackAltitude min value
 \param whiteAltitude max value
 */
-Scalarfield2D::Scalarfield2D(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
+ScalarField2D::ScalarField2D(const std::string& filePath, float blackAltitude, float whiteAltitude, int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
 {
 	ReadFromImage(filePath, blackAltitude, whiteAltitude);
 }
@@ -32,7 +32,7 @@ Scalarfield2D::Scalarfield2D(const std::string& filePath, float blackAltitude, f
 \param ny size in z axis
 \param bbox bounding box of the domain in world coordinates
 */
-Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
+ScalarField2D::ScalarField2D(int nx, int ny, const Box2D& bbox) : ValueField(nx, ny, bbox)
 {
 }
 
@@ -43,7 +43,7 @@ Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox) : ValueField(nx,
 \param bbox bounding box of the domain
 \param value default value of the field
 */
-Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox, float value) : ValueField(nx, ny, bbox, value)
+ScalarField2D::ScalarField2D(int nx, int ny, const Box2D& bbox, float value) : ValueField(nx, ny, bbox, value)
 {
 }
 
@@ -51,7 +51,7 @@ Scalarfield2D::Scalarfield2D(int nx, int ny, const Box2D& bbox, float value) : V
 \brief copy constructor
 \param field Scalarfield2D to copy
 */
-Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, field.ny, field.box)
+ScalarField2D::ScalarField2D(const ScalarField2D& field) : ValueField(field.nx, field.ny, field.box)
 {
 	for (unsigned int i = 0; i < values.size(); i++)
 		values[i] = field.values[i];
@@ -60,14 +60,14 @@ Scalarfield2D::Scalarfield2D(const Scalarfield2D& field) : ValueField(field.nx, 
 /*
 \brief Destructor
 */
-Scalarfield2D::~Scalarfield2D() 
+ScalarField2D::~ScalarField2D() 
 {
 }
 
 /*
 \brief Compute the gradient for the vertex (i, j)
 */
-Vector2 Scalarfield2D::Gradient(int i, int j) const
+Vector2 ScalarField2D::Gradient(int i, int j) const
 {
 	Vector2 ret;
 	float cellSizeX = (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
@@ -95,7 +95,7 @@ Vector2 Scalarfield2D::Gradient(int i, int j) const
 /*
 \brief
 */
-void Scalarfield2D::Add(int i, int j, float v)
+void ScalarField2D::Add(int i, int j, float v)
 {
 	values[ToIndex1D(i, j)] += v;
 }
@@ -103,7 +103,7 @@ void Scalarfield2D::Add(int i, int j, float v)
 /*
 \brief
 */
-void Scalarfield2D::Remove(int i, int j, float v)
+void ScalarField2D::Remove(int i, int j, float v)
 {
 	values[ToIndex1D(i, j)] -= v;
 }
@@ -111,7 +111,7 @@ void Scalarfield2D::Remove(int i, int j, float v)
 /*
 \brief Normalize this field 
 */
-void Scalarfield2D::NormalizeField()
+void ScalarField2D::NormalizeField()
 {
 	float min = Min();
 	float max = Max();
@@ -124,7 +124,7 @@ void Scalarfield2D::NormalizeField()
 \param min min value
 \param max max value
 */
-void Scalarfield2D::NormalizeField(float min, float max)
+void ScalarField2D::NormalizeField(float min, float max)
 {
 	for (int i = 0; i < ny * nx; i++)
 		values[i] = (values[i] - min) / (max - min);
@@ -133,9 +133,9 @@ void Scalarfield2D::NormalizeField(float min, float max)
 /*
 \brief Return the normalized version of this field
 */
-Scalarfield2D Scalarfield2D::Normalized() const
+ScalarField2D ScalarField2D::Normalized() const
 {
-	Scalarfield2D ret(*this);
+	ScalarField2D ret(*this);
 	float min = Min();
 	float max = Max();
 	for (int i = 0; i < ny * nx; i++)
@@ -146,7 +146,7 @@ Scalarfield2D Scalarfield2D::Normalized() const
 /*
 \brief Compute the average value of this field.
 */
-float Scalarfield2D::Average() const
+float ScalarField2D::Average() const
 {
 	float ret = 0.0f;
 	for (unsigned int i = 0; i < values.size(); i++)
@@ -158,7 +158,7 @@ float Scalarfield2D::Average() const
 \brief Get All points whose values are > threshold.
 \param threshold minimum value of range
 */
-std::vector<ScalarValue> Scalarfield2D::FilterSuperiorTo(float threshold) const
+std::vector<ScalarValue> ScalarField2D::FilterSuperiorTo(float threshold) const
 {
 	std::vector<ScalarValue> ret;
 	for (int i = 0; i < ny; i++)
@@ -177,7 +177,7 @@ std::vector<ScalarValue> Scalarfield2D::FilterSuperiorTo(float threshold) const
 \brief Get All points whose values are < threshold.
 \param threshold maximum value of range
 */
-std::vector<ScalarValue> Scalarfield2D::FilterInferiorTo(float threshold) const
+std::vector<ScalarValue> ScalarField2D::FilterInferiorTo(float threshold) const
 {
 	std::vector<ScalarValue> ret;
 	for (int i = 0; i < ny; i++)
@@ -197,7 +197,7 @@ std::vector<ScalarValue> Scalarfield2D::FilterInferiorTo(float threshold) const
 \param min minimum threshold
 \param max maximum threshold
 */
-std::vector<ScalarValue> Scalarfield2D::FilterBetween(float min, float max) const
+std::vector<ScalarValue> ScalarField2D::FilterBetween(float min, float max) const
 {
 	std::vector<ScalarValue> ret;
 	for (int i = 0; i < ny; i++)
@@ -215,7 +215,7 @@ std::vector<ScalarValue> Scalarfield2D::FilterBetween(float min, float max) cons
 /*
 \brief Compute the cell size of X/Y in world coordinates.
 */
-Vector2 Scalarfield2D::CellSize() const
+Vector2 ScalarField2D::CellSize() const
 {
 	Vector2 cellSize;
 	cellSize.x = (box.Vertex(1)[0] - box.Vertex(0)[0]) / (nx - 1);
@@ -226,7 +226,7 @@ Vector2 Scalarfield2D::CellSize() const
 /*
 \brief Compute a vertex world position including his height.
 */
-Vector3 Scalarfield2D::Vertex(int i, int j) const
+Vector3 ScalarField2D::Vertex(int i, int j) const
 {
 	float x = box.Vertex(0).x + i * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(i, j);
@@ -237,7 +237,7 @@ Vector3 Scalarfield2D::Vertex(int i, int j) const
 /*
 \brief Compute a vertex world position including his height.
 */
-Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
+Vector3 ScalarField2D::Vertex(const Vector2i& v) const
 {
 	float x = box.Vertex(0).x + v.x * (box.Vertex(1).x - box.Vertex(0).x) / (nx - 1);
 	float y = Get(v);
@@ -249,7 +249,7 @@ Vector3 Scalarfield2D::Vertex(const Vector2i& v) const
 \brief Get Vertex world position by performing bilinear interpolation.
 \param v world position in 2D
 */
-Vector3 Scalarfield2D::Vertex(const Vector2& v) const
+Vector3 ScalarField2D::Vertex(const Vector2& v) const
 {
 	return Vector3(v.x, GetValueBilinear(v), v.y);
 }
@@ -257,11 +257,11 @@ Vector3 Scalarfield2D::Vertex(const Vector2& v) const
 /*
 \brief todo
 */
-void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue, float whiteValue)
+void ScalarField2D::ReadFromImage(const std::string& filePath, float blackValue, float whiteValue)
 {
 	Texture2D grayscaleTex = Texture2D(filePath);
 	float texelX = 1.0f / (grayscaleTex.Width());
-	float texelY = 1.0f / (grayscaleTex.Height());
+	float texelY = 1.0f / (grayscaleTex.GetValueBilinear());
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
@@ -270,10 +270,10 @@ void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue,
 			float v = i / (static_cast<float>(ny - 1));
 
 			int anchorX = static_cast<int>((u * (grayscaleTex.Width() - 1)));
-			int anchorY = static_cast<int>((v * (grayscaleTex.Height() - 1)));
+			int anchorY = static_cast<int>((v * (grayscaleTex.GetValueBilinear() - 1)));
 			if (anchorX == grayscaleTex.Width() - 1)
 				anchorX--;
-			if (anchorY == grayscaleTex.Height() - 1)
+			if (anchorY == grayscaleTex.GetValueBilinear() - 1)
 				anchorY--;
 
 			// Bilinear interpolation
@@ -301,16 +301,16 @@ void Scalarfield2D::ReadFromImage(const std::string& filePath, float blackValue,
 \brief Utility method to save the scalarfield as image.
 \param path relative path
 */
-void Scalarfield2D::SaveAsImage(const std::string& path)
+void ScalarField2D::SaveAsImage(const std::string& path)
 {
-	// Todo
+	std::cout << "SaveAsImage : " << path << std::endl;
 }
 
 /*
 \brief Utility method to render a scalarfield as a GL texture.
 \param unit gl texture unit.
 */
-GLuint Scalarfield2D::GetGLTexture(int unit) const
+GLuint ScalarField2D::GetGLTexture(int unit) const
 {
 	Texture2D tex = Texture2D(nx, ny);
 	float min = Min();

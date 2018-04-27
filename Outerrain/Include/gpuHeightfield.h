@@ -1,7 +1,7 @@
 #pragma once
 #include "heightfield.h"
 
-class GPUHeightfield : public Heightfield
+class GPUHeightfield : public HeightField
 {
 protected:
 	Shader computeShader;

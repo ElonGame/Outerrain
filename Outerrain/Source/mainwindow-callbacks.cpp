@@ -44,15 +44,6 @@ void MainWindow::TranslateNoise(int y, int x)
 	UpdateMeshRenderer();
 }
 
-void MainWindow::LightingImpact()
-{
-	if (!hf)
-		return;
-	LayerField* lf = dynamic_cast<LayerField*>(hf);
-	lf->LightingEventSimulate(5.0, 100, 5);
-	UpdateMeshRenderer();
-}
-
 void MainWindow::GenerateTerrainFromSettings(bool gpu)
 {
 	if (hf != nullptr)
@@ -60,7 +51,7 @@ void MainWindow::GenerateTerrainFromSettings(bool gpu)
 	if (gpu)
 		hf = new GPUHeightfield(settings);
 	else
-		hf = new Heightfield(settings);
+		hf = new HeightField(settings);
 }
 
 void MainWindow::UpdateMeshRenderer()

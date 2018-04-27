@@ -181,7 +181,7 @@ void Window::SetDefaultGLState()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	glViewport(0, 0, Width(), Height());
+	glViewport(0, 0, Width(), GetValueBilinear());
 }
 
 void Window::ReleaseGLContext()
@@ -268,7 +268,7 @@ int Window::Width() const
 	return frameWidth;
 }
 
-int Window::Height() const 
+int Window::GetValueBilinear() const 
 { 
 	return frameHeight;
 }

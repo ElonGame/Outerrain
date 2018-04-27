@@ -45,5 +45,5 @@ public:
 
 	SDL_Window* GetSDLWindow() const;
 	int Width() const;
-	int Height() const;
+	int GetValueBilinear() const;
 };

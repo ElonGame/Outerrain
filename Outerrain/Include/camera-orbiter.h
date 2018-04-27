@@ -32,6 +32,6 @@ public:
 	void Move(float z);
 	Transform ViewDirection() const;
 	Transform Projection() const;
-	void Frame(float frameWidth, float frameHeight, float z, float fov, Vector3& dO, Vector3& dx, Vector3& dy) const;
+	void Frame(float frameWidth, float frameHeight, float z, Vector3& dO, Vector3& dx, Vector3& dy) const;
 	Vector3 Position() const;
 };

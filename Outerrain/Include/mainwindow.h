@@ -20,7 +20,7 @@ private:
 
 	/* Application Data */
 	SceneHierarchy hierarchy;
-	Heightfield* hf;
+	HeightField* hf;
 	TerrainSettings settings;
 
 	/* Example scenes */
@@ -39,7 +39,6 @@ private:
 	void HydraulicErosionStep();
 	void ThermalErosionStep();
 	void TranslateNoise(int, int);
-	void LightingImpact();
 
 	void GenerateTerrainFromSettings(bool gpu = false);
 	void UpdateMeshMaterial();
@@ -48,7 +47,7 @@ private:
 
 	void Init();
 	void MainLoop();
-	void Update(float time, float deltaTime);
+	void Update();
 	void Render();
 	void RenderGUI();
 

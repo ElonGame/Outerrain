@@ -2,7 +2,7 @@
 #include "heightfield.h"
 #include "layerfield.h"
 
-HeightfieldMesh::HeightfieldMesh(Heightfield* h) : hf(h)
+HeightfieldMesh::HeightfieldMesh(HeightField* h) : hf(h)
 {
 	// Vertices
 	int nx = hf->SizeX();

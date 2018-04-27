@@ -7,17 +7,17 @@
 #include "terrainSettings.h"
 #include "frame.h"
 
-class Heightfield : public Scalarfield2D
+class HeightField : public ScalarField2D
 {
 public:
-	Heightfield();
-	Heightfield(const TerrainSettings& settings);
-	Heightfield(int nx, int ny, const Box2D& bbox);
-	Heightfield(int nx, int ny, const Box2D& bbox, float value);
-	Heightfield(const std::string& filePath, float minAltitude, float maxAltitude, int nx, int ny, const Box2D& bbox);
-	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type);
-	Heightfield(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
-	~Heightfield();
+	HeightField();
+	HeightField(const TerrainSettings& settings);
+	HeightField(int nx, int ny, const Box2D& bbox);
+	HeightField(int nx, int ny, const Box2D& bbox, float value);
+	HeightField(const std::string& filePath, float minAltitude, float maxAltitude, int nx, int ny, const Box2D& bbox);
+	HeightField(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, FractalType type);
+	HeightField(int nx, int ny, const Box2D& bbox, const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
+	~HeightField();
 
 	void InitFromNoise(const Noise& n, float amplitude, float freq, int oct, const Vector3& offset, FractalType type);
 
@@ -25,11 +25,11 @@ public:
 	virtual void StreamPowerErosion(float amplitude);
 	virtual void HydraulicErosion();
 
-	Scalarfield2D DrainageArea() const;
-	Scalarfield2D Wetness() const;
-	Scalarfield2D StreamPower() const;
-	Scalarfield2D Slope() const;
-	Scalarfield2D Illumination() const;
+	ScalarField2D DrainageArea() const;
+	ScalarField2D Wetness() const;
+	ScalarField2D StreamPower() const;
+	ScalarField2D Slope() const;
+	ScalarField2D Illumination() const;
 
 	bool Intersect(const Ray& ray, Hit& hit, float K) const;
 	bool Intersect(const Ray& ray, Hit& hit) const;
